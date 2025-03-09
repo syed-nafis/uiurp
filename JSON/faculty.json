@@ -1,0 +1,192 @@
+[
+    {
+        "name": "Dr. Mohammad Nurul Huda",
+        "email": "nurulhuda@uiu.ac.bd",
+        "phone": "+8801234567890",
+        "bio": "Dr. Mohammad Nurul Huda is a Professor and Head of the CSE Department at UIU with over two decades of experience in teaching, research, and academic administration. He specializes in algorithm design, artificial intelligence, and data mining, mentoring countless students and researchers.",
+        "job_title": "Professor and Head of CSE Department",
+        "office_number": "Room 501, UIU Main Building",
+        "profile_image": "https://drive.google.com/uc?export=view&id=1ABCDEFG12345",
+        "interested_fields_of_research": [
+            "Algorithm Design",
+            "Artificial Intelligence",
+            "Data Mining"
+        ],
+        "projects": [
+            {
+                "title": "AI-Based Optimization Techniques",
+                "description": "Developing AI models for solving optimization problems in supply chain management."
+            },
+            {
+                "title": "Data Mining in Healthcare",
+                "description": "Analyzing large datasets to find trends in medical diagnostics."
+            },
+            {
+                "title": "Algorithmic Trading Systems",
+                "description": "Creating algorithms for automated stock market trading."
+            }
+        ],
+        "prerequisites": [
+            "Python programming",
+            "Linear Algebra",
+            "Basic Statistics"
+        ],
+        "resources_to_learn_prerequisites": [
+            { "topic": "Python Programming", "link": "https://www.learnpython.org/" },
+            { "topic": "Linear Algebra Basics", "link": "https://www.khanacademy.org/math/linear-algebra" },
+            { "topic": "Statistics Fundamentals", "link": "https://www.coursera.org/learn/statistics" }
+        ]
+    },
+    {
+        "name": "Dr. Dewan Md. Farid",
+        "email": "dewanfarid@uiu.ac.bd",
+        "phone": "+8809876543210",
+        "bio": "Dr. Dewan Md. Farid is a Professor in the CSE Department at UIU, specializing in machine learning, big data analytics, and deep learning. He has published extensively in these areas and actively mentors students for advanced research.",
+        "job_title": "Professor",
+        "office_number": "Room 403, UIU Annex Building",
+        "profile_image": "https://drive.google.com/uc?export=view&id=1HIJKLM12345",
+        "interested_fields_of_research": [
+            "Machine Learning",
+            "Big Data Analytics",
+            "Deep Learning"
+        ],
+        "projects": [
+            {
+                "title": "Predictive Health Analytics Using Big Data",
+                "description": "Analyze healthcare trends using machine learning and big data tools."
+            },
+            {
+                "title": "Energy Consumption Prediction",
+                "description": "Using ML to predict and optimize energy consumption in smart grids."
+            },
+            {
+                "title": "Deep Learning for Natural Language Processing",
+                "description": "Building deep learning models for language understanding and generation."
+            }
+        ],
+        "prerequisites": [
+            "Experience with Hadoop/Spark",
+            "Machine Learning Basics",
+            "Python Programming"
+        ],
+        "resources_to_learn_prerequisites": [
+            { "topic": "Hadoop Basics", "link": "https://hadoop.apache.org/" },
+            { "topic": "Introduction to Machine Learning", "link": "https://www.coursera.org/learn/machine-learning" },
+            { "topic": "Python Programming", "link": "https://www.learnpython.org/" }
+        ]
+    },
+    {
+        "name": "Dr. Al-Sakib Khan Pathan",
+        "email": "pathan@uiu.ac.bd",
+        "phone": "+8801928374650",
+        "bio": "Dr. Al-Sakib Khan Pathan is a cybersecurity expert and a Professor at UIU. He is recognized for his work on IoT security, network protocols, and secure systems.",
+        "job_title": "Professor",
+        "office_number": "Room 407, UIU Main Building",
+        "profile_image": "https://drive.google.com/uc?export=view&id=1NOPQRS67890",
+        "interested_fields_of_research": [
+            "Cybersecurity",
+            "IoT Security",
+            "Network Protocols"
+        ],
+        "projects": [
+            {
+                "title": "IoT Security and Privacy Framework",
+                "description": "Designing a secure framework for IoT devices."
+            },
+            {
+                "title": "Blockchain in Cybersecurity",
+                "description": "Integrating blockchain technology into cybersecurity practices."
+            },
+            {
+                "title": "Advanced Network Simulations",
+                "description": "Simulating network protocols for next-gen communications."
+            }
+        ],
+        "prerequisites": [
+            "Networking Basics",
+            "Cryptographic Algorithms",
+            "Understanding Blockchain"
+        ],
+        "resources_to_learn_prerequisites": [
+            { "topic": "Networking Basics", "link": "https://www.coursera.org/learn/computer-networking" },
+            { "topic": "Cryptography Fundamentals", "link": "https://cryptobook.nakov.com/" },
+            { "topic": "Blockchain Basics", "link": "https://www.edx.org/course/blockchain-basics" }
+        ]
+    },
+    {
+        "name": "Dr. Khondaker Abdullah-Al-Mamun",
+        "email": "mamun@uiu.ac.bd",
+        "phone": "+8801734567890",
+        "bio": "Dr. Mamun is an IoT and cloud computing specialist, focusing on smart systems. His work addresses urban challenges through innovative IoT applications.",
+        "job_title": "Professor",
+        "office_number": "Room 405, UIU Main Building",
+        "profile_image": "https://drive.google.com/uc?export=view&id=1TUVWXY34567",
+        "interested_fields_of_research": [
+            "IoT Applications",
+            "Cloud Computing",
+            "Smart Systems"
+        ],
+        "projects": [
+            {
+                "title": "Smart IoT Solutions for Urban Development",
+                "description": "Using IoT for efficient urban development solutions."
+            },
+            {
+                "title": "Cloud Computing for Healthcare",
+                "description": "Leveraging cloud technologies to improve healthcare delivery systems."
+            },
+            {
+                "title": "IoT for Smart Agriculture",
+                "description": "Developing IoT-based systems for sustainable agriculture."
+            }
+        ],
+        "prerequisites": [
+            "IoT Basics",
+            "Cloud Computing",
+            "Programming with Sensors"
+        ],
+        "resources_to_learn_prerequisites": [
+            { "topic": "Introduction to IoT", "link": "https://www.edx.org/course/internet-of-things-iot" },
+            { "topic": "Cloud Computing Basics", "link": "https://aws.amazon.com/training/" },
+            { "topic": "Working with Sensors", "link": "https://www.coursera.org/specializations/iot" }
+        ]
+    },
+    {
+        "name": "Dr. Nahid Hossain",
+        "email": "nahidhossain@uiu.ac.bd",
+        "phone": "+8801928734650",
+        "bio": "Dr. Nahid Hossain is an Assistant Professor at UIU, specializing in Natural Language Processing (NLP) and Deep Learning. His research focuses on language understanding, generation, and large language models.",
+        "job_title": "Assistant Professor",
+        "office_number": "Room 505, UIU Main Building",
+        "profile_image": "https://drive.google.com/uc?export=view&id=1UVWXYZ23456",
+        "interested_fields_of_research": [
+            "Natural Language Processing",
+            "Deep Learning",
+            "Language Technology"
+        ],
+        "projects": [
+            {
+                "title": "Transformer-based Spelling Error Correction Framework for Bangla",
+                "description": "Developing a transformer model for spelling error correction in Bangla."
+            },
+            {
+                "title": "Text Summarization for Bangla",
+                "description": "Building NLP models to summarize Bangla texts automatically."
+            },
+            {
+                "title": "Machine Translation for Low-Resource Languages",
+                "description": "Developing systems for translating low-resource languages."
+            }
+        ],
+        "prerequisites": [
+            "Python Programming",
+            "Transformer Models",
+            "Understanding NLP Concepts"
+        ],
+        "resources_to_learn_prerequisites": [
+            { "topic": "Python Programming", "link": "https://www.learnpython.org/" },
+            { "topic": "Transformer Models", "link": "https://jalammar.github.io/illustrated-transformer/" },
+            { "topic": "NLP Concepts", "link": "https://www.coursera.org/learn/nlp-sequence-models" }
+        ]
+    }
+]

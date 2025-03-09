@@ -1,0 +1,167 @@
+[
+    {
+        "name": "Alice Johnson",
+        "bio": "Alice is a third-year computer science student passionate about web development and AI. She enjoys creating responsive applications and experimenting with machine learning algorithms.",
+        "email": "alice.johnson@example.com",
+        "github": "https://github.com/alicejohnson",
+        "linkedin": "https://linkedin.com/in/alicejohnson",
+        "projects": [
+            {
+                "title": "Personal Portfolio Website",
+                "description": "A responsive portfolio showcasing my skills and projects using React and Tailwind CSS."
+            },
+            {
+                "title": "Chatbot with NLP",
+                "description": "Built a chatbot using Python and TensorFlow to answer FAQs for a university website."
+            },
+            {
+                "title": "E-commerce Platform",
+                "description": "Developed a full-stack e-commerce application with user authentication and payment integration."
+            }
+        ],
+        "skills": [
+            "HTML & CSS",
+            "JavaScript",
+            "React",
+            "Python",
+            "Machine Learning"
+        ],
+        "learning_materials": [
+            { "topic": "React Basics", "link": "https://reactjs.org/docs/getting-started.html" },
+            { "topic": "Machine Learning with Python", "link": "https://www.coursera.org/learn/machine-learning" },
+            { "topic": "Responsive Design", "link": "https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design" }
+        ]
+    },
+    {
+        "name": "Michael Brown",
+        "bio": "Michael is a final-year computer science student with a strong interest in cybersecurity and ethical hacking. He has worked on securing web applications and network penetration testing.",
+        "email": "michael.brown@example.com",
+        "github": "https://github.com/michaelbrown",
+        "linkedin": "https://linkedin.com/in/michaelbrown",
+        "projects": [
+            {
+                "title": "Penetration Testing Toolkit",
+                "description": "Created a Python-based toolkit to scan and test vulnerabilities in web applications."
+            },
+            {
+                "title": "Secure Login System",
+                "description": "Developed a secure login system using Django and implemented JWT authentication."
+            },
+            {
+                "title": "IoT Device Security",
+                "description": "Analyzed vulnerabilities in IoT devices and proposed mitigation strategies."
+            }
+        ],
+        "skills": [
+            "Python",
+            "Network Security",
+            "Ethical Hacking",
+            "Cryptography",
+            "Django"
+        ],
+        "learning_materials": [
+            { "topic": "Ethical Hacking", "link": "https://www.cybrary.it/course/ethical-hacking/" },
+            { "topic": "Cryptography Basics", "link": "https://cryptobook.nakov.com/" },
+            { "topic": "Django Tutorials", "link": "https://docs.djangoproject.com/en/4.0/intro/" }
+        ]
+    },
+    {
+        "name": "Sophia Davis",
+        "bio": "Sophia is a second-year student passionate about UI/UX design and front-end development. She is proficient in crafting intuitive user interfaces and improving accessibility.",
+        "email": "sophia.davis@example.com",
+        "github": "https://github.com/sophiadavis",
+        "linkedin": "https://linkedin.com/in/sophiadavis",
+        "projects": [
+            {
+                "title": "Redesign of University Portal",
+                "description": "Led a project to redesign the university portal for better usability and aesthetics."
+            },
+            {
+                "title": "Mobile App UI Prototype",
+                "description": "Designed an interactive prototype for a healthcare app using Figma and Adobe XD."
+            },
+            {
+                "title": "Personal Blog Website",
+                "description": "Built a personal blog using Next.js with a focus on typography and accessibility."
+            }
+        ],
+        "skills": [
+            "HTML & CSS",
+            "JavaScript",
+            "Figma",
+            "Adobe XD",
+            "Next.js"
+        ],
+        "learning_materials": [
+            { "topic": "UI/UX Principles", "link": "https://www.interaction-design.org/courses" },
+            { "topic": "Next.js Basics", "link": "https://nextjs.org/learn" },
+            { "topic": "Figma Tutorials", "link": "https://help.figma.com/" }
+        ]
+    },
+    {
+        "name": "Daniel Wilson",
+        "bio": "Daniel is a computer science enthusiast interested in blockchain technology and smart contracts. He is working on decentralized applications to simplify business processes.",
+        "email": "daniel.wilson@example.com",
+        "github": "https://github.com/danielwilson",
+        "linkedin": "https://linkedin.com/in/danielwilson",
+        "projects": [
+            {
+                "title": "Blockchain Voting System",
+                "description": "Developed a secure voting platform using Ethereum and Solidity."
+            },
+            {
+                "title": "Decentralized File Storage",
+                "description": "Created a decentralized file storage solution using IPFS."
+            },
+            {
+                "title": "Smart Contract for Token Exchange",
+                "description": "Implemented a smart contract for peer-to-peer token exchange."
+            }
+        ],
+        "skills": [
+            "Blockchain",
+            "Solidity",
+            "Ethereum",
+            "IPFS",
+            "Cryptography"
+        ],
+        "learning_materials": [
+            { "topic": "Blockchain Basics", "link": "https://www.coursera.org/learn/blockchain-basics" },
+            { "topic": "Solidity Programming", "link": "https://soliditylang.org/" },
+            { "topic": "Ethereum Development", "link": "https://ethereum.org/en/developers/" }
+        ]
+    },
+    {
+        "name": "Emma Martinez",
+        "bio": "Emma is a first-year student interested in game development. She is exploring Unity and Unreal Engine to create immersive 3D games.",
+        "email": "emma.martinez@example.com",
+        "github": "https://github.com/emmamartinez",
+        "linkedin": "https://linkedin.com/in/emmamartinez",
+        "projects": [
+            {
+                "title": "3D Puzzle Game",
+                "description": "Developed a 3D puzzle game using Unity and C#."
+            },
+            {
+                "title": "Platformer Game Prototype",
+                "description": "Created a side-scrolling platformer game using Unreal Engine."
+            },
+            {
+                "title": "Game AI for NPCs",
+                "description": "Implemented basic AI behaviors for NPCs in a game environment."
+            }
+        ],
+        "skills": [
+            "Unity",
+            "Unreal Engine",
+            "C#",
+            "Game Physics",
+            "Game AI"
+        ],
+        "learning_materials": [
+            { "topic": "Unity Basics", "link": "https://learn.unity.com/" },
+            { "topic": "Unreal Engine Tutorials", "link": "https://www.unrealengine.com/en-US/online-learning" },
+            { "topic": "Game AI Concepts", "link": "https://gameprogrammingpatterns.com/ai.html" }
+        ]
+    }
+]
