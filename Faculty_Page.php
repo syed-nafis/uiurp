@@ -6,9 +6,18 @@
     <title>Faculty</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="Style/style.css">
+    <link rel="stylesheet" href="Style/faculty_page.css">
 </head>
 <body>
     <?php include 'navbar.php'; ?>
+
+    <div class="hero-section">
+    <img src="Resources/faculty_hero.jpg" alt="Faculty Image" class="hero-image">
+    <div class="overlay">
+        <h1>Our Faculty</h1>
+        <p>At the Head of the Class<br>UIU faculty are renowned leaders in their fields, extraordinary teachers, and dedicated mentors.</p>
+    </div>
+    </div>
 
     <!-- Faculty List -->
     <div class="container mt-5">
@@ -19,39 +28,28 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
     fetch('load_faculty.php')
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(`HTTP error! Status: ${response.status}, Response: ${text}`);
-                });
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             const facultyList = document.getElementById('facultyList');
-            console.log("Data loaded:", data);
-
             if (data.length === 0) {
                 facultyList.innerHTML = '<p class="text-center">No faculty members found.</p>';
                 return;
             }
 
             data.forEach(faculty => {
-                // Use faculty's Google Drive image or a default placeholder
                 const profileImage = faculty.profile_image ? faculty.profile_image : 'resources/imgPlaceholder.png';
 
                 const facultyCard = `
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <a href="Faculty_Profile.php?id=${faculty._id}" class="text-decoration-none text-dark">
-                                <img src="${profileImage}" class="card-img-top" alt="${faculty.name}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${faculty.name}</h5>
-                                    <p class="card-text">${faculty.bio}</p>
-                                </div>
-                            </a>
+                    <div class="col-md-4 d-flex">
+                        <div class="faculty-card">
+                            <img src="${profileImage}" alt="${faculty.name}" class="faculty-img">
+                            <div class="faculty-info">
+                                <h4>${faculty.name}</h4>
+                                <p>${faculty.bio}</p>
+                                <a href="Faculty_Profile.php?id=${faculty._id}" class="learn-more">LEARN MORE</a>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -59,12 +57,11 @@
             });
         })
         .catch(error => {
+            document.getElementById('facultyList').innerHTML = `<p class="text-danger">Failed to load faculty data.</p>`;
             console.error('Error loading faculty data:', error);
-            document.getElementById('facultyList').innerHTML = `
-                <p class="text-danger">Failed to load faculty data. Error: ${error.message}</p>
-            `;
         });
-    });
+});
+
     </script>
 </body>
 </html>
