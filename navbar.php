@@ -18,7 +18,7 @@
                     <a class="nav-link" href="Faculty_Page.php">Faculty</a>
                 </li>
                 <li class="nav-item me-5">
-                    <a class="nav-link" href="#">Forum</a>
+                    <a class="nav-link" href="forum_index.html">Forum</a>
                 </li>
             </ul>
             <span class="">
