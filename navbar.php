@@ -25,7 +25,7 @@
                     <a class="nav-link fw-semibold <?= basename($_SERVER['PHP_SELF']) == 'Faculty_Page.php' ? 'active' : ''; ?>" href="Faculty_Page.php">Faculty</a>
                 </li>
                 <li class="nav-item me-5">
-                    <a class="nav-link fw-semibold" href="#">Forum</a>
+                    <a class="nav-link fw-semibold" href="#">Forum</a
                 </li>
             </ul>
 
