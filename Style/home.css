@@ -6,8 +6,10 @@
 #search{
     width: 100%;
     height: 100vh;
-    background-image: url(resources/home_background.png);
+    /* Remove the static background image */
+    /* background-image: url(resources/home_background.png); */
     background-size: cover;
+    background-position: center;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -159,6 +159,18 @@
                   }
               });
           });
+
+      // Fetch and apply the background image
+      fetch('fetch_image.php?name=uiurp_homepage_background')
+          .then(response => response.json())
+          .then(data => {
+              const searchSection = document.getElementById('search');
+              if (data.url) {
+                  searchSection.style.backgroundImage = `url('${data.url}')`;
+                  searchSection.style.backgroundSize = 'cover';
+                  searchSection.style.backgroundPosition = 'center';
+              }
+          });
   });
   </script>
 
