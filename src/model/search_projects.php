@@ -1,7 +1,18 @@
 <?php
-require 'vendor/autoload.php'; // Include Composer's autoloader
+require __DIR__ . '/../../vendor/autoload.php'; // Updated path to Composer's autoloader
+
+header('Content-Type: application/json');
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 $data = json_decode(file_get_contents('php://input'), true);
+
+// Validate input data
+if (!isset($data['searchString']) || !is_string($data['searchString'])) {
+    echo json_encode(['error' => 'Invalid or missing searchString']);
+    exit;
+}
+
 $searchString = $data['searchString'];
 $searchWords = explode(' ', $searchString);
 

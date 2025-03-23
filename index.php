@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIU Webpage</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="Style/home.css">
-
+    <link rel="stylesheet" href="assets/styles/home.css">
 </head>
 <body>
-  <?php include 'navbar.php'; ?>
+  <?php include 'src/includes/navbar.php'; ?>
 
   <div id="search">
     <section class="custom-search">
@@ -30,15 +29,15 @@
     <div id="recentPublicationsCarousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img src="resources/Recent research.png" class="d-block w-100" alt="Recent Research">
+          <img src="assets/resources/Recent research.png" class="d-block w-100" alt="Recent Research">
         </div>
         <div class="carousel-item">
           <!-- Carousel item content -->
-          <img src="resources/Recent research.png" class="d-block w-100" alt="Recent Research">
+          <img src="assets/resources/Recent research.png" class="d-block w-100" alt="Recent Research">
         </div>
         <div class="carousel-item">
           <!-- Carousel item content -->
-          <img src="resources/Recent research.png" class="d-block w-100" alt="Recent Research">
+          <img src="assets/resources/Recent research.png" class="d-block w-100" alt="Recent Research">
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#recentPublicationsCarousel" data-bs-slide="prev">
@@ -83,13 +82,11 @@
       const keywordsList = document.getElementById('keywordsList');
       
       // Fetch and display the frequently searched keywords
-      fetch('fetch_keywords.php')
+      fetch('src/model/fetch_keywords.php')
           .then(response => response.json())
           .then(data => {
-            console.log("hello world");
               keywordsList.innerHTML = '';
               data.forEach(keyword => {
-                  console.log("hello world");
                   const span = document.createElement('span');
                   span.textContent = keyword.name;
                   span.style.cursor = 'pointer';
@@ -114,7 +111,7 @@
       });
 
       function handleSearch(searchString) {
-          fetch('search_projects.php', {
+          fetch('src/model/search_projects.php', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json'
@@ -125,12 +122,12 @@
           .then(data => {
               // Redirect to Research_page.html with the search results
               localStorage.setItem('searchResults', JSON.stringify(data));
-              window.location.href = 'Research_page.html';
+              window.location.href = 'Research_page.php';
           });
       }
 
       // Fetch and display the FAQs
-      fetch('fetch_faqs.php')
+      fetch('src/model/fetch_faqs.php')
           .then(response => response.json())
           .then(data => {
               const faqAccordionLeft = document.getElementById('faqAccordionLeft');
@@ -161,7 +158,7 @@
           });
 
       // Fetch and apply the background image
-      fetch('fetch_image.php?name=uiurp_homepage_background')
+      fetch('src/model/fetch_image.php?name=uiurp_homepage_background')
           .then(response => response.json())
           .then(data => {
               const searchSection = document.getElementById('search');

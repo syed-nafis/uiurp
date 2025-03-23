@@ -1,5 +1,5 @@
 <?php
-require 'vendor/autoload.php'; // Include MongoDB library
+require __DIR__ . '/../../vendor/autoload.php'; // Updated path to Composer's autoloader
 
 try {
     // Connect to MongoDB using the provided connection string

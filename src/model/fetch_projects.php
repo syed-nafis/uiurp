@@ -1,5 +1,5 @@
 <?php
-require 'vendor/autoload.php'; // Include Composer's autoloader
+require __DIR__ . '/../../vendor/autoload.php'; // Updated path to Composer's autoloader
 
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 15;
 

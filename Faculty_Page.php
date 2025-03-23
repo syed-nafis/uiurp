@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faculty</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="Style/style.css">
-    <link rel="stylesheet" href="Style/faculty_page.css">
+    <link rel="stylesheet" href="assets/styles/style.css">
+    <link rel="stylesheet" href="assets/styles/faculty_page.css">
 </head>
 <body>
-    <?php include 'navbar.php'; ?>
+    <?php include 'src/includes/navbar.php'; ?>
 
     <div class="hero-section">
-    <img src="Resources/faculty_hero.jpg" alt="Faculty Image" class="hero-image">
-    <div class="overlay">
-        <h1>Our Faculty</h1>
-        <p>At the Head of the Class<br>UIU faculty are renowned leaders in their fields, extraordinary teachers, and dedicated mentors.</p>
-    </div>
+        <img src="assets/resources/faculty_hero.jpg" alt="Faculty Image" class="hero-image">
+        <div class="overlay">
+            <h1>Our Faculty</h1>
+            <p>At the Head of the Class<br>UIU faculty are renowned leaders in their fields, extraordinary teachers, and dedicated mentors.</p>
+        </div>
     </div>
 
     <!-- Faculty List -->
@@ -29,7 +29,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-    fetch('load_faculty.php')
+    fetch('src/model/load_faculty.php')
         .then(response => response.json())
         .then(data => {
             const facultyList = document.getElementById('facultyList');
@@ -39,7 +39,7 @@
             }
 
             data.forEach(faculty => {
-                const profileImage = faculty.profile_image ? faculty.profile_image : 'resources/imgPlaceholder.png';
+                const profileImage = faculty.profile_image ? faculty.profile_image : 'assets/resources/imgPlaceholder.png';
 
                 const facultyCard = `
                     <div class="col-md-4 d-flex">

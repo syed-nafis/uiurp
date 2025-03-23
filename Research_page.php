@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research Projects</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="assets/styles/home.css">
 </head>
 <body>
-  <?php include 'navbar.php'; ?>
+  <?php include 'src/includes/navbar.php'; ?>
 
   <div class="container my-4">
     <div class="input-group">
@@ -42,7 +42,7 @@
       // Load the first 15 projects when the "Projects" tab is clicked
       projectsTab.addEventListener('click', function(event) {
           event.preventDefault();
-          fetch('fetch_projects.php?limit=15')
+          fetch('src/model/fetch_projects.php?limit=15')
               .then(response => response.json())
               .then(data => {
                   displayProjects(data);
@@ -68,7 +68,7 @@
       });
 
       function handleSearch(searchString) {
-          fetch('search_projects.php', {
+          fetch('src/model/search_projects.php', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json'
@@ -99,7 +99,7 @@
                   projectItem.className = 'list-group-item list-group-item-action d-flex align-items-center';
                   projectItem.href = `Projects_page.html?id=${project._id.$oid}`;
                   projectItem.innerHTML = `
-                      <img src="Resources/c9.jpg" alt="Project Image" class="img-fluid rounded me-3 align-items-center" style="height: 100px; width: 200px;">
+                      <img src="assets/resources/c9.jpg" alt="Project Image" class="img-fluid rounded me-3 align-items-center" style="height: 100px; width: 200px;">
                       <div class="p-3">
                           <h5 class="mb-1">${project.title}</h5>
                           <p class="mb-1">${project.description}</p>
@@ -114,7 +114,7 @@
       }
 
       // Load the first 15 projects on page load
-      fetch('fetch_projects.php?limit=15')
+      fetch('src/model/fetch_projects.php?limit=15')
           .then(response => response.json())
           .then(data => {
               displayProjects(data);

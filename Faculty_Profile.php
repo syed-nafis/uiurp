@@ -1,6 +1,6 @@
 <?php
 // Get all images from the Resources folder
-$imageFolder = "Resources/research_picture/";
+$imageFolder = "assets/resources/research_picture/";
 $images = glob($imageFolder . "*.{jpg,png,jpeg,gif}", GLOB_BRACE);
 
 // Start the session 
@@ -52,10 +52,10 @@ if (isset($_GET['id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faculty Profile - <?= $faculty['name']; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="Style/faculty_profile.css">
+    <link rel="stylesheet" href="assets/styles/faculty_profile.css">
 </head>
 <body>
-    <?php include 'navbar.php'; ?>
+    <?php include 'src/includes/navbar.php'; ?>
 
     <!-- Hero Section -->
     <header>
@@ -75,7 +75,7 @@ if (isset($_GET['id'])) {
             </div>
             <div class="col-md-6">
                 <div class="d-flex justify-content-end">
-                    <img src="<?= $faculty['profile_image'] ?? 'Resources/imgPlaceholder.png'; ?>" alt="Profile Picture" class="img-fluid rounded" id="facultyImage">
+                    <img src="<?= $faculty['profile_image'] ?? 'assets/resources/imgPlaceholder.png'; ?>" alt="Profile Picture" class="img-fluid rounded" id="facultyImage">
                 </div>
             </div>
         </div>

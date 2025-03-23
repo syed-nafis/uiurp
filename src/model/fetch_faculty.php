@@ -1,5 +1,9 @@
 <?php
-require 'vendor/autoload.php'; // Include Composer's autoloader
+require __DIR__ . '/../../vendor/autoload.php'; // Updated path to Composer's autoloader
+
+header('Content-Type: application/json');
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 $facultyId = $_GET['id'];
 

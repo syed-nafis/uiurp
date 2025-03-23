@@ -1,5 +1,5 @@
 <?php
-require 'vendor/autoload.php'; // Include Composer's autoloader
+require __DIR__ . '/../../vendor/autoload.php'; // Updated path to Composer's autoloader
 
 $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
 $collection = $client->uiurp->students;

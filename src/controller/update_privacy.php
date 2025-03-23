@@ -1,5 +1,5 @@
 <?php
-require 'vendor/autoload.php'; // Include Composer's autoloader
+require __DIR__ . '/../../vendor/autoload.php'; // Updated path to Composer's autoloader
 
 $data = json_decode(file_get_contents('php://input'), true);
 $projectId = $_GET['id'];
