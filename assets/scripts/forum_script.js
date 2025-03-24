@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('fetch_forum.php')
+    fetch('/../../src/model/fetch_forum.php')
         .then(response => response.json())
         .then(data => {
             const postsContainer = document.getElementById('postsContainer');
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const title = document.getElementById('postTitle').value;
         const content = document.getElementById('postContent').value;
 
-        fetch('submit_post.php', {
+        fetch('/../../src/controller/submit_post.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

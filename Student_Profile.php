@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <?php include 'navbar.php'; ?>
+  <?php include 'src/includes/navbar.php'; ?>
 
     
     <header class="container py-5 text-center">
@@ -22,7 +22,7 @@
                 <p class="mt-3">Email: studentemail@example.com</p>
             </div>
             <div class="col-md-6">
-                <img src="Resources/student.jpeg" alt="Student Picture" class="img-fluid rounded" style="height: 70%; width: 70%;">
+                <img src="assets/resources/student.jpeg" alt="Student Picture" class="img-fluid rounded" style="height: 70%; width: 70%;">
             </div>
         </div>
     </header>
