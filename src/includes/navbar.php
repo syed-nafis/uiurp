@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container-fluid">
         <link rel="stylesheet" href="assets/styles/navbar_style.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- Moved here -->
 
         <!-- Logo -->
         <a class="navbar-brand ps-4 p-2" href="index.php">
@@ -30,11 +31,15 @@
             </ul>
 
             <!-- User Profile -->
-            <div class="d-flex align-items-center">
-                <a href="../../Student_Profile.php" class="nav-link d-flex align-items-center fw-semibold">
+            <div class="d-flex align-items-center dropdown">
+                <a href="#" class="nav-link d-flex align-items-center fw-semibold dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="assets/resources/user_avatar.png" alt="User Avatar" class="rounded-circle me-2" width="40" height="40">
                     <span class="user-name">Najmol Hasan</span>
                 </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="../../Student_Profile.php">Edit Profile</a></li>
+                    <li><a class="dropdown-item" href="../../logout.php">Logout</a></li>
+                </ul>
             </div>
         </div>
     </div>

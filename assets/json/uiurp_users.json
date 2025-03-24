@@ -1,0 +1,254 @@
+[
+  {
+    "type": "faculty",
+    "id": "6795b9a1ea284b5c74e4a8cd",
+    "username": "Mohammad",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "6795b9a1ea284b5c74e4a8ce",
+    "username": "Dewan",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "6795b9a1ea284b5c74e4a8cf",
+    "username": "Al-Sakib",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "6795b9a1ea284b5c74e4a8d0",
+    "username": "Khondaker",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "6795b9a1ea284b5c74e4a8d1",
+    "username": "Nahid",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "6795b9a1ea284b5c74e4a8d2",
+    "username": "Hasan",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "6795b9a1ea284b5c74e4a8d3",
+    "username": "A.K.M.",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67d843737a0422d12a08e5dc",
+    "username": "Md",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67d8449e7a0422d12a08e5dd",
+    "username": "Md.",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67dc539751087d1634cce68a",
+    "username": "Suman",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67dc545f51087d1634cce68b",
+    "username": "Mir",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67dc550d51087d1634cce68c",
+    "username": "Iftekharul",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67dc598d51087d1634cce68d",
+    "username": "Jahan",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67dc5eb651087d1634cce693",
+    "username": "Mohaiminul",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67dc5ff151087d1634cce695",
+    "username": "Tasnim",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67dc619251087d1634cce696",
+    "username": "Sadia",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67dc62a851087d1634cce698",
+    "username": "Sabrin",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67dc637851087d1634cce699",
+    "username": "Ahmed",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67dc63dc51087d1634cce69a",
+    "username": "Minhajul",
+    "password": "12345"
+  },
+  {
+    "type": "faculty",
+    "id": "67dc642e51087d1634cce69b",
+    "username": "Binte",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a880",
+    "username": "01127836",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a86e",
+    "username": "01135469",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a86f",
+    "username": "01170025",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a878",
+    "username": "01104766",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a87d",
+    "username": "01158263",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a86d",
+    "username": "01189743",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a87f",
+    "username": "01198532",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a87a",
+    "username": "01183984",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a87e",
+    "username": "01164918",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a872",
+    "username": "01131664",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a874",
+    "username": "01143935",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a876",
+    "username": "01128721",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a87c",
+    "username": "01167838",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a870",
+    "username": "01153039",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a873",
+    "username": "01197649",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a875",
+    "username": "01138613",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a87b",
+    "username": "01123128",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a879",
+    "username": "01100785",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a871",
+    "username": "01178982",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "6795313eea284b5c74e4a877",
+    "username": "01104567",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "67953ae4f9995e7e330c6ce6",
+    "username": "01181921",
+    "password": "12345"
+  },
+  {
+    "type": "student",
+    "id": "67953bb7f9995e7e330c6ce7",
+    "username": "01106106",
+    "password": "12345"
+  }
+]
