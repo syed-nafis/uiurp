@@ -59,8 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 alert('Post submitted successfully!');
-                // Optionally, you can refresh the posts or add the new post to the DOM
-                location.reload(); // Reload the page to fetch and display the new post
+                window.location.href = 'view_posts.php'; // Redirect to the page that displays the new post
             } else {
                 alert('Error submitting post: ' + data.message);
             }
