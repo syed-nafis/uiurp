@@ -1,0 +1,1129 @@
+[{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814726"
+  },
+  "title": "Blockchain for Supply Chain Transparency",
+  "abstract": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency.",
+  "description": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency. The study includes implementing a prototype system to track goods from origin to destination in real-time, utilizing distributed ledger technology to create immutable records of transactions throughout the supply chain process. Our implementation focuses on enhancing trust among stakeholders while reducing operational costs associated with verification and auditing.",
+  "coverImage": {
+    "url": "/storage/images/blockchain-architecture.png",
+    "alt": "Blockchain Supply Chain Architecture",
+    "fallback": "/assets/images/Research_Card_Placeholder.png"
+  },
+  "field": "Computer Science",
+  "keywords": [
+    "Blockchain",
+    "Supply Chain",
+    "Transparency",
+    "Distributed Ledger"
+  ],
+  "institution": "United International University",
+  "createdAt": {
+    "$date": "2023-09-15T08:30:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-22T14:45:00.000Z"
+  },
+  "privacy": 0,
+  "members": [
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a872"
+      },
+      "name": "Ahmed Hossain",
+      "role": "Author",
+      "contribution": 40
+    },
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a87d"
+      },
+      "name": "Faiza Rahman",
+      "role": "Author",
+      "contribution": 35
+    },
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a87a"
+      },
+      "name": "Sadia Jahan",
+      "role": "Author",
+      "contribution": 25
+    }
+  ],
+  "supervisor": {
+    "userId": {
+      "$oid": "6795b9a1ea284b5c74e4a8cf"
+    },
+    "name": "Dr. Saiful Islam",
+    "role": "Supervisor"
+  },
+  "links": {
+    "github": "https://github.com/example/project14",
+    "paper": "https://example.com/papers/blockchain-supply-chain.pdf",
+    "doi": "https://doi.org/example/project14",
+    "youtube": "https://youtube.com/watch?v=example14",
+    "website": "https://blockchain-supply-chain.example.com"
+  },
+  "files": [
+    {
+      "name": "Final Research Paper.pdf",
+      "path": "/storage/papers/blockchain-supply-chain.pdf",
+      "type": "application/pdf",
+      "size": 2458000,
+      "uploadedAt": {
+        "$date": "2023-09-15T10:12:00.000Z"
+      }
+    },
+    {
+      "name": "Project Presentation.pptx",
+      "path": "/storage/presentations/blockchain-supply-chain.pptx",
+      "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "size": 4280000,
+      "uploadedAt": {
+        "$date": "2023-09-25T15:30:00.000Z"
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "title": "Project Proposal",
+      "description": "Initial concept and literature review completed",
+      "date": {
+        "$date": "2023-01-15T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a872"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a87d"
+        }
+      ]
+    },
+    {
+      "title": "System Design",
+      "description": "Architecture planning and component design",
+      "date": {
+        "$date": "2023-03-22T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a872"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a87a"
+        }
+      ]
+    },
+    {
+      "title": "Implementation Phase",
+      "description": "Development of core blockchain components",
+      "date": {
+        "$date": "2023-06-05T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a87a"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a87d"
+        }
+      ]
+    },
+    {
+      "title": "Testing and Validation",
+      "description": "Real-world testing with supply chain partners",
+      "date": {
+        "$date": "2023-08-20T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a872"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a87d"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a87a"
+        }
+      ]
+    }
+  ],
+  "media": [
+    {
+      "type": "image",
+      "url": "/storage/images/blockchain-architecture.png",
+      "caption": "System Architecture Diagram"
+    },
+    {
+      "type": "image",
+      "url": "/storage/images/blockchain-dashboard.png",
+      "caption": "Supply Chain Dashboard Interface"
+    },
+    {
+      "type": "video",
+      "url": "https://youtube.com/embed/example14",
+      "caption": "Project Demo and Explanation"
+    }
+  ],
+  "references": [
+    {
+      "title": "Blockchain in Supply Chain Management",
+      "link": "https://doi.org/10.1016/j.jom.2018.03.001"
+    },
+    {
+      "title": "Distributed Ledger Technology in Logistics",
+      "link": "https://doi.org/10.1016/j.future.2021.05.032"
+    },
+    {
+      "title": "Trust Enhancement through Blockchain Immutability",
+      "link": "https://arxiv.org/abs/2003.05622"
+    }
+  ],
+  "stats": {
+    "views": 1254,
+    "downloads": 387,
+    "favorites": 76
+  },
+  "comments": [
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a880"
+      },
+      "content": "Great work on the implementation! The smart contract design is particularly innovative.",
+      "createdAt": {
+        "$date": "2023-10-05T18:42:00.000Z"
+      },
+      "replies": [
+        {
+          "userId": {
+            "$oid": "6795313eea284b5c74e4a872"
+          },
+          "content": "Thank you! We spent a lot of time ensuring the contracts were secure and efficient.",
+          "createdAt": {
+            "$date": "2023-10-06T09:15:00.000Z"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814719"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "abstract": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans.",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics. Our implementation includes custom architecture optimizations for medical imaging data and techniques to address the limited availability of labeled medical datasets through transfer learning and data augmentation approaches.",
+  "coverImage": {
+    "url": "/storage/images/segmentation-results.png",
+    "alt": "Medical Image Segmentation Results",
+    "fallback": "/assets/images/Research_Card_Placeholder.png"
+  },
+  "field": "Healthcare",
+  "keywords": [
+    "Deep Learning",
+    "Medical Imaging",
+    "Neural Networks",
+    "Image Segmentation"
+  ],
+  "institution": "United International University",
+  "createdAt": {
+    "$date": "2023-07-18T09:12:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-30T11:24:00.000Z"
+  },
+  "privacy": 1,
+  "members": [
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a874"
+      },
+      "name": "Raisa Islam",
+      "role": "Lead Researcher",
+      "contribution": 45
+    },
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a880"
+      },
+      "name": "Tanvir Ahmed",
+      "role": "Researcher",
+      "contribution": 30
+    },
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a873"
+      },
+      "name": "Farhan Khan",
+      "role": "Researcher",
+      "contribution": 25
+    }
+  ],
+  "supervisor": {
+    "userId": {
+      "$oid": "6795b9a1ea284b5c74e4a8ce"
+    },
+    "name": "Dr. Razia Sultana",
+    "role": "Supervisor"
+  },
+  "links": {
+    "github": "https://github.com/example/project1",
+    "paper": "https://example.com/papers/deep-learning-medical.pdf",
+    "doi": "https://doi.org/example/project1",
+    "youtube": "https://youtube.com/watch?v=example1",
+    "website": "https://medical-segmentation.example.com"
+  },
+  "files": [
+    {
+      "name": "Research Paper.pdf",
+      "path": "/storage/papers/deep-learning-medical.pdf",
+      "type": "application/pdf",
+      "size": 3157000,
+      "uploadedAt": {
+        "$date": "2023-07-25T14:30:00.000Z"
+      }
+    },
+    {
+      "name": "Model Architecture.png",
+      "path": "/storage/images/cnn-architecture.png",
+      "type": "image/png",
+      "size": 478000,
+      "uploadedAt": {
+        "$date": "2023-08-10T09:45:00.000Z"
+      }
+    },
+    {
+      "name": "Dataset Description.xlsx",
+      "path": "/storage/data/medical-dataset-info.xlsx",
+      "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "size": 225000,
+      "uploadedAt": {
+        "$date": "2023-08-05T16:20:00.000Z"
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "title": "Research Proposal",
+      "description": "Initial concept and objectives defined",
+      "date": {
+        "$date": "2023-02-10T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a874"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a873"
+        }
+      ]
+    },
+    {
+      "title": "Data Collection",
+      "description": "Acquisition and preprocessing of medical imaging datasets",
+      "date": {
+        "$date": "2023-04-15T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a880"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a873"
+        }
+      ]
+    },
+    {
+      "title": "Model Development",
+      "description": "Implementation and training of CNN architectures",
+      "date": {
+        "$date": "2023-06-20T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a874"
+        }
+      ]
+    },
+    {
+      "title": "Clinical Validation",
+      "description": "Performance evaluation with medical professionals",
+      "date": {
+        "$date": "2023-07-18T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a874"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a880"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a873"
+        }
+      ]
+    }
+  ],
+  "media": [
+    {
+      "type": "image",
+      "url": "/storage/images/segmentation-results.png",
+      "caption": "Comparison of Segmentation Results"
+    },
+    {
+      "type": "image",
+      "url": "/storage/images/accuracy-chart.png",
+      "caption": "Model Accuracy Across Different Datasets"
+    },
+    {
+      "type": "video",
+      "url": "https://youtube.com/embed/example1",
+      "caption": "Research Methodology and Results Explanation"
+    }
+  ],
+  "references": [
+    {
+      "title": "State-of-the-art Brain Tumor Segmentation",
+      "link": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "title": "CNN Applications in Medical Imaging",
+      "link": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "title": "Deep Learning for Healthcare Image Analysis",
+      "link": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "stats": {
+    "views": 2183,
+    "downloads": 546,
+    "favorites": 132
+  },
+  "comments": [
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a87c"
+      },
+      "content": "The methodology used here could be very useful for our oncology department. Would you be open to collaboration?",
+      "createdAt": {
+        "$date": "2023-08-12T13:14:00.000Z"
+      },
+      "replies": [
+        {
+          "userId": {
+            "$oid": "6795313eea284b5c74e4a874"
+          },
+          "content": "Absolutely! We're looking for clinical partners. Please reach out via email and we can discuss further.",
+          "createdAt": {
+            "$date": "2023-08-12T15:30:00.000Z"
+          }
+        }
+      ]
+    },
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a87b"
+      },
+      "content": "What was your approach to handling class imbalance in the training data?",
+      "createdAt": {
+        "$date": "2023-09-05T10:22:00.000Z"
+      },
+      "replies": [
+        {
+          "userId": {
+            "$oid": "6795313eea284b5c74e4a880"
+          },
+          "content": "We used a combination of weighted loss functions and data augmentation techniques specifically designed for medical images.",
+          "createdAt": {
+            "$date": "2023-09-05T14:45:00.000Z"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381471c"
+  },
+  "title": "IoT-Based Smart Agriculture System",
+  "abstract": "This project focuses on developing an Internet of Things (IoT) system for smart agriculture, enabling real-time monitoring of soil conditions, weather, and crop health.",
+  "description": "This project focuses on developing an Internet of Things (IoT) system for smart agriculture, enabling real-time monitoring of soil conditions, weather, and crop health. The goal is to optimize resource usage and increase crop yields using advanced sensors and analytics. Our implementation includes a network of low-power sensors, a central gateway for data collection, cloud-based storage and analytics, and a mobile application for farmers to monitor and control their agricultural operations remotely.",
+  "coverImage": {
+    "url": "/storage/images/iot-sensor-network.jpg",
+    "alt": "IoT Smart Agriculture Sensor Network",
+    "fallback": "/assets/images/Research_Card_Placeholder.png"
+  },
+  "field": "Agriculture Technology",
+  "keywords": [
+    "IoT",
+    "Smart Agriculture",
+    "Sensor Networks",
+    "Data Analytics"
+  ],
+  "institution": "United International University",
+  "createdAt": {
+    "$date": "2023-06-10T11:45:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-08-28T16:30:00.000Z"
+  },
+  "privacy": 0,
+  "members": [
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a875"
+      },
+      "name": "Nusrat Jahan",
+      "role": "Project Lead",
+      "contribution": 30
+    },
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a874"
+      },
+      "name": "Raisa Islam",
+      "role": "Hardware Developer",
+      "contribution": 25
+    },
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a872"
+      },
+      "name": "Ahmed Hossain",
+      "role": "Software Developer",
+      "contribution": 25
+    },
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a871"
+      },
+      "name": "Minhajul Abedin",
+      "role": "Data Analyst",
+      "contribution": 20
+    }
+  ],
+  "supervisor": {
+    "userId": {
+      "$oid": "6795b9a1ea284b5c74e4a8cf"
+    },
+    "name": "Dr. Saiful Islam",
+    "role": "Supervisor"
+  },
+  "links": {
+    "github": "https://github.com/example/project4",
+    "paper": "https://example.com/papers/iot-agriculture.pdf",
+    "doi": "https://doi.org/example/project4",
+    "youtube": "https://youtube.com/watch?v=example4",
+    "website": "https://smart-agriculture.example.com"
+  },
+  "files": [
+    {
+      "name": "Technical Documentation.pdf",
+      "path": "/storage/papers/iot-agriculture-technical.pdf",
+      "type": "application/pdf",
+      "size": 4218000,
+      "uploadedAt": {
+        "$date": "2023-06-22T09:30:00.000Z"
+      }
+    },
+    {
+      "name": "System Design.pdf",
+      "path": "/storage/documents/iot-agriculture-design.pdf",
+      "type": "application/pdf",
+      "size": 2876000,
+      "uploadedAt": {
+        "$date": "2023-06-25T14:15:00.000Z"
+      }
+    },
+    {
+      "name": "User Manual.pdf",
+      "path": "/storage/documents/iot-agriculture-manual.pdf",
+      "type": "application/pdf",
+      "size": 1542000,
+      "uploadedAt": {
+        "$date": "2023-07-10T11:20:00.000Z"
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "title": "Project Initiation",
+      "description": "Requirements gathering and planning",
+      "date": {
+        "$date": "2023-01-05T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a875"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a874"
+        }
+      ]
+    },
+    {
+      "title": "Sensor Network Design",
+      "description": "Selection and configuration of IoT sensors",
+      "date": {
+        "$date": "2023-02-20T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a874"
+        }
+      ]
+    },
+    {
+      "title": "Software Development",
+      "description": "Backend system and mobile app implementation",
+      "date": {
+        "$date": "2023-04-15T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a872"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a871"
+        }
+      ]
+    },
+    {
+      "title": "Field Testing",
+      "description": "Deployment in test farm location",
+      "date": {
+        "$date": "2023-05-30T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a875"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a874"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a872"
+        },
+        {
+          "$oid": "6795313eea284b5c74e4a871"
+        }
+      ]
+    }
+  ],
+  "media": [
+    {
+      "type": "image",
+      "url": "/storage/images/iot-sensor-network.jpg",
+      "caption": "Deployed Sensor Network in Rice Field"
+    },
+    {
+      "type": "image",
+      "url": "/storage/images/iot-dashboard.png",
+      "caption": "Farmer Dashboard Interface"
+    },
+    {
+      "type": "image",
+      "url": "/storage/images/iot-hardware.jpg",
+      "caption": "Sensor Hardware Components"
+    },
+    {
+      "type": "video",
+      "url": "https://youtube.com/embed/example4",
+      "caption": "System Demonstration and Results"
+    }
+  ],
+  "references": [
+    {
+      "title": "IoT Systems in Modern Farming",
+      "link": "https://doi.org/10.1109/JIOT.2020.2968253"
+    },
+    {
+      "title": "The Future of Sustainable Farming",
+      "link": "https://doi.org/10.1016/j.compag.2018.11.005"
+    },
+    {
+      "title": "Precision Agriculture and Resource Efficiency",
+      "link": "https://arxiv.org/abs/2004.08936"
+    }
+  ],
+  "stats": {
+    "views": 3287,
+    "downloads": 962,
+    "favorites": 218
+  },
+  "comments": [
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a876"
+      },
+      "content": "This is exactly what our farming cooperative has been looking for. How scalable is the system for larger agricultural operations?",
+      "createdAt": {
+        "$date": "2023-07-08T12:30:00.000Z"
+      },
+      "replies": [
+        {
+          "userId": {
+            "$oid": "6795313eea284b5c74e4a875"
+          },
+          "content": "The system is designed to be highly scalable. We've tested it on farms up to 100 acres with over 200 sensors without performance degradation.",
+          "createdAt": {
+            "$date": "2023-07-09T09:15:00.000Z"
+          }
+        }
+      ]
+    },
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a87e"
+      },
+      "content": "Have you considered adding machine learning predictions for pest outbreaks based on environmental conditions?",
+      "createdAt": {
+        "$date": "2023-08-05T15:42:00.000Z"
+      },
+      "replies": [
+        {
+          "userId": {
+            "$oid": "6795313eea284b5c74e4a871"
+          },
+          "content": "Yes, that's in our phase 2 development plan. We're currently collecting data to train those models.",
+          "createdAt": {
+            "$date": "2023-08-06T10:18:00.000Z"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814727"
+  },
+  "title": "AI-Powered Early Disease Detection System",
+  "abstract": "Development of a machine learning system that can detect early signs of diseases through analysis of medical imaging data, focusing on improving diagnostic accuracy and reducing detection time.",
+  "description": "This research project develops an artificial intelligence system for early disease detection using deep learning algorithms applied to medical imaging data. The system is trained on a large dataset of X-rays, MRIs, and CT scans to identify patterns indicative of various diseases in their early stages. The implementation includes a novel neural network architecture optimized for medical image processing and a user-friendly interface for healthcare professionals.",
+  "coverImage": {
+    "url": "/storage/images/ai-model-architecture.png",
+    "alt": "AI Disease Detection Model Architecture",
+    "fallback": "/assets/images/Research_Card_Placeholder.png"
+  },
+  "field": "Computer Science",
+  "keywords": [
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Healthcare",
+    "Medical Imaging"
+  ],
+  "institution": "United International University",
+  "createdAt": {
+    "$date": "2023-08-10T09:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-11-15T16:30:00.000Z"
+  },
+  "privacy": 0,
+  "members": [
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a873"
+      },
+      "name": "Farhan Khan",
+      "role": "Author",
+      "contribution": 45
+    },
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a874"
+      },
+      "name": "Raisa Islam",
+      "role": "Author",
+      "contribution": 55
+    }
+  ],
+  "supervisor": {
+    "userId": {
+      "$oid": "6795b9a1ea284b5c74e4a8d0"
+    },
+    "name": "Dr. Mahfuzur Rahman",
+    "role": "Supervisor"
+  },
+  "links": {
+    "github": "https://github.com/example/ai-disease-detection",
+    "paper": "https://example.com/papers/ai-disease-detection.pdf",
+    "doi": "https://doi.org/example/ai-detection",
+    "website": "https://ai-disease-detection.example.com"
+  },
+  "files": [
+    {
+      "name": "Research Paper.pdf",
+      "path": "/storage/papers/ai-disease-detection.pdf",
+      "type": "application/pdf",
+      "size": 3150000,
+      "uploadedAt": {
+        "$date": "2023-11-01T14:20:00.000Z"
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "title": "Data Collection",
+      "description": "Gathering and preprocessing medical imaging dataset",
+      "date": {
+        "$date": "2023-08-15T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a873"
+        }
+      ]
+    },
+    {
+      "title": "Model Development",
+      "description": "Implementation and training of AI models",
+      "date": {
+        "$date": "2023-10-01T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a874"
+        }
+      ]
+    }
+  ],
+  "media": [
+    {
+      "type": "image",
+      "url": "/storage/images/ai-model-architecture.png",
+      "caption": "Neural Network Architecture"
+    }
+  ],
+  "references": [
+    {
+      "title": "Deep Learning Applications in Medical Imaging",
+      "link": "https://doi.org/10.1038/s41591-020-0931-3"
+    }
+  ],
+  "stats": {
+    "views": 892,
+    "downloads": 245,
+    "favorites": 67
+  },
+  "comments": []
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814728"
+  },
+  "title": "Smart Urban Waste Management System",
+  "abstract": "Development of an IoT-based smart waste management system for urban areas, incorporating real-time monitoring and optimization of collection routes.",
+  "description": "This project implements a smart waste management system using IoT sensors and cloud computing to optimize waste collection in urban areas. The system includes smart bins with fill-level monitoring, automated route optimization for collection vehicles, and a central dashboard for real-time monitoring and analytics.",
+  "coverImage": {
+    "url": "/storage/images/waste-management-system.png",
+    "alt": "Smart Waste Management System Overview",
+    "fallback": "/assets/images/Research_Card_Placeholder.png"
+  },
+  "field": "Environmental Engineering",
+  "keywords": [
+    "IoT",
+    "Smart City",
+    "Waste Management",
+    "Sustainability"
+  ],
+  "institution": "United International University",
+  "createdAt": {
+    "$date": "2023-07-20T10:15:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-12-01T11:45:00.000Z"
+  },
+  "privacy": 0,
+  "members": [
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a875"
+      },
+      "name": "Nusrat Jahan",
+      "role": "Author",
+      "contribution": 50
+    },
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a876"
+      },
+      "name": "Tasneem Rahman",
+      "role": "Author",
+      "contribution": 50
+    }
+  ],
+  "supervisor": {
+    "userId": {
+      "$oid": "6795b9a1ea284b5c74e4a8d1"
+    },
+    "name": "Dr. Tahmina Akter",
+    "role": "Supervisor"
+  },
+  "links": {
+    "github": "https://github.com/example/smart-waste",
+    "paper": "https://example.com/papers/smart-waste.pdf",
+    "website": "https://smart-waste.example.com"
+  },
+  "files": [
+    {
+      "name": "Technical Documentation.pdf",
+      "path": "/storage/papers/smart-waste-docs.pdf",
+      "type": "application/pdf",
+      "size": 2840000,
+      "uploadedAt": {
+        "$date": "2023-11-20T16:45:00.000Z"
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "title": "System Design",
+      "description": "Design of IoT architecture and sensor network",
+      "date": {
+        "$date": "2023-07-25T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a875"
+        }
+      ]
+    }
+  ],
+  "media": [
+    {
+      "type": "image",
+      "url": "/storage/images/waste-management-system.png",
+      "caption": "System Overview"
+    }
+  ],
+  "references": [
+    {
+      "title": "IoT Integration in Urban Waste Management",
+      "link": "https://doi.org/10.1016/j.wasman.2019.02.033"
+    }
+  ],
+  "stats": {
+    "views": 654,
+    "downloads": 189,
+    "favorites": 45
+  },
+  "comments": []
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814729"
+  },
+  "title": "Renewable Energy Forecasting Using Deep Learning",
+  "abstract": "Implementation of a deep learning system for accurate prediction of renewable energy generation from solar and wind sources, enabling better grid management.",
+  "description": "This research develops advanced deep learning models to forecast renewable energy generation from multiple sources. The system incorporates weather data, historical generation patterns, and real-time sensor data to provide accurate predictions for better grid management and energy distribution.",
+  "coverImage": {
+    "url": "/storage/images/forecast-results.png",
+    "alt": "Renewable Energy Forecasting Results",
+    "fallback": "/assets/images/Research_Card_Placeholder.png"
+  },
+  "field": "Electrical Engineering",
+  "keywords": [
+    "Deep Learning",
+    "Renewable Energy",
+    "Forecasting",
+    "Smart Grid"
+  ],
+  "institution": "United International University",
+  "createdAt": {
+    "$date": "2023-09-05T08:45:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-12-10T13:20:00.000Z"
+  },
+  "privacy": 0,
+  "members": [
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a877"
+      },
+      "name": "Mohammad Rahman",
+      "role": "Author",
+      "contribution": 60
+    },
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a878"
+      },
+      "name": "Anika Kabir",
+      "role": "Author",
+      "contribution": 40
+    }
+  ],
+  "supervisor": {
+    "userId": {
+      "$oid": "6795b9a1ea284b5c74e4a8d2"
+    },
+    "name": "Dr. Imran Khan",
+    "role": "Supervisor"
+  },
+  "links": {
+    "github": "https://github.com/example/renewable-forecast",
+    "paper": "https://example.com/papers/renewable-forecast.pdf"
+  },
+  "files": [
+    {
+      "name": "Research Paper.pdf",
+      "path": "/storage/papers/renewable-forecast.pdf",
+      "type": "application/pdf",
+      "size": 3580000,
+      "uploadedAt": {
+        "$date": "2023-12-05T09:30:00.000Z"
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "title": "Model Development",
+      "description": "Development of forecasting algorithms",
+      "date": {
+        "$date": "2023-09-20T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a877"
+        }
+      ]
+    }
+  ],
+  "media": [
+    {
+      "type": "image",
+      "url": "/storage/images/forecast-results.png",
+      "caption": "Forecasting Results Visualization"
+    }
+  ],
+  "references": [
+    {
+      "title": "Deep Learning for Renewable Energy Forecasting",
+      "link": "https://doi.org/10.1016/j.rser.2020.109898"
+    }
+  ],
+  "stats": {
+    "views": 723,
+    "downloads": 156,
+    "favorites": 89
+  },
+  "comments": []
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814730"
+  },
+  "title": "Cybersecurity Risk Assessment Framework",
+  "abstract": "Development of a comprehensive framework for assessing and mitigating cybersecurity risks in enterprise environments using AI and machine learning techniques.",
+  "description": "This project creates an innovative framework for real-time cybersecurity risk assessment and mitigation. The system uses machine learning algorithms to analyze network traffic patterns, identify potential threats, and automatically implement security measures to protect enterprise systems.",
+  "coverImage": {
+    "url": "/storage/images/risk-framework.png",
+    "alt": "Cybersecurity Risk Assessment Framework",
+    "fallback": "/assets/images/Research_Card_Placeholder.png"
+  },
+  "field": "Information Security",
+  "keywords": [
+    "Cybersecurity",
+    "Machine Learning",
+    "Risk Assessment",
+    "Network Security"
+  ],
+  "institution": "United International University",
+  "createdAt": {
+    "$date": "2023-10-01T11:30:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2023-12-15T14:45:00.000Z"
+  },
+  "privacy": 0,
+  "members": [
+    {
+      "userId": {
+        "$oid": "6795313eea284b5c74e4a879"
+      },
+      "name": "Sakib Ahmed",
+      "role": "Author",
+      "contribution": 100
+    }
+  ],
+  "supervisor": {
+    "userId": {
+      "$oid": "6795b9a1ea284b5c74e4a8d3"
+    },
+    "name": "Dr. Nusrat Jahan",
+    "role": "Supervisor"
+  },
+  "links": {
+    "github": "https://github.com/example/cyber-risk",
+    "paper": "https://example.com/papers/cyber-risk.pdf"
+  },
+  "files": [
+    {
+      "name": "Framework Documentation.pdf",
+      "path": "/storage/papers/cyber-risk-framework.pdf",
+      "type": "application/pdf",
+      "size": 2950000,
+      "uploadedAt": {
+        "$date": "2023-12-10T15:20:00.000Z"
+      }
+    }
+  ],
+  "timeline": [
+    {
+      "title": "Framework Design",
+      "description": "Design of risk assessment methodology",
+      "date": {
+        "$date": "2023-10-15T00:00:00.000Z"
+      },
+      "status": "Completed",
+      "assignedTo": [
+        {
+          "$oid": "6795313eea284b5c74e4a879"
+        }
+      ]
+    }
+  ],
+  "media": [
+    {
+      "type": "image",
+      "url": "/storage/images/risk-framework.png",
+      "caption": "Framework Architecture"
+    }
+  ],
+  "references": [
+    {
+      "title": "Machine Learning for Network Threat Detection",
+      "link": "https://doi.org/10.1109/TDSC.2019.2940949"
+    }
+  ],
+  "stats": {
+    "views": 512,
+    "downloads": 178,
+    "favorites": 56
+  },
+  "comments": []
+}]
