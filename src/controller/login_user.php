@@ -1,15 +1,12 @@
 <?php
-session_start();
 require __DIR__ . '/../../vendor/autoload.php'; // Updated path to Composer's autoloader
 
-use MongoDB\Client;
-use MongoDB\BSON\ObjectId;
-
 // Update the MongoDB connection string and database name
-$mongoClient = new Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
-$db = $mongoClient->uiurp;
-
+$client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
+$db = $client->uiurp;
 $loginInfoCollection = $db->login_info;
+
+session_start(); // Start session to track user login status
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
@@ -30,7 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $facultyCollection = $db->faculties;
             $facultyData = $facultyCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
             if ($facultyData) {
-                $_SESSION['user'] = $facultyData;
+                $_SESSION['logged_in'] = true;
+                $_SESSION['user_type'] = 'faculty';
+                $_SESSION['user_data'] = json_decode(json_encode($facultyData),true);
                 header('Location: /../../index.php'); // Redirect to faculty dashboard
                 exit();
             }
@@ -40,7 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $studentData = $studentCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
             echo "<script>console.log('" . json_encode($studentData) . "');</script>"; // Log the data for debugging
             if ($studentData) {
-                $_SESSION['user'] = $studentData;
+                $_SESSION['logged_in'] = true;
+                $_SESSION['user_type'] = 'faculty';
+                $_SESSION['user_data'] = json_decode(json_encode($studentData),true);
                 header('Location: /../../index.php'); // Redirect to student dashboard
                 exit();
             }

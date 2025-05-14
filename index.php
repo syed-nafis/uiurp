@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="assets/styles/home.css">
 </head>
 <body>
-  <?php include 'src/includes/navbar.php'; ?>
+  <?php 
+    include 'src/includes/navbar.php'; 
+  ?>
 
   <div id="search">
     <section class="custom-search">

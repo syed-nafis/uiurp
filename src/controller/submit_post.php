@@ -1,26 +1,34 @@
 <?php
 require __DIR__ . '/../../vendor/autoload.php'; // Updated path to Composer's autoloader
 
-$mongoClient = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
-$db = $mongoClient->uiurp;
+
+$client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
+$db = $client->uiurp;
 $collection = $db->forum;
 
-$data = json_decode(file_get_contents('php://input'), true);
+$posts = $collection->find()->toArray();
 
-error_log(print_r($data, true)); // Log the received data
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
 
-if (isset($data['title']) && isset($data['content'])) {
     $post = [
+        'user_id' => new MongoDB\BSON\ObjectId("661e174ee04e47be9b0e337b"), // Replace if dynamic
         'title' => $data['title'],
         'content' => $data['content'],
+        'views' => 0,
         'upvotes' => 0,
         'downvotes' => 0,
-        'views' => 0,
-        'comments' => []
+        'comments' => [],
+        'tags' => [],
+        'timestamp' => new MongoDB\BSON\UTCDateTime()
     ];
+
     $result = $collection->insertOne($post);
-    echo json_encode(['success' => true, 'id' => $result->getInsertedId()]);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Invalid input']);
+
+    if ($result->getInsertedCount() === 1) {
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false]);
+    }
 }
 ?>
