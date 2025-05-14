@@ -1,3 +1,11 @@
+<?php
+require __DIR__ . '/src/includes/db_connection.php'; // Include your database connection
+
+$client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
+$collection = $client->uiurp->forum_posts;
+
+$posts = $collection->find()->toArray();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

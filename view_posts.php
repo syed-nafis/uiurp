@@ -1,9 +1,16 @@
 <?php
+<<<<<<< HEAD
 require __DIR__ . '/vendor/autoload.php'; // Updated path to Composer's autoloader
 
 $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
 $db = $client->uiurp;
 $collection = $db->forum;
+=======
+require __DIR__ . '/src/includes/db_connection.php'; // Include your database connection
+
+$client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
+$collection = $client->uiurp->forum_posts;
+>>>>>>> 965ee972971121555a52ae13ce5f86a3256eadab
 
 $posts = $collection->find()->toArray();
 ?>
@@ -16,6 +23,7 @@ $posts = $collection->find()->toArray();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/styles/home.css">
     <link rel="stylesheet" href="assets/styles/forum_style.css">
+<<<<<<< HEAD
     <style>
         .forum-post {
             border: 1px solid #ddd;
@@ -44,6 +52,8 @@ $posts = $collection->find()->toArray();
             color: #666;
         }
     </style>
+=======
+>>>>>>> 965ee972971121555a52ae13ce5f86a3256eadab
 </head>
 <body>
   <?php include 'src/includes/navbar.php'; ?>
@@ -55,6 +65,7 @@ $posts = $collection->find()->toArray();
               <div class="forum-post border p-3 mb-3">
                   <h3><?= htmlspecialchars($post['title']) ?></h3>
                   <p><?= htmlspecialchars($post['content']) ?></p>
+<<<<<<< HEAD
                   <p><strong>Views:</strong> <?= $post['views'] ?? 0 ?></p>
                   <p>
                       <button class="btn btn-success btn-sm upvote-btn" data-post-id="<?= $post['_id'] ?>">Upvote</button>
@@ -64,6 +75,11 @@ $posts = $collection->find()->toArray();
                       <button class="btn btn-danger btn-sm downvote-btn" data-post-id="<?= $post['_id'] ?>">Downvote</button>
                       <span id="downvotes-<?= $post['_id'] ?>" class="ms-2"><?= $post['downvotes'] ?? 0 ?></span>
                   </p>
+=======
+                  <p><strong>Views:</strong> <?= $post['views'] ?></p>
+                  <p><strong>Upvotes:</strong> <?= $post['upvotes'] ?></p>
+                  <p><strong>Downvotes:</strong> <?= $post['downvotes'] ?></p>
+>>>>>>> 965ee972971121555a52ae13ce5f86a3256eadab
                   <div class="comments">
                       <strong>Comments:</strong>
                       <?php if (!empty($post['comments'])): ?>
@@ -75,6 +91,7 @@ $posts = $collection->find()->toArray();
                       <?php else: ?>
                           <p>No comments yet.</p>
                       <?php endif; ?>
+<<<<<<< HEAD
 
                       <!-- Add Comment Form -->
                       <form method="POST" action="add_comment.php">
@@ -82,6 +99,8 @@ $posts = $collection->find()->toArray();
                           <textarea name="comment" placeholder="Add a comment..." class="form-control mb-2"></textarea>
                           <button type="submit" class="btn btn-primary">Submit Comment</button>
                       </form>
+=======
+>>>>>>> 965ee972971121555a52ae13ce5f86a3256eadab
                   </div>
               </div>
           <?php endforeach; ?>
@@ -89,6 +108,7 @@ $posts = $collection->find()->toArray();
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<<<<<<< HEAD
   <script>
   document.addEventListener('DOMContentLoaded', function() {
       // Handle upvote button clicks
@@ -140,5 +160,7 @@ $posts = $collection->find()->toArray();
       });
   });
   </script>
+=======
+>>>>>>> 965ee972971121555a52ae13ce5f86a3256eadab
 </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../../vendor/autoload.php'; // Updated path to Composer's autoloader
+require __DIR__ . '/src/includes/db_connection.php'; // Include your database connection
 
 
 $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
