@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container-fluid">
         <link rel="stylesheet" href="assets/styles/navbar_style.css">
@@ -55,31 +59,20 @@
             </ul>
 
             <!-- User Profile -->
-            <div class="d-flex align-items-center">
-                <div class="user-profile-container">
-                    <a href="#" class="user-profile-link" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="user-avatar-container">
-                            <img src="assets/resources/user_avatar.png" alt="User Avatar" class="user-avatar">
-                        </div>
-                        <span class="user-profile-name">Najmol Hasan</span>
-                        <i class="bi bi-chevron-down user-dropdown-icon"></i>
+             <?php if (isset($_SESSION['logged_in'])): ?>
+                <div class="d-flex align-items-center dropdown">
+                    <a href="#" class="nav-link d-flex align-items-center fw-semibold dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="assets/resources/user_avatar.png" alt="User Avatar" class="rounded-circle me-2" width="40" height="40">
+                        <span class="user-name"><?= $_SESSION['user_data']['name'] ?></span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end modern-dropdown" aria-labelledby="userDropdown">
-                        <li class="dropdown-header">
-                            <span>User Account</span>
-                        </li>
-                        <li><a class="dropdown-item" href="../../Student_Profile.php">
-                            <i class="bi bi-person-circle item-icon"></i>
-                            <span>Edit Profile</span>
-                        </a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item logout-item" href="../../logout.php">
-                            <i class="bi bi-box-arrow-right item-icon"></i>
-                            <span>Logout</span>
-                        </a></li>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="../../Student_Profile.php">Edit Profile</a></li>
+                        <li><a class="dropdown-item" href="../../logout.php">Logout</a></li>
                     </ul>
                 </div>
-            </div>
+            <?php else: ?>
+                <a href="../../login.php" class="nav-link d-flex align-items-center fw-semibold dropdown-toggle" id="userDropdown" role="button" aria-expanded="false">Login</a>
+            <?php endif; ?>
         </div>
     </div>
 </nav>
