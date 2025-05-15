@@ -1,0 +1,1491 @@
+[{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814726"
+  },
+  "title": "Blockchain for Supply Chain Transparency",
+  "description": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency. The study includes implementing a prototype system to track goods from origin to destination in real-time.",
+  "links": {
+    "github": "https://github.com/example/project14",
+    "youtube": "https://youtube.com/watch?v=example14",
+    "doi": "https://doi.org/example/project14"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a872"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87d"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87a"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "Blockchain ensures secure and transparent transaction records in supply chains.",
+      "cite": "https://doi.org/10.1016/j.jom.2018.03.001"
+    },
+    {
+      "quote": "Distributed ledger technology is transforming logistics operations.",
+      "cite": "https://doi.org/10.1016/j.future.2021.05.032"
+    },
+    {
+      "quote": "The immutability of blockchain enhances trust among supply chain stakeholders.",
+      "cite": "https://arxiv.org/abs/2003.05622"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8cf"
+  },
+  "keywords": [
+    "Renewable Energy",
+    "Sustainability",
+    "Solar Power",
+    "Energy Optimization"
+  ],
+  "privacy": 0
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381472b"
+  },
+  "title": "Blockchain for Supply Chain Transparency",
+  "description": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency. The study includes implementing a prototype system to track goods from origin to destination in real-time.",
+  "links": {
+    "github": "https://github.com/example/project19",
+    "youtube": "https://youtube.com/watch?v=example19",
+    "doi": "https://doi.org/example/project19"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a879"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87f"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a872"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86e"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "Blockchain ensures secure and transparent transaction records in supply chains.",
+      "cite": "https://doi.org/10.1016/j.jom.2018.03.001"
+    },
+    {
+      "quote": "Distributed ledger technology is transforming logistics operations.",
+      "cite": "https://doi.org/10.1016/j.future.2021.05.032"
+    },
+    {
+      "quote": "The immutability of blockchain enhances trust among supply chain stakeholders.",
+      "cite": "https://arxiv.org/abs/2003.05622"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8cd"
+  },
+  "keywords": [
+    "Cloud Computing",
+    "Scalability",
+    "Virtualization",
+    "Infrastructure"
+  ],
+  "privacy": 0
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381471c"
+  },
+  "title": "IoT-Based Smart Agriculture System",
+  "description": "This project focuses on developing an Internet of Things (IoT) system for smart agriculture, enabling real-time monitoring of soil conditions, weather, and crop health. The goal is to optimize resource usage and increase crop yields using advanced sensors and analytics.",
+  "links": {
+    "github": "https://github.com/example/project4",
+    "youtube": "https://youtube.com/watch?v=example4",
+    "doi": "https://doi.org/example/project4"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a875"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a874"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a872"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a871"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "IoT systems can revolutionize farming practices by providing actionable insights.",
+      "cite": "https://doi.org/10.1109/JIOT.2020.2968253"
+    },
+    {
+      "quote": "Smart agriculture is the future of sustainable farming.",
+      "cite": "https://doi.org/10.1016/j.compag.2018.11.005"
+    },
+    {
+      "quote": "Precision agriculture using IoT improves efficiency and reduces waste.",
+      "cite": "https://arxiv.org/abs/2004.08936"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8cf"
+  },
+  "keywords": [
+    "Digital Marketing",
+    "Consumer Behavior",
+    "Social Media",
+    "Analytics"
+  ],
+  "privacy": 0
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381472e"
+  },
+  "title": "IoT-Based Smart Agriculture System",
+  "description": "This project focuses on developing an Internet of Things (IoT) system for smart agriculture, enabling real-time monitoring of soil conditions, weather, and crop health. The goal is to optimize resource usage and increase crop yields using advanced sensors and analytics.",
+  "links": {
+    "github": "https://github.com/example/project22",
+    "youtube": "https://youtube.com/watch?v=example22",
+    "doi": "https://doi.org/example/project22"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a87a"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87b"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86e"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "IoT systems can revolutionize farming practices by providing actionable insights.",
+      "cite": "https://doi.org/10.1109/JIOT.2020.2968253"
+    },
+    {
+      "quote": "Smart agriculture is the future of sustainable farming.",
+      "cite": "https://doi.org/10.1016/j.compag.2018.11.005"
+    },
+    {
+      "quote": "Precision agriculture using IoT improves efficiency and reduces waste.",
+      "cite": "https://arxiv.org/abs/2004.08936"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8cf"
+  },
+  "keywords": [
+    "Healthcare",
+    "Diagnostics",
+    "Medical Imaging",
+    "Automation"
+  ],
+  "privacy": 0
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814731"
+  },
+  "title": "IoT-Based Smart Agriculture System",
+  "description": "This project focuses on developing an Internet of Things (IoT) system for smart agriculture, enabling real-time monitoring of soil conditions, weather, and crop health. The goal is to optimize resource usage and increase crop yields using advanced sensors and analytics.",
+  "links": {
+    "github": "https://github.com/example/project25",
+    "youtube": "https://youtube.com/watch?v=example25",
+    "doi": "https://doi.org/example/project25"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a87c"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86e"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a870"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "IoT systems can revolutionize farming practices by providing actionable insights.",
+      "cite": "https://doi.org/10.1109/JIOT.2020.2968253"
+    },
+    {
+      "quote": "Smart agriculture is the future of sustainable farming.",
+      "cite": "https://doi.org/10.1016/j.compag.2018.11.005"
+    },
+    {
+      "quote": "Precision agriculture using IoT improves efficiency and reduces waste.",
+      "cite": "https://arxiv.org/abs/2004.08936"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d1"
+  },
+  "keywords": [
+    "Renewable Energy",
+    "Sustainability",
+    "Solar Power",
+    "Energy Optimization"
+  ],
+  "privacy": 0
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814732"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics.",
+  "links": {
+    "github": "https://github.com/example/project26",
+    "youtube": "https://youtube.com/watch?v=example26",
+    "doi": "https://doi.org/example/project26"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a878"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86f"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a874"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "This approach achieves state-of-the-art accuracy in brain tumor segmentation.",
+      "cite": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "quote": "CNNs have revolutionized medical imaging by providing precise and automated results.",
+      "cite": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "quote": "Deep learning enables faster and more accurate image analysis in healthcare.",
+      "cite": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d0"
+  },
+  "keywords": [
+    "Blockchain",
+    "Cryptography",
+    "Supply Chain",
+    "Transparency"
+  ],
+  "privacy": 0
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814733"
+  },
+  "title": "Blockchain for Supply Chain Transparency",
+  "description": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency. The study includes implementing a prototype system to track goods from origin to destination in real-time.",
+  "links": {
+    "github": "https://github.com/example/project27",
+    "youtube": "https://youtube.com/watch?v=example27",
+    "doi": "https://doi.org/example/project27"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a87d"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86e"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86d"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86f"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "Blockchain ensures secure and transparent transaction records in supply chains.",
+      "cite": "https://doi.org/10.1016/j.jom.2018.03.001"
+    },
+    {
+      "quote": "Distributed ledger technology is transforming logistics operations.",
+      "cite": "https://doi.org/10.1016/j.future.2021.05.032"
+    },
+    {
+      "quote": "The immutability of blockchain enhances trust among supply chain stakeholders.",
+      "cite": "https://arxiv.org/abs/2003.05622"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d0"
+  },
+  "keywords": [
+    "Big Data",
+    "Analytics",
+    "Data Mining",
+    "Visualization"
+  ],
+  "privacy": 0
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814721"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics.",
+  "links": {
+    "github": "https://github.com/example/project9",
+    "youtube": "https://youtube.com/watch?v=example9",
+    "doi": "https://doi.org/example/project9"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a86f"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a870"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a877"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87e"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "This approach achieves state-of-the-art accuracy in brain tumor segmentation.",
+      "cite": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "quote": "CNNs have revolutionized medical imaging by providing precise and automated results.",
+      "cite": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "quote": "Deep learning enables faster and more accurate image analysis in healthcare.",
+      "cite": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d0"
+  },
+  "keywords": [
+    "Big Data",
+    "Analytics",
+    "Data Mining",
+    "Visualization"
+  ],
+  "privacy": 0
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814734"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics.",
+  "links": {
+    "github": "https://github.com/example/project28",
+    "youtube": "https://youtube.com/watch?v=example28",
+    "doi": "https://doi.org/example/project28"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a86e"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87f"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a879"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a878"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "This approach achieves state-of-the-art accuracy in brain tumor segmentation.",
+      "cite": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "quote": "CNNs have revolutionized medical imaging by providing precise and automated results.",
+      "cite": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "quote": "Deep learning enables faster and more accurate image analysis in healthcare.",
+      "cite": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8cd"
+  },
+  "keywords": [
+    "Cloud Computing",
+    "Scalability",
+    "Virtualization",
+    "Infrastructure"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381471f"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics.",
+  "links": {
+    "github": "https://github.com/example/project7",
+    "youtube": "https://youtube.com/watch?v=example7",
+    "doi": "https://doi.org/example/project7"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a86d"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a875"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87b"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a877"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "This approach achieves state-of-the-art accuracy in brain tumor segmentation.",
+      "cite": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "quote": "CNNs have revolutionized medical imaging by providing precise and automated results.",
+      "cite": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "quote": "Deep learning enables faster and more accurate image analysis in healthcare.",
+      "cite": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d0"
+  },
+  "keywords": [
+    "Healthcare",
+    "Diagnostics",
+    "Medical Imaging",
+    "Automation"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814723"
+  },
+  "title": "Blockchain for Supply Chain Transparency",
+  "description": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency. The study includes implementing a prototype system to track goods from origin to destination in real-time.",
+  "links": {
+    "github": "https://github.com/example/project11",
+    "youtube": "https://youtube.com/watch?v=example11",
+    "doi": "https://doi.org/example/project11"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a880"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a877"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a876"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87a"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "Blockchain ensures secure and transparent transaction records in supply chains.",
+      "cite": "https://doi.org/10.1016/j.jom.2018.03.001"
+    },
+    {
+      "quote": "Distributed ledger technology is transforming logistics operations.",
+      "cite": "https://doi.org/10.1016/j.future.2021.05.032"
+    },
+    {
+      "quote": "The immutability of blockchain enhances trust among supply chain stakeholders.",
+      "cite": "https://arxiv.org/abs/2003.05622"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d0"
+  },
+  "keywords": [
+    "Renewable Energy",
+    "Sustainability",
+    "Solar Power",
+    "Energy Optimization"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814725"
+  },
+  "title": "Blockchain for Supply Chain Transparency",
+  "description": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency. The study includes implementing a prototype system to track goods from origin to destination in real-time.",
+  "links": {
+    "github": "https://github.com/example/project13",
+    "youtube": "https://youtube.com/watch?v=example13",
+    "doi": "https://doi.org/example/project13"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a87d"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a879"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a876"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86d"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "Blockchain ensures secure and transparent transaction records in supply chains.",
+      "cite": "https://doi.org/10.1016/j.jom.2018.03.001"
+    },
+    {
+      "quote": "Distributed ledger technology is transforming logistics operations.",
+      "cite": "https://doi.org/10.1016/j.future.2021.05.032"
+    },
+    {
+      "quote": "The immutability of blockchain enhances trust among supply chain stakeholders.",
+      "cite": "https://arxiv.org/abs/2003.05622"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8ce"
+  },
+  "keywords": [
+    "Cloud Computing",
+    "Scalability",
+    "Virtualization",
+    "Infrastructure"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381472c"
+  },
+  "title": "IoT-Based Smart Agriculture System",
+  "description": "This project focuses on developing an Internet of Things (IoT) system for smart agriculture, enabling real-time monitoring of soil conditions, weather, and crop health. The goal is to optimize resource usage and increase crop yields using advanced sensors and analytics.",
+  "links": {
+    "github": "https://github.com/example/project20",
+    "youtube": "https://youtube.com/watch?v=example20",
+    "doi": "https://doi.org/example/project20"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a873"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a872"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86f"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a879"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "IoT systems can revolutionize farming practices by providing actionable insights.",
+      "cite": "https://doi.org/10.1109/JIOT.2020.2968253"
+    },
+    {
+      "quote": "Smart agriculture is the future of sustainable farming.",
+      "cite": "https://doi.org/10.1016/j.compag.2018.11.005"
+    },
+    {
+      "quote": "Precision agriculture using IoT improves efficiency and reduces waste.",
+      "cite": "https://arxiv.org/abs/2004.08936"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d1"
+  },
+  "keywords": [
+    "Renewable Energy",
+    "Sustainability",
+    "Solar Power",
+    "Energy Optimization"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381471a"
+  },
+  "title": "Blockchain for Supply Chain Transparency",
+  "description": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency. The study includes implementing a prototype system to track goods from origin to destination in real-time.",
+  "links": {
+    "github": "https://github.com/example/project2",
+    "youtube": "https://youtube.com/watch?v=example2",
+    "doi": "https://doi.org/example/project2"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a871"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87f"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86d"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a872"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "Blockchain ensures secure and transparent transaction records in supply chains.",
+      "cite": "https://doi.org/10.1016/j.jom.2018.03.001"
+    },
+    {
+      "quote": "Distributed ledger technology is transforming logistics operations.",
+      "cite": "https://doi.org/10.1016/j.future.2021.05.032"
+    },
+    {
+      "quote": "The immutability of blockchain enhances trust among supply chain stakeholders.",
+      "cite": "https://arxiv.org/abs/2003.05622"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8cd"
+  },
+  "keywords": [
+    "Cybersecurity",
+    "Data Privacy",
+    "Threat Detection",
+    "Encryption"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814724"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics.",
+  "links": {
+    "github": "https://github.com/example/project12",
+    "youtube": "https://youtube.com/watch?v=example12",
+    "doi": "https://doi.org/example/project12"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a86d"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a880"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87f"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "This approach achieves state-of-the-art accuracy in brain tumor segmentation.",
+      "cite": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "quote": "CNNs have revolutionized medical imaging by providing precise and automated results.",
+      "cite": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "quote": "Deep learning enables faster and more accurate image analysis in healthcare.",
+      "cite": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8ce"
+  },
+  "keywords": [
+    "Healthcare",
+    "Diagnostics",
+    "Medical Imaging",
+    "Automation"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814727"
+  },
+  "title": "IoT-Based Smart Agriculture System",
+  "description": "This project focuses on developing an Internet of Things (IoT) system for smart agriculture, enabling real-time monitoring of soil conditions, weather, and crop health. The goal is to optimize resource usage and increase crop yields using advanced sensors and analytics.",
+  "links": {
+    "github": "https://github.com/example/project15",
+    "youtube": "https://youtube.com/watch?v=example15",
+    "doi": "https://doi.org/example/project15"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a872"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a875"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86e"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87d"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "IoT systems can revolutionize farming practices by providing actionable insights.",
+      "cite": "https://doi.org/10.1109/JIOT.2020.2968253"
+    },
+    {
+      "quote": "Smart agriculture is the future of sustainable farming.",
+      "cite": "https://doi.org/10.1016/j.compag.2018.11.005"
+    },
+    {
+      "quote": "Precision agriculture using IoT improves efficiency and reduces waste.",
+      "cite": "https://arxiv.org/abs/2004.08936"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8ce"
+  },
+  "keywords": [
+    "Cybersecurity",
+    "Data Privacy",
+    "Threat Detection",
+    "Encryption"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381472d"
+  },
+  "title": "Blockchain for Supply Chain Transparency",
+  "description": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency. The study includes implementing a prototype system to track goods from origin to destination in real-time.",
+  "links": {
+    "github": "https://github.com/example/project21",
+    "youtube": "https://youtube.com/watch?v=example21",
+    "doi": "https://doi.org/example/project21"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a86e"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a874"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a872"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87e"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "Blockchain ensures secure and transparent transaction records in supply chains.",
+      "cite": "https://doi.org/10.1016/j.jom.2018.03.001"
+    },
+    {
+      "quote": "Distributed ledger technology is transforming logistics operations.",
+      "cite": "https://doi.org/10.1016/j.future.2021.05.032"
+    },
+    {
+      "quote": "The immutability of blockchain enhances trust among supply chain stakeholders.",
+      "cite": "https://arxiv.org/abs/2003.05622"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8cf"
+  },
+  "keywords": [
+    "Big Data",
+    "Analytics",
+    "Data Mining",
+    "Visualization"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814730"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics.",
+  "links": {
+    "github": "https://github.com/example/project24",
+    "youtube": "https://youtube.com/watch?v=example24",
+    "doi": "https://doi.org/example/project24"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a873"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a872"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a880"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87c"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "This approach achieves state-of-the-art accuracy in brain tumor segmentation.",
+      "cite": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "quote": "CNNs have revolutionized medical imaging by providing precise and automated results.",
+      "cite": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "quote": "Deep learning enables faster and more accurate image analysis in healthcare.",
+      "cite": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d0"
+  },
+  "keywords": [
+    "Big Data",
+    "Analytics",
+    "Data Mining",
+    "Visualization"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381471d"
+  },
+  "title": "Blockchain for Supply Chain Transparency",
+  "description": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency. The study includes implementing a prototype system to track goods from origin to destination in real-time.",
+  "links": {
+    "github": "https://github.com/example/project5",
+    "youtube": "https://youtube.com/watch?v=example5",
+    "doi": "https://doi.org/example/project5"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a872"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a878"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87c"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "Blockchain ensures secure and transparent transaction records in supply chains.",
+      "cite": "https://doi.org/10.1016/j.jom.2018.03.001"
+    },
+    {
+      "quote": "Distributed ledger technology is transforming logistics operations.",
+      "cite": "https://doi.org/10.1016/j.future.2021.05.032"
+    },
+    {
+      "quote": "The immutability of blockchain enhances trust among supply chain stakeholders.",
+      "cite": "https://arxiv.org/abs/2003.05622"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8cf"
+  },
+  "keywords": [
+    "Quantum Computing",
+    "Algorithms",
+    "Quantum Mechanics",
+    "Simulations"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814728"
+  },
+  "title": "IoT-Based Smart Agriculture System",
+  "description": "This project focuses on developing an Internet of Things (IoT) system for smart agriculture, enabling real-time monitoring of soil conditions, weather, and crop health. The goal is to optimize resource usage and increase crop yields using advanced sensors and analytics.",
+  "links": {
+    "github": "https://github.com/example/project16",
+    "youtube": "https://youtube.com/watch?v=example16",
+    "doi": "https://doi.org/example/project16"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a874"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86f"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a873"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "IoT systems can revolutionize farming practices by providing actionable insights.",
+      "cite": "https://doi.org/10.1109/JIOT.2020.2968253"
+    },
+    {
+      "quote": "Smart agriculture is the future of sustainable farming.",
+      "cite": "https://doi.org/10.1016/j.compag.2018.11.005"
+    },
+    {
+      "quote": "Precision agriculture using IoT improves efficiency and reduces waste.",
+      "cite": "https://arxiv.org/abs/2004.08936"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8ce"
+  },
+  "keywords": [
+    "Blockchain",
+    "Cryptography",
+    "Supply Chain",
+    "Transparency"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814729"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics.",
+  "links": {
+    "github": "https://github.com/example/project17",
+    "youtube": "https://youtube.com/watch?v=example17",
+    "doi": "https://doi.org/example/project17"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a87e"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a874"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a872"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86e"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "This approach achieves state-of-the-art accuracy in brain tumor segmentation.",
+      "cite": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "quote": "CNNs have revolutionized medical imaging by providing precise and automated results.",
+      "cite": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "quote": "Deep learning enables faster and more accurate image analysis in healthcare.",
+      "cite": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8ce"
+  },
+  "keywords": [
+    "Blockchain",
+    "Cryptography",
+    "Supply Chain",
+    "Transparency"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814736"
+  },
+  "title": "Blockchain for Supply Chain Transparency",
+  "description": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency. The study includes implementing a prototype system to track goods from origin to destination in real-time.",
+  "links": {
+    "github": "https://github.com/example/project30",
+    "youtube": "https://youtube.com/watch?v=example30",
+    "doi": "https://doi.org/example/project30"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a879"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87e"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a878"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "Blockchain ensures secure and transparent transaction records in supply chains.",
+      "cite": "https://doi.org/10.1016/j.jom.2018.03.001"
+    },
+    {
+      "quote": "Distributed ledger technology is transforming logistics operations.",
+      "cite": "https://doi.org/10.1016/j.future.2021.05.032"
+    },
+    {
+      "quote": "The immutability of blockchain enhances trust among supply chain stakeholders.",
+      "cite": "https://arxiv.org/abs/2003.05622"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d0"
+  },
+  "keywords": [
+    "Big Data",
+    "Analytics",
+    "Data Mining",
+    "Visualization"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381472f"
+  },
+  "title": "Blockchain for Supply Chain Transparency",
+  "description": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency. The study includes implementing a prototype system to track goods from origin to destination in real-time.",
+  "links": {
+    "github": "https://github.com/example/project23",
+    "youtube": "https://youtube.com/watch?v=example23",
+    "doi": "https://doi.org/example/project23"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a876"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a872"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87b"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "Blockchain ensures secure and transparent transaction records in supply chains.",
+      "cite": "https://doi.org/10.1016/j.jom.2018.03.001"
+    },
+    {
+      "quote": "Distributed ledger technology is transforming logistics operations.",
+      "cite": "https://doi.org/10.1016/j.future.2021.05.032"
+    },
+    {
+      "quote": "The immutability of blockchain enhances trust among supply chain stakeholders.",
+      "cite": "https://arxiv.org/abs/2003.05622"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d1"
+  },
+  "keywords": [
+    "Quantum Computing",
+    "Algorithms",
+    "Quantum Mechanics",
+    "Simulations"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381471e"
+  },
+  "title": "IoT-Based Smart Agriculture System",
+  "description": "This project focuses on developing an Internet of Things (IoT) system for smart agriculture, enabling real-time monitoring of soil conditions, weather, and crop health. The goal is to optimize resource usage and increase crop yields using advanced sensors and analytics.",
+  "links": {
+    "github": "https://github.com/example/project6",
+    "youtube": "https://youtube.com/watch?v=example6",
+    "doi": "https://doi.org/example/project6"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a873"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a871"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a876"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "IoT systems can revolutionize farming practices by providing actionable insights.",
+      "cite": "https://doi.org/10.1109/JIOT.2020.2968253"
+    },
+    {
+      "quote": "Smart agriculture is the future of sustainable farming.",
+      "cite": "https://doi.org/10.1016/j.compag.2018.11.005"
+    },
+    {
+      "quote": "Precision agriculture using IoT improves efficiency and reduces waste.",
+      "cite": "https://arxiv.org/abs/2004.08936"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d0"
+  },
+  "keywords": [
+    "Cybersecurity",
+    "Data Privacy",
+    "Threat Detection",
+    "Encryption"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814720"
+  },
+  "title": "Blockchain for Supply Chain Transparency",
+  "description": "This research investigates how blockchain technology can enhance supply chain management by providing transparency, reducing fraud, and improving efficiency. The study includes implementing a prototype system to track goods from origin to destination in real-time.",
+  "links": {
+    "github": "https://github.com/example/project8",
+    "youtube": "https://youtube.com/watch?v=example8",
+    "doi": "https://doi.org/example/project8"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a87b"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87e"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a876"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86e"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "Blockchain ensures secure and transparent transaction records in supply chains.",
+      "cite": "https://doi.org/10.1016/j.jom.2018.03.001"
+    },
+    {
+      "quote": "Distributed ledger technology is transforming logistics operations.",
+      "cite": "https://doi.org/10.1016/j.future.2021.05.032"
+    },
+    {
+      "quote": "The immutability of blockchain enhances trust among supply chain stakeholders.",
+      "cite": "https://arxiv.org/abs/2003.05622"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8ce"
+  },
+  "keywords": [
+    "AI",
+    "Machine Learning",
+    "Neural Networks",
+    "Image Processing"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381472a"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics.",
+  "links": {
+    "github": "https://github.com/example/project18",
+    "youtube": "https://youtube.com/watch?v=example18",
+    "doi": "https://doi.org/example/project18"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a87b"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a86f"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a870"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "This approach achieves state-of-the-art accuracy in brain tumor segmentation.",
+      "cite": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "quote": "CNNs have revolutionized medical imaging by providing precise and automated results.",
+      "cite": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "quote": "Deep learning enables faster and more accurate image analysis in healthcare.",
+      "cite": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8cd"
+  },
+  "keywords": [
+    "Cloud Computing",
+    "Scalability",
+    "Virtualization",
+    "Infrastructure"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814719"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics.",
+  "links": {
+    "github": "https://github.com/example/project1",
+    "youtube": "https://youtube.com/watch?v=example1",
+    "doi": "https://doi.org/example/project1"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a874"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a880"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a873"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "This approach achieves state-of-the-art accuracy in brain tumor segmentation.",
+      "cite": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "quote": "CNNs have revolutionized medical imaging by providing precise and automated results.",
+      "cite": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "quote": "Deep learning enables faster and more accurate image analysis in healthcare.",
+      "cite": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8ce"
+  },
+  "keywords": [
+    "Digital Marketing",
+    "Consumer Behavior",
+    "Social Media",
+    "Analytics"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc638381471b"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics.",
+  "links": {
+    "github": "https://github.com/example/project3",
+    "youtube": "https://youtube.com/watch?v=example3",
+    "doi": "https://doi.org/example/project3"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a874"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87b"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87c"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "This approach achieves state-of-the-art accuracy in brain tumor segmentation.",
+      "cite": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "quote": "CNNs have revolutionized medical imaging by providing precise and automated results.",
+      "cite": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "quote": "Deep learning enables faster and more accurate image analysis in healthcare.",
+      "cite": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8ce"
+  },
+  "keywords": [
+    "Quantum Computing",
+    "Algorithms",
+    "Quantum Mechanics",
+    "Simulations"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814722"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics.",
+  "links": {
+    "github": "https://github.com/example/project10",
+    "youtube": "https://youtube.com/watch?v=example10",
+    "doi": "https://doi.org/example/project10"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a874"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a880"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87d"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87f"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "This approach achieves state-of-the-art accuracy in brain tumor segmentation.",
+      "cite": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "quote": "CNNs have revolutionized medical imaging by providing precise and automated results.",
+      "cite": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "quote": "Deep learning enables faster and more accurate image analysis in healthcare.",
+      "cite": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d1"
+  },
+  "keywords": [
+    "AI",
+    "Machine Learning",
+    "Neural Networks",
+    "Image Processing"
+  ],
+  "privacy": 1
+},
+{
+  "_id": {
+    "$oid": "6795338cb2fbbc6383814735"
+  },
+  "title": "Deep Learning for Medical Image Segmentation",
+  "description": "This project explores the application of deep learning models in segmenting medical images to identify critical regions, such as tumors in MRI scans. The research focuses on developing convolutional neural networks (CNNs) and utilizing large datasets to achieve high accuracy and reliability in clinical diagnostics.",
+  "links": {
+    "github": "https://github.com/example/project29",
+    "youtube": "https://youtube.com/watch?v=example29",
+    "doi": "https://doi.org/example/project29"
+  },
+  "tech": "",
+  "members": [
+    {
+      "$oid": "6795313eea284b5c74e4a875"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a876"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a874"
+    },
+    {
+      "$oid": "6795313eea284b5c74e4a87a"
+    }
+  ],
+  "citations": [
+    {
+      "quote": "This approach achieves state-of-the-art accuracy in brain tumor segmentation.",
+      "cite": "https://doi.org/10.1016/j.media.2020.101820"
+    },
+    {
+      "quote": "CNNs have revolutionized medical imaging by providing precise and automated results.",
+      "cite": "https://doi.org/10.1038/s41598-019-48545-8"
+    },
+    {
+      "quote": "Deep learning enables faster and more accurate image analysis in healthcare.",
+      "cite": "https://arxiv.org/abs/2001.09408"
+    }
+  ],
+  "supervisor": {
+    "$oid": "6795b9a1ea284b5c74e4a8d0"
+  },
+  "keywords": [
+    "Renewable Energy",
+    "Sustainability",
+    "Solar Power",
+    "Energy Optimization"
+  ],
+  "privacy": 1
+}]
