@@ -4,6 +4,8 @@ require __DIR__ . '/vendor/autoload.php'; // Updated path to Composer's autoload
 $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
 $collection = $client->uiurp->forum_posts;
 
+$posts = $collection->find()->toArray();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
