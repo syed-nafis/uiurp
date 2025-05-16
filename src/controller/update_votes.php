@@ -27,32 +27,29 @@ try {
         exit;
     }
 
-    if (!isset($_SESSION['upvoted_posts'])) {
-        $_SESSION['upvoted_posts'] = [];
+    // Track upvote state per post in session: 1 for upvoted, 0 for not upvoted
+    if (!isset($_SESSION['upvote_state'])) {
+        $_SESSION['upvote_state'] = [];
     }
 
-    // If already upvoted, just return current upvotes without incrementing or error
-    if (in_array($postId, $_SESSION['upvoted_posts'])) {
-        $post = $collection->findOne(['_id' => new MongoDB\BSON\ObjectId($postId)]);
-        echo json_encode([
-            'success' => true,
-            'upvotes' => $post['upvotes'] ?? 0
-        ]);
-        exit;
-    }
+    $currentState = $_SESSION['upvote_state'][$postId] ?? 0; // 0 = not upvoted, 1 = upvoted
 
-    // Update upvotes by 1
+    // Alternate: if not upvoted, upvote (+1); if upvoted, remove upvote (-1)
+    $inc = $currentState === 1 ? -1 : 1;
+
     $result = $collection->updateOne(
         ['_id' => new MongoDB\BSON\ObjectId($postId)],
-        ['$inc' => ['upvotes' => 1]]
+        ['$inc' => ['upvotes' => $inc]]
     );
 
     if ($result->getModifiedCount() === 1) {
-        $_SESSION['upvoted_posts'][] = $postId;
+        // Toggle state
+        $_SESSION['upvote_state'][$postId] = $currentState === 1 ? 0 : 1;
         $post = $collection->findOne(['_id' => new MongoDB\BSON\ObjectId($postId)]);
         echo json_encode([
             'success' => true,
-            'upvotes' => $post['upvotes'] ?? 0
+            'upvotes' => $post['upvotes'] ?? 0,
+            'upvoted' => $_SESSION['upvote_state'][$postId] === 1
         ]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Failed to update upvotes']);
