@@ -39,18 +39,7 @@ session_start();
                 <div class="d-flex align-items-center dropdown">
                     <a href="#" class="nav-link d-flex align-items-center fw-semibold dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="assets/resources/user_avatar.png" alt="User Avatar" class="rounded-circle me-2" width="40" height="40">
-                        <span class="user-name">
-                            <?php
-                                $userData = $_SESSION['user_data'];
-                                if (is_array($userData)) {
-                                    echo $userData['name'];
-                                } elseif (is_object($userData)) {
-                                    echo $userData->name;
-                                } else {
-                                    echo 'User';
-                                }
-                            ?>
-                        </span>
+                        <span class="user-name"><?= $_SESSION['user_data']['name'] ?></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="../../Student_Profile.php">Edit Profile</a></li>
