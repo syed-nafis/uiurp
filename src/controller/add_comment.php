@@ -5,6 +5,8 @@ $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb
 $db = $client->uiurp;
 $collection = $db->forum;
 
+header('Content-Type: application/json'); // Ensure JSON response
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the POST data
     $postId = $_POST['postId'] ?? null;
@@ -17,10 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
+        // Sanitize the comment
+        $sanitizedComment = htmlspecialchars($comment, ENT_QUOTES, 'UTF-8');
+
         // Update the post's comments array
         $result = $collection->updateOne(
             ['_id' => new MongoDB\BSON\ObjectId($postId)], // Query by ObjectId
-            ['$push' => ['comments' => $comment]] // Add the comment to the comments array
+            ['$push' => ['comments' => $sanitizedComment]] // Add the sanitized comment
         );
 
         if ($result->getModifiedCount() === 1) {
@@ -31,40 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (Exception $e) {
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
     }
+} else {
+    echo json_encode(['success' => false, 'message' => 'Invalid request method']);
 }
 ?>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Add event listener to all forms with the class "add-comment-form"
-    document.querySelectorAll('.add-comment-form').forEach(form => {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission behavior
-
-            const formData = new FormData(form); // Collect form data
-            const postId = formData.get('postId');
-            const comment = formData.get('comment');
-
-            // Send the data via AJAX
-            fetch('add_comment.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Comment added successfully!');
-                    // Optionally, reload the page or update the comments section dynamically
-                    location.reload(); // Reload the page to show the updated comments
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while adding the comment.');
-            });
-        });
-    });
-});
-</script>
