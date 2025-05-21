@@ -1,0 +1,1080 @@
+2025-05-19 09:53:11 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 09:53:11 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 09:53:11 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 09:53:11 - Admin user, showing all projects
+2025-05-19 09:53:11 - Found 9 projects
+2025-05-19 09:55:34 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 682ae3d4314b6622be02c124
+                )
+
+            [name] => Mayen
+            [email] => www.mayen@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 682ae3d4314b6622be02c124
+)
+
+2025-05-19 09:55:34 - UserId extracted: 682ae3d4314b6622be02c124, isLoggedIn: true
+2025-05-19 09:55:34 - Filter: {"$or":[{"createdBy":"682ae3d4314b6622be02c124"},{"members":{"$elemMatch":{"userId.$oid":"682ae3d4314b6622be02c124"}}},{"supervisor.userId.$oid":"682ae3d4314b6622be02c124"}]}
+2025-05-19 09:55:34 - Found 0 projects
+2025-05-19 09:57:36 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 682ae3d4314b6622be02c124
+                )
+
+            [name] => Mayen
+            [email] => www.mayen@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 682ae3d4314b6622be02c124
+)
+
+2025-05-19 09:57:36 - UserId extracted: 682ae3d4314b6622be02c124, isLoggedIn: true
+2025-05-19 09:57:36 - Filter: {"$or":[{"createdBy":"682ae3d4314b6622be02c124"},{"members":{"$elemMatch":{"userId.$oid":"682ae3d4314b6622be02c124"}}},{"supervisor.userId.$oid":"682ae3d4314b6622be02c124"}]}
+2025-05-19 09:57:36 - Found 1 projects
+2025-05-19 11:30:42 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 682ae3d4314b6622be02c124
+                )
+
+            [name] => Mayen
+            [email] => www.mayen@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 682ae3d4314b6622be02c124
+)
+
+2025-05-19 11:30:42 - UserId extracted: 682ae3d4314b6622be02c124, isLoggedIn: true
+2025-05-19 11:30:42 - Filter: {"$or":[{"createdBy":"682ae3d4314b6622be02c124"},{"members":{"$elemMatch":{"userId.$oid":"682ae3d4314b6622be02c124"}}},{"supervisor.userId.$oid":"682ae3d4314b6622be02c124"}]}
+2025-05-19 11:30:43 - Found 1 projects
+2025-05-19 11:31:14 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:31:14 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:31:14 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:31:14 - Admin user, showing all projects
+2025-05-19 11:31:14 - Found 10 projects
+2025-05-19 11:32:00 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:32:00 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:32:00 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:32:00 - Admin user, showing all projects
+2025-05-19 11:32:00 - Found 10 projects
+2025-05-19 11:32:18 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:32:18 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:32:18 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:32:18 - Admin user, showing all projects
+2025-05-19 11:32:19 - Found 10 projects
+2025-05-19 11:32:57 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:32:57 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:32:57 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:32:57 - Admin user, showing all projects
+2025-05-19 11:32:57 - Found 10 projects
+2025-05-19 11:33:22 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:33:22 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:33:22 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:33:22 - Admin user, showing all projects
+2025-05-19 11:33:22 - Found 10 projects
+2025-05-19 11:37:11 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:37:11 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:37:11 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:37:11 - Admin user, showing all projects
+2025-05-19 11:37:12 - Found 10 projects
+2025-05-19 11:37:23 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:37:23 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:37:23 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:37:23 - Admin user, showing all projects
+2025-05-19 11:37:23 - Found 9 projects
+2025-05-19 11:37:30 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:37:30 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:37:30 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:37:30 - Admin user, showing all projects
+2025-05-19 11:37:30 - Found 9 projects
+2025-05-19 11:44:18 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:44:18 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:44:18 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:44:18 - Admin user, showing all projects
+2025-05-19 11:44:18 - Found 9 projects
+2025-05-19 11:44:28 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:44:28 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:44:28 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:44:28 - Admin user, showing all projects
+2025-05-19 11:44:28 - Found 9 projects
+2025-05-19 11:44:50 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:44:50 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:44:50 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:44:50 - Admin user, showing all projects
+2025-05-19 11:44:50 - Found 8 projects
+2025-05-19 11:50:10 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:50:10 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:50:10 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:50:10 - Admin user, showing all projects
+2025-05-19 11:50:10 - Found 8 projects
+2025-05-19 11:55:03 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:55:03 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:55:03 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:55:03 - Admin user, showing all projects
+2025-05-19 11:55:03 - Found 8 projects
+2025-05-19 11:55:08 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:55:08 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:55:08 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:55:08 - Admin user, showing all projects
+2025-05-19 11:55:08 - Found 8 projects
+2025-05-19 11:57:31 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:57:31 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:57:31 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:57:31 - Admin user, showing all projects
+2025-05-19 11:57:31 - Found 8 projects
+2025-05-19 11:57:33 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:57:33 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:57:33 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:57:33 - Admin user, showing all projects
+2025-05-19 11:57:33 - Found 8 projects
+2025-05-19 11:58:48 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:58:48 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 11:58:48 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 11:58:48 - Admin user, showing all projects
+2025-05-19 11:58:48 - Found 8 projects
+2025-05-19 12:03:33 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:03:33 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 12:03:33 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 12:03:33 - Admin user, showing all projects
+2025-05-19 12:03:34 - Found 8 projects
+2025-05-19 12:07:48 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:07:48 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 12:07:48 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 12:07:48 - Admin user, showing all projects
+2025-05-19 12:07:48 - Found 8 projects
+2025-05-19 12:12:05 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:12:05 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 12:12:05 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 12:12:05 - Admin user, showing all projects
+2025-05-19 12:12:05 - Found 8 projects
+2025-05-19 12:16:36 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:16:36 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 12:16:36 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 12:16:36 - Admin user, showing all projects
+2025-05-19 12:16:36 - Found 8 projects
+2025-05-19 12:16:44 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:16:44 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 12:16:44 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 12:16:44 - Admin user, showing all projects
+2025-05-19 12:16:44 - Found 8 projects
+2025-05-19 12:18:22 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:18:22 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 12:18:22 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 12:18:22 - Admin user, showing all projects
+2025-05-19 12:18:22 - Found 8 projects
+2025-05-19 12:34:51 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:34:51 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 12:34:51 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 12:34:51 - Admin user, showing all projects
+2025-05-19 12:34:51 - Found 8 projects
+2025-05-19 12:34:57 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:34:57 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 12:34:57 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 12:34:57 - Admin user, showing all projects
+2025-05-19 12:34:57 - Found 8 projects
+2025-05-19 12:35:02 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:35:02 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 12:35:02 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 12:35:02 - Admin user, showing all projects
+2025-05-19 12:35:02 - Found 8 projects
+2025-05-19 12:35:58 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:35:58 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 12:35:58 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 12:35:58 - Admin user, showing all projects
+2025-05-19 12:35:58 - Found 8 projects
+2025-05-19 12:42:19 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:42:19 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 12:42:19 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 12:42:19 - Admin user, showing all projects
+2025-05-19 12:42:20 - Found 8 projects
+2025-05-19 12:44:37 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:44:37 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 12:44:37 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 12:44:37 - Admin user, showing all projects
+2025-05-19 12:44:37 - Found 9 projects
+2025-05-19 13:01:46 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 13:01:46 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 13:01:46 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 13:01:46 - Admin user, showing all projects
+2025-05-19 13:01:47 - Found 9 projects
+2025-05-19 13:15:10 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 13:15:10 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 13:15:10 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 13:15:10 - Admin user, showing all projects
+2025-05-19 13:15:10 - Found 9 projects
+2025-05-19 13:15:16 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 13:15:16 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 13:15:16 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 13:15:16 - Admin user, showing all projects
+2025-05-19 13:15:17 - Found 9 projects
+2025-05-19 13:15:22 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 13:15:22 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 13:15:22 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 13:15:22 - Admin user, showing all projects
+2025-05-19 13:15:22 - Found 9 projects
+2025-05-19 13:15:32 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 13:15:32 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 13:15:32 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"}]}
+2025-05-19 13:15:32 - Admin user, showing all projects
+2025-05-19 13:15:32 - Found 9 projects
+2025-05-19 13:26:39 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 13:26:39 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 13:26:39 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-19 13:26:39 - Admin user, showing all projects
+2025-05-19 13:26:39 - Found 9 projects
+2025-05-19 14:16:55 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 682ae3d4314b6622be02c124
+                )
+
+            [name] => Mayen
+            [email] => www.mayen@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 682ae3d4314b6622be02c124
+)
+
+2025-05-19 14:16:55 - UserId extracted: 682ae3d4314b6622be02c124, isLoggedIn: true
+2025-05-19 14:16:55 - Filter: {"$or":[{"createdBy":"682ae3d4314b6622be02c124"},{"createdBy.$oid":"682ae3d4314b6622be02c124"},{"members":{"$elemMatch":{"userId":"682ae3d4314b6622be02c124"}}},{"members":{"$elemMatch":{"userId.$oid":"682ae3d4314b6622be02c124"}}},{"supervisor.userId.$oid":"682ae3d4314b6622be02c124"},{"supervisor.userId":"682ae3d4314b6622be02c124"}]}
+2025-05-19 14:16:56 - Found 0 projects
+2025-05-19 14:20:56 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 682ae3d4314b6622be02c124
+                )
+
+            [name] => Mayen
+            [email] => www.mayen@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 682ae3d4314b6622be02c124
+)
+
+2025-05-19 14:20:56 - UserId extracted: 682ae3d4314b6622be02c124, isLoggedIn: true
+2025-05-19 14:20:56 - Filter: {"$or":[{"createdBy":"682ae3d4314b6622be02c124"},{"createdBy.$oid":"682ae3d4314b6622be02c124"},{"members":{"$elemMatch":{"userId":"682ae3d4314b6622be02c124"}}},{"members":{"$elemMatch":{"userId.$oid":"682ae3d4314b6622be02c124"}}},{"supervisor.userId.$oid":"682ae3d4314b6622be02c124"},{"supervisor.userId":"682ae3d4314b6622be02c124"}]}
+2025-05-19 14:20:56 - Found 0 projects
+2025-05-19 14:23:35 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 682ae3d4314b6622be02c124
+                )
+
+            [name] => Mayen
+            [email] => www.mayen@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 682ae3d4314b6622be02c124
+)
+
+2025-05-19 14:23:35 - UserId extracted: 682ae3d4314b6622be02c124, isLoggedIn: true
+2025-05-19 14:23:35 - Filter: {"$or":[{"createdBy":"682ae3d4314b6622be02c124"},{"createdBy.$oid":"682ae3d4314b6622be02c124"},{"members":{"$elemMatch":{"userId":"682ae3d4314b6622be02c124"}}},{"members":{"$elemMatch":{"userId.$oid":"682ae3d4314b6622be02c124"}}},{"supervisor.userId.$oid":"682ae3d4314b6622be02c124"},{"supervisor.userId":"682ae3d4314b6622be02c124"}]}
+2025-05-19 14:23:35 - Found 0 projects
+2025-05-19 14:25:17 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 682ae3d4314b6622be02c124
+                )
+
+            [name] => Mayen
+            [email] => www.mayen@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 682ae3d4314b6622be02c124
+)
+
+2025-05-19 14:25:17 - UserId extracted: 682ae3d4314b6622be02c124, isLoggedIn: true
+2025-05-19 14:25:17 - Filter: {"$or":[{"createdBy":"682ae3d4314b6622be02c124"},{"createdBy.$oid":"682ae3d4314b6622be02c124"},{"members":{"$elemMatch":{"userId":"682ae3d4314b6622be02c124"}}},{"members":{"$elemMatch":{"userId.$oid":"682ae3d4314b6622be02c124"}}},{"supervisor.userId.$oid":"682ae3d4314b6622be02c124"},{"supervisor.userId":"682ae3d4314b6622be02c124"}]}
+2025-05-19 14:25:17 - Found 0 projects
+2025-05-19 14:59:06 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 682ae3d4314b6622be02c124
+                )
+
+            [name] => Mayen
+            [email] => www.mayen@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 682ae3d4314b6622be02c124
+)
+
+2025-05-19 14:59:06 - UserId extracted: 682ae3d4314b6622be02c124, isLoggedIn: true
+2025-05-19 14:59:06 - Filter: {"$or":[{"createdBy":"682ae3d4314b6622be02c124"},{"createdBy.$oid":"682ae3d4314b6622be02c124"},{"members":{"$elemMatch":{"userId":"682ae3d4314b6622be02c124"}}},{"members":{"$elemMatch":{"userId.$oid":"682ae3d4314b6622be02c124"}}},{"supervisor.userId.$oid":"682ae3d4314b6622be02c124"},{"supervisor.userId":"682ae3d4314b6622be02c124"}]}
+2025-05-19 14:59:07 - Found 0 projects
+2025-05-19 19:24:36 - SESSION: Array
+(
+)
+
+2025-05-19 19:24:36 - UserId extracted: , isLoggedIn: false
+2025-05-19 19:24:37 - Not logged in, showing public projects
+2025-05-19 19:24:38 - Found 8 projects
+2025-05-20 05:12:49 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-20 05:12:49 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-20 05:12:49 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-20 05:12:49 - Admin user, showing all projects
+2025-05-20 05:12:49 - Found 9 projects
+2025-05-20 05:14:49 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-20 05:14:49 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-20 05:14:49 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-20 05:14:49 - Admin user, showing all projects
+2025-05-20 05:14:50 - Found 9 projects
+2025-05-19 20:03:43 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 20:03:43 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-19 20:03:43 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-19 20:03:43 - Admin user, showing all projects
+2025-05-19 20:03:46 - Found 9 projects

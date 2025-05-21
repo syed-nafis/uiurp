@@ -1,6 +1,5 @@
 <?php
-// Comment out session start to allow anyone to edit
-// session_start();
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -4,9 +4,18 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 // We're importing classes directly without hints to avoid linter issues
 use MongoDB\Client;
+use MongoDB\BSON\UTCDateTime;
+use MongoDB\BSON\ObjectId;
 
-// Comment out session-related code
-// session_start();
+// Start session to capture user data if available
+session_start();
+
+// Log session data for debugging
+$log_path = __DIR__ . '/../../logs/project_update_debug.log';
+if (!file_exists(dirname($log_path))) {
+    mkdir(dirname($log_path), 0777, true);
+}
+file_put_contents($log_path, date('Y-m-d H:i:s') . " - SESSION: " . print_r($_SESSION, true) . "\n", FILE_APPEND);
 
 header('Content-Type: application/json');
 
@@ -42,8 +51,23 @@ if ($DEBUG) {
 }
 
 $projectId = $_POST['project_id'];
-// Use a dummy user ID since we're bypassing authentication
+// Get the user ID from session
+$userId = null;
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+} elseif (isset($_SESSION['user_data']) && isset($_SESSION['user_data']['_id']) && isset($_SESSION['user_data']['_id']['$oid'])) {
+    // Try to get ID from user_data if available
+    $userId = $_SESSION['user_data']['_id']['$oid'];
+} elseif (isset($_SESSION['user_data']) && isset($_SESSION['user_data']['_id'])) {
+    // Fall back to string representation of ID if present
+    $userId = (string)$_SESSION['user_data']['_id'];
+}
+// Default to a dummy ID if none found
+if (!$userId) {
 $userId = '000000000000000000000000';
+}
+
+file_put_contents($log_path, date('Y-m-d H:i:s') . " - UserId extracted: $userId\n", FILE_APPEND);
 
 // Check required fields - with improved validation
 $requiredFields = ['title', 'field'];
@@ -301,6 +325,72 @@ try {
         }
     }
     
+    // Handle project files uploads
+    $files = isset($project['files']) ? $project['files'] : [];
+    if (isset($_FILES['project_files']) && !empty($_FILES['project_files']['name'][0])) {
+        $uploadDir = __DIR__ . '/../../storage/files/';
+        
+        // Create directory if it doesn't exist
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        
+        $fileCount = count($_FILES['project_files']['name']);
+        
+        for ($i = 0; $i < $fileCount; $i++) {
+            if ($_FILES['project_files']['error'][$i] === 0) {
+                $filename = $_FILES['project_files']['name'][$i];
+                $fileType = $_FILES['project_files']['type'][$i];
+                $fileSize = $_FILES['project_files']['size'][$i];
+                $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
+                $newFilename = 'file_' . time() . '_' . uniqid() . '.' . $fileExtension;
+                $targetFile = $uploadDir . $newFilename;
+                
+                if (move_uploaded_file($_FILES['project_files']['tmp_name'][$i], $targetFile)) {
+                    $files[] = [
+                        'name' => $filename,
+                        'path' => '/storage/files/' . $newFilename,
+                        'type' => $fileType,
+                        'size' => $fileSize,
+                        'uploadedAt' => new \MongoDB\BSON\UTCDateTime(time() * 1000)
+                    ];
+                }
+            }
+        }
+    }
+    
+    // Handle media file uploads
+    $media = isset($project['media']) ? $project['media'] : [];
+    if (isset($_FILES['project_media']) && !empty($_FILES['project_media']['name'][0])) {
+        $uploadDir = __DIR__ . '/../../storage/media/';
+        
+        // Create directory if it doesn't exist
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+        
+        $fileCount = count($_FILES['project_media']['name']);
+        
+        for ($i = 0; $i < $fileCount; $i++) {
+            if ($_FILES['project_media']['error'][$i] === 0) {
+                $filename = $_FILES['project_media']['name'][$i];
+                $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
+                $newFilename = 'media_' . time() . '_' . uniqid() . '.' . $fileExtension;
+                $targetFile = $uploadDir . $newFilename;
+                
+                if (move_uploaded_file($_FILES['project_media']['tmp_name'][$i], $targetFile)) {
+                    $mediaType = strpos($_FILES['project_media']['type'][$i], 'image/') === 0 ? 'image' : 'video';
+                    
+                    $media[] = [
+                        'type' => $mediaType,
+                        'url' => '/storage/media/' . $newFilename,
+                        'caption' => $filename
+                    ];
+                }
+            }
+        }
+    }
+    
     // Get date values
     $createdAt = isset($project['createdAt']) ? $project['createdAt'] : new \MongoDB\BSON\UTCDateTime(time() * 1000);
     if (isset($_POST['created_date']) && !empty($_POST['created_date'])) {
@@ -309,6 +399,10 @@ try {
             $createdAt = new \MongoDB\BSON\UTCDateTime($createdTime * 1000);
         }
     }
+    
+    // Preserve the original creator ID
+    // This is important for filtering projects by creator on the project_management.php page
+    $createdBy = isset($project['createdBy']) ? $project['createdBy'] : null;
     
     $updatedAt = new \MongoDB\BSON\UTCDateTime(time() * 1000);
     if (isset($_POST['updated_date']) && !empty($_POST['updated_date'])) {
@@ -344,8 +438,11 @@ try {
                     'youtube' => isset($_POST['youtube_url']) ? $_POST['youtube_url'] : ''
                 ],
                 'coverImage' => $coverImage,
+                'files' => $files,
+                'media' => $media,
                 'createdAt' => $createdAt,
-                'updatedAt' => $updatedAt
+                'updatedAt' => $updatedAt,
+                'createdBy' => $createdBy
             ]
         ]
     );

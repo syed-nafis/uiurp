@@ -91,6 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_type'] = 'faculty';
                 $_SESSION['user_data'] = json_decode(json_encode($facultyData),true);
+                $_SESSION['user_id'] = $id;
                 header('Location: /../../index.php'); // Redirect to faculty dashboard
                 exit();
             }
@@ -103,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_type'] = 'faculty';
                 $_SESSION['user_data'] = json_decode(json_encode($studentData),true);
+                $_SESSION['user_id'] = $id;
                 header('Location: /../../index.php'); // Redirect to student dashboard
                 exit();
             }

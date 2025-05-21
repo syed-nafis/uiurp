@@ -1036,3 +1036,156 @@
 
 )
 
+2025-05-19 08:08:15 - POST data: Array
+(
+    [project_id] => 680ce2153fc22d716b02d236
+    [title] => test
+    [abstract] => test
+    [description] => test
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => ["Blockchain"]
+    [created_date] => 
+    [updated_date] => 2025-05-19
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Saiful Islam
+    [team_members] => [{"name":"Samin","role":"Author","contribution":11,"userId":null}]
+    [timeline] => [{"title":"test","description":"test","date":"2025-04-26","status":"Planned"},{"title":"test","description":"test","date":"2025-04-26","status":"In Progress"},{"title":"test","description":"test","date":"2025-04-26","status":"Completed"}]
+    [references] => [{"title":"test","link":"https://doi.org/10.1109/TDSC.2019.2940949"},{"title":"test2","link":"https://doi.org/10.1109/TDSC.2019.2940949"}]
+    [views] => 740
+    [downloads] => 784
+    [favorites] => 563
+    [comments] => []
+)
+2025-05-19 08:08:15 - Privacy field: value='0', type=string
+2025-05-19 08:08:15 - References parsed as JSON: Array
+(
+    [0] => Array
+        (
+            [title] => test
+            [link] => https://doi.org/10.1109/TDSC.2019.2940949
+        )
+
+    [1] => Array
+        (
+            [title] => test2
+            [link] => https://doi.org/10.1109/TDSC.2019.2940949
+        )
+
+)
+
+2025-05-19 08:08:15 - Final references data: Array
+(
+    [0] => Array
+        (
+            [title] => test
+            [link] => https://doi.org/10.1109/TDSC.2019.2940949
+        )
+
+    [1] => Array
+        (
+            [title] => test2
+            [link] => https://doi.org/10.1109/TDSC.2019.2940949
+        )
+
+)
+
+2025-05-19 08:13:45 - POST data: Array
+(
+    [project_id] => 682acbe836469b434b000244
+    [title] => test2
+    [abstract] => test2
+    [description] => test2
+    [field] => Blockchain
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 
+    [updated_date] => 2025-05-19
+    [github_url] => https://github.com/example/project14
+    [project_url] => https://github.com/example/project14
+    [paper_url] => https://github.com/example/project14
+    [doi] => https://github.com/example/project14
+    [youtube_url] => https://github.com/example/project14
+    [supervisor] => Sunday
+    [team_members] => [{"name":"Samin","role":"Author","contribution":25,"userId":null}]
+    [timeline] => [{"title":"","description":"","date":"2025-05-19","status":"Planned"},{"title":"","description":"","date":"2025-05-19","status":"Planned"},{"title":"","description":"","date":"2025-05-19","status":"Planned"},{"title":"","description":"","date":"2025-05-19","status":"Planned"}]
+    [references] => [{"title":"Test","link":"https://github.com/example/project14"}]
+    [views] => 363
+    [downloads] => 998
+    [favorites] => 486
+    [comments] => []
+)
+2025-05-19 08:13:45 - Privacy field: value='0', type=string
+2025-05-19 08:13:45 - References parsed as JSON: Array
+(
+    [0] => Array
+        (
+            [title] => Test
+            [link] => https://github.com/example/project14
+        )
+
+)
+
+2025-05-19 08:13:45 - Final references data: Array
+(
+    [0] => Array
+        (
+            [title] => Test
+            [link] => https://github.com/example/project14
+        )
+
+)
+
+2025-05-19 08:14:41 - POST data: Array
+(
+    [project_id] => 682acbe836469b434b000244
+    [title] => test2
+    [abstract] => test2
+    [description] => test2
+    [field] => Blockchain
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 
+    [updated_date] => 2025-05-19
+    [github_url] => https://github.com/example/project14
+    [project_url] => https://github.com/example/project14
+    [paper_url] => https://github.com/example/project14
+    [doi] => https://github.com/example/project14
+    [youtube_url] => https://github.com/example/project14
+    [supervisor] => Sunday
+    [team_members] => [{"name":"Samin","role":"Author","contribution":25,"userId":null}]
+    [timeline] => [{"title":"test","description":"","date":{"$date":"2025-05-19T00:00:00.000Z"},"status":"Planned"},{"title":"test2","description":"","date":{"$date":"2025-05-19T00:00:00.000Z"},"status":"Planned"},{"title":"test3","description":"","date":{"$date":"2025-05-19T00:00:00.000Z"},"status":"Planned"},{"title":"test4","description":"","date":{"$date":"2025-05-19T00:00:00.000Z"},"status":"Planned"}]
+    [references] => [{"title":"Test","link":"https://github.com/example/project14"}]
+    [views] => 363
+    [downloads] => 998
+    [favorites] => 486
+    [comments] => []
+)
+2025-05-19 08:14:41 - Privacy field: value='0', type=string
+2025-05-19 08:14:41 - References parsed as JSON: Array
+(
+    [0] => Array
+        (
+            [title] => Test
+            [link] => https://github.com/example/project14
+        )
+
+)
+
+2025-05-19 08:14:41 - Final references data: Array
+(
+    [0] => Array
+        (
+            [title] => Test
+            [link] => https://github.com/example/project14
+        )
+
+)
+

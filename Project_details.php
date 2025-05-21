@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2073,6 +2076,15 @@
 </head>
 <body>
     <?php include 'src/includes/navbar.php'; ?>
+    
+    <!-- Inject PHP session data into JavaScript -->
+    <script>
+        <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['user_id'])): ?>
+        var currentUserId = "<?php echo $_SESSION['user_id']; ?>";
+        <?php else: ?>
+        var currentUserId = null;
+        <?php endif; ?>
+    </script>
 
     <!-- Background particles -->
     <div id="particles-js"></div>
@@ -2536,12 +2548,33 @@
                 </button>
             `;
             
-            // Add edit project button
-            const editBtn = `
+            // Check if the current user is the creator of the project
+            // We need to fetch the current logged-in user information from PHP session
+            let isCreator = false;
+            let currentUser = null;
+            
+            // Fetch the current user ID from a PHP variable injected into the page
+            if (typeof currentUserId !== 'undefined') {
+                currentUser = currentUserId;
+            }
+            
+            // Check if the current user is the project creator
+            if (currentUser) {
+                // Check if user is in members list with appropriate role/permissions
+                if (project.members && project.members.length > 0) {
+                    isCreator = project.members.some(member => 
+                        (member.userId && member.userId.$oid === currentUser) || 
+                        (member.userId === currentUser)
+                    );
+                }
+            }
+            
+            // Only show edit button if user is the creator
+            const editBtn = isCreator ? `
                 <button id="editProjectBtn" class="btn btn-outline-primary ms-2" data-project-id="${project._id.$oid}">
                     <i class="bi bi-pencil-square"></i>Edit Project
                 </button>
-            `;
+            ` : '';
             
             headerEl.innerHTML = `
                 <div class="d-flex justify-content-between align-items-start position-relative z-1">
@@ -2549,7 +2582,7 @@
                         <h1 class="float-animation display-4">${project.title}</h1>
                         <div class="mb-3 d-flex align-items-center mt-3">
                             ${privacy}
-                            ${toggleBtn}
+                            ${isCreator ? toggleBtn : ''}
                             ${editBtn}
                         </div>
                     </div>

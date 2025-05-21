@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -348,42 +351,23 @@
             letter-spacing: 1px;
         }
         
-        .action-buttons {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 10;
-            display: flex;
-            gap: 5px;
+        /* Action buttons removed */
+        
+        /* Delete button styling */
+        .delete-project-btn {
+            font-weight: 600;    /* To match .btn-outline-primary */
+            border-radius: 10px; /* To match .btn-outline-primary */
+            padding: 12px 25px;  /* To match .btn-outline-primary padding */
+            transition: all 0.3s ease; /* Consistent transition handling */
         }
         
-        .action-button {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--dark-color);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        
-        .action-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .action-button.edit:hover {
-            background: var(--primary-color);
+        .delete-project-btn:hover {
+            background-color: var(--warning-color);
+            border-color: var(--warning-color);
             color: white;
-        }
-        
-        .action-button.delete:hover {
-            background: var(--warning-color);
-            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(247, 37, 133, 0.25);
+            /* transition: all 0.3s ease; Removed as it's in the base style now */
         }
         
         .empty-state {
@@ -660,6 +644,16 @@
             color: var(--warning-color);
         }
         
+        /* Ensure linked project cards don't have default link styling */
+        .project-card a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .project-card a:hover {
+            color: inherit; /* Optional: prevent color change on hover if desired */
+        }
+        
         @media (max-width: 992px) {
             .header-container {
                 min-height: 25vh;
@@ -723,6 +717,62 @@
         .reference-item a:hover {
             text-decoration: underline;
         }
+        
+        .empty-projects-container {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .empty-projects-container:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .empty-icon-container {
+            position: relative;
+            display: inline-block;
+            animation: float-animation 3s ease-in-out infinite;
+        }
+        
+        .empty-icon-container::before {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 50%;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            filter: blur(5px);
+            animation: shadow-animation 3s ease-in-out infinite;
+        }
+        
+        @keyframes float-animation {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes shadow-animation {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.3; }
+            50% { transform: translateX(-50%) scale(0.8); opacity: 0.1; }
+        }
+        
+        .create-project-button {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            border: none;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .create-project-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+            background: linear-gradient(135deg, #3a56e4, #2f09a0);
+        }
     </style>
 </head>
 <body>
@@ -755,7 +805,7 @@
         <ul class="nav nav-tabs" id="projectManagementTabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="edit-projects-tab" data-bs-toggle="tab" data-bs-target="#edit-projects" type="button" role="tab" aria-controls="edit-projects" aria-selected="true">
-                    <i class="bi bi-collection me-2"></i>Edit Projects
+                    <i class="bi bi-collection me-2"></i>My Projects
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -1869,13 +1919,43 @@
                         // Update login status
                         isLoggedIn = data.isLoggedIn;
                         
+                        // Log debugging info to console
+                        console.log("Debug info:", data.debug);
+                        
                         // Display projects, either user's projects or public ones
                         if (data.projects && data.projects.length > 0) {
-                            displayUserProjects(data.projects, !isLoggedIn);
+                            // Only display projects created by the current user
+                            if (isLoggedIn) {
+                                const userId = data.debug?.userId || null;
+                                
+                                // Filter projects to only show those created by the current user
+                                const userProjects = data.projects.filter(project => {
+                                    // Check if user is in the members list
+                                    if (project.members && project.members.length > 0) {
+                                        return project.members.some(member => 
+                                            (member.userId && member.userId.$oid === userId) || 
+                                            (member.userId === userId)
+                                        );
+                                    }
+                                    return false;
+                                });
+                                
+                                if (userProjects.length > 0) {
+                                    displayUserProjects(userProjects, false);
                         } else {
-                            const message = isLoggedIn ? 
-                                'You haven\'t created any research projects yet. Click "Create New Project" to get started.' : 
-                                'No public projects found. Create a new project to get started.';
+                                    displayEmptyState('No Projects Found', 
+                                        `You haven't created any research projects yet. Click the button below to get started.`);
+                                }
+                            } else {
+                                // For non-logged in users, show empty state
+                                displayEmptyState('Login Required', 
+                                    'Please login to view your research projects.');
+                            }
+                        } else {
+                            const userId = data.debug?.userId || 'unknown';
+                            let message = isLoggedIn ? 
+                                `You haven't created any research projects yet. Click the button below to get started.` : 
+                                'Please login to view your research projects.';
                             displayEmptyState('No projects found', message);
                         }
                     } else {
@@ -1963,18 +2043,13 @@
                 // Determine if action buttons should be shown (only for logged-in users and their projects)
                 const showActionButtons = isLoggedIn && !isPublicView;
                 
-                col.innerHTML = `
-                    <div class="project-card position-relative">
-                        ${showActionButtons ? `
-                        <div class="action-buttons">
-                            <div class="action-button edit" data-id="${project._id.$oid}" data-bs-toggle="tooltip" title="Edit Project">
-                                <i class="bi bi-pencil-fill"></i>
-                            </div>
-                            <div class="action-button delete" data-id="${project._id.$oid}" data-bs-toggle="tooltip" title="Delete Project">
-                                <i class="bi bi-trash-fill"></i>
-                            </div>
-                        </div>
-                        ` : ''}
+                // Card link wrapper
+                const cardLink = document.createElement('a');
+                cardLink.href = `Project_details.php?id=${project._id.$oid}`;
+                cardLink.style.textDecoration = 'none'; // Prevent underline
+                cardLink.style.color = 'inherit';     // Inherit text color
+
+                cardLink.innerHTML = `
                         <div class="card-img">
                             <img src="${imageSrc}" alt="${project.title}" class="img-fluid" onerror="this.onerror=null; this.src='${getRandomResearchImage()}';">
                         </div>
@@ -1990,28 +2065,46 @@
                                 <i class="bi bi-mortarboard-fill me-2 text-primary"></i>
                                 <small>${project.field || 'Research'}</small>
                             </div>
-                            <div class="mt-3">
-                                <a href="edit_project.php?id=${project._id.$oid}" class="btn btn-sm btn-outline-primary">
+                        <div class="mt-3 project-actions">
+                            <a href="edit_project.php?id=${project._id.$oid}" class="btn btn-sm btn-outline-primary edit-project-btn">
                                     <i class="bi bi-pencil-fill me-1"></i>Edit
                                 </a>
-                            </div>
+                            ${showActionButtons ? `
+                            <button class="btn btn-sm btn-outline-danger ms-2 delete-project-btn" data-id="${project._id.$oid}" data-title="${project.title}">
+                                <i class="bi bi-trash-fill me-1"></i>Delete
+                            </button>
+                            ` : ''}
                         </div>
                     </div>
                 `;
                 
+                const projectCardDiv = document.createElement('div');
+                projectCardDiv.className = 'project-card position-relative';
+                projectCardDiv.appendChild(cardLink);
+                col.appendChild(projectCardDiv);
+                
                 userProjectsList.appendChild(col);
                 
                 // Add event listeners for edit and delete buttons if shown
+                // These should stop propagation to prevent card click
                 if (showActionButtons) {
-                    col.querySelector('.edit').addEventListener('click', function() {
+                    const editBtn = col.querySelector('.edit-project-btn');
+                    if(editBtn) {
+                        editBtn.addEventListener('click', function(e) {
+                            e.stopPropagation(); // Prevent card click
+                            // The link will handle navigation
+                        });
+                    }
+
+                    const deleteBtn = col.querySelector('.delete-project-btn');
+                    if (deleteBtn) {
+                        deleteBtn.addEventListener('click', function(e) {
+                            e.stopPropagation(); // Prevent card click
                         const projectId = this.getAttribute('data-id');
-                        editProject(projectId);
+                            const projectTitle = this.getAttribute('data-title');
+                            deleteProject(projectId, projectTitle);
                     });
-                    
-                    col.querySelector('.delete').addEventListener('click', function() {
-                        const projectId = this.getAttribute('data-id');
-                        deleteProject(projectId, project.title);
-                    });
+                    }
                 }
             });
             
@@ -2025,21 +2118,95 @@
         function displayEmptyState(title, message) {
             userProjectsList.innerHTML = `
                 <div class="col-12">
-                    <div class="empty-state" data-aos="fade-up">
-                        <i class="bi bi-journal-text"></i>
-                        <h3>${title}</h3>
-                        <p>${message}</p>
-                        <button class="btn btn-primary" id="createProjectBtn">
-                            <i class="bi bi-plus-circle me-2"></i>Create New Project
-                        </button>
+                    <div class="empty-projects-container text-center py-5">
+                        <div class="empty-icon-container mb-4">
+                            <i class="bi bi-folder2-open display-1 text-muted opacity-50"></i>
+                        </div>
+                        <h3 class="fw-bold mb-3">${title}</h3>
+                        <p class="text-muted mx-auto" style="max-width: 500px;">${message}</p>
+                        
+                        <div class="mt-4">
+                            ${title !== 'Login Required' ? 
+                                `<button class="btn btn-primary btn-lg create-project-button px-4">
+                                    <i class="bi bi-plus-circle me-2"></i>Create Your First Project
+                                </button>` : 
+                                `<a href="login.php" class="btn btn-primary btn-lg px-4">
+                                    <i class="bi bi-person-fill me-2"></i>Login to Access
+                                </a>`
+                            }
+                        </div>
                     </div>
                 </div>
             `;
             
+            // Add custom styling for the empty state
+            const style = document.createElement('style');
+            style.textContent = `
+                .empty-projects-container {
+                    background: white;
+                    border-radius: 16px;
+                    padding: 3rem;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                    transition: all 0.3s ease;
+                }
+                
+                .empty-projects-container:hover {
+                    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+                    transform: translateY(-5px);
+                }
+                
+                .empty-icon-container {
+                    position: relative;
+                    display: inline-block;
+                    animation: float-animation 3s ease-in-out infinite;
+                }
+                
+                .empty-icon-container::before {
+                    content: '';
+                    position: absolute;
+                    width: 80px;
+                    height: 20px;
+                    background: rgba(0, 0, 0, 0.05);
+                    border-radius: 50%;
+                    bottom: -10px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    filter: blur(5px);
+                    animation: shadow-animation 3s ease-in-out infinite;
+                }
+                
+                @keyframes float-animation {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-15px); }
+                }
+                
+                @keyframes shadow-animation {
+                    0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.3; }
+                    50% { transform: translateX(-50%) scale(0.8); opacity: 0.1; }
+                }
+                
+                .create-project-button {
+                    background: linear-gradient(135deg, #4361ee, #3a0ca3);
+                    border: none;
+                    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+                    transition: all 0.3s ease;
+                }
+                
+                .create-project-button:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+                    background: linear-gradient(135deg, #3a56e4, #2f09a0);
+                }
+            `;
+            document.head.appendChild(style);
+            
             // Add event listener to the create project button
-            document.getElementById('createProjectBtn').addEventListener('click', function() {
+            const createBtn = document.querySelector('.create-project-button');
+            if (createBtn) {
+                createBtn.addEventListener('click', function() {
                 document.getElementById('new-project-tab').click();
             });
+            }
         }
         
         function editProject(projectId) {
@@ -2247,9 +2414,15 @@
         }
         
         function deleteProject(projectId, projectTitle) {
+            // Simplified approach with better error handling
             if (confirm(`Are you sure you want to delete "${projectTitle}"? This action cannot be undone.`)) {
+                // Show spinner
                 showSpinner();
                 
+                // Log what we're trying to delete for debugging
+                console.log("Attempting to delete project:", projectId, projectTitle);
+                
+                // Send delete request
                 fetch('src/model/delete_project.php', {
                     method: 'POST',
                     headers: {
@@ -2257,9 +2430,13 @@
                     },
                     body: JSON.stringify({ projectId: projectId })
                 })
-                .then(response => response.json())
+                .then(response => {
+                    console.log("Delete response status:", response.status);
+                    return response.json();
+                })
                 .then(data => {
                     hideSpinner();
+                    console.log("Delete response data:", data);
                     
                     if (data.success) {
                         showToast('Success', 'Project deleted successfully', 'success');
@@ -2270,7 +2447,7 @@
                 })
                 .catch(error => {
                     hideSpinner();
-                    console.error('Error:', error);
+                    console.error('Error deleting project:', error);
                     showToast('Error', 'An error occurred while deleting the project', 'error');
                 });
             }

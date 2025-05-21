@@ -1,0 +1,89 @@
+2025-05-19 11:37:22 - DELETE REQUEST: {"projectId":"682acbe836469b434b000244"}
+2025-05-19 11:37:22 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:37:22 - UserId extracted: 68266805617c9cdcb302f742
+2025-05-19 11:37:22 - Decoded data: Array
+(
+    [projectId] => 682acbe836469b434b000244
+)
+
+2025-05-19 11:37:22 - ProjectId to delete: 682acbe836469b434b000244
+2025-05-19 11:37:22 - Created ObjectId successfully
+2025-05-19 11:37:22 - Project found, attempting to delete
+2025-05-19 11:37:23 - Project deleted successfully
+2025-05-19 11:44:44 - DELETE REQUEST: {"projectId":"682ae470314b6622be02c126"}
+2025-05-19 11:44:44 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:44:44 - UserId extracted: 68266805617c9cdcb302f742
+2025-05-19 11:44:44 - Decoded data: Array
+(
+    [projectId] => 682ae470314b6622be02c126
+)
+
+2025-05-19 11:44:44 - ProjectId to delete: 682ae470314b6622be02c126
+2025-05-19 11:44:44 - Created ObjectId successfully
+2025-05-19 11:44:44 - Project found, attempting to delete
+2025-05-19 11:44:44 - Project deleted successfully
+2025-05-19 11:44:50 - DELETE REQUEST: {"projectId":"682ae470314b6622be02c126"}
+2025-05-19 11:44:50 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 11:44:50 - UserId extracted: 68266805617c9cdcb302f742
+2025-05-19 11:44:50 - Decoded data: Array
+(
+    [projectId] => 682ae470314b6622be02c126
+)
+
+2025-05-19 11:44:50 - ProjectId to delete: 682ae470314b6622be02c126
+2025-05-19 11:44:50 - Created ObjectId successfully
+2025-05-19 11:44:50 - Project not found with ID: 682ae470314b6622be02c126

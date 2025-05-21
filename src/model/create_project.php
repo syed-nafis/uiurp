@@ -9,9 +9,26 @@ use MongoDB\BSON\ObjectId;
 // Start session to capture user data if available
 session_start();
 
+// Log session data for debugging
+$log_path = __DIR__ . '/../../logs/project_create_debug.log';
+file_put_contents($log_path, date('Y-m-d H:i:s') . " - SESSION: " . print_r($_SESSION, true) . "\n", FILE_APPEND);
+
 // Set user ID and username (null if not logged in)
-$userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
-$username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Anonymous User';
+$userId = null;
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+} elseif (isset($_SESSION['user_data']) && isset($_SESSION['user_data']['_id']) && isset($_SESSION['user_data']['_id']['$oid'])) {
+    // Try to get ID from user_data if available
+    $userId = $_SESSION['user_data']['_id']['$oid'];
+} elseif (isset($_SESSION['user_data']) && isset($_SESSION['user_data']['_id'])) {
+    // Fall back to string representation of ID if present
+    $userId = (string)$_SESSION['user_data']['_id'];
+}
+
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : 
+           (isset($_SESSION['user_data']['name']) ? $_SESSION['user_data']['name'] : 'Anonymous User');
+
+file_put_contents($log_path, date('Y-m-d H:i:s') . " - UserId extracted: $userId, Username: $username\n", FILE_APPEND);
 
 // Set dates
 if (!empty($_POST['createdAt'])) {
@@ -270,7 +287,8 @@ $project = [
     'media' => $media,
     'references' => $referencesArray,
     'stats' => $stats,
-    'comments' => [] // Initialize with empty array
+    'comments' => [], // Initialize with empty array
+    'createdBy' => $userId // Store the creator's user ID
 ];
 
 try {
