@@ -16,9 +16,7 @@ switch ($sortOption) {
     case 'upvotes':
         $sort = ['upvotes' => -1];
         break;
-    case 'views':
-        $sort = ['views' => -1];
-        break;
+
     default:
         $sort = ['timestamp' => -1];
         break;
@@ -74,18 +72,14 @@ $posts = $collection->find([], ['sort' => $sort])->toArray();
           <option value="">-- Select --</option>
           <option value="newest" <?= isset($_GET['sort']) && $_GET['sort'] == 'newest' ? 'selected' : '' ?>>Newest</option>
           <option value="upvotes" <?= isset($_GET['sort']) && $_GET['sort'] == 'upvotes' ? 'selected' : '' ?>>Most Upvoted</option>
-          <option value="views" <?= isset($_GET['sort']) && $_GET['sort'] == 'views' ? 'selected' : '' ?>>Most Viewed</option>
+          
         </select>
       </form>
       <h1>All Posts</h1>
       <div id="postsContainer">
           <?php foreach ($posts as $post): ?>
               <div class="forum-post border p-3 mb-3">
-                  <h3>
-                    <a href="post_view.php?id=<?= $post['_id'] ?>" class="text-decoration-none">
-                      <?= htmlspecialchars($post['title']) ?>
-                    </a>
-                  </h3>
+                  <h3><?= htmlspecialchars($post['title']) ?></h3>
                   <p><?= htmlspecialchars($post['content']) ?></p>
                   <p><strong>Views:</strong> <?= $post['views'] ?? 0 ?></p>
                   <p>
