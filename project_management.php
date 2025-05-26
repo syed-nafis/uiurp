@@ -14,24 +14,131 @@ session_start();
     <link rel="stylesheet" href="assets/styles/home.css">
     <style>
         :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3a0ca3;
-            --accent-color: #7209b7;
-            --light-color: #f8f9fa;
-            --dark-color: #212529;
-            --success-color: #4cc9f0;
-            --warning-color: #f72585;
+            /* Modern Professional Colors */
+            --primary: #2563eb;
+            --secondary: #8b5cf6;
+            --accent: #0ea5e9;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --border-light: #475569;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            
+            /* Glass morphism */
+            --glass-bg: rgba(30, 41, 59, 0.8);
+            --glass-border: rgba(148, 163, 184, 0.1);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #2563eb, #8b5cf6);
+            --gradient-surface: linear-gradient(135deg, #1e293b, #334155);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            
+            /* Border radius */
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+            
+            /* Transitions */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         body {
-            background-color: #f0f2f5;
-            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0d1a 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             overflow-x: hidden;
+            color: var(--text-primary);
+            position: relative;
+            min-height: 100vh;
+            scroll-behavior: smooth;
         }
         
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        /* Enhanced Background Effects */
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
         
-        /* Background particles */
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.4;
+            animation: float-orb 15s ease-in-out infinite;
+            box-shadow: 0 0 50px currentColor;
+        }
+        
+        .orb-1 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, rgba(37, 99, 235, 0.1) 50%, transparent 70%);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, rgba(14, 165, 233, 0.08) 50%, transparent 70%);
+            top: 60%;
+            right: 10%;
+            animation-delay: 7s;
+        }
+        
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, rgba(6, 182, 212, 0.1) 50%, transparent 70%);
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 14s;
+        }
+        
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            25% { transform: translate(30px, -20px) scale(1.05) rotate(90deg); }
+            50% { transform: translate(-20px, 30px) scale(0.95) rotate(180deg); }
+            75% { transform: translate(25px, 15px) scale(1.02) rotate(270deg); }
+        }
+        
+        /* Dynamic Grid Background */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: grid-pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes grid-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        /* Enhanced Particles */
         #particles-js {
             position: fixed;
             width: 100%;
@@ -39,16 +146,7 @@ session_start();
             top: 0;
             left: 0;
             z-index: 0;
-            opacity: 0;
             pointer-events: none;
-            background: radial-gradient(circle at 30% 40%, rgba(76, 201, 240, 0.05), transparent 30%),
-                        radial-gradient(circle at 70% 70%, rgba(114, 9, 183, 0.05), transparent 35%),
-                        radial-gradient(circle at 80% 10%, rgba(247, 37, 133, 0.05), transparent 25%);
-            transition: opacity 1.5s ease-in-out;
-        }
-        
-        body.loaded #particles-js {
-            opacity: 0.7;
         }
         
         /* Ensure content appears above particles */
@@ -59,296 +157,710 @@ session_start();
             z-index: 1;
         }
         
-        /* Special accent particles */
-        .floating-accent {
-            position: fixed;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(76, 201, 240, 0.15) 0%, rgba(76, 201, 240, 0) 70%);
-            border-radius: 50%;
-            filter: blur(20px);
-            opacity: 0.7;
-            animation: float-accent 25s infinite linear;
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        .floating-accent:nth-child(1) {
-            top: 20%;
-            left: 10%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(114, 9, 183, 0.12) 0%, rgba(114, 9, 183, 0) 70%);
-            animation-duration: 30s;
-        }
-        
-        .floating-accent:nth-child(2) {
-            top: 70%;
-            left: 80%;
-            width: 450px;
-            height: 450px;
-            background: radial-gradient(circle, rgba(247, 37, 133, 0.12) 0%, rgba(247, 37, 133, 0) 70%);
-            animation-duration: 25s;
-            animation-delay: 5s;
-        }
-        
-        .floating-accent:nth-child(3) {
-            top: 40%;
-            left: 60%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(67, 97, 238, 0.12) 0%, rgba(67, 97, 238, 0) 70%);
-            animation-duration: 28s;
-            animation-delay: 2s;
-        }
-        
-        @keyframes float-accent {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(-50px, 50px) rotate(90deg); }
-            50% { transform: translate(0, 100px) rotate(180deg); }
-            75% { transform: translate(50px, 50px) rotate(270deg); }
-            100% { transform: translate(0, 0) rotate(360deg); }
-        }
-        
-        /* Burst effect for click animation */
-        .particle-burst {
-            position: absolute;
-            pointer-events: none;
-            border-radius: 50%;
-            z-index: 2;
-            transform: translate(-50%, -50%);
-            animation: burst-anim 1s forwards ease-out;
-        }
-        
-        @keyframes burst-anim {
-            0% {
-                width: 0;
-                height: 0;
-                opacity: 0.7;
-                background: radial-gradient(circle, rgba(114, 9, 183, 0.8) 0%, rgba(114, 9, 183, 0) 70%);
-            }
-            100% {
-                width: 300px;
-                height: 300px;
-                opacity: 0;
-                background: radial-gradient(circle, rgba(114, 9, 183, 0) 0%, rgba(114, 9, 183, 0) 70%);
-            }
-        }
-        
+        /* Hero Section with Dynamic Background */
         .header-container {
-            background: linear-gradient(125deg, #4361ee, #3a0ca3, #7209b7, #f72585);
-            background-size: 300% 300%;
-            animation: gradientBG 12s ease infinite;
-            min-height: 30vh;
+            background: linear-gradient(135deg, 
+                rgba(15, 23, 42, 0.95) 0%, 
+                rgba(30, 41, 59, 0.9) 50%,
+                rgba(37, 99, 235, 0.8) 100%);
+            min-height: 70vh;
             display: flex;
             align-items: center;
             position: relative;
-            border-radius: 0 0 30% 70% / 30%;
-            margin-bottom: 50px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            padding: 50px 0;
             overflow: hidden;
+            padding: 80px 0 100px;
+            clip-path: ellipse(100% 100% at 50% 0%);
+            transition: clip-path 0.3s ease-out;
         }
         
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .header-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="circuit" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M0,10 L10,10 L10,0 L20,0 M10,10 L10,20 M10,15 L20,15" stroke="rgba(255,255,255,0.05)" stroke-width="0.5" fill="none"/></pattern></defs><rect width="100" height="100" fill="url(%23circuit)"/></svg>');
+            opacity: 0.6;
+            z-index: 1;
         }
         
-        .header-container h1 {
-            color: white;
-            font-size: 2.8rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            letter-spacing: -1px;
+        .header-container::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%;
+            height: 150px;
+            background: radial-gradient(ellipse 80% 100% at 50% 0%, 
+                rgba(37, 99, 235, 0.3) 0%, 
+                rgba(14, 165, 233, 0.2) 30%,
+                rgba(6, 182, 212, 0.1) 60%,
+                transparent 100%);
+            border-radius: 50%;
+            filter: blur(20px);
+            z-index: 2;
+            transition: all 0.3s ease-out;
+        }
+        
+
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .hero-title {
+            font-size: clamp(2.2rem, 6vw, 3.8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #0ea5e9 70%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            text-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #0ea5e9, #14b8a6);
+            border-radius: 2px;
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.6);
+            animation: glow-pulse 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow-pulse {
+            from { box-shadow: 0 0 15px rgba(37, 99, 235, 0.6); }
+            to { box-shadow: 0 0 25px rgba(20, 184, 166, 0.6); }
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #0ea5e9 70%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
         }
         
         .header-container p {
             color: rgba(255, 255, 255, 0.9);
             font-size: 1.2rem;
+            font-weight: 400;
             max-width: 700px;
             margin: 0 auto;
+            position: relative;
+            z-index: 10;
+            text-align: center;
         }
         
         .card {
-            border-radius: 16px;
+            border-radius: var(--border-radius);
             overflow: hidden;
-            background: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
-            border: none;
-            transition: all 0.3s ease;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 24px;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .card::before {
+            display: none;
         }
         
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transform: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: rgba(76, 201, 240, 0.1);
+        }
+        
+        .card:hover::before {
+            opacity: 0;
         }
         
         .card-header {
-            background: linear-gradient(to right, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
-            border-bottom: none;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
             padding: 1.25rem 1.5rem;
             font-weight: 600;
-            color: var(--secondary-color);
+            color: var(--text-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-header::after {
+            display: none;
+        }
+        
+        .card-header i {
+            color: var(--primary);
+            margin-right: 10px;
+            font-size: 1.1rem;
         }
         
         .form-label {
             font-weight: 500;
-            color: var(--dark-color);
+            color: var(--text-secondary);
             margin-bottom: 0.5rem;
+            display: block;
+            font-size: 0.95rem;
+        }
+        
+        .form-label::before {
+            display: none;
         }
         
         .form-control, .form-select {
-            border-radius: 10px;
-            padding: 12px 15px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            padding: 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
             font-size: 0.95rem;
-            transition: all 0.3s;
+            transition: var(--transition);
+            box-shadow: none;
+            position: relative;
+            z-index: 2;
+            caret-color: var(--primary);
+        }
+        
+        /* Ensure all text input is light colored */
+        input, textarea, select, option {
+            color: var(--text-primary) !important;
         }
         
         .form-control:focus, .form-select:focus {
-            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
-            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+            border-color: var(--primary);
+            background: var(--surface-light);
+            outline: none;
+            color: var(--text-primary);
+        }
+        
+        /* Ensure consistent text color in all states */
+        .form-control:active, .form-select:active,
+        .form-control:focus-visible, .form-select:focus-visible {
+            color: rgba(255, 255, 255, 1);
+        }
+        
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+        
+        /* Fix for webkit browsers */
+        .form-control::-webkit-input-placeholder {
+            color: var(--text-muted);
+        }
+        
+        /* Fix for Firefox */
+        .form-control::-moz-placeholder {
+            color: var(--text-muted);
+            opacity: 1;
+        }
+        
+        /* Override Bootstrap's text colors for form-select */
+        .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234cc9f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+            appearance: none;
+            color-scheme: dark;
+        }
+        
+        .form-select option {
+            background-color: rgba(15, 23, 42, 0.95);
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Fix for Firefox and other browsers to ensure consistent dropdown styling */
+        select.form-select option {
+            background-color: rgb(15, 23, 42);
+        }
+        
+        /* Style the form text description */
+        .form-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+        
+        /* Remove hover effects on inputs */
+        .form-control:hover, .form-select:hover {
+            border-color: rgba(76, 201, 240, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Fix for file input buttons */
+        input[type="file"]::file-selector-button {
+            background: rgba(22, 28, 45, 0.7);
+            color: rgba(76, 201, 240, 0.9);
+            border: 1px solid rgba(76, 201, 240, 0.2);
+            border-radius: 4px;
+            padding: 8px 16px;
+            margin-right: 16px;
+            transition: none;
+            cursor: pointer;
+            font-weight: 400;
+            box-shadow: none;
+        }
+        
+        input[type="file"]::file-selector-button:hover {
+            background: rgba(22, 28, 45, 0.75);
+            color: rgba(76, 201, 240, 1);
+            border-color: rgba(76, 201, 240, 0.4);
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Style for textarea - maintain consistent height */
+        textarea.form-control {
+            min-height: 100px;
+        }
+        
+        /* More minimal card body */
+        .card-body {
+            padding: 1rem;
+        }
+        
+        /* Reduce vertical spacing in the form */
+        .row.mb-4 {
+            margin-bottom: 1rem !important;
+        }
+        
+        /* Make form elements more compact */
+        .form-group, .mb-3 {
+            margin-bottom: 0.75rem !important;
         }
         
         .btn-primary {
-            background: var(--primary-color);
+            background: var(--gradient-primary);
             border: none;
-            border-radius: 10px;
-            padding: 12px 25px;
+            border-radius: var(--border-radius);
+            padding: 12px 24px;
             font-weight: 600;
-            transition: all 0.3s;
+            transition: var(--transition);
+            position: relative;
+            color: white;
+            box-shadow: var(--shadow-sm);
+            font-size: 0.95rem;
         }
         
         .btn-primary:hover {
-            background: var(--secondary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+            background: var(--gradient-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            filter: brightness(1.1);
         }
         
         .btn-outline-primary {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            border-radius: 10px;
-            padding: 12px 25px;
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: var(--border-radius);
+            padding: 12px 24px;
             font-weight: 600;
-            transition: all 0.3s;
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
         }
         
         .btn-outline-primary:hover {
-            background: var(--primary-color);
             color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.2);
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn i {
+            display: inline-block;
+            margin-right: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .btn:hover i {
+            transform: none;
         }
         
         .nav-tabs {
-            border-bottom: none;
+            border-bottom: 1px solid var(--border);
             margin-bottom: 30px;
+            display: flex;
+            position: relative;
+            z-index: 2;
+            gap: 0;
+            padding-bottom: 0;
+            padding-top: 20px;
+            margin-top: 20px;
+            overflow: visible;
+        }
+        
+        /* Add additional container padding to fix tab clipping */
+        .container.my-5 {
+            padding-top: 20px;
+        }
+        
+        /* Fix tab wrapper styles */
+        .tabs-wrapper {
+            margin-bottom: 30px;
+            margin-top: 20px;
+            padding-top: 30px;
+            position: relative;
+            overflow: visible;
+            z-index: 100;
+        }
+        
+        /* Ensure tab content has proper spacing */
+        #projectManagementTabContent {
+            padding-top: 30px;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .nav-tabs::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: rgba(76, 201, 240, 0.15);
+            z-index: 1;
+            box-shadow: none;
+        }
+        
+        /* Minimal tab styling */
+        .nav-item {
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 5px;
         }
         
         .nav-tabs .nav-link {
             border: none;
-            border-radius: 10px;
-            padding: 12px 25px;
-            margin-right: 10px;
-            font-weight: 600;
-            color: var(--dark-color);
-            transition: all 0.3s;
+            border-radius: 0;
+            padding: 12px 20px;
+            margin-right: 0;
+            margin-top: 0;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            transition: var(--transition);
+            background: transparent;
+            backdrop-filter: none;
+            position: relative;
+            overflow: visible;
+            z-index: 10;
+            letter-spacing: 0;
+            box-shadow: none;
+            display: block;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .nav-tabs .nav-link::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle at center, rgba(76, 201, 240, 0.2), transparent 70%);
+            transition: var(--smooth-transition);
+            opacity: 0;
+            z-index: -1;
+        }
+        
+        .nav-tabs .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(to right, #4cc9f0, #7209b7);
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+            border-radius: 3px;
         }
         
         .nav-tabs .nav-link:hover {
-            color: var(--primary-color);
-            background-color: rgba(67, 97, 238, 0.05);
+            color: rgba(255, 255, 255, 0.9);
+            background: transparent;
+            transform: none;
+            box-shadow: none;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .nav-tabs .nav-link:hover::before,
+        .nav-tabs .nav-link:hover::after {
+            display: none;
         }
         
         .nav-tabs .nav-link.active {
             color: white;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+            background: transparent;
+            box-shadow: none;
+            transform: none;
+            border-bottom: 2px solid var(--primary);
+            margin-top: 0;
+        }
+        
+        /* Minimal styling for the tabs container */
+        #projectManagementTabs {
+            margin-top: 30px !important;
+            padding-top: 5px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-tabs .nav-link.active::after {
+            display: none;
+        }
+        
+        .nav-tabs .nav-link i {
+            margin-right: 8px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            color: var(--primary);
+            display: inline-block;
+        }
+        
+        .nav-tabs .nav-link:hover i,
+        .nav-tabs .nav-link.active i {
+            transform: none;
+            filter: none;
+            color: var(--primary);
         }
         
         .project-card {
-            border-radius: 16px;
+            background: linear-gradient(135deg, 
+                rgba(15, 23, 42, 0.8) 0%, 
+                rgba(30, 41, 59, 0.6) 100%);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(37, 99, 235, 0.2);
             overflow: hidden;
-            background: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
-            border: none;
-            transition: all 0.3s ease;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
             height: 100%;
+        }
+        
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(37, 99, 235, 0.1) 0%, 
+                rgba(139, 92, 246, 0.1) 50%,
+                rgba(20, 184, 166, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
         }
         
         .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px) scale(1.02);
+            border-color: #0ea5e9;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 0 40px rgba(37, 99, 235, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         
-        .project-card .card-img {
-            height: 200px;
+        .project-card:hover::before {
+            opacity: 1;
+        }
+        
+        .card-image {
+            height: 250px;
             position: relative;
             overflow: hidden;
-            background-color: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         }
         
-        .project-card img {
-            transition: all 0.3s ease;
+        .card-image img {
+            width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(0.8) saturate(1.2);
+        }
+        
+        .card-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-height: 200px;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(15, 23, 42, 0.3) 0%, 
+                rgba(30, 41, 59, 0.5) 100%);
+            transition: opacity 0.4s ease;
         }
         
-        .project-card:hover img {
-            transform: scale(1.05);
+        .project-card:hover .card-image img {
+            transform: scale(1.1);
+            filter: brightness(1) saturate(1.4);
         }
         
-        .project-card .card-body {
-            padding: 20px;
+        .project-card:hover .card-image::after {
+            opacity: 0.3;
         }
         
-        .project-card .card-title {
+        .card-content {
+            padding: 2rem;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .project-badge {
+            position: absolute;
+            top: -15px;
+            left: 25px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.8rem;
             font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--dark-color);
-            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+            z-index: 10;
             transition: all 0.3s ease;
+        }
+        
+        .project-badge.private {
+            background: linear-gradient(135deg, #14b8a6 0%, #f59e0b 100%);
+            box-shadow: 0 8px 20px rgba(20, 184, 166, 0.4);
+        }
+        
+        .project-card:hover .project-badge {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.6);
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .card-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2px;
         }
         
         .project-card:hover .card-title {
-            color: var(--primary-color);
+            color: #0ea5e9;
         }
         
-        .project-card .card-text {
-            color: #6c757d;
-            font-size: 0.95rem;
+        .project-card:hover .card-title::after {
+            width: 100%;
+        }
+        
+        .card-description {
+            color: var(--text-secondary);
             line-height: 1.6;
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
         }
         
-        .badge-public {
-            background: linear-gradient(135deg, #4cc9f0, #56cfe1);
-            color: white;
+        /* Improve card text readability */
+        .card p, .card .small, .card label, .card small, .card .form-label, .card .text-muted {
+            color: var(--text-secondary);
         }
         
-        .badge-private {
-            background: linear-gradient(135deg, #f72585, #ff758f);
-            color: white;
+        /* Override Bootstrap's text-muted class */
+        .text-muted {
+            color: var(--text-muted) !important;
         }
         
-        .badge {
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        /* Additional contrast for important text */
+        .card .card-title, .card h1, .card h2, .card h3, .card h4, .card h5, .card h6, .card strong {
+            color: var(--text-primary);
+        }
+        
+        .project-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding: 8px 15px;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 10px;
+            border-left: 3px solid #0ea5e9;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .meta-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .project-card:hover .meta-item {
+            transform: translateX(5px);
+            border-left-color: #14b8a6;
+        }
+        
+        .project-card:hover .meta-item::before {
+            left: 100%;
+        }
+        
+        .meta-icon {
+            color: #0ea5e9;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .project-card:hover .meta-icon {
+            color: #14b8a6;
+            transform: scale(1.2);
         }
         
         /* Action buttons removed */
@@ -415,29 +927,88 @@ session_start();
             filter: alpha(opacity=0);
             opacity: 0;
             outline: none;
-            cursor: inherit;
+            cursor: pointer;
             display: block;
+            z-index: 3;
+            color-scheme: dark; /* Ensure system dialogs use dark mode */
+        }
+        
+        /* Style for file input focus */
+        input[type="file"]:focus {
+            outline: none;
+            border-color: rgba(76, 201, 240, 0.3);
+        }
+        
+        /* Style for file input focus-visible */
+        input[type="file"]:focus-visible::file-selector-button {
+            outline: none;
+            border-color: rgba(76, 201, 240, 0.5);
+            color: rgba(76, 201, 240, 1);
+        }
+        
+        /* Fix for direct file inputs that aren't using our custom upload component */
+        input[type="file"] {
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(76, 201, 240, 0.1);
+            border-radius: 4px;
+            padding: 8px 8px 8px 12px;
+            color-scheme: dark;
+            width: 100%; /* Ensure full width */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+        
+        input[type="file"]:hover {
+            border-color: rgba(76, 201, 240, 0.2);
+            color: rgba(76, 201, 240, 0.9);
         }
         
         .file-upload-btn {
             width: 100%;
-            border: 2px dashed rgba(67, 97, 238, 0.3);
-            border-radius: 10px;
-            padding: 30px;
+            border: 1px dashed rgba(76, 201, 240, 0.2);
+            border-radius: 4px;
+            padding: 20px;
             text-align: center;
-            background: rgba(67, 97, 238, 0.05);
-            transition: all 0.3s;
+            background: rgba(15, 23, 42, 0.5);
+            transition: none;
+            backdrop-filter: none;
+            position: relative;
+        }
+        
+        .file-upload-btn::before,
+        .file-upload-btn::after {
+            display: none;
         }
         
         .file-upload-btn:hover {
-            background: rgba(67, 97, 238, 0.1);
-            border-color: rgba(67, 97, 238, 0.5);
+            background: rgba(15, 23, 42, 0.5);
+            border-color: rgba(76, 201, 240, 0.3);
+            transform: none;
+            box-shadow: none;
         }
         
         .file-upload-btn i {
-            font-size: 2rem;
-            color: var(--primary-color);
+            font-size: 1.5rem;
             margin-bottom: 10px;
+            color: rgba(76, 201, 240, 0.7);
+            display: inline-block;
+        }
+        
+        .file-upload-btn p {
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+        
+        .file-upload-btn:hover p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        @keyframes pulse-glow {
+            0% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+            100% { opacity: 0.3; transform: scale(1); }
         }
         
         .preview-image {
@@ -451,7 +1022,7 @@ session_start();
         .keyword-badge {
             display: inline-block;
             padding: 5px 10px;
-            background: rgba(67, 97, 238, 0.1);
+            background: rgba(101, 129, 255, 0.84);
             color: var(--primary-color);
             border-radius: 20px;
             margin-right: 5px;
@@ -561,14 +1132,18 @@ session_start();
         
         /* Timeline styles */
         .timeline-item {
-            background-color: #f8f9fa;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-            border-left: 4px solid var(--primary-color);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
+            background-color: rgba(15, 23, 42, 0.5);
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--primary-color);
+            box-shadow: none;
+            transition: none;
             cursor: grab;
+            backdrop-filter: none;
+            border: 1px solid rgba(76, 201, 240, 0.1);
+            border-left: 3px solid var(--primary-color);
+            color: rgba(255, 255, 255, 0.9);
         }
         
         .timeline-item.grabbing {
@@ -576,8 +1151,9 @@ session_start();
         }
         
         .timeline-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transform: none;
+            border-color: rgba(76, 201, 240, 0.15);
+            background-color: rgba(15, 23, 42, 0.6);
         }
         
         .timeline-item.completed {
@@ -597,16 +1173,18 @@ session_start();
         }
         
         .timeline-date {
-            color: var(--secondary-color);
+            color: rgba(76, 201, 240, 0.9);
             font-weight: 500;
             font-size: 0.9rem;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
         }
         
         .timeline-date i {
-            margin-right: 5px;
+            margin-right: 8px;
+            color: rgba(76, 201, 240, 0.8);
+            font-size: 1rem;
         }
         
         .timeline-controls {
@@ -615,33 +1193,95 @@ session_start();
             gap: 8px;
         }
         
+        .timeline-item h6 {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-item p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Customize timeline action buttons */
+        .timeline-controls .btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(76, 201, 240, 0.1);
+            background: rgba(15, 23, 42, 0.4);
+            color: rgba(255, 255, 255, 0.8);
+            transition: none;
+            font-size: 0.8rem;
+        }
+        
+        .timeline-controls .btn:hover {
+            transform: none;
+            background: rgba(15, 23, 42, 0.5);
+            border-color: rgba(76, 201, 240, 0.2);
+            box-shadow: none;
+        }
+        
+        .timeline-controls .btn-outline-primary:hover {
+            color: #4cc9f0;
+        }
+        
+        .timeline-controls .btn-outline-danger:hover {
+            color: #f72585;
+            border-color: rgba(247, 37, 133, 0.4);
+        }
+        
         .status-badge {
             display: inline-block;
-            padding: 3px 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            border-radius: 20px;
-            margin-left: 10px;
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border-radius: 4px;
+            margin-left: 8px;
+            position: relative;
+            box-shadow: none;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: none;
         }
         
         .status-completed {
-            background-color: rgba(76, 201, 240, 0.15);
-            color: var(--success-color);
+            background: rgba(76, 201, 240, 0.2);
+            color: #4cc9f0;
+            border-color: rgba(76, 201, 240, 0.3);
         }
         
         .status-in-progress {
-            background-color: rgba(67, 97, 238, 0.15);
-            color: var(--primary-color);
+            background: rgba(67, 97, 238, 0.2);
+            color: #4361ee;
+            border-color: rgba(67, 97, 238, 0.3);
         }
         
         .status-planned {
-            background-color: rgba(58, 12, 163, 0.15);
-            color: var(--secondary-color);
+            background: rgba(58, 12, 163, 0.2);
+            color: #7209b7;
+            border-color: rgba(58, 12, 163, 0.3);
         }
         
         .status-delayed {
-            background-color: rgba(247, 37, 133, 0.15);
-            color: var(--warning-color);
+            background: rgba(247, 37, 133, 0.2);
+            color: #f72585;
+            border-color: rgba(247, 37, 133, 0.3);
+        }
+        
+        .status-badge::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .timeline-item:hover .status-badge::after {
+            opacity: 1;
         }
         
         /* Ensure linked project cards don't have default link styling */
@@ -693,42 +1333,156 @@ session_start();
         
         /* References styling */
         .reference-item {
-            background-color: #f8f9fa;
-            transition: all 0.3s ease;
+            background-color: rgba(15, 23, 42, 0.5);
+            transition: var(--smooth-transition);
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(76, 201, 240, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .reference-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #4cc9f0, #7209b7);
+            opacity: 0.7;
         }
         
         .reference-item:hover {
-            background-color: #e9ecef;
-            transform: translateY(-2px);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            background-color: rgba(22, 28, 45, 0.7);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2), 0 0 10px rgba(76, 201, 240, 0.1);
+            border-color: rgba(76, 201, 240, 0.3);
         }
         
         #references-container {
             max-height: 300px;
             overflow-y: auto;
+            padding: 10px 5px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(76, 201, 240, 0.5) rgba(15, 23, 42, 0.2);
+        }
+        
+        #references-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #references-container::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.2);
+            border-radius: 10px;
+        }
+        
+        #references-container::-webkit-scrollbar-thumb {
+            background: rgba(76, 201, 240, 0.5);
+            border-radius: 10px;
         }
         
         .reference-item a {
             word-break: break-all;
-            color: #0d6efd;
+            color: #4cc9f0;
             text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
         }
         
         .reference-item a:hover {
-            text-decoration: underline;
+            color: #f72585;
+            text-shadow: 0 0 5px rgba(76, 201, 240, 0.3);
+        }
+        
+        .reference-item a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(to right, #4cc9f0, #f72585);
+            transition: width 0.3s ease;
+        }
+        
+        .reference-item a:hover::after {
+            width: 100%;
         }
         
         .empty-projects-container {
-            background: white;
-            border-radius: 16px;
-            padding: 3rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+            background: var(--glass-bg);
+            border-radius: var(--border-radius-lg);
+            padding: 4rem;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .empty-projects-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(76, 201, 240, 0.1), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 0;
+        }
+        
+        .empty-projects-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, 
+                transparent, 
+                rgba(76, 201, 240, 0.5), 
+                transparent);
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
         
         .empty-projects-container:hover {
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(76, 201, 240, 0.2);
+            transform: translateY(-8px);
+            border-color: rgba(76, 201, 240, 0.4);
+        }
+        
+        .empty-projects-container:hover::before {
+            opacity: 1;
+            animation: pulse-glow 3s infinite alternate;
+        }
+        
+        .empty-projects-container:hover::after {
+            opacity: 1;
+        }
+        
+        .empty-projects-container h3 {
+            color: var(--text-primary);
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+        }
+        
+        .empty-projects-container p {
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 2;
+            font-size: 1.1rem;
+            line-height: 1.6;
         }
         
         .empty-icon-container {
@@ -762,29 +1516,110 @@ session_start();
         }
         
         .create-project-button {
-            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            background: var(--gradient-primary);
             border: none;
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+        
+        .create-project-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
         }
         
         .create-project-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
-            background: linear-gradient(135deg, #3a56e4, #2f09a0);
+            box-shadow: var(--shadow-lg);
+            filter: brightness(1.1);
+        }
+        
+        .create-project-button:hover::before {
+            left: 100%;
+        }
+        
+        .create-project-button i {
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .create-project-button:hover i {
+            transform: rotate(90deg);
+        }
+        
+        /* Timeline Edit Modal Styling */
+        #timelineEditModal .modal-content {
+            background-color: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(76, 201, 240, 0.1);
+            border-radius: 4px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        #timelineEditModal .modal-header {
+            border-bottom: 1px solid rgba(76, 201, 240, 0.1);
+            padding: 0.75rem 1rem;
+        }
+        
+        #timelineEditModal .modal-footer {
+            border-top: 1px solid rgba(76, 201, 240, 0.1);
+            padding: 0.75rem 1rem;
+        }
+        
+        #timelineEditModal .modal-title {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        #timelineEditModal .btn-close {
+            filter: invert(1) brightness(0.8);
+            opacity: 0.7;
+        }
+        
+        #timelineEditModal .form-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        
+        #timelineEditModal .form-control,
+        #timelineEditModal .form-select {
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(76, 201, 240, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        #timelineEditModal .form-control:focus,
+        #timelineEditModal .form-select:focus {
+            border-color: rgba(76, 201, 240, 0.3);
+            box-shadow: 0 0 0 1px rgba(76, 201, 240, 0.3);
         }
     </style>
 </head>
 <body>
     <?php include 'src/includes/navbar.php'; ?>
     
+    <!-- Enhanced Background Effects -->
+    <div class="background-effects">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+        <div class="cyber-grid"></div>
+    </div>
+    
     <!-- Background Particles -->
     <div id="particles-js"></div>
-    
-    <!-- Special accent elements -->
-    <div class="floating-accent"></div>
-    <div class="floating-accent"></div>
-    <div class="floating-accent"></div>
     
     <!-- Loading Spinner -->
     <div class="spinner-overlay" id="spinner">
@@ -795,25 +1630,27 @@ session_start();
     <div class="toast-container" id="toastContainer"></div>
     
     <div class="header-container">
-        <div class="container text-center">
-            <h1 data-aos="fade-down" data-aos-duration="1000">Edit Research Projects</h1>
+        <div class="container text-center hero-content">
+            <h1 class="hero-title" data-aos="fade-down" data-aos-duration="1000">Edit <span class="text-gradient" data-text="Research">Research</span> Projects</h1>
             <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">Create, edit, and share your groundbreaking research with the academic community.</p>
         </div>
     </div>
     
-    <div class="container my-5">
-        <ul class="nav nav-tabs" id="projectManagementTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="edit-projects-tab" data-bs-toggle="tab" data-bs-target="#edit-projects" type="button" role="tab" aria-controls="edit-projects" aria-selected="true">
-                    <i class="bi bi-collection me-2"></i>My Projects
-                </button>
-            </li>
+    <div class="container my-5" style="margin-top: 40px !important; padding-top: 20px;">
+        <div class="tabs-wrapper" style="padding-top: 60px; position: relative; z-index: 100;">
+            <ul class="nav nav-tabs" id="projectManagementTabs" role="tablist" style="margin-top: 40px;">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="edit-projects-tab" data-bs-toggle="tab" data-bs-target="#edit-projects" type="button" role="tab" aria-controls="edit-projects" aria-selected="true">
+                        <i class="bi bi-collection me-2"></i>My Projects
+                    </button>
+                </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="new-project-tab" data-bs-toggle="tab" data-bs-target="#new-project" type="button" role="tab" aria-controls="new-project" aria-selected="false">
                     <i class="bi bi-plus-circle me-2"></i>Create New Project
                 </button>
-            </li>
-        </ul>
+                            </li>
+            </ul>
+        </div>
         
         <div class="tab-content" id="projectManagementTabContent">
             <!-- Edit Projects Tab -->
@@ -828,7 +1665,7 @@ session_start();
                 <!-- Project Creation Form -->
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="card">
+                        <div class="card mt-3">
                             <div class="card-header">
                                 <i class="bi bi-file-earmark-plus me-2"></i>New Research Project
                             </div>
@@ -836,19 +1673,19 @@ session_start();
                                 <form id="projectForm" enctype="multipart/form-data">
                                     <input type="hidden" id="projectId" name="projectId" value="">
                                     
-                                    <div class="row mb-4">
+                                    <div class="row mb-3">
                                         <div class="col-md-8">
-                                            <div class="mb-3">
+                                            <div class="mb-2">
                                                 <label for="title" class="form-label">Project Title*</label>
                                                 <input type="text" class="form-control" id="title" name="title" required>
                                             </div>
                                             
-                                            <div class="mb-3">
+                                            <div class="mb-2">
                                                 <label for="abstract" class="form-label">Abstract*</label>
                                                 <textarea class="form-control" id="abstract" name="abstract" rows="3" required></textarea>
                                             </div>
                                             
-                                            <div class="mb-3">
+                                            <div class="mb-2">
                                                 <label for="description" class="form-label">Full Description</label>
                                                 <textarea class="form-control" id="description" name="description" rows="5"></textarea>
                                             </div>
@@ -935,16 +1772,16 @@ session_start();
                                         </div>
                                     </div>
                                     
-                                    <div class="row mb-4">
+                                    <div class="row mb-3">
                                         <div class="col-12">
                                             <div class="card">
                                                 <div class="card-header">
                                                     <i class="bi bi-link-45deg me-2"></i>External Links
                                                 </div>
-                                                <div class="card-body">
+                                                <div class="card-body pb-2">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <div class="mb-3">
+                                                            <div class="mb-2">
                                                                 <label for="github" class="form-label">GitHub Repository URL</label>
                                                                 <input type="url" class="form-control" id="github" name="github" placeholder="https://github.com/yourusername/your-repo">
                                                             </div>
@@ -1126,12 +1963,12 @@ session_start();
                                     <!-- Comments Section (Hidden, will be initialized as empty array) -->
                                     <input type="hidden" id="commentsArray" name="commentsArray" value="[]">
                                     
-                                    <div class="text-end">
+                                    <div class="text-end mt-3">
                                         <button type="button" class="btn btn-outline-secondary me-2" id="resetForm">
-                                            <i class="bi bi-arrow-counterclockwise me-2"></i>Reset
+                                            <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
                                         </button>
                                         <button type="submit" class="btn btn-primary">
-                                            <i class="bi bi-save me-2"></i>Save Project
+                                            <i class="bi bi-save me-1"></i>Save Project
                                         </button>
                                     </div>
                                 </form>
@@ -1143,15 +1980,159 @@ session_start();
         </div>
     </div>
 
-    <footer class="text-light" style="background: linear-gradient(135deg, #212529, #141b24); padding: 60px 0 40px; margin-top: 100px; position: relative;">
-        <div class="container text-center">
-            <div data-aos="fade-up">
-                <h4 class="mb-4">UIU Research Portal</h4>
-                <p class="mb-4 opacity-75">Connecting innovative minds and groundbreaking research</p>
-                <p class="mt-5 pt-3">&copy; 2025 UIU Research Portal. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <?php include 'src/includes/footer.php'; ?>
+    
+    <style>
+        /* Enhanced Footer */
+        .enhanced-footer {
+            background: linear-gradient(135deg, #0a0d1a 0%, #1a1a2e 100%);
+            border-top: 1px solid rgba(37, 99, 235, 0.2);
+            position: relative;
+            overflow: hidden;
+            padding: 80px 0 40px;
+            color: var(--text-primary);
+        }
+        
+        .enhanced-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                #0ea5e9, 
+                #8b5cf6, 
+                #14b8a6, 
+                transparent);
+            animation: border-glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes border-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .footer-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary), #0ea5e9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .footer-description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
+            transition: width 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: #0ea5e9;
+        }
+        
+        .footer-links a:hover::after {
+            width: 100%;
+        }
+        
+        .footer-section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            position: relative;
+        }
+        
+        .footer-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: #0ea5e9;
+            border-radius: 1px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 2rem;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 50%;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .social-link:hover {
+            background: #0ea5e9;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(37, 99, 235, 0.1);
+            margin-top: 3rem;
+            padding-top: 2rem;
+            text-align: center;
+        }
+        
+        .copyright-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+    </style>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
@@ -1163,27 +2144,27 @@ session_start();
         particlesJS('particles-js', {
             "particles": {
                 "number": {
-                    "value": 80,
+                    "value": 100,
                     "density": {
                         "enable": true,
-                        "value_area": 1000
+                        "value_area": 1500
                     }
                 },
                 "color": {
-                    "value": ["#4361ee", "#3a0ca3", "#7209b7", "#4cc9f0", "#f72585"]
+                    "value": ["#4cc9f0", "#7209b7", "#4361ee", "#3a0ca3", "#f72585"]
                 },
                 "shape": {
-                    "type": ["circle", "triangle", "polygon"],
+                    "type": ["circle", "triangle", "polygon", "edge", "star"],
                     "stroke": {
                         "width": 0,
                         "color": "#000000"
                     },
                     "polygon": {
-                        "nb_sides": 5
+                        "nb_sides": 6
                     }
                 },
                 "opacity": {
-                    "value": 0.3,
+                    "value": 0.4,
                     "random": true,
                     "anim": {
                         "enable": true,
@@ -1193,77 +2174,84 @@ session_start();
                     }
                 },
                 "size": {
-                    "value": 12,
+                    "value": 8,
                     "random": true,
                     "anim": {
                         "enable": true,
                         "speed": 2,
-                        "size_min": 3,
+                        "size_min": 1,
                         "sync": false
                     }
                 },
                 "line_linked": {
                     "enable": true,
                     "distance": 180,
-                    "color": "#7209b7",
-                    "opacity": 0.25,
-                    "width": 1.5
+                    "color": "#4cc9f0",
+                    "opacity": 0.3,
+                    "width": 1.2,
+                    "shadow": {
+                        "enable": true,
+                        "blur": 5,
+                        "color": "#4cc9f0"
+                    }
                 },
                 "move": {
                     "enable": true,
-                    "speed": 1.8,
+                    "speed": 1.5,
                     "direction": "none",
                     "random": true,
                     "straight": false,
-                    "out_mode": "bounce",
-                    "bounce": true,
+                    "out_mode": "out",
+                    "bounce": false,
                     "attract": {
                         "enable": true,
                         "rotateX": 500,
-                        "rotateY": 1000
+                        "rotateY": 1200
                     }
                 }
             },
             "interactivity": {
-                "detect_on": "window",
+                "detect_on": "canvas",
                 "events": {
                     "onhover": {
                         "enable": true,
-                        "mode": "bubble"
+                        "mode": "grab"
                     },
                     "onclick": {
                         "enable": true,
-                        "mode": "push"
+                        "mode": "repulse"
                     },
                     "resize": true
                 },
                 "modes": {
                     "grab": {
-                        "distance": 140,
+                        "distance": 180,
                         "line_linked": {
-                            "opacity": 0.8
+                            "opacity": 0.8,
+                            "color": "#f72585"
                         }
                     },
                     "bubble": {
                         "distance": 150,
-                        "size": 16,
-                        "duration": 1.5,
+                        "size": 12,
+                        "duration": 2,
                         "opacity": 0.8,
                         "speed": 3
                     },
                     "repulse": {
-                        "distance": 150,
-                        "duration": 0.4
+                        "distance": 200,
+                        "duration": 2
                     },
                     "push": {
-                        "particles_nb": 6
+                        "particles_nb": 10
                     },
                     "remove": {
                         "particles_nb": 2
                     }
                 }
             },
-            "retina_detect": true
+            "retina_detect": true,
+            "fps_limit": 60
         });
         
         // Function to reinitialize particles if they stop
@@ -1943,31 +2931,32 @@ session_start();
                                 if (userProjects.length > 0) {
                                     displayUserProjects(userProjects, false);
                         } else {
-                                    displayEmptyState('No Projects Found', 
-                                        `You haven't created any research projects yet. Click the button below to get started.`);
+                                    displayEmptyState('Ready to Innovate?', 
+                                        `Transform your ideas into groundbreaking research projects. Share your discoveries with the academic community and make an impact.`);
                                 }
                             } else {
                                 // For non-logged in users, show empty state
-                                displayEmptyState('Login Required', 
-                                    'Please login to view your research projects.');
+                                displayEmptyState('Join the Research Community', 
+                                    'Access your personal research dashboard and connect with fellow researchers worldwide.');
                             }
                         } else {
                             const userId = data.debug?.userId || 'unknown';
+                            let title = isLoggedIn ? 'Ready to Innovate?' : 'Join the Research Community';
                             let message = isLoggedIn ? 
-                                `You haven't created any research projects yet. Click the button below to get started.` : 
-                                'Please login to view your research projects.';
-                            displayEmptyState('No projects found', message);
+                                `Transform your ideas into groundbreaking research projects. Share your discoveries with the academic community and make an impact.` : 
+                                'Access your personal research dashboard and connect with fellow researchers worldwide.';
+                            displayEmptyState(title, message);
                         }
                     } else {
                         // Show empty state or error
-                        displayEmptyState('No projects found', 'You haven\'t created any research projects yet. Click "Create New Project" to get started.');
+                        displayEmptyState('Ready to Innovate?', 'Transform your ideas into groundbreaking research projects. Share your discoveries with the academic community and make an impact.');
                         console.error('Error:', data.message);
                     }
                 })
                 .catch(error => {
                     hideSpinner();
                     console.error('Error:', error);
-                    displayEmptyState('Error loading projects', 'An error occurred while loading projects. Please try again later.');
+                    displayEmptyState('Connection Issue', 'Unable to load your projects right now. Please check your connection and try again.');
                 });
         }
         
@@ -2050,29 +3039,31 @@ session_start();
                 cardLink.style.color = 'inherit';     // Inherit text color
 
                 cardLink.innerHTML = `
-                        <div class="card-img">
-                            <img src="${imageSrc}" alt="${project.title}" class="img-fluid" onerror="this.onerror=null; this.src='${getRandomResearchImage()}';">
-                        </div>
-                        <div class="card-body">
-                            <span class="badge ${badgeClass}">${badgeText}</span>
-                            <h5 class="card-title">${project.title}</h5>
-                            <p class="card-text">${project.abstract ? (project.abstract.length > 100 ? project.abstract.substring(0, 100) + '...' : project.abstract) : 'No abstract available'}</p>
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="bi bi-calendar3 me-2 text-primary"></i>
-                                <small>${formattedDate}</small>
+                    <div class="card-image">
+                        <img src="${imageSrc}" alt="${project.title}" loading="lazy" onerror="this.onerror=null; this.src='${getRandomResearchImage()}';">
+                    </div>
+                    <div class="card-content">
+                        <div class="project-badge ${badgeClass}">${badgeText}</div>
+                        <h3 class="card-title">${project.title}</h3>
+                        <p class="card-description">${project.abstract ? (project.abstract.length > 120 ? project.abstract.substring(0, 120) + '...' : project.abstract) : 'No description available'}</p>
+                        <div class="project-meta">
+                            <div class="meta-item">
+                                <i class="meta-icon far fa-calendar-alt"></i>
+                                <span>${formattedDate}</span>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-mortarboard-fill me-2 text-primary"></i>
-                                <small>${project.field || 'Research'}</small>
+                            <div class="meta-item">
+                                <i class="meta-icon fas fa-graduation-cap"></i>
+                                <span>${project.field || 'Research'}</span>
                             </div>
-                        <div class="mt-3 project-actions">
-                            <a href="edit_project.php?id=${project._id.$oid}" class="btn btn-sm btn-outline-primary edit-project-btn">
+                            ${showActionButtons ? `
+                            <div class="meta-item project-actions">
+                                <a href="edit_project.php?id=${project._id.$oid}" class="btn btn-sm btn-outline-primary edit-project-btn">
                                     <i class="bi bi-pencil-fill me-1"></i>Edit
                                 </a>
-                            ${showActionButtons ? `
-                            <button class="btn btn-sm btn-outline-danger ms-2 delete-project-btn" data-id="${project._id.$oid}" data-title="${project.title}">
-                                <i class="bi bi-trash-fill me-1"></i>Delete
-                            </button>
+                                <button class="btn btn-sm btn-outline-danger ms-2 delete-project-btn" data-id="${project._id.$oid}" data-title="${project.title}">
+                                    <i class="bi bi-trash-fill me-1"></i>Delete
+                                </button>
+                            </div>
                             ` : ''}
                         </div>
                     </div>
@@ -2120,18 +3111,18 @@ session_start();
                 <div class="col-12">
                     <div class="empty-projects-container text-center py-5">
                         <div class="empty-icon-container mb-4">
-                            <i class="bi bi-folder2-open display-1 text-muted opacity-50"></i>
+                            <i class="bi bi-lightbulb display-1 text-primary opacity-75"></i>
                         </div>
                         <h3 class="fw-bold mb-3">${title}</h3>
-                        <p class="text-muted mx-auto" style="max-width: 500px;">${message}</p>
+                        <p class="mx-auto" style="max-width: 500px; color: var(--text-secondary);">${message}</p>
                         
                         <div class="mt-4">
-                            ${title !== 'Login Required' ? 
+                            ${title !== 'Join the Research Community' ? 
                                 `<button class="btn btn-primary btn-lg create-project-button px-4">
-                                    <i class="bi bi-plus-circle me-2"></i>Create Your First Project
+                                    <i class="bi bi-plus-circle me-2"></i>Start Your Research Journey
                                 </button>` : 
                                 `<a href="login.php" class="btn btn-primary btn-lg px-4">
-                                    <i class="bi bi-person-fill me-2"></i>Login to Access
+                                    <i class="bi bi-person-fill me-2"></i>Login to Continue
                                 </a>`
                             }
                         </div>
@@ -2143,7 +3134,7 @@ session_start();
             const style = document.createElement('style');
             style.textContent = `
                 .empty-projects-container {
-                    background: white;
+                    background: #00112957;
                     border-radius: 16px;
                     padding: 3rem;
                     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -2588,19 +3579,19 @@ session_start();
                             </div>
                             <div class="modal-body">
                                 <form id="timelineEditForm">
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <label for="timelineTitle" class="form-label">Title</label>
                                         <input type="text" class="form-control" id="timelineTitle" required>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <label for="timelineDescription" class="form-label">Description</label>
                                         <textarea class="form-control" id="timelineDescription" rows="3"></textarea>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <label for="timelineDate" class="form-label">Date</label>
                                         <input type="date" class="form-control" id="timelineDate" required>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <label for="timelineStatus" class="form-label">Status</label>
                                         <select class="form-select" id="timelineStatus">
                                             <option value="Planned">Planned</option>
@@ -2612,8 +3603,8 @@ session_start();
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary" id="saveTimelineChanges">Save Changes</button>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="saveTimelineChanges">Save</button>
                             </div>
                         </div>
                     </div>

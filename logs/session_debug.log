@@ -1078,3 +1078,1699 @@
 2025-05-19 20:03:43 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
 2025-05-19 20:03:43 - Admin user, showing all projects
 2025-05-19 20:03:46 - Found 9 projects
+2025-05-21 17:12:43 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-21 17:12:43 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-21 17:12:43 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-21 17:12:43 - Admin user, showing all projects
+2025-05-21 17:12:44 - Found 9 projects
+2025-05-22 15:40:26 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 15:40:26 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 15:40:26 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 15:40:26 - Admin user, showing all projects
+2025-05-22 15:40:27 - Found 9 projects
+2025-05-22 15:49:58 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 15:49:58 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 15:49:58 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 15:49:58 - Admin user, showing all projects
+2025-05-22 15:49:59 - Found 9 projects
+2025-05-22 15:59:42 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 15:59:42 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 15:59:42 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 15:59:42 - Admin user, showing all projects
+2025-05-22 15:59:42 - Found 9 projects
+2025-05-22 16:05:42 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:05:42 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:05:42 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:05:42 - Admin user, showing all projects
+2025-05-22 16:05:43 - Found 9 projects
+2025-05-22 16:09:07 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:09:07 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:09:07 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:09:07 - Admin user, showing all projects
+2025-05-22 16:09:07 - Found 9 projects
+2025-05-22 16:12:35 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:12:35 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:12:35 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:12:35 - Admin user, showing all projects
+2025-05-22 16:12:35 - Found 9 projects
+2025-05-22 16:15:38 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:15:38 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:15:38 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:15:38 - Admin user, showing all projects
+2025-05-22 16:15:39 - Found 9 projects
+2025-05-22 16:21:20 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:21:20 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:21:20 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:21:20 - Admin user, showing all projects
+2025-05-22 16:21:20 - Found 9 projects
+2025-05-22 16:23:05 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:23:05 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:23:05 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:23:05 - Admin user, showing all projects
+2025-05-22 16:23:05 - Found 9 projects
+2025-05-22 16:24:43 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:24:43 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:24:43 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:24:43 - Admin user, showing all projects
+2025-05-22 16:24:43 - Found 9 projects
+2025-05-22 16:27:43 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:27:43 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:27:43 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:27:43 - Admin user, showing all projects
+2025-05-22 16:27:44 - Found 9 projects
+2025-05-22 16:32:12 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:32:12 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:32:12 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:32:12 - Admin user, showing all projects
+2025-05-22 16:32:12 - Found 9 projects
+2025-05-22 16:34:15 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:34:15 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:34:15 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:34:15 - Admin user, showing all projects
+2025-05-22 16:34:16 - Found 9 projects
+2025-05-22 16:37:27 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:37:27 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:37:27 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:37:27 - Admin user, showing all projects
+2025-05-22 16:37:28 - Found 9 projects
+2025-05-22 16:42:20 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:42:20 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:42:21 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:42:21 - Admin user, showing all projects
+2025-05-22 16:42:21 - Found 9 projects
+2025-05-22 16:44:36 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:44:36 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:44:36 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:44:36 - Admin user, showing all projects
+2025-05-22 16:44:36 - Found 10 projects
+2025-05-22 16:47:08 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:47:08 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:47:08 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:47:08 - Admin user, showing all projects
+2025-05-22 16:47:08 - Found 10 projects
+2025-05-22 16:47:23 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:47:23 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 16:47:23 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 16:47:23 - Admin user, showing all projects
+2025-05-22 16:47:23 - Found 10 projects
+2025-05-22 17:09:38 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 17:09:38 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 17:09:38 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 17:09:38 - Admin user, showing all projects
+2025-05-22 17:09:39 - Found 10 projects
+2025-05-22 17:22:39 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 17:22:39 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 17:22:39 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 17:22:39 - Admin user, showing all projects
+2025-05-22 17:22:40 - Found 10 projects
+2025-05-22 17:33:39 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 17:33:39 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-22 17:33:40 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-22 17:33:40 - Admin user, showing all projects
+2025-05-22 17:33:42 - Found 10 projects
+2025-05-23 06:15:48 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 682ae3d4314b6622be02c124
+                )
+
+            [name] => Mayen
+            [email] => www.mayen@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 682ae3d4314b6622be02c124
+)
+
+2025-05-23 06:15:48 - UserId extracted: 682ae3d4314b6622be02c124, isLoggedIn: true
+2025-05-23 06:15:48 - Filter: {"$or":[{"createdBy":"682ae3d4314b6622be02c124"},{"createdBy.$oid":"682ae3d4314b6622be02c124"},{"members":{"$elemMatch":{"userId":"682ae3d4314b6622be02c124"}}},{"members":{"$elemMatch":{"userId.$oid":"682ae3d4314b6622be02c124"}}},{"supervisor.userId.$oid":"682ae3d4314b6622be02c124"},{"supervisor.userId":"682ae3d4314b6622be02c124"}]}
+2025-05-23 06:15:48 - Found 0 projects
+2025-05-23 06:42:47 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+    [error] => Student profile not found
+)
+
+2025-05-23 06:42:47 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-23 06:42:47 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-23 06:42:47 - Admin user, showing all projects
+2025-05-23 06:42:48 - Found 10 projects
+2025-05-24 09:46:13 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [bio] => test
+            [phone] => 
+            [linkedin] => https://github.com/syed-nafis/uiurp
+            [github] => https://github.com/syed-nafis/uiurp
+            [twitter] => https://github.com/syed-nafis/uiurp
+            [created_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [updated_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [skills] => Array
+                (
+                    [0] => Javascript
+                    [1] => Python
+                    [2] => HTML
+                    [3] => CSS
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => BSC
+                            [institution] => UIU
+                            [field] => computer science engineering
+                            [year] => 2026
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => HSC
+                            [institution] => Hatemali college 
+                            [field] => Science
+                            [year] => 2021
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                )
+
+            [profile_image] => uploads/profile_images/profile_68266805617c9cdcb302f742_1747976283.png
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-24 09:46:13 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-24 09:46:13 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-24 09:46:15 - Found 2 projects
+2025-05-24 09:49:14 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [bio] => test
+            [phone] => 
+            [linkedin] => https://github.com/syed-nafis/uiurp
+            [github] => https://github.com/syed-nafis/uiurp
+            [twitter] => https://github.com/syed-nafis/uiurp
+            [created_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [updated_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [skills] => Array
+                (
+                    [0] => Javascript
+                    [1] => Python
+                    [2] => HTML
+                    [3] => CSS
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => BSC
+                            [institution] => UIU
+                            [field] => computer science engineering
+                            [year] => 2026
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => HSC
+                            [institution] => Hatemali college 
+                            [field] => Science
+                            [year] => 2021
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                )
+
+            [profile_image] => uploads/profile_images/profile_68266805617c9cdcb302f742_1747976283.png
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-24 09:49:14 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-24 09:49:14 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-24 09:49:14 - Found 2 projects
+2025-05-24 09:52:07 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [bio] => test
+            [phone] => 
+            [linkedin] => https://github.com/syed-nafis/uiurp
+            [github] => https://github.com/syed-nafis/uiurp
+            [twitter] => https://github.com/syed-nafis/uiurp
+            [created_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [updated_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [skills] => Array
+                (
+                    [0] => Javascript
+                    [1] => Python
+                    [2] => HTML
+                    [3] => CSS
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => BSC
+                            [institution] => UIU
+                            [field] => computer science engineering
+                            [year] => 2026
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => HSC
+                            [institution] => Hatemali college 
+                            [field] => Science
+                            [year] => 2021
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                )
+
+            [profile_image] => uploads/profile_images/profile_68266805617c9cdcb302f742_1747976283.png
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-24 09:52:07 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-24 09:52:07 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-24 09:52:07 - Found 2 projects
+2025-05-24 09:53:32 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [bio] => test
+            [phone] => 
+            [linkedin] => https://github.com/syed-nafis/uiurp
+            [github] => https://github.com/syed-nafis/uiurp
+            [twitter] => https://github.com/syed-nafis/uiurp
+            [created_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [updated_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [skills] => Array
+                (
+                    [0] => Javascript
+                    [1] => Python
+                    [2] => HTML
+                    [3] => CSS
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => BSC
+                            [institution] => UIU
+                            [field] => computer science engineering
+                            [year] => 2026
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => HSC
+                            [institution] => Hatemali college 
+                            [field] => Science
+                            [year] => 2021
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                )
+
+            [profile_image] => uploads/profile_images/profile_68266805617c9cdcb302f742_1747976283.png
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-24 09:53:32 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-24 09:53:32 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-24 09:53:32 - Found 2 projects
+2025-05-24 10:04:00 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [bio] => test
+            [phone] => 
+            [linkedin] => https://github.com/syed-nafis/uiurp
+            [github] => https://github.com/syed-nafis/uiurp
+            [twitter] => https://github.com/syed-nafis/uiurp
+            [created_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [updated_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [skills] => Array
+                (
+                    [0] => Javascript
+                    [1] => Python
+                    [2] => HTML
+                    [3] => CSS
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => BSC
+                            [institution] => UIU
+                            [field] => computer science engineering
+                            [year] => 2026
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => HSC
+                            [institution] => Hatemali college 
+                            [field] => Science
+                            [year] => 2021
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                )
+
+            [profile_image] => uploads/profile_images/profile_68266805617c9cdcb302f742_1747976283.png
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-24 10:04:00 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-24 10:04:00 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-24 10:04:01 - Found 2 projects
+2025-05-25 09:03:29 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [bio] => test
+            [phone] => 
+            [linkedin] => https://github.com/syed-nafis/uiurp
+            [github] => https://github.com/syed-nafis/uiurp
+            [twitter] => https://github.com/syed-nafis/uiurp
+            [created_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [updated_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [skills] => Array
+                (
+                    [0] => Javascript
+                    [1] => Python
+                    [2] => HTML
+                    [3] => CSS
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => BSC
+                            [institution] => UIU
+                            [field] => computer science engineering
+                            [year] => 2026
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => HSC
+                            [institution] => Hatemali college 
+                            [field] => Science
+                            [year] => 2021
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                )
+
+            [profile_image] => uploads/profile_images/profile_68266805617c9cdcb302f742_1747976283.png
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-25 09:03:29 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-25 09:03:30 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-25 09:03:31 - Found 2 projects
+2025-05-25 09:13:55 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [bio] => test
+            [phone] => 
+            [linkedin] => https://github.com/syed-nafis/uiurp
+            [github] => https://github.com/syed-nafis/uiurp
+            [twitter] => https://github.com/syed-nafis/uiurp
+            [created_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [updated_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [skills] => Array
+                (
+                    [0] => Javascript
+                    [1] => Python
+                    [2] => HTML
+                    [3] => CSS
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => BSC
+                            [institution] => UIU
+                            [field] => computer science engineering
+                            [year] => 2026
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => HSC
+                            [institution] => Hatemali college 
+                            [field] => Science
+                            [year] => 2021
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                )
+
+            [profile_image] => uploads/profile_images/profile_68266805617c9cdcb302f742_1747976283.png
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-25 09:13:55 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-25 09:13:55 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-25 09:13:55 - Found 2 projects
+2025-05-25 09:22:49 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [bio] => test
+            [phone] => 
+            [linkedin] => https://github.com/syed-nafis/uiurp
+            [github] => https://github.com/syed-nafis/uiurp
+            [twitter] => https://github.com/syed-nafis/uiurp
+            [created_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [updated_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [skills] => Array
+                (
+                    [0] => Javascript
+                    [1] => Python
+                    [2] => HTML
+                    [3] => CSS
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => BSC
+                            [institution] => UIU
+                            [field] => computer science engineering
+                            [year] => 2026
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => HSC
+                            [institution] => Hatemali college 
+                            [field] => Science
+                            [year] => 2021
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                )
+
+            [profile_image] => uploads/profile_images/profile_68266805617c9cdcb302f742_1747976283.png
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-25 09:22:49 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-25 09:22:49 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-25 09:22:49 - Found 2 projects
+2025-05-25 09:40:04 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [bio] => test
+            [phone] => 
+            [linkedin] => https://github.com/syed-nafis/uiurp
+            [github] => https://github.com/syed-nafis/uiurp
+            [twitter] => https://github.com/syed-nafis/uiurp
+            [created_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [updated_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [skills] => Array
+                (
+                    [0] => Javascript
+                    [1] => Python
+                    [2] => HTML
+                    [3] => CSS
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => BSC
+                            [institution] => UIU
+                            [field] => computer science engineering
+                            [year] => 2026
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => HSC
+                            [institution] => Hatemali college 
+                            [field] => Science
+                            [year] => 2021
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                )
+
+            [profile_image] => uploads/profile_images/profile_68266805617c9cdcb302f742_1747976283.png
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-25 09:40:04 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-25 09:40:04 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-25 09:40:04 - Found 2 projects
+2025-05-25 09:43:41 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [bio] => test
+            [phone] => 
+            [linkedin] => https://github.com/syed-nafis/uiurp
+            [github] => https://github.com/syed-nafis/uiurp
+            [twitter] => https://github.com/syed-nafis/uiurp
+            [created_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [updated_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [skills] => Array
+                (
+                    [0] => Javascript
+                    [1] => Python
+                    [2] => HTML
+                    [3] => CSS
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => BSC
+                            [institution] => UIU
+                            [field] => computer science engineering
+                            [year] => 2026
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => HSC
+                            [institution] => Hatemali college 
+                            [field] => Science
+                            [year] => 2021
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                )
+
+            [profile_image] => uploads/profile_images/profile_68266805617c9cdcb302f742_1747976283.png
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-25 09:43:41 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-25 09:43:41 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-25 09:43:41 - Found 2 projects
+2025-05-25 13:20:06 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [bio] => test
+            [phone] => 
+            [linkedin] => https://github.com/syed-nafis/uiurp
+            [github] => https://github.com/syed-nafis/uiurp
+            [twitter] => https://github.com/syed-nafis/uiurp
+            [created_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [updated_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [skills] => Array
+                (
+                    [0] => Javascript
+                    [1] => Python
+                    [2] => HTML
+                    [3] => CSS
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => BSC
+                            [institution] => UIU
+                            [field] => computer science engineering
+                            [year] => 2026
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => HSC
+                            [institution] => Hatemali college 
+                            [field] => Science
+                            [year] => 2021
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                )
+
+            [profile_image] => uploads/profile_images/profile_68266805617c9cdcb302f742_1747976283.png
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-25 13:20:06 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-25 13:20:06 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-25 13:20:07 - Found 2 projects
+2025-05-25 13:20:58 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [bio] => test
+            [phone] => 
+            [linkedin] => https://github.com/syed-nafis/uiurp
+            [github] => https://github.com/syed-nafis/uiurp
+            [twitter] => https://github.com/syed-nafis/uiurp
+            [created_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [updated_at] => Array
+                (
+                    [$date] => Array
+                        (
+                            [$numberLong] => 1747976283257
+                        )
+
+                )
+
+            [skills] => Array
+                (
+                    [0] => Javascript
+                    [1] => Python
+                    [2] => HTML
+                    [3] => CSS
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => BSC
+                            [institution] => UIU
+                            [field] => computer science engineering
+                            [year] => 2026
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => HSC
+                            [institution] => Hatemali college 
+                            [field] => Science
+                            [year] => 2021
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                )
+
+            [profile_image] => uploads/profile_images/profile_68266805617c9cdcb302f742_1747976283.png
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-25 13:20:58 - UserId extracted: 68266805617c9cdcb302f742, isLoggedIn: true
+2025-05-25 13:20:58 - Filter: {"$or":[{"createdBy":"68266805617c9cdcb302f742"},{"createdBy.$oid":"68266805617c9cdcb302f742"},{"members":{"$elemMatch":{"userId":"68266805617c9cdcb302f742"}}},{"members":{"$elemMatch":{"userId.$oid":"68266805617c9cdcb302f742"}}},{"supervisor.userId.$oid":"68266805617c9cdcb302f742"},{"supervisor.userId":"68266805617c9cdcb302f742"}]}
+2025-05-25 13:20:58 - Found 2 projects
+2025-05-25 18:21:18 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [name] => samin
+            [email] => www.mayen017@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-05-25 18:21:18 - UserId extracted: 6833436be5c16779b409aa42, isLoggedIn: true
+2025-05-25 18:21:18 - Filter: {"$or":[{"createdBy":"6833436be5c16779b409aa42"},{"createdBy.$oid":"6833436be5c16779b409aa42"},{"members":{"$elemMatch":{"userId":"6833436be5c16779b409aa42"}}},{"members":{"$elemMatch":{"userId.$oid":"6833436be5c16779b409aa42"}}},{"supervisor.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId":"6833436be5c16779b409aa42"}]}
+2025-05-25 18:21:19 - Found 0 projects
+2025-05-25 18:24:21 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [name] => samin
+            [email] => www.mayen017@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-05-25 18:24:21 - UserId extracted: 6833436be5c16779b409aa42, isLoggedIn: true
+2025-05-25 18:24:21 - Filter: {"$or":[{"createdBy":"6833436be5c16779b409aa42"},{"createdBy.$oid":"6833436be5c16779b409aa42"},{"members":{"$elemMatch":{"userId":"6833436be5c16779b409aa42"}}},{"members":{"$elemMatch":{"userId.$oid":"6833436be5c16779b409aa42"}}},{"supervisor.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId":"6833436be5c16779b409aa42"}]}
+2025-05-25 18:24:21 - Found 0 projects
+2025-05-25 18:25:52 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [name] => samin
+            [email] => www.mayen017@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-05-25 18:25:52 - UserId extracted: 6833436be5c16779b409aa42, isLoggedIn: true
+2025-05-25 18:25:52 - Filter: {"$or":[{"createdBy":"6833436be5c16779b409aa42"},{"createdBy.$oid":"6833436be5c16779b409aa42"},{"members":{"$elemMatch":{"userId":"6833436be5c16779b409aa42"}}},{"members":{"$elemMatch":{"userId.$oid":"6833436be5c16779b409aa42"}}},{"supervisor.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId":"6833436be5c16779b409aa42"}]}
+2025-05-25 18:25:53 - Found 0 projects
+2025-05-26 13:28:05 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [name] => samin
+            [email] => www.mayen017@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-05-26 13:28:05 - UserId extracted: 6833436be5c16779b409aa42, isLoggedIn: true
+2025-05-26 13:28:05 - Filter: {"$or":[{"createdBy":"6833436be5c16779b409aa42"},{"createdBy.$oid":"6833436be5c16779b409aa42"},{"members":{"$elemMatch":{"userId":"6833436be5c16779b409aa42"}}},{"members":{"$elemMatch":{"userId.$oid":"6833436be5c16779b409aa42"}}},{"supervisor.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId":"6833436be5c16779b409aa42"}]}
+2025-05-26 13:28:06 - Found 0 projects

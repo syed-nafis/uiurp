@@ -11,14 +11,17 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
 <!-- Include Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
 
-<nav class="modern-navbar">
+<nav class="neo-navbar">
     <!-- Animated Background Layer -->
     <div class="navbar-bg-layer"></div>
+    <div class="navbar-glow-effect"></div>
+    <div class="navbar-grid-overlay"></div>
     
     <div class="navbar-container">
         <!-- Logo with Animation -->
         <a href="index.php" class="navbar-logo">
-            <img src="assets/resources/UIURP.png" alt="UIURP Logo">
+            <div class="text-logo">UIURP</div>
+            <div class="logo-particles"></div>
             <span class="logo-glow"></span>
         </a>
 
@@ -57,6 +60,18 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                 </a>
             </div>
 
+            <!-- Theme Toggle -->
+            <div class="theme-toggle-container">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <div class="toggle-track">
+                        <div class="toggle-thumb">
+                            <i class="bi bi-sun-fill sun-icon"></i>
+                            <i class="bi bi-moon-fill moon-icon"></i>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
             <!-- User Profile Section -->
             <div class="user-section">
                 <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']): ?>
@@ -65,6 +80,7 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                             <div class="user-avatar">
                                 <img src="assets/resources/user_avatar.png" alt="User">
                                 <div class="avatar-status"></div>
+                                <div class="avatar-glow"></div>
                             </div>
                             <span class="user-name"><?= htmlspecialchars($_SESSION['user_data']['name'] ?? 'User') ?></span>
                             <i class="bi bi-chevron-down"></i>
@@ -74,6 +90,7 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                             <div class="dropdown-header">
                                 <div class="header-avatar">
                                     <img src="assets/resources/user_avatar.png" alt="User">
+                                    <div class="header-avatar-glow"></div>
                                 </div>
                                 <div class="header-info">
                                     <p class="header-name"><?= htmlspecialchars($_SESSION['user_data']['name'] ?? 'User') ?></p>
@@ -85,7 +102,14 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                                 <!-- Profile Section -->
                                 <a href="<?= $base_path ?>Student_Profile.php" class="menu-item">
                                     <i class="bi bi-person-circle"></i>
+                                    <span>View Profile</span>
+                                    <div class="menu-item-glow"></div>
+                                </a>
+                                
+                                <a href="<?= $base_path ?>Student_Profile_Edit.php" class="menu-item">
+                                    <i class="bi bi-pencil-square"></i>
                                     <span>Edit Profile</span>
+                                    <div class="menu-item-glow"></div>
                                 </a>
                                 
                                 <!-- Projects Section -->
@@ -94,10 +118,12 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                                     <a href="<?= $base_path ?>project_management.php" class="menu-item">
                                         <i class="bi bi-folder-fill"></i>
                                         <span>My Projects</span>
+                                        <div class="menu-item-glow"></div>
                                     </a>
                                     <a href="<?= $base_path ?>project_management.php#new-project" class="menu-item">
                                         <i class="bi bi-plus-circle"></i>
                                         <span>Create New Project</span>
+                                        <div class="menu-item-glow"></div>
                                     </a>
                                 </div>
                                 
@@ -105,14 +131,16 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                                 <a href="<?= $base_path ?>logout.php" class="menu-item logout">
                                     <i class="bi bi-box-arrow-right"></i>
                                     <span>Logout</span>
+                                    <div class="menu-item-glow"></div>
                                 </a>
                             </div>
                         </div>
                     </div>
                 <?php else: ?>
-                    <a href="<?= $base_path ?>login.php" class="login-button">
-                        <i class="bi bi-person-circle"></i>
-                        <span>Login</span>
+                    <a href="<?= $base_path ?>login.php" class="neo-login-button">
+                        <span class="button-content">Login</span>
+                        <span class="button-icon"><i class="bi bi-person-circle"></i></span>
+                        <span class="button-glow"></span>
                     </a>
                 <?php endif; ?>
                 </div>
@@ -123,24 +151,111 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
 <!-- Navbar Styling and Animations -->
 <style>
 :root {
-    --navbar-primary: #4361ee;
-    --navbar-secondary: #3a0ca3;
-    --navbar-accent: #7209b7;
-    --navbar-light: #f8f9fa;
-    --navbar-dark: #212529;
-    --navbar-success: #4cc9f0;
-    --navbar-warning: #f72585;
+    /* Modern Futuristic Color Scheme */
+    --neo-primary: #4361ee;
+    --neo-secondary: #3a0ca3;
+    --neo-accent: #7209b7;
+    --neo-blue: #4cc9f0;
+    --neo-magenta: #f72585;
+    --neo-light: #f8f9fa;
+    --neo-dark: #121729;
+    
+    /* Theme Variables - Dark Mode (Default) */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #64748b;
+    --border-color: rgba(76, 201, 240, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    
+    /* UI Variables */
+    --navbar-bg: rgba(18, 23, 41, 0.7);
+    --navbar-height: 75px;
+    --navbar-height-scroll: 65px;
     --navbar-transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    --navbar-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    --navbar-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     --navbar-gradient: linear-gradient(135deg, #4361ee, #3a0ca3);
-    --navbar-bg: #ffffff;
-    --navbar-height: 70px;
-    --navbar-height-scroll: 60px;
+    --neo-gradient: linear-gradient(135deg, #4cc9f0, #7209b7);
     --border-radius: 12px;
 }
 
+/* Light Theme Variables */
+[data-theme="light"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #e2e8f0;
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --border-color: rgba(67, 97, 238, 0.15);
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --navbar-bg: rgba(255, 255, 255, 0.95);
+    --navbar-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Light Theme Navbar Specific Styles */
+[data-theme="light"] .navbar-bg-layer {
+    background: var(--navbar-bg);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(67, 97, 238, 0.1);
+}
+
+[data-theme="light"] .neo-navbar.scrolled .navbar-bg-layer {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .text-logo {
+    background: linear-gradient(135deg, #4361ee, #3a0ca3);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+[data-theme="light"] .nav-item {
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .nav-item:hover {
+    color: var(--neo-primary);
+}
+
+[data-theme="light"] .nav-item.active {
+    color: var(--neo-primary);
+}
+
+[data-theme="light"] .nav-highlight {
+    background: var(--gradient-primary);
+}
+
+[data-theme="light"] .neo-login-button {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+[data-theme="light"] .user-name {
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .user-menu-dropdown {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .menu-item {
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .menu-item:hover {
+    background: var(--bg-secondary);
+    color: var(--neo-primary);
+}
+
 /* Core Navbar Structure */
-.modern-navbar {
+.neo-navbar {
     position: fixed;
     top: 0;
     left: 0;
@@ -148,8 +263,7 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     height: var(--navbar-height);
     z-index: 1000;
     transition: var(--navbar-transition);
-    background: var(--navbar-bg);
-    box-shadow: var(--navbar-shadow);
+    background: transparent;
 }
 
 .navbar-bg-layer {
@@ -159,13 +273,51 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     width: 100%;
     height: 100%;
     background: var(--navbar-bg);
-    box-shadow: var(--navbar-shadow);
+    backdrop-filter: blur(10px);
     z-index: -1;
+    transition: var(--navbar-transition);
+    border-bottom: 1px solid rgba(76, 201, 240, 0.1);
 }
 
-.modern-navbar.scrolled .navbar-bg-layer {
-    transform: translateY(0);
-    opacity: 1;
+.navbar-glow-effect {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, 
+        transparent, 
+        rgba(76, 201, 240, 0.3), 
+        rgba(114, 9, 183, 0.3), 
+        rgba(76, 201, 240, 0.3), 
+        transparent);
+    z-index: -1;
+    box-shadow: 0 0 20px 3px rgba(76, 201, 240, 0.2);
+}
+
+.navbar-grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, rgba(76, 201, 240, 0.03) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(76, 201, 240, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: -1;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.neo-navbar.scrolled {
+    height: var(--navbar-height-scroll);
+    background: var(--neo-dark);
+}
+
+.neo-navbar.scrolled .navbar-bg-layer {
+    background: rgba(18, 23, 41, 0.95);
+    backdrop-filter: blur(15px);
+    box-shadow: var(--navbar-shadow);
 }
 
 .navbar-container {
@@ -187,37 +339,60 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     text-decoration: none;
 }
 
-.navbar-logo img {
-    height: 55px;
-    width: 90px;
-    object-fit: contain;
+.text-logo {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #4cc9f0, #7209b7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     transition: var(--navbar-transition);
-    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.1));
+    filter: drop-shadow(0 0 15px rgba(76, 201, 240, 0.3));
+    position: relative;
+    z-index: 2;
+    text-transform: uppercase;
 }
 
-.modern-navbar.scrolled .navbar-logo img {
-    height: 45px;
-    width: 80px;
+.neo-navbar.scrolled .text-logo {
+    font-size: 1.8rem;
 }
 
 .logo-glow {
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     background: radial-gradient(circle, rgba(76, 201, 240, 0.3), transparent 70%);
     border-radius: 50%;
-    z-index: -1;
+    z-index: 1;
     opacity: 0;
     transform: scale(0.8);
     transition: opacity 0.5s ease, transform 0.5s ease;
     top: 50%;
     left: 40px;
-    margin-top: -25px;
+    margin-top: -30px;
+    animation: pulse-glow 3s infinite alternate;
+}
+
+@keyframes pulse-glow {
+    0% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+    100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
 }
 
 .navbar-logo:hover .logo-glow {
-    opacity: 1;
+    opacity: 0.8;
     transform: scale(1.5);
+}
+
+.logo-particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: none;
 }
 
 /* Navigation Menu Styling */
@@ -241,23 +416,26 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     height: 100%;
     padding: 0 20px;
     text-decoration: none;
-    color: var(--navbar-dark);
+    color: var(--neo-light);
     font-weight: 500;
     font-size: 16px;
     transition: var(--navbar-transition);
+    overflow: hidden;
 }
 
 .nav-icon {
     margin-right: 8px;
     font-size: 18px;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
     display: inline-block;
-    opacity: 0.7;
+    opacity: 0.8;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .nav-text {
     position: relative;
     overflow: hidden;
+    transition: var(--navbar-transition);
 }
 
 .nav-highlight {
@@ -266,27 +444,58 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     left: 50%;
     width: 0;
     height: 3px;
-    background: var(--navbar-gradient);
+    background: var(--neo-gradient);
     border-radius: 3px;
     transform: translateX(-50%);
     transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 15px rgba(76, 201, 240, 0.5);
 }
 
 /* Navigation Item Hover Effects */
 .nav-item:hover, 
 .nav-item.active {
-    color: var(--navbar-primary);
+    color: #ffffff;
 }
 
 .nav-item:hover .nav-icon,
 .nav-item.active .nav-icon {
-    transform: translateY(-3px);
+    transform: translateY(-3px) scale(1.1);
     opacity: 1;
+    color: var(--neo-blue);
 }
 
 .nav-item:hover .nav-highlight,
 .nav-item.active .nav-highlight {
     width: 30px;
+}
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(114, 9, 183, 0.1));
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.nav-item:hover::before,
+.nav-item.active::before {
+    opacity: 1;
+}
+
+.nav-item.active .nav-highlight {
+    width: 40px;
+    background: linear-gradient(to right, #4cc9f0, #f72585);
+    animation: neon-glow 2s infinite alternate;
+}
+
+@keyframes neon-glow {
+    0% { box-shadow: 0 0 5px rgba(76, 201, 240, 0.5), 0 0 10px rgba(76, 201, 240, 0.3); }
+    100% { box-shadow: 0 0 10px rgba(76, 201, 240, 0.7), 0 0 20px rgba(76, 201, 240, 0.5); }
 }
 
 /* User Section Styling */
@@ -304,25 +513,30 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
 .user-trigger {
     display: flex;
     align-items: center;
-    padding: 8px 16px;
-    border-radius: 30px;
     cursor: pointer;
-    transition: var(--navbar-transition);
-    background: rgba(0, 0, 0, 0.03);
+    padding: 8px 16px;
+    border-radius: 50px;
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(76, 201, 240, 0.2);
+    transition: all 0.3s ease;
 }
 
 .user-trigger:hover {
-    background: rgba(0, 0, 0, 0.06);
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(76, 201, 240, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .user-avatar {
     position: relative;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     overflow: hidden;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    margin-right: 12px;
+    margin-right: 10px;
+    border: 2px solid rgba(76, 201, 240, 0.5);
+    transition: all 0.3s ease;
 }
 
 .user-avatar img {
@@ -333,60 +547,95 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
 
 .avatar-status {
     position: absolute;
-    bottom: 3px;
-    right: 3px;
-    width: 8px;
-    height: 8px;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background-color: #4cc9f0;
     border-radius: 50%;
-    background: #28a745;
-    border: 2px solid white;
+    border: 2px solid rgba(30, 41, 59, 0.8);
+    z-index: 1;
+}
+
+.avatar-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(76, 201, 240, 0.3), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.user-trigger:hover .avatar-glow {
+    opacity: 1;
 }
 
 .user-name {
-    font-weight: 600;
-    margin-right: 8px;
-    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 10px;
+    font-size: 14px;
+    transition: all 0.3s ease;
 }
 
-/* User Dropdown Styling */
+.user-trigger:hover .user-name {
+    color: #ffffff;
+}
+
+.user-trigger i {
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.user-trigger:hover i {
+    color: rgba(255, 255, 255, 0.9);
+    transform: translateY(2px);
+}
+
+/* Dropdown Menu Styling */
 .user-menu-dropdown {
     position: absolute;
-    top: calc(100% + 15px);
+    top: calc(100% + 10px);
     right: 0;
     width: 280px;
-    background: white;
-    border-radius: var(--border-radius);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    background: rgba(18, 23, 41, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
     opacity: 0;
-    transform-origin: top right;
-    transform: scale(0.9);
-    visibility: hidden;
-    transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.2s;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     overflow: hidden;
-    z-index: 1001;
+    border: 1px solid rgba(76, 201, 240, 0.2);
+    backdrop-filter: blur(15px);
+    z-index: 100;
 }
 
 .user-profile.active .user-menu-dropdown {
     opacity: 1;
-    transform: scale(1);
-    visibility: visible;
+    transform: translateY(0);
+    pointer-events: all;
 }
 
 .dropdown-header {
     padding: 20px;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(76, 201, 240, 0.1));
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(76, 201, 240, 0.1);
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(22, 28, 45, 0.5));
 }
 
 .header-avatar {
+    position: relative;
     width: 50px;
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
     margin-right: 15px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(76, 201, 240, 0.5);
 }
 
 .header-avatar img {
@@ -395,138 +644,192 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     object-fit: cover;
 }
 
+.header-avatar-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(76, 201, 240, 0.3), transparent 70%);
+    opacity: 0.5;
+    animation: pulse-glow 3s infinite alternate;
+}
+
 .header-info {
     flex: 1;
 }
 
 .header-name {
     font-weight: 600;
-    margin: 0;
+    color: #ffffff;
+    margin: 0 0 5px;
+    font-size: 16px;
 }
 
 .header-email {
-    font-size: 13px;
-    color: #6c757d;
+    color: rgba(255, 255, 255, 0.6);
     margin: 0;
-    margin-top: 3px;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .dropdown-content {
-    padding: 10px;
-}
-
-.menu-section {
-    padding: 5px 0;
-    margin-bottom: 10px;
-}
-
-.menu-section-title {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #6c757d;
-    margin: 8px 15px;
-    font-weight: 600;
+    padding: 15px;
 }
 
 .menu-item {
     display: flex;
     align-items: center;
     padding: 12px 15px;
-    text-decoration: none;
-    color: var(--navbar-dark);
     border-radius: 8px;
-    transition: var(--navbar-transition);
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    margin-bottom: 5px;
 }
 
 .menu-item i {
     font-size: 18px;
     margin-right: 12px;
-    color: #6c757d;
-    transition: var(--navbar-transition);
+    transition: all 0.3s ease;
+    color: rgba(76, 201, 240, 0.8);
 }
 
 .menu-item span {
-    font-weight: 500;
+    flex: 1;
     font-size: 14px;
-    transition: var(--navbar-transition);
+    transition: all 0.3s ease;
+}
+
+.menu-item-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(114, 9, 183, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
 }
 
 .menu-item:hover {
-    background: rgba(67, 97, 238, 0.05);
-    color: var(--navbar-primary);
+    color: #ffffff;
+    transform: translateX(5px);
 }
 
 .menu-item:hover i {
-    color: var(--navbar-primary);
+    transform: scale(1.1);
+    color: rgba(76, 201, 240, 1);
 }
 
-.menu-item:active {
-    transform: scale(0.98);
-}
-
-.menu-item::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(67, 97, 238, 0.2) 0%, transparent 70%);
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0;
-    transition: transform 0.5s ease, opacity 0.5s ease;
-    pointer-events: none;
-    border-radius: 50%;
-}
-
-.menu-item:active::after {
-    transform: translate(-50%, -50%) scale(3);
+.menu-item:hover .menu-item-glow {
     opacity: 1;
-    transition: transform 0.15s ease-out, opacity 0.15s ease-out;
+}
+
+.menu-section {
+    margin: 15px 0;
+}
+
+.menu-section-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(76, 201, 240, 0.7);
+    margin: 0 0 10px;
+    padding: 0 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .menu-divider {
     height: 1px;
-    background: rgba(0, 0, 0, 0.05);
+    background: linear-gradient(to right, 
+        transparent, 
+        rgba(76, 201, 240, 0.1), 
+        rgba(114, 9, 183, 0.1), 
+        rgba(76, 201, 240, 0.1), 
+        transparent);
     margin: 10px 0;
 }
 
 .logout {
-    color: #dc3545;
+    color: rgba(247, 37, 133, 0.8);
 }
 
 .logout i {
-    color: #dc3545;
+    color: rgba(247, 37, 133, 0.8);
 }
 
-.login-button {
-    display: flex;
+.logout:hover {
+    color: rgba(247, 37, 133, 1);
+}
+
+.logout:hover i {
+    color: rgba(247, 37, 133, 1);
+}
+
+/* Neo Button Styling for Login */
+.neo-login-button {
+    position: relative;
+    display: inline-flex;
     align-items: center;
-    padding: 10px 20px;
-    background: var(--navbar-gradient);
+    justify-content: center;
+    padding: 10px 25px;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.8), rgba(114, 9, 183, 0.8));
     color: white;
-    border-radius: 30px;
+    border-radius: 50px;
     text-decoration: none;
     font-weight: 500;
     font-size: 15px;
-    transition: var(--navbar-transition);
-    box-shadow: 0 5px 20px rgba(67, 97, 238, 0.3);
-    position: relative;
+    transition: all 0.3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    border: 1px solid rgba(76, 201, 240, 0.5);
     overflow: hidden;
+    z-index: 1;
 }
 
-.login-button i {
+.neo-login-button .button-content {
+    position: relative;
+    z-index: 2;
     margin-right: 8px;
-    font-size: 18px;
 }
 
-.login-button:hover {
+.neo-login-button .button-icon {
+    position: relative;
+    z-index: 2;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.neo-login-button .button-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.5), rgba(114, 9, 183, 0.5));
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: scale(0.9);
+}
+
+.neo-login-button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+    box-shadow: 0 10px 25px rgba(76, 201, 240, 0.3);
     color: white;
+}
+
+.neo-login-button:hover .button-icon {
+    transform: translateX(3px);
+}
+
+.neo-login-button:hover .button-glow {
+    opacity: 1;
+    transform: scale(1.1);
 }
 
 /* Mobile Toggle Button */
@@ -543,14 +846,16 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
 .mobile-toggle span {
     width: 100%;
     height: 2px;
-    background: var(--navbar-dark);
+    background: var(--neo-light);
     border-radius: 4px;
     transition: var(--navbar-transition);
     transform-origin: left;
+    box-shadow: 0 0 5px rgba(76, 201, 240, 0.5);
 }
 
 .mobile-toggle.active span:nth-child(1) {
     transform: rotate(45deg);
+    background: rgba(76, 201, 240, 1);
 }
 
 .mobile-toggle.active span:nth-child(2) {
@@ -559,6 +864,7 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
 
 .mobile-toggle.active span:nth-child(3) {
     transform: rotate(-45deg);
+    background: rgba(76, 201, 240, 1);
 }
 
 /* Responsive Styling */
@@ -578,16 +884,18 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
         width: 80%;
         max-width: 350px;
         height: 100vh;
-        background: white;
+        background: rgba(18, 23, 41, 0.95);
+        backdrop-filter: blur(15px);
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
         padding: 100px 30px 30px;
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
         transform: translateX(100%);
         transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         z-index: 50;
         overflow-y: auto;
+        border-left: 1px solid rgba(76, 201, 240, 0.1);
     }
     
     .navbar-menu.active {
@@ -607,10 +915,12 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
         width: 100%;
         height: auto;
         padding: 15px 0;
+        border-bottom: 1px solid rgba(76, 201, 240, 0.1);
     }
     
     .nav-highlight {
-        display: none;
+        bottom: -1px;
+        height: 2px;
     }
     
     .user-section {
@@ -619,7 +929,7 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     }
     
     .user-profile, 
-    .login-button {
+    .neo-login-button {
         width: 100%;
     }
     
@@ -632,20 +942,20 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
         position: static;
         width: 100%;
         margin-top: 15px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
     }
     
     /* Animation for mobile menu items */
     .nav-item, 
     .user-profile, 
-    .login-button {
+    .neo-login-button {
         opacity: 0;
         transform: translateX(20px);
     }
     
     .navbar-menu.active .nav-item, 
     .navbar-menu.active .user-profile, 
-    .navbar-menu.active .login-button {
+    .navbar-menu.active .neo-login-button {
         animation: fadeSlideIn 0.5s forwards;
     }
     
@@ -653,57 +963,147 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     .navbar-menu.active .nav-item:nth-child(2) { animation-delay: 0.15s; }
     .navbar-menu.active .nav-item:nth-child(3) { animation-delay: 0.2s; }
     .navbar-menu.active .nav-item:nth-child(4) { animation-delay: 0.25s; }
-    .navbar-menu.active .user-profile, 
-    .navbar-menu.active .login-button { animation-delay: 0.3s; }
+    .navbar-menu.active .user-profile,
+    .navbar-menu.active .neo-login-button { animation-delay: 0.3s; }
     
     @keyframes fadeSlideIn {
+        from {
+            opacity: 0;
+            transform: translateX(20px);
+        }
         to {
             opacity: 1;
             transform: translateX(0);
         }
     }
+    
+    /* Menu overlay for mobile */
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(3px);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 45;
+    }
+    
+    .menu-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+    }
 }
 
-/* Adjust body padding for fixed navbar */
-body {
-    padding-top: var(--navbar-height);
+/* Theme Toggle Styles */
+.theme-toggle-container {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
 }
 
-/* Smooth body padding transition */
-.modern-navbar.scrolled + body {
-    padding-top: var(--navbar-height-scroll);
+.theme-toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
 }
 
-/* Add a subtle overlay when mobile menu is open */
-.menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 40;
+.toggle-track {
+    width: 60px;
+    height: 30px;
+    background: var(--bg-tertiary);
+    border-radius: 15px;
+    position: relative;
+    transition: var(--navbar-transition);
+    border: 2px solid var(--border-color);
+    box-shadow: inset 0 2px 4px var(--shadow-color);
+}
+
+.toggle-thumb {
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(135deg, var(--neo-blue), var(--neo-primary));
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: var(--navbar-transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-thumb i {
+    font-size: 12px;
+    color: white;
+    transition: var(--navbar-transition);
+}
+
+.sun-icon {
     opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.4s ease, visibility 0.4s;
+    transform: rotate(-90deg);
 }
 
-.menu-overlay.active {
+.moon-icon {
     opacity: 1;
-    visibility: visible;
+    transform: rotate(0deg);
+    position: absolute;
 }
 
-/* Additional scroll animation */
-.modern-navbar.scrolled {
-    height: var(--navbar-height-scroll);
+/* Light theme toggle state */
+[data-theme="light"] .toggle-thumb {
+    transform: translateX(30px);
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+[data-theme="light"] .sun-icon {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+[data-theme="light"] .moon-icon {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+.theme-toggle:hover .toggle-track {
+    border-color: var(--neo-primary);
+    box-shadow: 0 0 15px rgba(67, 97, 238, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    .theme-toggle-container {
+        margin-right: 0.5rem;
+    }
+    
+    .toggle-track {
+        width: 50px;
+        height: 25px;
+    }
+    
+    .toggle-thumb {
+        width: 21px;
+        height: 21px;
+    }
+    
+    [data-theme="light"] .toggle-thumb {
+        transform: translateX(25px);
+    }
 }
 </style>
 
-<!-- Navbar Script for Functionality and Animations -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
     // Elements
-    const navbar = document.querySelector('.modern-navbar');
+    const navbar = document.querySelector('.neo-navbar');
     const mobileToggle = document.querySelector('.mobile-toggle');
     const navbarMenu = document.querySelector('.navbar-menu');
     const userTrigger = document.getElementById('userMenuTrigger');
@@ -715,8 +1115,8 @@ body {
     document.body.appendChild(overlay);
     
     // Handle scroll
-        let lastScrollY = window.scrollY;
-        let isScrollingDown = false;
+    let lastScrollY = window.scrollY;
+    let isScrollingDown = false;
     
     // Initial state check
     if (window.scrollY > 50) {
@@ -748,20 +1148,16 @@ body {
     });
     
     // Mobile menu toggle
-    mobileToggle.addEventListener('click', function() {
-        this.classList.toggle('active');
-        navbarMenu.classList.toggle('active');
-        overlay.classList.toggle('active');
-        
-        // Prevent body scroll when menu is open
-        if (navbarMenu.classList.contains('active')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-    });
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navbarMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = navbarMenu.classList.contains('active') ? 'hidden' : '';
+        });
+    }
     
-    // Close mobile menu when clicking overlay
+    // Overlay click to close menu
     overlay.addEventListener('click', function() {
         mobileToggle.classList.remove('active');
         navbarMenu.classList.remove('active');
@@ -774,94 +1170,117 @@ body {
         userTrigger.addEventListener('click', function(e) {
             e.stopPropagation();
             userProfile.classList.toggle('active');
-            console.log('User dropdown toggled:', userProfile.classList.contains('active'));
         });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            if (userProfile && !userProfile.contains(e.target)) {
-                userProfile.classList.remove('active');
-            }
-        });
-        }
-        
-        // Add magnetic effect to nav items
-            const navItems = document.querySelectorAll('.nav-item');
+    }
     
-    navItems.forEach(item => {
-                item.addEventListener('mousemove', function(e) {
-                    const bounds = this.getBoundingClientRect();
-            const mouseX = e.clientX - bounds.left;
-            const mouseY = e.clientY - bounds.top;
-            const centerX = bounds.width / 2;
-            const centerY = bounds.height / 2;
-                    const deltaX = (mouseX - centerX) * 0.1;
-                    const deltaY = (mouseY - centerY) * 0.1;
-                    
-            const icon = this.querySelector('.nav-icon');
-            if (icon) {
-                icon.style.transform = `translate(${deltaX}px, ${deltaY - 3}px)`;
-            }
-                });
-                
-                item.addEventListener('mouseleave', function() {
-            const icon = this.querySelector('.nav-icon');
-            if (icon) {
-                icon.style.transform = '';
-            }
-                });
-            });
-            
-    // Add ripple effect to menu items
-    const menuItems = document.querySelectorAll('.menu-item');
-            
-    menuItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const ripple = document.createElement('span');
-            ripple.style.left = `${x}px`;
-            ripple.style.top = `${y}px`;
-            ripple.className = 'ripple-effect';
-            
-            this.appendChild(ripple);
-            
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
-        });
-    });
-        
-    // Add CSS for ripple effect
-        const style = document.createElement('style');
-    style.textContent = `
-        .ripple-effect {
-                position: absolute;
-                border-radius: 50%;
-            background: rgba(255, 255, 255, 0.7);
-                transform: scale(0);
-            animation: ripple-animation 0.6s linear;
-                pointer-events: none;
-            }
-        
-        @keyframes ripple-animation {
-                to {
-                transform: scale(4);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-        
-    // Preload avatar images for smoother experience
-    const avatars = document.querySelectorAll('.user-avatar img, .header-avatar img');
-    avatars.forEach(img => {
-        if (img.src) {
-            const preloadImg = new Image();
-            preloadImg.src = img.src;
+    // Close user dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (userProfile && !userProfile.contains(e.target)) {
+            userProfile.classList.remove('active');
         }
-        });
     });
+    
+    // Create logo particles effect
+    const createLogoParticles = () => {
+        const logoContainer = document.querySelector('.logo-particles');
+        if (!logoContainer) return;
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = 100;
+        canvas.height = 60;
+        canvas.style.position = 'absolute';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.pointerEvents = 'none';
+        
+        logoContainer.appendChild(canvas);
+        
+        const ctx = canvas.getContext('2d');
+        const particles = [];
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.color = Math.random() > 0.5 ? 
+                    `rgba(76, 201, 240, ${Math.random() * 0.5 + 0.3})` : 
+                    `rgba(114, 9, 183, ${Math.random() * 0.5 + 0.3})`;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        const initParticles = () => {
+            for (let i = 0; i < 15; i++) {
+                particles.push(new Particle());
+            }
+        };
+        
+        const animateParticles = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            
+            requestAnimationFrame(animateParticles);
+        };
+        
+        initParticles();
+        animateParticles();
+    };
+    
+    // Initialize logo particles
+    createLogoParticles();
+    
+    // Theme Toggle Functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const htmlElement = document.documentElement;
+    
+    // Check for saved theme preference or default to 'dark'
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    htmlElement.setAttribute('data-theme', currentTheme);
+    
+    // Theme toggle event listener
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Dispatch custom event for theme change
+            const themeChangeEvent = new CustomEvent('themeChanged', {
+                detail: { theme: newTheme }
+            });
+            document.dispatchEvent(themeChangeEvent);
+            
+            // Add a subtle animation effect
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+    }
+});
 </script>
