@@ -1,0 +1,66 @@
+2025-05-19 09:57:36 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 682ae3d4314b6622be02c124
+                )
+
+            [name] => Mayen
+            [email] => www.mayen@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 682ae3d4314b6622be02c124
+)
+
+2025-05-19 09:57:36 - UserId extracted: 682ae3d4314b6622be02c124, Username: Mayen
+2025-05-19 12:44:37 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [user_id] => 68266805617c9cdcb302f742
+)
+
+2025-05-19 12:44:37 - UserId extracted: 68266805617c9cdcb302f742, Username: Samin
+2025-05-22 16:44:35 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 68266805617c9cdcb302f742
+                )
+
+            [name] => Samin
+            [email] => www.mayen017@gmail.com
+            [role] => admin
+        )
+
+    [upvote_state] => Array
+        (
+            [67e9968f218eca1c6f0d2ae8] => 1
+            [67e9963e218eca1c6f0d2ae7] => 1
+            [6602cfe7a1b23f0a9c123008] => 1
+        )
+
+)
+
+2025-05-22 16:44:35 - UserId extracted: 68266805617c9cdcb302f742, Username: Samin
