@@ -66,6 +66,9 @@ $posts = $collection->find([], ['sort' => $sort])->toArray();
   <?php include 'src/includes/navbar.php'; ?>
 
   <div class="container">
+      <div class="mb-3">
+        <a href="forum_index.php" class="btn btn-primary btn-lg">+ Create New Post</a>
+      </div>
       <form method="GET" class="mb-3">
         <label for="sort" class="form-label">Sort by:</label>
         <select name="sort" id="sort" class="form-select w-auto d-inline" onchange="this.form.submit()">
