@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const postDiv = document.createElement('div');
                     postDiv.className = 'forum-post';
                     postDiv.innerHTML = `
-                        <p><strong>Author ID:</strong> ${forum.user_id?.$oid || 'Unknown'}</p> <!-- ✅ NEW: user ID -->
+                        <p><strong>Posted by:</strong> ${forum.user_name || 'Unknown'}</p>
                         <h3>${forum.title}</h3>
                         <p>${forum.content}</p>
                         <p><strong>Tags:</strong> ${forum.tags ? forum.tags.join(', ') : 'None'}</p> <!-- ✅ NEW: tags -->

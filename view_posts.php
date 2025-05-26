@@ -79,9 +79,17 @@ $posts = $collection->find([], ['sort' => $sort])->toArray();
       <div id="postsContainer">
           <?php foreach ($posts as $post): ?>
               <div class="forum-post border p-3 mb-3">
-                  <h3><?= htmlspecialchars($post['title']) ?></h3>
+<?php
+    $posterName = $post['user_name'] ?? 'Unknown';
+?>
+                  <div class="text-start text-muted mb-2" style="font-size: 0.9rem;">
+                      Posted by <?= htmlspecialchars($posterName) ?>
+                  </div>
+                  <h3>
+                      <?= htmlspecialchars($post['title']) ?>
+                  </h3>
                   <p><?= htmlspecialchars($post['content']) ?></p>
-                  <p><strong>Views:</strong> <?= $post['views'] ?? 0 ?></p>
+                 
                   <p>
                       <button class="btn btn-success btn-sm upvote-btn" data-post-id="<?= $post['_id'] ?>">Upvote</button>
                       <span id="upvotes-<?= $post['_id'] ?>" class="ms-2"><?= $post['upvotes'] ?? 0 ?></span>
@@ -96,7 +104,7 @@ $posts = $collection->find([], ['sort' => $sort])->toArray();
                                       <?= htmlspecialchars($comment['text'] ?? '') ?>
                                       <br>
                                       <small>
-                                          <?= isset($comment['time']) ? date('F j, Y, g:i a', $comment['time']->toDateTime()->getTimestamp()) : '' ?>
+                                          <?= isset($comment['time']) ? date('g:i a, F j, Y', $comment['time']->toDateTime()->getTimestamp()) : '' ?>
                                       </small>
                                   </li>
                               <?php endforeach; ?>

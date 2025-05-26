@@ -9,10 +9,15 @@ $collection = $db->forum;
 $posts = $collection->find()->toArray();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    session_start();
+    $userId = $_SESSION['user_id'] ?? null;
+    $userName = $_SESSION['user_data']['name'] ?? 'Anonymous';
+
     $data = json_decode(file_get_contents('php://input'), true);
 
     $post = [
-        'user_id' => new MongoDB\BSON\ObjectId("661e174ee04e47be9b0e337b"), // Replace if dynamic
+        'user_id' => new MongoDB\BSON\ObjectId($userId),
+        'user_name' => $userName,
         'title' => $data['title'],
         'content' => $data['content'],
         'views' => 0,
