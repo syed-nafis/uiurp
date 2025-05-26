@@ -73,7 +73,7 @@ $posts = $collection->find()->toArray();
                       <?php endif; ?>
 
                       <!-- Add Comment Form -->
-                      <form method="POST" action="add_comment.php">
+                      <form method="POST" action="src/controller/add_comment.php" class="add-comment-form">
                           <input type="hidden" name="postId" value="<?= $post['_id'] ?>">
                           <textarea name="comment" placeholder="Add a comment..." class="form-control mb-2"></textarea>
                           <button type="submit" class="btn btn-primary">Submit Comment</button>
@@ -108,6 +108,36 @@ $posts = $collection->find()->toArray();
                   }
               })
               .catch(error => console.error('Error:', error));
+          });
+      });
+  });
+  </script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Handle comment form submissions
+      document.querySelectorAll('.add-comment-form').forEach(form => {
+          form.addEventListener('submit', function(event) {
+              event.preventDefault();
+
+              const formData = new FormData(form);
+
+              fetch('src/controller/add_comment.php', {
+                  method: 'POST',
+                  body: formData
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      alert('Comment added successfully!');
+                      location.reload();
+                  } else {
+                      alert('Error: ' + data.message);
+                  }
+              })
+              .catch(error => {
+                  console.error('Error:', error);
+                  alert('An error occurred while adding the comment.');
+              });
           });
       });
   });
