@@ -1,6 +1,8 @@
 <?php
 require __DIR__ . '/vendor/autoload.php'; // Updated path to Composer's autoloader
 
+session_start();
+
 $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
 $db = $client->uiurp;
 $collection = $db->forum;
@@ -60,6 +62,9 @@ $posts = $collection->find([], ['sort' => $sort])->toArray();
             font-style: italic;
             color: #666;
         }
+        body {
+            padding-top: 70px; /* Adjust this value to your navbar height */
+        }
     </style>
 </head>
 <body>
@@ -82,9 +87,7 @@ $posts = $collection->find([], ['sort' => $sort])->toArray();
       <div id="postsContainer">
           <?php foreach ($posts as $post): ?>
               <div class="forum-post border p-3 mb-3">
-<?php
-    $posterName = $post['user_name'] ?? 'Unknown';
-?>
+                  <?php $posterName = $post['user_name'] ?? 'Unknown';?>
                   <div class="text-start text-muted mb-2" style="font-size: 0.9rem;">
                       Posted by <?= htmlspecialchars($posterName) ?>
                   </div>
