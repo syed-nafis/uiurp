@@ -71,6 +71,9 @@ if (isset($_GET['id'])) {
                     <button class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#scheduleModal">
                         Current Schedule
                     </button>
+                    <a href="#interested-fields" class="btn btn-primary me-2 mb-2">Interested Field</a>
+                    <a href="#prerequisite" class="btn btn-primary me-2 mb-2">Prerequisite</a>
+                    <a href="#resource" class="btn btn-primary me-2 mb-2">Learning Resource</a>
                 </div>
             </div>
             <div class="col-md-6">
@@ -99,15 +102,15 @@ if (isset($_GET['id'])) {
 </div>
 
 
-    <!-- Interested Fields Section -->
-    <section class="py-5 bg-light">
-    <h2 class="text-center mb-4">Interested Fields</h2>
-    <div class="container p-3 text-center align-items-center">
-        <div class="row text-center align-items-center justify-content-center">
+<!-- Interested Fields Section -->
+<section id="interested-fields" class="py-5 bg-light">
+    <h2 class="text-center mb-5">Interested Fields</h2>
+    <div class="container">
+        <div class="row justify-content-center">
             <?php foreach ($faculty['interested_fields_of_research'] as $field): ?>
-                <div class="col-md-3 mb-4">
-                    <div class="field-box p-4 shadow-sm rounded-lg">
-                        <h3 class="text-secondary"><?= $field; ?></h3>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="field-box p-4 shadow-sm rounded-4 bg-white h-100 d-flex align-items-center justify-content-center text-center">
+                        <h5 class="mb-0 text-dark"><?= $field; ?></h5>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -135,6 +138,45 @@ if (isset($_GET['id'])) {
                 </div>
             </div>
         <?php endforeach; ?>
+    </div>
+</section>
+
+<section id="prerequisite" class="prerequisites-section py-5 bg-white">
+    <h2 class="text-center mb-4">Prerequisites</h2>
+    <div class="container">
+        <?php if (!empty($faculty['prerequisites']) && count($faculty['prerequisites']) > 0): ?>
+            <div class="row justify-content-center">
+                <?php foreach ($faculty['prerequisites'] as $prerequisite): ?>
+                    <div class="col-md-5 col-lg-4 mb-4">
+                        <div class="prerequisite-card p-4 shadow-sm rounded bg-light h-100">
+                            <h5 class="text-dark mb-0"><?= htmlspecialchars($prerequisite); ?></h5>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p class="text-center text-muted">No prerequisites available at the moment.</p>
+        <?php endif; ?>
+    </div>
+</section>
+
+<section id="resource" class="resources-section py-5 bg-light">
+    <h2 class="text-center mb-4">Resources to Learn Prerequisites</h2>
+    <div class="container">
+        <?php if (!empty($faculty['resources_to_learn_prerequisites']) && count($faculty['resources_to_learn_prerequisites']) > 0): ?>
+            <div class="row justify-content-center">
+                <?php foreach ($faculty['resources_to_learn_prerequisites'] as $resource): ?>
+                    <div class="col-md-5 col-lg-4 mb-4">
+                        <a href="<?= htmlspecialchars($resource['link']); ?>" target="_blank" class="resource-card d-block p-4 text-decoration-none shadow-sm rounded bg-white h-100">
+                            <h5 class="text-primary mb-1"><?= htmlspecialchars($resource['topic']); ?></h5>
+                            <small class="text-muted">Click to learn more</small>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p class="text-center text-muted">No resources available at the moment.</p>
+        <?php endif; ?>
     </div>
 </section>
 
