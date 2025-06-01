@@ -2943,3 +2943,133 @@
 2025-06-01 12:17:50 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2c5, isLoggedIn: true
 2025-06-01 12:17:51 - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2c5"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2c5"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2c5"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2c5"}}},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2c5"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2c5"}]}
 2025-06-01 12:17:52 - Found 0 projects
+2025-06-01 15:50:52 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 67e19fa9ebb89e49e04ddf28
+                )
+
+            [name] => Mr. Mir Moynuddin Ahmed Shibly
+            [email] => moynuddin@cse.uiu.ac.bd
+            [phone] => +8801877425176
+            [bio] => Mr. Mir Moynuddin Ahmed Shibly is an Assistant Professor in the Department of CSE at UIU. He specializes in Machine Learning, Data Mining, and Bioinformatics. With a background in Data Science, he has experience as both a lecturer and a teaching assistant.
+            [job_title] => Assistant Professor
+            [office_number] => Room: 536
+            [profile_image] => https://i.imgur.com/rRzCUAI.jpg
+            [interested_fields_of_research] => Array
+                (
+                    [0] => Machine Learning
+                    [1] => Data Mining
+                    [2] => Bioinformatics
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => MS in Computer Science and Engineering
+                            [major] => Data Science
+                            [year] => 2021-2022
+                            [institution] => East West University, Dhaka
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => BS in Computer Science and Engineering
+                            [year] => 2016-2020
+                            [institution] => East West University, Dhaka
+                        )
+
+                )
+
+            [experience] => Array
+                (
+                    [0] => Array
+                        (
+                            [position] => Assistant Professor
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => United International University
+                            [period] => February 2022 – present
+                        )
+
+                    [1] => Array
+                        (
+                            [position] => Lecturer
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => Primeasia University
+                            [period] => February 2021 – January 2022
+                        )
+
+                    [2] => Array
+                        (
+                            [position] => Undergraduate Teaching Assistant
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => East West University
+                            [period] => January 2019 – May 2020
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => Pre-trained Deep Learning Models in Automatic COVID-19 Diagnosis
+                            [description] => A research paper on using pre-trained deep learning models for automatic COVID-19 diagnosis, published in the Indonesian Journal of Electrical Engineering and Computer Science.
+                            [year] => 2021
+                            [publication] => Indonesian Journal of Electrical Engineering and Computer Science
+                            [authors] => Array
+                                (
+                                    [0] => Ahmed Wasif Reza
+                                    [1] => Mir Moynuddin Ahmed Shibly
+                                    [2] => Md Mahamudul Hasan
+                                    [3] => Nazla Nowrin
+                                )
+
+                        )
+
+                )
+
+            [prerequisites] => Array
+                (
+                    [0] => Machine Learning Fundamentals
+                    [1] => Deep Learning
+                    [2] => Python Programming
+                    [3] => Basic Statistics
+                )
+
+            [resources_to_learn_prerequisites] => Array
+                (
+                    [0] => Array
+                        (
+                            [topic] => Machine Learning Fundamentals
+                            [link] => https://www.youtube.com/playlist?list=PLqYmG7hTraZCDxZ44o4p3N5Anz3lLRVZF
+                        )
+
+                    [1] => Array
+                        (
+                            [topic] => Deep Learning
+                            [link] => https://www.coursera.org/specializations/deep-learning
+                        )
+
+                    [2] => Array
+                        (
+                            [topic] => Basic Statistics
+                            [link] => https://www.youtube.com/playlist?list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1
+                        )
+
+                )
+
+            [username] => mshibly
+        )
+
+)
+
+2025-06-01 15:50:52 - UserId extracted: 67e19fa9ebb89e49e04ddf28, isLoggedIn: true
+2025-06-01 15:50:52 - Filter: {"$or":[{"createdBy":"67e19fa9ebb89e49e04ddf28"},{"createdBy.$oid":"67e19fa9ebb89e49e04ddf28"},{"members":{"$elemMatch":{"userId":"67e19fa9ebb89e49e04ddf28"}}},{"members":{"$elemMatch":{"userId.$oid":"67e19fa9ebb89e49e04ddf28"}}},{"supervisor.userId.$oid":"67e19fa9ebb89e49e04ddf28"},{"supervisor.userId":"67e19fa9ebb89e49e04ddf28"}]}
+2025-06-01 15:50:52 - Found 0 projects
