@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<script>console.log('" . json_encode($studentData) . "');</script>"; // Log the data for debugging
             if ($studentData) {
                 $_SESSION['logged_in'] = true;
-                $_SESSION['user_type'] = 'faculty';
+                $_SESSION['user_type'] = 'student';
                 $_SESSION['user_data'] = json_decode(json_encode($studentData),true);
                 header('Location: /../../index.php'); // Redirect to student dashboard
                 exit();
