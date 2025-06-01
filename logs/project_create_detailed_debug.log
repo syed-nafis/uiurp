@@ -1,0 +1,911 @@
+2025-05-30 08:42:21 - === NEW PROJECT CREATION REQUEST ===
+2025-05-30 08:42:21 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.65
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-05-30 08:42:21 - POST: Array
+(
+    [projectId] => 
+    [title] => teset
+    [abstract] => tsetsetse
+    [description] => estsetsetst
+    [field] => Computer Science
+    [institution] => United International University
+    [keywords] => ["Blockchain"]
+    [privacy] => 0
+    [createdAt] => 
+    [updatedAt] => 
+    [github] => https://github.com/example/project14
+    [website] => https://blockchain-supply-chain.example.com
+    [paper] => https://example.com/papers/blockchain-supply-chain.pdf
+    [doi] => https://doi.org/example/project14
+    [youtube] => https://youtube.com/watch?v=example14
+    [supervisor] => Mr. Shoib Ahmed Shourav
+    [supervisorId] => 67e1a592ebb89e49e04ddf2f
+    [references] => 
+    [viewsCount] => 592
+    [downloadsCount] => 432
+    [favoritesCount] => 940
+    [commentsArray] => []
+    [members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Imran Hasan","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c9"}}]
+    [timeline] => [{"title":"","description":"","date":"2025-05-30","status":"Planned"},{"title":"","description":"","date":"2025-05-30","status":"Planned"},{"title":"","description":"","date":"2025-05-30","status":"Planned"}]
+    [links] => {"github":"https://github.com/example/project14","website":"https://blockchain-supply-chain.example.com","paper":"https://example.com/papers/blockchain-supply-chain.pdf","doi":"https://doi.org/example/project14","youtube":"https://youtube.com/watch?v=example14"}
+)
+
+2025-05-30 08:42:21 - FILES: Array
+(
+    [coverImage] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+    [projectFiles] => Array
+        (
+            [name] => Array
+                (
+                    [0] => 
+                )
+
+            [full_path] => Array
+                (
+                    [0] => 
+                )
+
+            [type] => Array
+                (
+                    [0] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => 
+                )
+
+            [error] => Array
+                (
+                    [0] => 4
+                )
+
+            [size] => Array
+                (
+                    [0] => 0
+                )
+
+        )
+
+    [mediaFiles] => Array
+        (
+            [name] => Array
+                (
+                    [0] => 
+                )
+
+            [full_path] => Array
+                (
+                    [0] => 
+                )
+
+            [type] => Array
+                (
+                    [0] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => 
+                )
+
+            [error] => Array
+                (
+                    [0] => 4
+                )
+
+            [size] => Array
+                (
+                    [0] => 0
+                )
+
+        )
+
+)
+
+2025-05-30 08:42:21 - UserId extracted: 6833436be5c16779b409aa42, Username: Samin yeaser khan
+2025-05-30 08:42:21 - Processed members: Array
+(
+    [0] => Array
+        (
+            [name] => Samin yeaser khan
+            [role] => Creator
+            [contribution] => 100
+            [userId] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+        )
+
+    [1] => Array
+        (
+            [name] => Imran Hasan
+            [role] => Author
+            [contribution] => 0
+            [userId] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                )
+
+        )
+
+)
+
+2025-05-30 08:42:21 - Processing supervisor - Name: Mr. Shoib Ahmed Shourav, ID: 67e1a592ebb89e49e04ddf2f
+2025-05-30 08:42:22 - Found faculty supervisor: Array
+(
+    [userId] => Array
+        (
+            [$oid] => 67e1a592ebb89e49e04ddf2f
+        )
+
+    [name] => Mr. Shoib Ahmed Shourav
+    [role] => Supervisor
+    [email] => shoib@cse.uiu.ac.bd
+)
+
+2025-05-30 08:42:22 - Final supervisor data: Array
+(
+    [userId] => Array
+        (
+            [$oid] => 67e1a592ebb89e49e04ddf2f
+        )
+
+    [name] => Mr. Shoib Ahmed Shourav
+    [role] => Supervisor
+    [email] => shoib@cse.uiu.ac.bd
+)
+
+2025-05-30 08:42:22 - Project document to insert: Array
+(
+    [title] => teset
+    [abstract] => tsetsetse
+    [description] => estsetsetst
+    [field] => Computer Science
+    [keywords] => Array
+        (
+            [0] => Blockchain
+        )
+
+    [institution] => United International University
+    [createdAt] => MongoDB\BSON\UTCDateTime Object
+        (
+            [milliseconds] => 1748587341953
+        )
+
+    [updatedAt] => MongoDB\BSON\UTCDateTime Object
+        (
+            [milliseconds] => 1748587341953
+        )
+
+    [privacy] => 0
+    [members] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [role] => Creator
+                    [contribution] => 100
+                    [userId] => Array
+                        (
+                            [$oid] => 6833436be5c16779b409aa42
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [name] => Imran Hasan
+                    [role] => Author
+                    [contribution] => 0
+                    [userId] => Array
+                        (
+                            [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                        )
+
+                )
+
+        )
+
+    [timeline] => Array
+        (
+            [0] => Array
+                (
+                    [title] => 
+                    [description] => 
+                    [date] => 2025-05-30
+                    [status] => Planned
+                )
+
+            [1] => Array
+                (
+                    [title] => 
+                    [description] => 
+                    [date] => 2025-05-30
+                    [status] => Planned
+                )
+
+            [2] => Array
+                (
+                    [title] => 
+                    [description] => 
+                    [date] => 2025-05-30
+                    [status] => Planned
+                )
+
+        )
+
+    [supervisor] => Array
+        (
+            [userId] => Array
+                (
+                    [$oid] => 67e1a592ebb89e49e04ddf2f
+                )
+
+            [name] => Mr. Shoib Ahmed Shourav
+            [role] => Supervisor
+            [email] => shoib@cse.uiu.ac.bd
+        )
+
+    [links] => Array
+        (
+            [github] => https://github.com/example/project14
+            [website] => https://blockchain-supply-chain.example.com
+            [paper] => https://example.com/papers/blockchain-supply-chain.pdf
+            [doi] => https://doi.org/example/project14
+            [youtube] => https://youtube.com/watch?v=example14
+        )
+
+    [stats] => Array
+        (
+            [views] => 0
+            [downloads] => 0
+            [favorites] => 0
+        )
+
+    [comments] => Array
+        (
+        )
+
+    [createdBy] => 6833436be5c16779b409aa42
+)
+
+2025-05-30 08:42:22 - Connected to MongoDB successfully
+2025-05-30 08:42:22 - Insert result: MongoDB\InsertOneResult Object
+(
+    [writeResult:MongoDB\InsertOneResult:private] => MongoDB\Driver\WriteResult Object
+        (
+            [nInserted] => 1
+            [nMatched] => 0
+            [nModified] => 0
+            [nRemoved] => 0
+            [nUpserted] => 0
+            [upsertedIds] => Array
+                (
+                )
+
+            [writeErrors] => Array
+                (
+                )
+
+            [writeConcernError] => 
+            [writeConcern] => MongoDB\Driver\WriteConcern Object
+                (
+                )
+
+            [errorReplies] => Array
+                (
+                )
+
+        )
+
+    [insertedId:MongoDB\InsertOneResult:private] => MongoDB\BSON\ObjectId Object
+        (
+            [oid] => 6839534eb7804646190966c4
+        )
+
+    [isAcknowledged:MongoDB\InsertOneResult:private] => 1
+)
+
+2025-05-30 08:42:22 - SUCCESS: Array
+(
+    [success] => 1
+    [message] => Project created successfully
+    [projectId] => 6839534eb7804646190966c4
+)
+
+2025-05-30 13:38:09 - === NEW PROJECT CREATION REQUEST ===
+2025-05-30 13:38:09 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.65
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-05-30 13:38:09 - POST: Array
+(
+    [projectId] => 
+    [title] => test5
+    [abstract] => test5
+    [description] => test5
+    [field] => Computer Science
+    [institution] => United International University
+    [keywords] => 
+    [privacy] => 0
+    [createdAt] => 
+    [updatedAt] => 
+    [github] => https://github.com/example/project14
+    [website] => https://blockchain-supply-chain.example.com
+    [paper] => https://example.com/papers/blockchain-supply-chain.pdf
+    [doi] => https://doi.org/example/project14
+    [youtube] => https://youtube.com/watch?v=example14
+    [supervisor] => Dr. Riasat Azim
+    [supervisorId] => 67e1ad43ebb89e49e04ddf38
+    [references] => 
+    [viewsCount] => 955
+    [downloadsCount] => 167
+    [favoritesCount] => 294
+    [commentsArray] => []
+    [members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Imran Hasan","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c9"}}]
+    [timeline] => [{"title":"","description":"","date":"2025-05-30","status":"Planned"},{"title":"","description":"","date":"2025-05-30","status":"Planned"},{"title":"","description":"","date":"2025-05-30","status":"Planned"}]
+    [links] => {"github":"https://github.com/example/project14","website":"https://blockchain-supply-chain.example.com","paper":"https://example.com/papers/blockchain-supply-chain.pdf","doi":"https://doi.org/example/project14","youtube":"https://youtube.com/watch?v=example14"}
+)
+
+2025-05-30 13:38:09 - FILES: Array
+(
+    [coverImage] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+    [projectFiles] => Array
+        (
+            [name] => Array
+                (
+                    [0] => 
+                )
+
+            [full_path] => Array
+                (
+                    [0] => 
+                )
+
+            [type] => Array
+                (
+                    [0] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => 
+                )
+
+            [error] => Array
+                (
+                    [0] => 4
+                )
+
+            [size] => Array
+                (
+                    [0] => 0
+                )
+
+        )
+
+    [mediaFiles] => Array
+        (
+            [name] => Array
+                (
+                    [0] => 
+                )
+
+            [full_path] => Array
+                (
+                    [0] => 
+                )
+
+            [type] => Array
+                (
+                    [0] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => 
+                )
+
+            [error] => Array
+                (
+                    [0] => 4
+                )
+
+            [size] => Array
+                (
+                    [0] => 0
+                )
+
+        )
+
+)
+
+2025-05-30 13:38:09 - UserId extracted: 6833436be5c16779b409aa42, Username: Samin yeaser khan
+2025-05-30 13:38:09 - Processed members: Array
+(
+    [0] => Array
+        (
+            [name] => Samin yeaser khan
+            [role] => Creator
+            [contribution] => 100
+            [userId] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+        )
+
+    [1] => Array
+        (
+            [name] => Imran Hasan
+            [role] => Author
+            [contribution] => 0
+            [userId] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                )
+
+        )
+
+)
+
+2025-05-30 13:38:09 - Processing supervisor - Name: Dr. Riasat Azim, ID: 67e1ad43ebb89e49e04ddf38
+2025-05-30 13:38:09 - Found faculty supervisor: Array
+(
+    [userId] => Array
+        (
+            [$oid] => 67e1ad43ebb89e49e04ddf38
+        )
+
+    [name] => Dr. Riasat Azim
+    [role] => Supervisor
+    [email] => kabir@cse.uiu.ac.bd
+)
+
+2025-05-30 13:38:09 - Final supervisor data: Array
+(
+    [userId] => Array
+        (
+            [$oid] => 67e1ad43ebb89e49e04ddf38
+        )
+
+    [name] => Dr. Riasat Azim
+    [role] => Supervisor
+    [email] => kabir@cse.uiu.ac.bd
+)
+
+2025-05-30 13:38:09 - Project document to insert: Array
+(
+    [title] => test5
+    [abstract] => test5
+    [description] => test5
+    [field] => Computer Science
+    [keywords] => Array
+        (
+        )
+
+    [institution] => United International University
+    [createdAt] => MongoDB\BSON\UTCDateTime Object
+        (
+            [milliseconds] => 1748605089263
+        )
+
+    [updatedAt] => MongoDB\BSON\UTCDateTime Object
+        (
+            [milliseconds] => 1748605089263
+        )
+
+    [privacy] => 0
+    [members] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [role] => Creator
+                    [contribution] => 100
+                    [userId] => Array
+                        (
+                            [$oid] => 6833436be5c16779b409aa42
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [name] => Imran Hasan
+                    [role] => Author
+                    [contribution] => 0
+                    [userId] => Array
+                        (
+                            [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                        )
+
+                )
+
+        )
+
+    [timeline] => Array
+        (
+            [0] => Array
+                (
+                    [title] => 
+                    [description] => 
+                    [date] => 2025-05-30
+                    [status] => Planned
+                )
+
+            [1] => Array
+                (
+                    [title] => 
+                    [description] => 
+                    [date] => 2025-05-30
+                    [status] => Planned
+                )
+
+            [2] => Array
+                (
+                    [title] => 
+                    [description] => 
+                    [date] => 2025-05-30
+                    [status] => Planned
+                )
+
+        )
+
+    [supervisor] => Array
+        (
+            [userId] => Array
+                (
+                    [$oid] => 67e1ad43ebb89e49e04ddf38
+                )
+
+            [name] => Dr. Riasat Azim
+            [role] => Supervisor
+            [email] => kabir@cse.uiu.ac.bd
+        )
+
+    [links] => Array
+        (
+            [github] => https://github.com/example/project14
+            [website] => https://blockchain-supply-chain.example.com
+            [paper] => https://example.com/papers/blockchain-supply-chain.pdf
+            [doi] => https://doi.org/example/project14
+            [youtube] => https://youtube.com/watch?v=example14
+        )
+
+    [stats] => Array
+        (
+            [views] => 0
+            [downloads] => 0
+            [favorites] => 0
+        )
+
+    [comments] => Array
+        (
+        )
+
+    [createdBy] => 6833436be5c16779b409aa42
+)
+
+2025-05-30 13:38:09 - Connected to MongoDB successfully
+2025-05-30 13:38:09 - Insert result: MongoDB\InsertOneResult Object
+(
+    [writeResult:MongoDB\InsertOneResult:private] => MongoDB\Driver\WriteResult Object
+        (
+            [nInserted] => 1
+            [nMatched] => 0
+            [nModified] => 0
+            [nRemoved] => 0
+            [nUpserted] => 0
+            [upsertedIds] => Array
+                (
+                )
+
+            [writeErrors] => Array
+                (
+                )
+
+            [writeConcernError] => 
+            [writeConcern] => MongoDB\Driver\WriteConcern Object
+                (
+                )
+
+            [errorReplies] => Array
+                (
+                )
+
+        )
+
+    [insertedId:MongoDB\InsertOneResult:private] => MongoDB\BSON\ObjectId Object
+        (
+            [oid] => 683998a151fcf55cdb026af4
+        )
+
+    [isAcknowledged:MongoDB\InsertOneResult:private] => 1
+)
+
+2025-05-30 13:38:09 - SUCCESS: Array
+(
+    [success] => 1
+    [message] => Project created successfully
+    [projectId] => 683998a151fcf55cdb026af4
+)
+

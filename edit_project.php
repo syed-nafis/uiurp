@@ -14,24 +14,131 @@ session_start();
     <link rel="stylesheet" href="assets/styles/home.css">
     <style>
         :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3a0ca3;
-            --accent-color: #7209b7;
-            --light-color: #f8f9fa;
-            --dark-color: #212529;
-            --success-color: #4cc9f0;
-            --warning-color: #f72585;
+            /* Modern Professional Colors */
+            --primary: #2563eb;
+            --secondary: #8b5cf6;
+            --accent: #0ea5e9;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --border-light: #475569;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            
+            /* Glass morphism */
+            --glass-bg: rgba(30, 41, 59, 0.8);
+            --glass-border: rgba(148, 163, 184, 0.1);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #2563eb, #8b5cf6);
+            --gradient-surface: linear-gradient(135deg, #1e293b, #334155);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            
+            /* Border radius */
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+            
+            /* Transitions */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         body {
-            background-color: #f0f2f5;
-            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0d1a 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             overflow-x: hidden;
+            color: var(--text-primary);
+            position: relative;
+            min-height: 100vh;
+            scroll-behavior: smooth;
         }
         
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        /* Enhanced Background Effects */
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
         
-        /* Background particles */
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.4;
+            animation: float-orb 15s ease-in-out infinite;
+            box-shadow: 0 0 50px currentColor;
+        }
+        
+        .orb-1 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, rgba(37, 99, 235, 0.1) 50%, transparent 70%);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, rgba(14, 165, 233, 0.08) 50%, transparent 70%);
+            top: 60%;
+            right: 10%;
+            animation-delay: 7s;
+        }
+        
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, rgba(6, 182, 212, 0.1) 50%, transparent 70%);
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 14s;
+        }
+        
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            25% { transform: translate(30px, -20px) scale(1.05) rotate(90deg); }
+            50% { transform: translate(-20px, 30px) scale(0.95) rotate(180deg); }
+            75% { transform: translate(25px, 15px) scale(1.02) rotate(270deg); }
+        }
+        
+        /* Dynamic Grid Background */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: grid-pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes grid-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        /* Enhanced Particles */
         #particles-js {
             position: fixed;
             width: 100%;
@@ -39,16 +146,7 @@ session_start();
             top: 0;
             left: 0;
             z-index: 0;
-            opacity: 0;
             pointer-events: none;
-            background: radial-gradient(circle at 30% 40%, rgba(76, 201, 240, 0.05), transparent 30%),
-                        radial-gradient(circle at 70% 70%, rgba(114, 9, 183, 0.05), transparent 35%),
-                        radial-gradient(circle at 80% 10%, rgba(247, 37, 133, 0.05), transparent 25%);
-            transition: opacity 1.5s ease-in-out;
-        }
-        
-        body.loaded #particles-js {
-            opacity: 0.7;
         }
         
         /* Ensure content appears above particles */
@@ -59,298 +157,346 @@ session_start();
             z-index: 1;
         }
         
-        /* Special accent particles */
-        .floating-accent {
-            position: fixed;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(76, 201, 240, 0.15) 0%, rgba(76, 201, 240, 0) 70%);
-            border-radius: 50%;
-            filter: blur(20px);
-            opacity: 0.7;
-            animation: float-accent 25s infinite linear;
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        .floating-accent:nth-child(1) {
-            top: 20%;
-            left: 10%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(114, 9, 183, 0.12) 0%, rgba(114, 9, 183, 0) 70%);
-            animation-duration: 30s;
-        }
-        
-        .floating-accent:nth-child(2) {
-            top: 70%;
-            left: 80%;
-            width: 450px;
-            height: 450px;
-            background: radial-gradient(circle, rgba(247, 37, 133, 0.12) 0%, rgba(247, 37, 133, 0) 70%);
-            animation-duration: 25s;
-            animation-delay: 5s;
-        }
-        
-        .floating-accent:nth-child(3) {
-            top: 40%;
-            left: 60%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(67, 97, 238, 0.12) 0%, rgba(67, 97, 238, 0) 70%);
-            animation-duration: 28s;
-            animation-delay: 2s;
-        }
-        
-        @keyframes float-accent {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(-50px, 50px) rotate(90deg); }
-            50% { transform: translate(0, 100px) rotate(180deg); }
-            75% { transform: translate(50px, 50px) rotate(270deg); }
-            100% { transform: translate(0, 0) rotate(360deg); }
-        }
-        
-        /* Burst effect for click animation */
-        .particle-burst {
-            position: absolute;
-            pointer-events: none;
-            border-radius: 50%;
-            z-index: 2;
-            transform: translate(-50%, -50%);
-            animation: burst-anim 1s forwards ease-out;
-        }
-        
-        @keyframes burst-anim {
-            0% {
-                width: 0;
-                height: 0;
-                opacity: 0.7;
-                background: radial-gradient(circle, rgba(114, 9, 183, 0.8) 0%, rgba(114, 9, 183, 0) 70%);
-            }
-            100% {
-                width: 300px;
-                height: 300px;
-                opacity: 0;
-                background: radial-gradient(circle, rgba(114, 9, 183, 0) 0%, rgba(114, 9, 183, 0) 70%);
-            }
-        }
-        
+        /* Hero Section with Dynamic Background */
         .header-container {
-            background: linear-gradient(125deg, #4361ee, #3a0ca3, #7209b7, #f72585);
-            background-size: 300% 300%;
-            animation: gradientBG 12s ease infinite;
-            min-height: 20vh;
+            background: linear-gradient(135deg, 
+                rgba(15, 23, 42, 0.95) 0%, 
+                rgba(30, 41, 59, 0.9) 50%,
+                rgba(37, 99, 235, 0.8) 100%);
+            min-height: 70vh;
             display: flex;
             align-items: center;
             position: relative;
-            border-radius: 0 0 30% 70% / 30%;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            padding: 30px 0;
             overflow: hidden;
+            padding: 80px 0 100px;
+            clip-path: ellipse(100% 100% at 50% 0%);
+            transition: clip-path 0.3s ease-out;
         }
         
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .header-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="circuit" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M0,10 L10,10 L10,0 L20,0 M10,10 L10,20 M10,15 L20,15" stroke="rgba(255,255,255,0.05)" stroke-width="0.5" fill="none"/></pattern></defs><rect width="100" height="100" fill="url(%23circuit)"/></svg>');
+            opacity: 0.6;
+            z-index: 1;
         }
         
-        .header-container h1 {
-            color: white;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            letter-spacing: -1px;
+        .header-container::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%;
+            height: 150px;
+            background: radial-gradient(ellipse 80% 100% at 50% 0%, 
+                rgba(37, 99, 235, 0.3) 0%, 
+                rgba(14, 165, 233, 0.2) 30%,
+                rgba(6, 182, 212, 0.1) 60%,
+                transparent 100%);
+            border-radius: 50%;
+            filter: blur(20px);
+            z-index: 2;
+            transition: all 0.3s ease-out;
         }
         
-        .header-container p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
-            max-width: 700px;
-            margin: 0 auto;
+        .hero-content {
+            position: relative;
+            z-index: 10;
         }
         
+        .hero-title {
+            font-size: clamp(2.2rem, 6vw, 3.8rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #0ea5e9 70%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            text-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #0ea5e9, #14b8a6);
+            border-radius: 2px;
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.6);
+            animation: glow-pulse 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow-pulse {
+            from { box-shadow: 0 0 15px rgba(37, 99, 235, 0.6); }
+            to { box-shadow: 0 0 25px rgba(20, 184, 166, 0.6); }
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #0ea5e9 70%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Modern Card Design */
         .card {
-            border-radius: 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-xl);
+            transition: var(--transition);
             overflow: hidden;
-            background: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
-            border: none;
-            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            z-index: 1;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-color: rgba(37, 99, 235, 0.3);
         }
         
         .card-header {
-            background: linear-gradient(to right, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
-            border-bottom: none;
-            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(139, 92, 246, 0.1));
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1.5rem;
             font-weight: 600;
-            color: var(--secondary-color);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 2;
         }
         
+        .card-body {
+            padding: 2rem;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Form Controls */
         .form-label {
             font-weight: 500;
-            color: var(--dark-color);
-            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
         }
         
         .form-control, .form-select {
-            border-radius: 10px;
-            padding: 12px 15px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(51, 65, 85, 0.6);
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
             font-size: 0.95rem;
-            transition: all 0.3s;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
         }
         
         .form-control:focus, .form-select:focus {
-            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
-            border-color: var(--primary-color);
+            background: rgba(51, 65, 85, 0.8);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+            color: var(--text-primary);
+        }
+        
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+        
+        /* Buttons */
+        .btn {
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            transition: var(--transition);
+            border: none;
+            position: relative;
+            overflow: hidden;
         }
         
         .btn-primary {
-            background: var(--primary-color);
-            border: none;
-            border-radius: 10px;
-            padding: 12px 25px;
-            font-weight: 600;
-            transition: all 0.3s;
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
         }
         
         .btn-primary:hover {
-            background: var(--secondary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+            background: linear-gradient(135deg, #1d4ed8, #7c3aed);
         }
         
         .btn-outline-primary {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            border-radius: 10px;
-            padding: 12px 25px;
-            font-weight: 600;
-            transition: all 0.3s;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
         }
         
         .btn-outline-primary:hover {
-            background: var(--primary-color);
+            background: var(--primary);
             color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
         }
         
+        .btn-outline-secondary {
+            border: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            background: transparent;
+        }
+        
+        .btn-outline-secondary:hover {
+            background: var(--surface-light);
+            color: var(--text-primary);
+            border-color: var(--border-light);
+        }
+        
+        .btn-outline-danger {
+            border: 1px solid var(--error);
+            color: var(--error);
+            background: transparent;
+        }
+        
+        .btn-outline-danger:hover {
+            background: var(--error);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        /* Loading States */
         .spinner-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            z-index: 9999;
+            background: rgba(15, 23, 42, 0.8);
             display: flex;
             align-items: center;
             justify-content: center;
-            visibility: hidden;
+            z-index: 9999;
             opacity: 0;
-            transition: opacity 0.3s, visibility 0.3s;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
         
         .spinner-overlay.show {
-            visibility: visible;
             opacity: 1;
+            visibility: visible;
         }
         
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(67, 97, 238, 0.1);
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(37, 99, 235, 0.3);
+            border-top: 3px solid var(--primary);
             border-radius: 50%;
-            border-top-color: var(--primary-color);
-            animation: spinner 1s linear infinite;
+            animation: spin 1s linear infinite;
         }
         
-        @keyframes spinner {
-            to { transform: rotate(360deg); }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
+        /* Toast Notifications */
         .toast-container {
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 9999;
+            z-index: 10000;
         }
         
         .toast {
-            background: white;
-            border-radius: 10px;
-            padding: 15px 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(20px);
             margin-bottom: 10px;
-            transition: all 0.3s;
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            min-width: 300px;
+            box-shadow: var(--shadow-lg);
         }
         
         .toast.show {
             opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .toast.success {
-            border-left: 4px solid var(--success-color);
-        }
-        
-        .toast.error {
-            border-left: 4px solid var(--warning-color);
+            transform: translateX(0);
         }
         
         .toast-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--glass-border);
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: 5px;
+            align-items: center;
         }
         
         .toast-title {
             font-weight: 600;
-            color: var(--dark-color);
+            color: var(--text-primary);
         }
         
         .toast-close {
             background: none;
             border: none;
+            color: var(--text-muted);
             font-size: 1.2rem;
             cursor: pointer;
-            color: #6c757d;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .toast-body {
-            color: #6c757d;
+            padding: 1rem;
+            color: var(--text-secondary);
         }
         
-        .keyword-badge {
-            display: inline-block;
-            padding: 5px 10px;
-            background: rgba(67, 97, 238, 0.1);
-            color: var(--primary-color);
-            border-radius: 20px;
-            margin-right: 5px;
-            margin-bottom: 5px;
-            font-size: 0.8rem;
-            font-weight: 500;
+        .toast.error {
+            border-left: 4px solid var(--error);
         }
         
-        .keyword-badge i {
-            cursor: pointer;
-            margin-left: 5px;
+        .toast.success {
+            border-left: 4px solid var(--success);
         }
         
-        .keyword-badge i:hover {
-            color: var(--warning-color);
+        .toast.warning {
+            border-left: 4px solid var(--warning);
         }
         
-        /* Custom file input */
+        .toast.info {
+            border-left: 4px solid var(--accent);
+        }
+        
+        /* File Upload Styling */
         .file-upload {
             position: relative;
             overflow: hidden;
@@ -358,144 +504,968 @@ session_start();
             width: 100%;
         }
         
-        .file-upload input[type=file] {
-            position: absolute;
-            top: 0;
-            right: 0;
-            min-width: 100%;
-            min-height: 100%;
-            text-align: right;
-            filter: alpha(opacity=0);
-            opacity: 0;
-            outline: none;
-            cursor: inherit;
-            display: block;
-        }
-        
         .file-upload-btn {
-            width: 100%;
-            border: 2px dashed rgba(67, 97, 238, 0.3);
-            border-radius: 10px;
-            padding: 30px;
+            background: rgba(51, 65, 85, 0.6);
+            border: 2px dashed var(--border);
+            border-radius: var(--border-radius);
+            padding: 2rem;
             text-align: center;
-            background: rgba(67, 97, 238, 0.05);
-            transition: all 0.3s;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-muted);
         }
         
         .file-upload-btn:hover {
-            background: rgba(67, 97, 238, 0.1);
-            border-color: rgba(67, 97, 238, 0.5);
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--text-primary);
         }
         
-        .file-upload-btn i {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
+        .file-upload input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
         }
         
         .preview-image {
             max-width: 100%;
             max-height: 200px;
-            margin-top: 15px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
         }
         
-        /* References styling */
+        /* Keywords and Tags */
+        .keyword-badge {
+            background: rgba(37, 99, 235, 0.2);
+            color: var(--primary);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-radius: 20px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            margin: 0.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .keyword-badge:hover {
+            background: rgba(37, 99, 235, 0.3);
+            border-color: var(--primary);
+        }
+        
+        .keyword-badge .remove-keyword {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+        
+        /* Member rows and timeline items */
+        .member-row, .timeline-item-form {
+            background: rgba(51, 65, 85, 0.3);
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+        
+        .member-row:hover, .timeline-item-form:hover {
+            border-color: var(--primary);
+            background: rgba(51, 65, 85, 0.5);
+        }
+        
+        /* References container */
         #references-container {
-            max-height: 250px;
+            max-height: 400px;
             overflow-y: auto;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            padding: 10px;
-            margin-top: 15px;
-            background: var(--light-color);
+            padding: 1rem;
+            background: rgba(51, 65, 85, 0.3);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border);
         }
         
         .reference-item {
-            background: white;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-left: 3px solid var(--primary-color);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.2s;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
         }
         
         .reference-item:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
+            border-color: var(--primary);
+            background: rgba(30, 41, 59, 0.8);
         }
         
-        .reference-item .reference-content {
-            flex-grow: 1;
-        }
-        
-        .reference-item .reference-title {
-            font-weight: 500;
-            margin-bottom: 4px;
-            color: var(--dark-color);
-        }
-        
-        .reference-item .reference-link {
-            font-size: 0.85rem;
-            color: var(--primary-color);
-            word-break: break-all;
-        }
-        
-        .reference-item .remove-reference {
-            color: #dc3545;
-            cursor: pointer;
-            margin-left: 10px;
-            padding: 4px;
-            border-radius: 50%;
-            transition: all 0.2s;
-        }
-        
-        .reference-item .remove-reference:hover {
-            background-color: rgba(220, 53, 69, 0.1);
-        }
-        
-        @media (max-width: 992px) {
-            .header-container {
-                min-height: 20vh;
-                text-align: center;
-            }
-            
-            .header-container h1 {
-                font-size: 2rem;
-            }
-        }
-        
+        /* Responsive Design */
         @media (max-width: 768px) {
             .header-container {
-                min-height: 15vh;
-                border-radius: 0 0 20% 50% / 20%;
+                min-height: 50vh;
+                padding: 60px 0 80px;
             }
             
-            .header-container h1 {
-                font-size: 1.8rem;
+            .hero-title {
+                font-size: 2rem;
             }
             
-            .header-container p {
+            .card-body {
+                padding: 1.5rem;
+            }
+            
+            .btn {
+                padding: 0.6rem 1.2rem;
                 font-size: 0.9rem;
             }
+        }
+        
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Enhanced Footer */
+        footer {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--background) 100%);
+            border-top: 1px solid var(--border);
+            margin-top: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.5), transparent);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-light);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+        
+        /* ===== ADDITIONAL DARK THEME FIXES ===== */
+        
+        /* Ensure all text elements are properly colored */
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-primary) !important;
+        }
+        
+        p, span, div, label {
+            color: var(--text-primary);
+        }
+        
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+        
+        .text-secondary {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Form validation states */
+        .form-control.is-invalid {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .form-control.is-valid {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .invalid-feedback {
+            color: var(--error);
+        }
+        
+        .valid-feedback {
+            color: var(--success);
+        }
+        
+        /* Input group styling */
+        .input-group .form-control {
+            background: rgba(51, 65, 85, 0.6);
+            border-color: var(--border);
+            color: var(--text-primary);
+        }
+        
+        .input-group .btn {
+            border-color: var(--border);
+        }
+        
+        /* Small text and help text */
+        .form-text, small {
+            color: var(--text-muted) !important;
+        }
+        
+        /* Loading states */
+        .spinner-border {
+            color: var(--primary);
+        }
+        
+        .visually-hidden {
+            color: var(--text-primary);
+        }
+        
+        /* Alert styling */
+        .alert {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            border-radius: var(--border-radius);
+        }
+        
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: var(--warning);
+        }
+        
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: var(--error);
+        }
+        
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--success);
+        }
+        
+        .alert-info {
+            background: rgba(14, 165, 233, 0.1);
+            border-color: rgba(14, 165, 233, 0.3);
+            color: var(--accent);
+        }
+        
+        /* List group styling */
+        .list-group-item {
+            background: rgba(51, 65, 85, 0.6);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+        
+        .list-group-item:hover {
+            background: rgba(51, 65, 85, 0.8);
+            border-color: var(--primary);
+        }
+        
+        /* Badge styling */
+        .badge {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .badge.bg-secondary {
+            background: var(--surface-light) !important;
+            color: var(--text-primary);
+        }
+        
+        .badge.bg-success {
+            background: var(--success) !important;
+        }
+        
+        .badge.bg-warning {
+            background: var(--warning) !important;
+        }
+        
+        .badge.bg-danger {
+            background: var(--error) !important;
+        }
+        
+        /* Table styling if any */
+        .table {
+            color: var(--text-primary);
+        }
+        
+        .table-dark {
+            background: var(--surface);
+            border-color: var(--border);
+        }
+        
+        /* Modal styling if any */
+        .modal-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            color: var(--text-primary);
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .modal-footer {
+            border-top: 1px solid var(--border);
+        }
+        
+        /* Dropdown styling */
+        .dropdown-menu {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            color: var(--text-primary);
+        }
+        
+        .dropdown-item {
+            color: var(--text-primary);
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(37, 99, 235, 0.2);
+            color: var(--text-primary);
+        }
+        
+        /* Progress bar styling */
+        .progress {
+            background: rgba(51, 65, 85, 0.6);
+        }
+        
+        .progress-bar {
+            background: var(--gradient-primary);
+        }
+        
+        /* Nav tabs styling if any */
+        .nav-tabs {
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .nav-tabs .nav-link {
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            color: var(--text-primary);
+            border-color: var(--border);
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--text-primary);
+            background: var(--surface);
+            border-color: var(--border);
+        }
+        
+        /* Pagination styling if any */
+        .page-link {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+        
+        .page-link:hover {
+            background: var(--surface-light);
+            border-color: var(--primary);
+            color: var(--text-primary);
+        }
+        
+        .page-item.active .page-link {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        /* Breadcrumb styling if any */
+        .breadcrumb {
+            background: rgba(51, 65, 85, 0.6);
+        }
+        
+        .breadcrumb-item a {
+            color: var(--primary);
+        }
+        
+        .breadcrumb-item.active {
+            color: var(--text-muted);
+        }
+        
+        /* Card specific fixes */
+        .card-title {
+            color: var(--text-primary) !important;
+        }
+        
+        .card-text {
+            color: var(--text-secondary) !important;
+        }
+        
+        .card-subtitle {
+            color: var(--text-muted) !important;
+        }
+        
+        /* Button group styling */
+        .btn-group .btn {
+            border-color: var(--border);
+        }
+        
+        /* Close button styling */
+        .btn-close {
+            filter: invert(1);
+            opacity: 0.7;
+        }
+        
+        .btn-close:hover {
+            opacity: 1;
+        }
+        
+        /* Accordion styling if any */
+        .accordion-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+        
+        .accordion-header button {
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+        
+        .accordion-body {
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+        
+        /* Offcanvas styling if any */
+        .offcanvas {
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+        
+        .offcanvas-header {
+            border-bottom: 1px solid var(--border);
+        }
+        
+        /* Tooltip styling */
+        .tooltip .tooltip-inner {
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+        
+        /* Popover styling */
+        .popover {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+        }
+        
+        .popover-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+        
+        .popover-body {
+            color: var(--text-primary);
+        }
+        
+        /* Specific form element fixes */
+        select option {
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+        
+        /* File input styling */
+        input[type="file"] {
+            color: var(--text-primary);
+        }
+        
+        input[type="file"]::-webkit-file-upload-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+        }
+        
+        /* Range input styling */
+        input[type="range"] {
+            background: var(--surface);
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            background: var(--primary);
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            background: var(--primary);
+            border: none;
+        }
+        
+        /* Checkbox and radio styling */
+        .form-check-input {
+            background-color: var(--surface);
+            border-color: var(--border);
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .form-check-label {
+            color: var(--text-primary);
+        }
+        
+        /* Switch styling */
+        .form-switch .form-check-input {
+            background-color: var(--surface);
+        }
+        
+        .form-switch .form-check-input:checked {
+            background-color: var(--primary);
+        }
+        
+        /* Ensure icons are properly colored */
+        i, .bi {
+            color: inherit;
+        }
+        
+        /* Link styling */
+        a {
+            color: var(--primary);
+        }
+        
+        a:hover {
+            color: var(--accent);
+        }
+        
+        /* Code and pre styling if any */
+        code {
+            background: rgba(51, 65, 85, 0.6);
+            color: var(--accent);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+        
+        pre {
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+        }
+        
+        /* Blockquote styling */
+        blockquote {
+            border-left: 4px solid var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--text-primary);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        /* HR styling */
+        hr {
+            border-color: var(--border);
+            opacity: 0.5;
+        }
+        
+        /* Mark/highlight styling */
+        mark {
+            background: rgba(245, 158, 11, 0.3);
+            color: var(--text-primary);
+        }
+        
+        /* Ensure all Bootstrap utility classes work with dark theme */
+        .text-primary {
+            color: var(--primary) !important;
+        }
+        
+        .text-secondary {
+            color: var(--text-secondary) !important;
+        }
+        
+        .text-success {
+            color: var(--success) !important;
+        }
+        
+        .text-warning {
+            color: var(--warning) !important;
+        }
+        
+        .text-danger {
+            color: var(--error) !important;
+        }
+        
+        .text-info {
+            color: var(--accent) !important;
+        }
+        
+        .text-light {
+            color: var(--text-secondary) !important;
+        }
+        
+        .text-dark {
+            color: var(--text-primary) !important;
+        }
+        
+        .bg-primary {
+            background-color: var(--primary) !important;
+        }
+        
+        .bg-secondary {
+            background-color: var(--surface-light) !important;
+        }
+        
+        .bg-success {
+            background-color: var(--success) !important;
+        }
+        
+        .bg-warning {
+            background-color: var(--warning) !important;
+        }
+        
+        .bg-danger {
+            background-color: var(--error) !important;
+        }
+        
+        .bg-info {
+            background-color: var(--accent) !important;
+        }
+        
+        .bg-light {
+            background-color: var(--surface) !important;
+        }
+        
+        .bg-dark {
+            background-color: var(--background) !important;
+        }
+        
+        /* Border utilities */
+        .border {
+            border-color: var(--border) !important;
+        }
+        
+        .border-primary {
+            border-color: var(--primary) !important;
+        }
+        
+        .border-secondary {
+            border-color: var(--surface-light) !important;
+        }
+        
+        .border-success {
+            border-color: var(--success) !important;
+        }
+        
+        .border-warning {
+            border-color: var(--warning) !important;
+        }
+        
+        .border-danger {
+            border-color: var(--error) !important;
+        }
+        
+        .border-info {
+            border-color: var(--accent) !important;
+        }
+        
+        .border-light {
+            border-color: var(--border-light) !important;
+        }
+        
+        .border-dark {
+            border-color: var(--border) !important;
+        }
+
+        /* ===== SEARCHABLE SUPERVISOR DROPDOWN ===== */
+        
+        .supervisor-search-container {
+            position: relative;
+        }
+
+        .supervisor-dropdown {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-bottom: none;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 99999;
+            display: none;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .supervisor-dropdown.show {
+            display: block;
+        }
+
+        .supervisor-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .supervisor-option:last-child {
+            border-bottom: none;
+        }
+
+        .supervisor-option:hover,
+        .supervisor-option.highlighted {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .supervisor-option .faculty-name {
+            font-weight: 500;
+        }
+
+        .supervisor-option .faculty-info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .supervisor-no-results {
+            padding: 12px 16px;
+            color: var(--text-muted);
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Search input styling */
+        #supervisor {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234cc9f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m11.742 10.344-6.979-6.979a2.21 2.21 0 1 1 3.121-3.121l6.979 6.979a2.21 2.21 0 0 1-3.121 3.121z'/%3e%3cpath fill='none' stroke='%234cc9f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6.5 6.5 10 10'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 12px center !important;
+            background-size: 16px 16px !important;
+            padding-right: 40px !important;
+        }
+
+        #supervisor:focus {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        #supervisor:focus + input + .supervisor-dropdown {
+            border-top: 1px solid var(--primary);
+        }
+
+        /* Light mode styles for searchable dropdown */
+        [data-theme="light"] .supervisor-dropdown {
+            background: var(--surface);
+            border-color: var(--border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .supervisor-option {
+            color: var(--text-primary);
+            border-bottom-color: var(--border);
+        }
+
+        [data-theme="light"] .supervisor-option:hover,
+        [data-theme="light"] .supervisor-option.highlighted {
+            background: rgba(37, 99, 235, 0.08);
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .supervisor-option .faculty-info {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .supervisor-no-results {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] #supervisor {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m11.742 10.344-6.979-6.979a2.21 2.21 0 1 1 3.121-3.121l6.979 6.979a2.21 2.21 0 0 1-3.121 3.121z'/%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6.5 6.5 10 10'/%3e%3c/svg%3e") !important;
+        }
+
+        /* Scrollbar styling for dropdown */
+        .supervisor-dropdown::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .supervisor-dropdown::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+
+        .supervisor-dropdown::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .supervisor-dropdown::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* ===== SEARCHABLE STUDENT DROPDOWN ===== */
+        
+        .student-search-container {
+            position: relative;
+        }
+
+        .student-dropdown {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-bottom: none;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 99999;
+            display: none;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .student-dropdown.show {
+            display: block;
+        }
+
+        .student-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .student-option:last-child {
+            border-bottom: none;
+        }
+
+        .student-option:hover,
+        .student-option.highlighted {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .student-option .student-name {
+            font-weight: 500;
+        }
+
+        .student-option .student-info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .student-no-results {
+            padding: 12px 16px;
+            color: var(--text-muted);
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Student search input styling */
+        .member-name.student-search {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234cc9f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m11.742 10.344-6.979-6.979a2.21 2.21 0 1 1 3.121-3.121l6.979 6.979a2.21 2.21 0 0 1-3.121 3.121z'/%3e%3cpath fill='none' stroke='%234cc9f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6.5 6.5 10 10'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 12px center !important;
+            background-size: 16px 16px !important;
+            padding-right: 40px !important;
+        }
+
+        .member-name.student-search:focus {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        /* Light mode styles for student search */
+        [data-theme="light"] .member-name.student-search {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m11.742 10.344-6.979-6.979a2.21 2.21 0 1 1 3.121-3.121l6.979 6.979a2.21 2.21 0 0 1-3.121 3.121z'/%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6.5 6.5 10 10'/%3e%3c/svg%3e") !important;
+        }
+
+        /* Student dropdown styling */
+        .student-dropdown::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .student-dropdown::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+
+        .student-dropdown::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .student-dropdown::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Ensure dropdowns appear above other content */
+        .card:has(.supervisor-dropdown),
+        .card:has(.student-dropdown) {
+            overflow: visible;
+        }
+
+        .card .supervisor-search-container,
+        .card .student-search-container {
+            z-index: 1000;
+        }
+
+        .supervisor-dropdown.show,
+        .student-dropdown.show {
+            z-index: 10000;
+        }
+
+        /* Additional styling for better UX */
+        .student-search-container {
+            z-index: 100;
         }
     </style>
 </head>
 <body>
     <?php include 'src/includes/navbar.php'; ?>
     
-    <!-- Background Particles -->
-    <div id="particles-js"></div>
+    <!-- Background Effects -->
+    <div class="background-effects">
+        <div class="cyber-grid"></div>
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+    </div>
     
-    <!-- Special accent elements -->
-    <div class="floating-accent"></div>
-    <div class="floating-accent"></div>
-    <div class="floating-accent"></div>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
     
     <!-- Loading Spinner -->
     <div class="spinner-overlay" id="spinner">
@@ -506,16 +1476,16 @@ session_start();
     <div class="toast-container" id="toastContainer"></div>
     
     <div class="header-container">
-        <div class="container text-center">
-            <h1 data-aos="fade-down" data-aos-duration="1000">Edit Project</h1>
-            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">Update your research project details</p>
+        <div class="container text-center hero-content">
+            <h1 class="hero-title" data-aos="fade-down" data-aos-duration="1000">Edit <span class="text-gradient" data-text="Project">Project</span></h1>
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">Update your research project details and share your progress with the academic community.</p>
         </div>
     </div>
     
-    <div class="container my-5">
+    <div class="container my-5" style="margin-top: 40px !important; padding-top: 20px;">
         <div class="row">
             <div class="col-lg-12">
-                <div class="card">
+                <div class="card mt-3">
                     <div class="card-header">
                         <i class="bi bi-pencil-square me-2"></i>Edit Project Details
                     </div>
@@ -549,7 +1519,7 @@ session_start();
         </div>
     </div>
 
-    <footer class="text-light" style="background: linear-gradient(135deg, #212529, #141b24); padding: 60px 0 40px; margin-top: 100px; position: relative;">
+    <footer class="text-light" style="padding: 60px 0 40px;">
         <div class="container text-center">
             <div data-aos="fade-up">
                 <h4 class="mb-4">UIU Research Portal</h4>
@@ -565,34 +1535,51 @@ session_start();
     
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Check if user should be scrolled to timeline section
+        if (window.location.hash === '#timeline-section') {
+            // Delay scroll to ensure page is fully loaded
+            setTimeout(() => {
+                const timelineSection = document.getElementById('timeline-section');
+                if (timelineSection) {
+                    timelineSection.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                    // Add a subtle highlight effect to draw attention
+                    timelineSection.style.transition = 'box-shadow 0.3s ease';
+                    timelineSection.style.boxShadow = '0 0 20px rgba(37, 99, 235, 0.3)';
+                    setTimeout(() => {
+                        timelineSection.style.boxShadow = '';
+                    }, 2000);
+                }
+            }, 1000);
+        }
+        
         // Debug mode for troubleshooting
         const DEBUG = true;
         
-        // Initialize particles.js
+        // Initialize particles.js with modern configuration
         particlesJS('particles-js', {
             "particles": {
                 "number": {
-                    "value": 80,
+                    "value": 60,
                     "density": {
                         "enable": true,
                         "value_area": 1000
                     }
                 },
                 "color": {
-                    "value": ["#4361ee", "#3a0ca3", "#7209b7", "#4cc9f0", "#f72585"]
+                    "value": ["#2563eb", "#8b5cf6", "#0ea5e9", "#14b8a6", "#f59e0b"]
                 },
                 "shape": {
-                    "type": ["circle", "triangle", "polygon"],
+                    "type": ["circle", "triangle"],
                     "stroke": {
                         "width": 0,
                         "color": "#000000"
-                    },
-                    "polygon": {
-                        "nb_sides": 5
                     }
                 },
                 "opacity": {
-                    "value": 0.3,
+                    "value": 0.4,
                     "random": true,
                     "anim": {
                         "enable": true,
@@ -602,43 +1589,43 @@ session_start();
                     }
                 },
                 "size": {
-                    "value": 12,
+                    "value": 8,
                     "random": true,
                     "anim": {
                         "enable": true,
                         "speed": 2,
-                        "size_min": 3,
+                        "size_min": 2,
                         "sync": false
                     }
                 },
                 "line_linked": {
                     "enable": true,
-                    "distance": 180,
-                    "color": "#7209b7",
-                    "opacity": 0.25,
-                    "width": 1.5
+                    "distance": 150,
+                    "color": "#2563eb",
+                    "opacity": 0.2,
+                    "width": 1
                 },
                 "move": {
                     "enable": true,
-                    "speed": 1.8,
+                    "speed": 1.5,
                     "direction": "none",
                     "random": true,
                     "straight": false,
-                    "out_mode": "bounce",
-                    "bounce": true,
+                    "out_mode": "out",
+                    "bounce": false,
                     "attract": {
-                        "enable": true,
-                        "rotateX": 500,
-                        "rotateY": 1000
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
                     }
                 }
             },
             "interactivity": {
-                "detect_on": "window",
+                "detect_on": "canvas",
                 "events": {
                     "onhover": {
                         "enable": true,
-                        "mode": "bubble"
+                        "mode": "grab"
                     },
                     "onclick": {
                         "enable": true,
@@ -650,22 +1637,22 @@ session_start();
                     "grab": {
                         "distance": 140,
                         "line_linked": {
-                            "opacity": 0.8
+                            "opacity": 0.5
                         }
                     },
                     "bubble": {
-                        "distance": 150,
-                        "size": 16,
-                        "duration": 1.5,
-                        "opacity": 0.8,
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
                         "speed": 3
                     },
                     "repulse": {
-                        "distance": 150,
+                        "distance": 200,
                         "duration": 0.4
                     },
                     "push": {
-                        "particles_nb": 6
+                        "particles_nb": 4
                     },
                     "remove": {
                         "particles_nb": 2
@@ -675,128 +1662,15 @@ session_start();
             "retina_detect": true
         });
         
-        // Function to reinitialize particles if they stop
-        function reinitializeParticlesIfNeeded() {
-            if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
-                const pJS = window.pJSDom[0].pJS;
-                if (!pJS.particles.move.enable || pJS.particles.array.length === 0) {
-                    console.log("Reinitializing particles...");
-                    pJS.particles.move.enable = true;
-                    
-                    // First try to refresh existing particles
-                    try {
-                        pJS.fn.particlesRefresh();
-                    } catch (error) {
-                        console.error("Error refreshing particles:", error);
-                        
-                        // If refreshing fails, destroy and recreate
-                        try {
-                            window.pJSDom[0].pJS.fn.vendors.destroypJS();
-                            window.pJSDom = [];
-                            particlesJS('particles-js', /* same config as above */);
-                        } catch (err) {
-                            console.error("Failed to reinitialize particles:", err);
-                        }
-                    }
-                }
-            } else {
-                // If pJSDom is missing, reinitialize
-                particlesJS('particles-js', /* same config as above */);
-            }
-        }
-        
-        // Keep particles active
-        setInterval(() => {
-            reinitializeParticlesIfNeeded();
-        }, 2000);
-        
-        // Add fade-in effect for particles
-        setTimeout(() => {
-            document.body.classList.add('loaded');
-        }, 300);
-        
-        // Add scroll effect to particles for depth
-        let lastScrollY = window.scrollY;
-        window.addEventListener('scroll', function() {
-            const canvas = document.querySelector('#particles-js canvas');
-            if (canvas) {
-                const scrollDifference = window.scrollY - lastScrollY;
-                lastScrollY = window.scrollY;
-                
-                // Apply enhanced parallax effect to particles
-                const particles = window.pJSDom[0].pJS.particles;
-                particles.array.forEach(particle => {
-                    particle.y -= scrollDifference * 0.05;
-                    
-                    // Add slight horizontal movement for more dynamic effect
-                    if (Math.random() > 0.5) {
-                        particle.x += Math.random() * 0.2 - 0.1;
-                    }
-                });
-            }
-        });
-        
-        // Add global click handler for adding particles but prevent it from stopping animation
-        document.addEventListener('click', function(e) {
-            // Don't create particles for clicks on interactive elements
-            if (e.target.closest('a, button, input, .card, .form-control, .toggle-btn')) {
-                return;
-            }
-            
-            if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
-                const pJS = window.pJSDom[0].pJS;
-                
-                // Create burst effect
-                const burst = document.createElement('div');
-                burst.classList.add('particle-burst');
-                burst.style.left = e.pageX + 'px';
-                burst.style.top = e.pageY + 'px';
-                document.body.appendChild(burst);
-                
-                setTimeout(() => {
-                    burst.remove();
-                }, 1000);
-                
-                // Use a safer method: create a new particle directly through pJS API
-                try {
-                    for (let i = 0; i < 8; i++) {
-                        const posX = e.clientX + ((Math.random() - 0.5) * 20);
-                        const posY = e.clientY + ((Math.random() - 0.5) * 20);
-                        
-                        // Use the particle creation method from particles.js
-                        pJS.fn.modes.pushParticles(1, {x: posX, y: posY});
-                    }
-                } catch (error) {
-                    console.error("Error adding particles on click:", error);
-                    // If there's an error, ensure animation is still running
-                    setTimeout(reinitializeParticlesIfNeeded, 200);
-                }
-            }
-            
-            // Don't stop propagation - just make sure particles keep running
-            setTimeout(reinitializeParticlesIfNeeded, 500);
-        });
-        
-        // Handle window focus/blur events to ensure particles keep moving
-        window.addEventListener('blur', function() {
-            // When window loses focus, set a timer to keep checking
-            window.particleCheckInterval = setInterval(reinitializeParticlesIfNeeded, 1000);
-        });
-        
-        window.addEventListener('focus', function() {
-            // When window regains focus, clear the intensive check interval
-            if (window.particleCheckInterval) {
-                clearInterval(window.particleCheckInterval);
-            }
-            
-            // Do a single check and reinitialize if needed
-            reinitializeParticlesIfNeeded();
-        });
-        
-        // Initialize AOS
+        // Initialize AOS animations with enhanced settings
         AOS.init({
             duration: 800,
-            once: true
+            easing: 'cubic-bezier(0.19, 1, 0.22, 1)',
+            once: false,
+            mirror: true,
+            anchorPlacement: 'top-bottom',
+            offset: 50,
+            delay: 100
         });
         
         // Elements
@@ -887,38 +1761,17 @@ session_start();
                         projectLoadingState.style.display = 'none';
                         editProjectForm.style.display = 'block';
                     } else {
-                        // Project not found in database, try JSON file as fallback
-                        if (DEBUG) console.log('Project not found in database, trying JSON file...');
-                        return fetch(`src/model/get_project_from_json.php?id=${id}`)
-                            .then(response => {
-                                if (DEBUG) console.log('JSON file server response:', response);
-                                return response.json();
-                            })
-                            .then(jsonData => {
-                                hideSpinner();
-                                
-                                if (jsonData.success && jsonData.project) {
-                                    // Project found in JSON file
-                                    if (DEBUG) console.log('Project found in JSON file:', jsonData.project);
-                                    buildEditForm(jsonData.project);
-                                    projectLoadingState.style.display = 'none';
-                                    editProjectForm.style.display = 'block';
-                                    
-                                    // Show a warning that we're using JSON data
-                                    showToast('Using JSON Data', 'Project loaded from JSON file instead of database.', 'warning');
-                                } else {
-                                    // Project not found anywhere
-                                    if (DEBUG) console.error('Project not found in database or JSON file');
-                                    projectLoadingState.style.display = 'none';
-                                    projectNotFound.style.display = 'block';
-                                    
-                                    // Add error details to the UI
-                                    const errorDetails = document.createElement('p');
-                                    errorDetails.className = 'text-danger mt-2';
-                                    errorDetails.textContent = jsonData.message || 'Project not found in database or JSON file';
-                                    projectNotFound.querySelector('p').after(errorDetails);
-                                }
-                            });
+                        // Project not found
+                        if (DEBUG) console.error('Project not found');
+                        hideSpinner();
+                        projectLoadingState.style.display = 'none';
+                        projectNotFound.style.display = 'block';
+                        
+                        // Add error details to the UI
+                        const errorDetails = document.createElement('p');
+                        errorDetails.className = 'text-danger mt-2';
+                        errorDetails.textContent = data.message || 'Project not found';
+                        projectNotFound.querySelector('p').after(errorDetails);
                     }
                 })
                 .catch(error => {
@@ -1104,8 +1957,17 @@ session_start();
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label for="supervisor" class="form-label">Project Supervisor</label>
-                                    <input type="text" class="form-control" id="supervisor" name="supervisor" placeholder="Supervisor Name" 
-                                        value="${project.supervisor ? (project.supervisor.name || '') : ''}">
+                                    <div class="supervisor-search-container position-relative">
+                                        <input type="text" class="form-control" id="supervisor" name="supervisor" 
+                                               placeholder="Type to search faculty..." autocomplete="off"
+                                               value="${project.supervisor ? (project.supervisor.name || '') : ''}">
+                                        <input type="hidden" id="supervisorId" name="supervisorId" 
+                                               value="${project.supervisor && project.supervisor.userId ? (project.supervisor.userId.$oid || '') : ''}">
+                                        <div class="supervisor-dropdown" id="supervisorDropdown">
+                                            <!-- Faculty options will be populated here -->
+                                        </div>
+                                    </div>
+                                    <div class="form-text">Choose a faculty member to supervise this project</div>
                                 </div>
                                 
                                 <label class="form-label">Team Members</label>
@@ -1121,7 +1983,7 @@ session_start();
                 </div>
 
                 <!-- Project Timeline Section -->
-                <div class="row mb-4">
+                <div class="row mb-4" id="timeline-section">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
@@ -1490,7 +2352,13 @@ session_start();
             
             row.innerHTML = `
                 <div class="col-md-3">
-                    <input type="text" class="form-control member-name" placeholder="Member Name" required value="${name}">
+                    <div class="student-search-container position-relative">
+                        <input type="text" class="form-control member-name student-search" placeholder="Type to search students..." autocomplete="off" required value="${name}">
+                        <input type="hidden" class="member-student-id" value="${userId}">
+                        <div class="student-dropdown">
+                            <!-- Student options will be populated here -->
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-3">
                     <input type="text" class="form-control member-role" placeholder="Role (e.g., Author, Researcher)" value="${role}">
@@ -1509,6 +2377,9 @@ session_start();
             `;
             
             membersContainer.appendChild(row);
+            
+            // Setup student search functionality for this row
+            setupStudentSearch(row);
             
             // Add event listener to remove button
             row.querySelector('.remove-member').addEventListener('click', function() {
@@ -2202,6 +3073,389 @@ session_start();
                 // Focus on title input for next entry
                 titleInput.focus();
             }
+        }
+        
+        // ===== DROPDOWN FUNCTIONALITY =====
+        
+        // Global variables for dropdown functionality
+        let allFacultyData = [];
+        let allStudentsData = [];
+        let currentHighlightedIndex = -1;
+        
+        // Load data and initialize dropdowns when page loads
+        function initializeDropdowns() {
+            loadFacultyForDropdown();
+            loadStudentsForDropdown();
+        }
+        
+        function loadFacultyForDropdown() {
+            // Check if global faculty data is available (from Faculty_Page.php)
+            if (window.facultyData && window.facultyData.length > 0) {
+                allFacultyData = window.facultyData;
+                setupSupervisorSearch();
+                return;
+            }
+            
+            // If global data is not available, fetch it directly
+            fetch('src/model/load_faculty.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        // Store globally for future use
+                        window.facultyData = data;
+                        allFacultyData = data;
+                        setupSupervisorSearch();
+                    } else {
+                        console.error('No faculty data received');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching faculty data:', error);
+                });
+        }
+        
+        function loadStudentsForDropdown() {
+            // Check if global students data is available
+            if (window.studentsData && window.studentsData.length > 0) {
+                allStudentsData = window.studentsData;
+                return;
+            }
+            
+            // If global data is not available, fetch it directly
+            fetch('src/model/load_students.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        // Store globally for future use
+                        window.studentsData = data;
+                        allStudentsData = data;
+                    } else {
+                        console.error('No students data received');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching students data:', error);
+                });
+        }
+        
+        function setupSupervisorSearch() {
+            const supervisorInput = document.getElementById('supervisor');
+            const supervisorDropdown = document.getElementById('supervisorDropdown');
+            const supervisorIdInput = document.getElementById('supervisorId');
+            
+            if (!supervisorInput || !supervisorDropdown) return;
+            
+            // Input event for filtering
+            supervisorInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                filterAndDisplayFaculty(searchTerm);
+            });
+            
+            // Focus event to show dropdown
+            supervisorInput.addEventListener('focus', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                filterAndDisplayFaculty(searchTerm);
+            });
+            
+            // Blur event to hide dropdown (with delay for clicks)
+            supervisorInput.addEventListener('blur', function() {
+                setTimeout(() => {
+                    hideSupervisorDropdown();
+                }, 150);
+            });
+            
+            // Keyboard navigation
+            supervisorInput.addEventListener('keydown', function(e) {
+                const options = supervisorDropdown.querySelectorAll('.supervisor-option');
+                
+                switch(e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        currentHighlightedIndex = Math.min(currentHighlightedIndex + 1, options.length - 1);
+                        updateHighlight(options);
+                        break;
+                        
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        currentHighlightedIndex = Math.max(currentHighlightedIndex - 1, -1);
+                        updateHighlight(options);
+                        break;
+                        
+                    case 'Enter':
+                        e.preventDefault();
+                        if (currentHighlightedIndex >= 0 && options[currentHighlightedIndex]) {
+                            selectFaculty(options[currentHighlightedIndex]);
+                        }
+                        break;
+                        
+                    case 'Escape':
+                        hideSupervisorDropdown();
+                        supervisorInput.blur();
+                        break;
+                }
+            });
+            
+            // Click outside to close
+            document.addEventListener('click', function(e) {
+                if (!supervisorInput.contains(e.target) && !supervisorDropdown.contains(e.target)) {
+                    hideSupervisorDropdown();
+                }
+            });
+        }
+        
+        function filterAndDisplayFaculty(searchTerm) {
+            const supervisorDropdown = document.getElementById('supervisorDropdown');
+            
+            if (!allFacultyData || allFacultyData.length === 0) {
+                supervisorDropdown.innerHTML = '<div class="supervisor-no-results">No faculty data available</div>';
+                supervisorDropdown.classList.add('show');
+                return;
+            }
+            
+            // Filter faculty based on search term
+            const filteredFaculty = allFacultyData.filter(faculty => 
+                faculty.name.toLowerCase().includes(searchTerm) ||
+                (faculty.email && faculty.email.toLowerCase().includes(searchTerm)) ||
+                (faculty.department && faculty.department.toLowerCase().includes(searchTerm))
+            );
+            
+            // Clear previous options
+            supervisorDropdown.innerHTML = '';
+            currentHighlightedIndex = -1;
+            
+            if (filteredFaculty.length === 0) {
+                supervisorDropdown.innerHTML = '<div class="supervisor-no-results">No faculty found matching your search</div>';
+            } else {
+                filteredFaculty.forEach((faculty, index) => {
+                    const option = document.createElement('div');
+                    option.className = 'supervisor-option';
+                    option.setAttribute('data-faculty-id', faculty._id);
+                    option.setAttribute('data-faculty-name', faculty.name);
+                    
+                    // Create faculty info display
+                    let facultyInfo = '';
+                    if (faculty.email || faculty.department) {
+                        const infoParts = [];
+                        if (faculty.email) infoParts.push(faculty.email);
+                        if (faculty.department) infoParts.push(faculty.department);
+                        facultyInfo = `<div class="faculty-info">${infoParts.join(' • ')}</div>`;
+                    }
+                    
+                    option.innerHTML = `
+                        <div>
+                            <div class="faculty-name">${faculty.name}</div>
+                            ${facultyInfo}
+                        </div>
+                    `;
+                    
+                    // Click event for selection
+                    option.addEventListener('click', function() {
+                        selectFaculty(this);
+                    });
+                    
+                    supervisorDropdown.appendChild(option);
+                });
+            }
+            
+            supervisorDropdown.classList.add('show');
+            
+            // Position dropdown
+            positionDropdown(supervisorDropdown, document.getElementById('supervisor'));
+        }
+        
+        function selectFaculty(optionElement) {
+            const facultyId = optionElement.getAttribute('data-faculty-id');
+            const facultyName = optionElement.getAttribute('data-faculty-name');
+            
+            // Set the input values
+            document.getElementById('supervisor').value = facultyName;
+            document.getElementById('supervisorId').value = facultyId;
+            
+            // Hide dropdown
+            hideSupervisorDropdown();
+        }
+        
+        function hideSupervisorDropdown() {
+            const supervisorDropdown = document.getElementById('supervisorDropdown');
+            supervisorDropdown.classList.remove('show');
+        }
+        
+        function updateHighlight(options) {
+            // Remove previous highlights
+            options.forEach(option => option.classList.remove('highlighted'));
+            
+            // Add highlight to current option
+            if (currentHighlightedIndex >= 0 && options[currentHighlightedIndex]) {
+                options[currentHighlightedIndex].classList.add('highlighted');
+                
+                // Scroll into view if needed
+                options[currentHighlightedIndex].scrollIntoView({
+                    block: 'nearest',
+                    behavior: 'smooth'
+                });
+            }
+        }
+        
+        function setupStudentSearch(memberRow) {
+            const studentInput = memberRow.querySelector('.member-name.student-search');
+            const studentDropdown = memberRow.querySelector('.student-dropdown');
+            const studentIdInput = memberRow.querySelector('.member-student-id');
+            
+            if (!studentInput || !studentDropdown) return;
+            
+            let currentHighlightedIndex = -1;
+            
+            // Input event for filtering
+            studentInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                filterAndDisplayStudents(searchTerm, studentDropdown, () => {
+                    currentHighlightedIndex = -1;
+                });
+            });
+            
+            // Focus event to show dropdown
+            studentInput.addEventListener('focus', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                filterAndDisplayStudents(searchTerm, studentDropdown, () => {
+                    currentHighlightedIndex = -1;
+                });
+            });
+            
+            // Blur event to hide dropdown (with delay for clicks)
+            studentInput.addEventListener('blur', function() {
+                setTimeout(() => {
+                    hideStudentDropdown(studentDropdown);
+                }, 150);
+            });
+            
+            // Keyboard navigation
+            studentInput.addEventListener('keydown', function(e) {
+                const options = studentDropdown.querySelectorAll('.student-option');
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    currentHighlightedIndex = Math.min(currentHighlightedIndex + 1, options.length - 1);
+                    updateStudentHighlight(options, currentHighlightedIndex);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    currentHighlightedIndex = Math.max(currentHighlightedIndex - 1, -1);
+                    updateStudentHighlight(options, currentHighlightedIndex);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (currentHighlightedIndex >= 0 && options[currentHighlightedIndex]) {
+                        selectStudent(options[currentHighlightedIndex], studentInput, studentIdInput, studentDropdown);
+                    }
+                } else if (e.key === 'Escape') {
+                    hideStudentDropdown(studentDropdown);
+                }
+            });
+        }
+        
+        function filterAndDisplayStudents(searchTerm, dropdown, callback) {
+            if (!allStudentsData || allStudentsData.length === 0) {
+                dropdown.innerHTML = '<div class="student-no-results">No students data available</div>';
+                dropdown.classList.add('show');
+                return;
+            }
+            
+            // Filter students based on search term
+            const filteredStudents = allStudentsData.filter(student => 
+                student.name.toLowerCase().includes(searchTerm) ||
+                student.student_id.toLowerCase().includes(searchTerm)
+            );
+            
+            // Clear previous options
+            dropdown.innerHTML = '';
+            
+            if (filteredStudents.length === 0) {
+                dropdown.innerHTML = '<div class="student-no-results">No students found matching your search</div>';
+            } else {
+                filteredStudents.forEach(student => {
+                    const option = document.createElement('div');
+                    option.className = 'student-option';
+                    option.innerHTML = `
+                        <div>
+                            <div class="student-name">${student.name}</div>
+                            <div class="student-info">ID: ${student.student_id}</div>
+                        </div>
+                    `;
+                    
+                    // Store student data in the element
+                    option.studentData = student;
+                    
+                    // Click handler
+                    option.addEventListener('click', function() {
+                        const studentInput = dropdown.closest('.member-row').querySelector('.member-name.student-search');
+                        const studentIdInput = dropdown.closest('.member-row').querySelector('.member-student-id');
+                        selectStudent(this, studentInput, studentIdInput, dropdown);
+                    });
+                    
+                    dropdown.appendChild(option);
+                });
+            }
+            
+            dropdown.classList.add('show');
+            
+            // Position dropdown
+            positionDropdown(dropdown, dropdown.closest('.student-search-container'));
+            
+            if (callback) callback();
+        }
+        
+        function selectStudent(option, input, hiddenInput, dropdown) {
+            const studentData = option.studentData;
+            if (studentData) {
+                input.value = studentData.name;
+                hiddenInput.value = studentData.id;
+                hideStudentDropdown(dropdown);
+                
+                // Trigger change event
+                input.dispatchEvent(new Event('change'));
+            }
+        }
+        
+        function updateStudentHighlight(options, index) {
+            options.forEach((option, i) => {
+                if (i === index) {
+                    option.classList.add('highlighted');
+                } else {
+                    option.classList.remove('highlighted');
+                }
+            });
+        }
+        
+        function hideStudentDropdown(dropdown) {
+            dropdown.classList.remove('show');
+        }
+        
+        function positionDropdown(dropdown, container) {
+            const containerRect = container.getBoundingClientRect();
+            const spaceAbove = containerRect.top;
+            
+            // If there's not enough space above, position it below instead
+            if (spaceAbove < 220) { // 220px accounts for dropdown height + some padding
+                dropdown.style.bottom = 'auto';
+                dropdown.style.top = '100%';
+                dropdown.style.borderRadius = '0 0 var(--border-radius) var(--border-radius)';
+                dropdown.style.borderTop = 'none';
+                dropdown.style.borderBottom = '1px solid var(--border)';
+                dropdown.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            } else {
+                // Reset to upward positioning (default)
+                dropdown.style.bottom = '100%';
+                dropdown.style.top = 'auto';
+                dropdown.style.borderRadius = 'var(--border-radius) var(--border-radius) 0 0';
+                dropdown.style.borderTop = '1px solid var(--border)';
+                dropdown.style.borderBottom = 'none';
+                dropdown.style.boxShadow = '0 -4px 12px rgba(0, 0, 0, 0.15)';
+            }
+        }
+        
+        // Initialize dropdowns when document is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeDropdowns);
+        } else {
+            initializeDropdowns();
         }
     });
     </script>

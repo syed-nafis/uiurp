@@ -377,13 +377,93 @@ session_start();
             background-size: 16px 12px;
             appearance: none;
             color-scheme: dark;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+            padding-right: 2.5rem;
         }
-        
+
+        /* Enhanced dropdown styling */
+        .form-select:hover {
+            border-color: rgba(76, 201, 240, 0.4);
+            background-color: var(--surface-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-select:focus {
+            border-color: var(--primary);
+            background-color: var(--surface-light);
+            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Custom dropdown arrow animation */
+        .form-select:focus {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234cc9f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        }
+
+        /* Dropdown options styling */
         .form-select option {
             background-color: rgba(15, 23, 42, 0.95);
             color: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border: none;
+            transition: all 0.2s ease;
         }
-        
+
+        .form-select option:hover,
+        .form-select option:focus {
+            background-color: rgba(76, 201, 240, 0.2);
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .form-select option:checked {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+        }
+
+        /* Enhanced supervisor dropdown */
+        #supervisor {
+            /* Clean dropdown with only arrow - no extra icons */
+        }
+
+        /* Enhanced privacy dropdown */
+        #privacy {
+            /* Clean dropdown with only arrow - no extra icons */
+        }
+
+        /* Enhanced timeline status dropdown */
+        #timelineStatus {
+            /* Clean dropdown with only arrow - no extra icons */
+        }
+
+        /* Dropdown container enhancements */
+        .dropdown-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .dropdown-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(76, 201, 240, 0.05), rgba(114, 9, 183, 0.05));
+            border-radius: var(--border-radius);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .dropdown-container:hover::before {
+            opacity: 1;
+        }
+
         /* Fix for Firefox and other browsers to ensure consistent dropdown styling */
         select.form-select option {
             background-color: rgb(15, 23, 42);
@@ -1099,11 +1179,15 @@ session_start();
         }
         
         .toast.success {
-            border-left: 4px solid var(--success-color);
+            border-left: 4px solid var(--success);
         }
         
         .toast.error {
-            border-left: 4px solid var(--warning-color);
+            border-left: 4px solid var(--error);
+        }
+        
+        .toast.warning {
+            border-left: 4px solid var(--warning);
         }
         
         .toast-header {
@@ -1605,384 +1689,7 @@ session_start();
             border-color: rgba(76, 201, 240, 0.3);
             box-shadow: 0 0 0 1px rgba(76, 201, 240, 0.3);
         }
-    </style>
-</head>
-<body>
-    <?php include 'src/includes/navbar.php'; ?>
-    
-    <!-- Enhanced Background Effects -->
-    <div class="background-effects">
-        <div class="floating-orb orb-1"></div>
-        <div class="floating-orb orb-2"></div>
-        <div class="floating-orb orb-3"></div>
-        <div class="cyber-grid"></div>
-    </div>
-    
-    <!-- Background Particles -->
-    <div id="particles-js"></div>
-    
-    <!-- Loading Spinner -->
-    <div class="spinner-overlay" id="spinner">
-        <div class="spinner"></div>
-    </div>
-    
-    <!-- Toast Notifications -->
-    <div class="toast-container" id="toastContainer"></div>
-    
-    <div class="header-container">
-        <div class="container text-center hero-content">
-            <h1 class="hero-title" data-aos="fade-down" data-aos-duration="1000">Edit <span class="text-gradient" data-text="Research">Research</span> Projects</h1>
-            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">Create, edit, and share your groundbreaking research with the academic community.</p>
-        </div>
-    </div>
-    
-    <div class="container my-5" style="margin-top: 40px !important; padding-top: 20px;">
-        <div class="tabs-wrapper" style="padding-top: 60px; position: relative; z-index: 100;">
-            <ul class="nav nav-tabs" id="projectManagementTabs" role="tablist" style="margin-top: 40px;">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="edit-projects-tab" data-bs-toggle="tab" data-bs-target="#edit-projects" type="button" role="tab" aria-controls="edit-projects" aria-selected="true">
-                        <i class="bi bi-collection me-2"></i>My Projects
-                    </button>
-                </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="new-project-tab" data-bs-toggle="tab" data-bs-target="#new-project" type="button" role="tab" aria-controls="new-project" aria-selected="false">
-                    <i class="bi bi-plus-circle me-2"></i>Create New Project
-                </button>
-                            </li>
-            </ul>
-        </div>
-        
-        <div class="tab-content" id="projectManagementTabContent">
-            <!-- Edit Projects Tab -->
-            <div class="tab-pane fade show active" id="edit-projects" role="tabpanel" aria-labelledby="edit-projects-tab">
-                <div id="userProjectsList" class="row g-4">
-                    <!-- User projects will be loaded here -->
-                </div>
-            </div>
-            
-            <!-- Create New Project Tab -->
-            <div class="tab-pane fade" id="new-project" role="tabpanel" aria-labelledby="new-project-tab">
-                <!-- Project Creation Form -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card mt-3">
-                            <div class="card-header">
-                                <i class="bi bi-file-earmark-plus me-2"></i>New Research Project
-                            </div>
-                            <div class="card-body">
-                                <form id="projectForm" enctype="multipart/form-data">
-                                    <input type="hidden" id="projectId" name="projectId" value="">
-                                    
-                                    <div class="row mb-3">
-                                        <div class="col-md-8">
-                                            <div class="mb-2">
-                                                <label for="title" class="form-label">Project Title*</label>
-                                                <input type="text" class="form-control" id="title" name="title" required>
-                                            </div>
-                                            
-                                            <div class="mb-2">
-                                                <label for="abstract" class="form-label">Abstract*</label>
-                                                <textarea class="form-control" id="abstract" name="abstract" rows="3" required></textarea>
-                                            </div>
-                                            
-                                            <div class="mb-2">
-                                                <label for="description" class="form-label">Full Description</label>
-                                                <textarea class="form-control" id="description" name="description" rows="5"></textarea>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-md-4">
-                                            <div class="mb-3">
-                                                <label for="coverImage" class="form-label">Cover Image</label>
-                                                <div class="file-upload">
-                                                    <div class="file-upload-btn" id="coverImageBtn">
-                                                        <i class="bi bi-cloud-arrow-up"></i>
-                                                        <p>Click or drag to upload an image</p>
-                                                    </div>
-                                                    <input type="file" class="form-control" id="coverImage" name="coverImage" accept="image/*">
-                                                </div>
-                                                <div id="imagePreviewContainer" class="mt-3 text-center" style="display: none;">
-                                                    <img id="imagePreview" class="preview-image">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger mt-2" id="removeImage">
-                                                        <i class="bi bi-trash me-1"></i>Remove
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row mb-4">
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="field" class="form-label">Research Field*</label>
-                                                <input type="text" class="form-control" id="field" name="field" required>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="institution" class="form-label">Institution</label>
-                                                <input type="text" class="form-control" id="institution" name="institution" value="United International University">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row mb-4">
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="keywords" class="form-label">Keywords</label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" id="keyword" placeholder="Add keyword">
-                                                    <button class="btn btn-outline-primary" type="button" id="addKeyword">
-                                                        <i class="bi bi-plus"></i>
-                                                    </button>
-                                                </div>
-                                                <div id="keywordsContainer" class="mt-2">
-                                                    <!-- Keywords will appear here -->
-                                                </div>
-                                                <input type="hidden" id="keywordsList" name="keywords">
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="privacy" class="form-label">Privacy Setting</label>
-                                                <select class="form-select" id="privacy" name="privacy">
-                                                    <option value="0">Public - Visible to everyone</option>
-                                                    <option value="1">Private - Visible only to you and collaborators</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row mb-4">
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="createdAt" class="form-label">Created At</label>
-                                                <input type="date" class="form-control" id="createdAt" name="createdAt">
-                                                <small class="text-muted">Leave empty for current date</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="updatedAt" class="form-label">Updated At</label>
-                                                <input type="date" class="form-control" id="updatedAt" name="updatedAt">
-                                                <small class="text-muted">Leave empty for current date</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row mb-3">
-                                        <div class="col-12">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <i class="bi bi-link-45deg me-2"></i>External Links
-                                                </div>
-                                                <div class="card-body pb-2">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="mb-2">
-                                                                <label for="github" class="form-label">GitHub Repository URL</label>
-                                                                <input type="url" class="form-control" id="github" name="github" placeholder="https://github.com/yourusername/your-repo">
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class="col-md-6">
-                                                            <div class="mb-3">
-                                                                <label for="website" class="form-label">Project Website URL</label>
-                                                                <input type="url" class="form-control" id="website" name="website" placeholder="https://yourproject.example.com">
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class="col-md-6">
-                                                            <div class="mb-3">
-                                                                <label for="paper" class="form-label">Research Paper URL</label>
-                                                                <input type="url" class="form-control" id="paper" name="paper" placeholder="https://journal.example.com/your-paper">
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class="col-md-6">
-                                                            <div class="mb-3">
-                                                                <label for="doi" class="form-label">DOI</label>
-                                                                <input type="text" class="form-control" id="doi" name="doi" placeholder="10.xxxx/xxxxx">
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class="col-md-6">
-                                                            <div class="mb-3">
-                                                                <label for="youtube" class="form-label">YouTube Video URL</label>
-                                                                <input type="url" class="form-control" id="youtube" name="youtube" placeholder="https://youtube.com/watch?v=xxxx">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row mb-4">
-                                        <div class="col-12">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <i class="bi bi-people-fill me-2"></i>Project Team
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="mb-3">
-                                                        <label for="supervisor" class="form-label">Project Supervisor</label>
-                                                        <input type="text" class="form-control" id="supervisor" name="supervisor" placeholder="Supervisor Name">
-                                                    </div>
-                                                    
-                                                    <label class="form-label">Team Members</label>
-                                                    <div id="membersContainer">
-                                                        <div class="row mb-2 member-row">
-                                                            <div class="col-md-3">
-                                                                <input type="text" class="form-control member-name" placeholder="Member Name" required>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <input type="text" class="form-control member-role" placeholder="Role (e.g., Author, Researcher)">
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <input type="number" class="form-control member-contribution" placeholder="Contribution %" min="0" max="100">
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <input type="text" class="form-control member-userid" placeholder="User ID (optional)">
-                                                            </div>
-                                                            <div class="col-md-1">
-                                                                <button type="button" class="btn btn-outline-danger remove-member" disabled>
-                                                                    <i class="bi bi-trash"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <button type="button" class="btn btn-outline-primary mt-2" id="addMember">
-                                                        <i class="bi bi-plus-circle me-2"></i>Add Team Member
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Project Timeline Section -->
-                                    <div class="row mb-4">
-                                        <div class="col-12">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <i class="bi bi-calendar-event me-2"></i>Project Timeline
-                                                </div>
-                                                <div class="card-body">
-                                                    <p class="text-muted mb-3">Add key milestones and events to track your project's progress.</p>
-                                                    
-                                                    <div id="timelineContainer">
-                                                        <!-- Timeline items will be added here -->
-                                                    </div>
-                                                    
-                                                    <button type="button" class="btn btn-outline-primary mt-3" id="addTimelineItem">
-                                                        <i class="bi bi-plus-circle me-2"></i>Add Timeline Item
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Files Section -->
-                                    <div class="row mb-4">
-                                        <div class="col-12">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <i class="bi bi-file-earmark me-2"></i>Project Files
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="mb-3">
-                                                        <label for="projectFiles" class="form-label">Upload Files (Reports, Papers, Data, etc.)</label>
-                                                        <input class="form-control" type="file" id="projectFiles" name="projectFiles[]" multiple>
-                                                        <div id="filesPreview" class="mt-2"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Media Section -->
-                                    <div class="row mb-4">
-                                        <div class="col-12">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <i class="bi bi-camera-video me-2"></i>Additional Media
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="mb-3">
-                                                        <label for="mediaFiles" class="form-label">Upload Images or Videos</label>
-                                                        <input class="form-control" type="file" id="mediaFiles" name="mediaFiles[]" multiple accept="image/*,video/*">
-                                                        <div id="mediaPreview" class="mt-2 row g-2"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- References Section -->
-                                    <div class="row mb-4">
-                                        <div class="col-12">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <i class="bi bi-journal-text me-2"></i>References
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="mb-3">
-                                                        <div id="references-container">
-                                                            <!-- Reference items will be added here -->
-                                                        </div>
-                                                        <div class="row mt-3">
-                                                            <div class="col-md-5">
-                                                                <input type="text" class="form-control" id="reference-title" placeholder="Reference Title">
-                                                            </div>
-                                                            <div class="col-md-5">
-                                                                <input type="text" class="form-control" id="reference-link" placeholder="Reference Link">
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <button type="button" class="btn btn-primary w-100" id="add-reference-btn">
-                                                                    <i class="bi bi-plus-circle"></i> Add
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        <input type="hidden" id="references" name="references">
-                                                        <div class="form-text">
-                                                            Add each reference with a title and a link. Example: "Deep Learning for Renewable Energy Forecasting" with link "https://doi.org/10.1016/j.rser.2020.109898"
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Stats Section (Hidden from user but will generate random stats) -->
-                                    <input type="hidden" id="viewsCount" name="viewsCount">
-                                    <input type="hidden" id="downloadsCount" name="downloadsCount">
-                                    <input type="hidden" id="favoritesCount" name="favoritesCount">
-                                    
-                                    <!-- Comments Section (Hidden, will be initialized as empty array) -->
-                                    <input type="hidden" id="commentsArray" name="commentsArray" value="[]">
-                                    
-                                    <div class="text-end mt-3">
-                                        <button type="button" class="btn btn-outline-secondary me-2" id="resetForm">
-                                            <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
-                                        </button>
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="bi bi-save me-1"></i>Save Project
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <?php include 'src/includes/footer.php'; ?>
-    
-    <style>
         /* Enhanced Footer */
         .enhanced-footer {
             background: linear-gradient(135deg, #0a0d1a 0%, #1a1a2e 100%);
@@ -2132,8 +1839,1676 @@ session_start();
             font-size: 0.9rem;
             margin: 0;
         }
-    </style>
 
+        /* ===== LIGHT MODE STYLES ===== */
+        [data-theme="light"] {
+            --primary: #2563eb;
+            --secondary: #8b5cf6;
+            --accent: #0ea5e9;
+            --background: #ffffff;
+            --surface: #f8fafc;
+            --surface-light: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --border-light: #cbd5e1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            
+            /* Glass morphism for light mode */
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            
+            /* Gradients for light mode */
+            --gradient-primary: linear-gradient(135deg, #2563eb, #8b5cf6);
+            --gradient-surface: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            
+            /* Shadows for light mode */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] body {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+            color: var(--text-primary);
+        }
+
+        /* Background effects in light mode */
+        [data-theme="light"] .floating-orb {
+            opacity: 0.2;
+        }
+
+        [data-theme="light"] .orb-1 {
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0.05) 50%, transparent 70%);
+        }
+
+        [data-theme="light"] .orb-2 {
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, rgba(14, 165, 233, 0.03) 50%, transparent 70%);
+        }
+
+        [data-theme="light"] .orb-3 {
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, rgba(6, 182, 212, 0.05) 50%, transparent 70%);
+        }
+
+        [data-theme="light"] .cyber-grid {
+            background-image: 
+                linear-gradient(to right, rgba(37, 99, 235, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(37, 99, 235, 0.02) 1px, transparent 1px);
+        }
+
+        /* Header container in light mode */
+        [data-theme="light"] .header-container {
+            background: linear-gradient(135deg, 
+                rgba(248, 250, 252, 0.95) 0%, 
+                rgba(241, 245, 249, 0.9) 50%,
+                rgba(37, 99, 235, 0.1) 100%);
+        }
+
+        [data-theme="light"] .header-container::before {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="circuit" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M0,10 L10,10 L10,0 L20,0 M10,10 L10,20 M10,15 L20,15" stroke="rgba(0,0,0,0.02)" stroke-width="0.5" fill="none"/></pattern></defs><rect width="100" height="100" fill="url(%23circuit)"/></svg>');
+            opacity: 0.3;
+        }
+
+        [data-theme="light"] .header-container::after {
+            background: radial-gradient(ellipse 80% 100% at 50% 0%, 
+                rgba(37, 99, 235, 0.1) 0%, 
+                rgba(14, 165, 233, 0.08) 30%,
+                rgba(6, 182, 212, 0.05) 60%,
+                transparent 100%);
+        }
+
+        [data-theme="light"] .hero-title {
+            background: linear-gradient(135deg, var(--text-primary) 0%, #0ea5e9 70%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        [data-theme="light"] .text-gradient {
+            background: linear-gradient(135deg, var(--text-primary) 0%, #0ea5e9 70%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        [data-theme="light"] .header-container p {
+            color: var(--text-secondary);
+        }
+
+        /* Cards in light mode */
+        [data-theme="light"] .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .card:hover {
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        [data-theme="light"] .card-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .card-header i {
+            color: var(--primary);
+        }
+
+        /* Form elements in light mode */
+        [data-theme="light"] .form-label {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .form-control,
+        [data-theme="light"] .form-select {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .form-control:focus,
+        [data-theme="light"] .form-select:focus {
+            border-color: var(--primary);
+            background: var(--surface-light);
+            color: var(--text-primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        [data-theme="light"] .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            cursor: pointer;
+            transition: var(--transition);
+            padding-right: 2.5rem;
+        }
+
+        [data-theme="light"] .form-select:hover {
+            border-color: rgba(37, 99, 235, 0.4);
+            background-color: var(--surface-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .form-select:focus {
+            border-color: var(--primary);
+            background-color: var(--surface-light);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            transform: translateY(-1px);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        }
+
+        [data-theme="light"] .form-select option {
+            background-color: var(--surface);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border: none;
+        }
+
+        [data-theme="light"] .form-select option:hover,
+        [data-theme="light"] .form-select option:focus {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .form-select option:checked {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+        }
+
+        /* Enhanced light mode supervisor dropdown */
+        [data-theme="light"] #supervisor {
+            /* Clean dropdown with only arrow - no extra icons */
+        }
+
+        /* Enhanced light mode privacy dropdown */
+        [data-theme="light"] #privacy {
+            /* Clean dropdown with only arrow - no extra icons */
+        }
+
+        /* Enhanced light mode timeline status dropdown */
+        [data-theme="light"] #timelineStatus {
+            /* Clean dropdown with only arrow - no extra icons */
+        }
+
+        /* Light mode dropdown container enhancements */
+        [data-theme="light"] .dropdown-container::before {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.03), rgba(139, 92, 246, 0.03));
+        }
+
+        /* File input in light mode */
+        [data-theme="light"] input[type="file"]::file-selector-button {
+            background: var(--surface);
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+
+        [data-theme="light"] input[type="file"]::file-selector-button:hover {
+            background: var(--surface-light);
+            border-color: var(--primary);
+        }
+
+        [data-theme="light"] input[type="file"] {
+            color: var(--text-primary);
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        [data-theme="light"] input[type="file"]:hover {
+            border-color: var(--primary);
+        }
+
+        [data-theme="light"] .file-upload-btn {
+            border: 1px dashed var(--border);
+            background: var(--surface);
+        }
+
+        [data-theme="light"] .file-upload-btn:hover {
+            background: var(--surface-light);
+            border-color: var(--primary);
+        }
+
+        [data-theme="light"] .file-upload-btn i {
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .file-upload-btn p {
+            color: var(--text-secondary);
+        }
+
+        /* Buttons in light mode */
+        [data-theme="light"] .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+        }
+
+        [data-theme="light"] .btn-primary:hover {
+            background: var(--gradient-primary);
+            filter: brightness(1.1);
+        }
+
+        [data-theme="light"] .btn-outline-primary {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .btn-outline-primary:hover {
+            color: white;
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        [data-theme="light"] .btn-outline-secondary {
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            background: transparent;
+        }
+
+        [data-theme="light"] .btn-outline-secondary:hover {
+            background: var(--surface);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .btn-outline-danger {
+            border: 1px solid var(--error);
+            color: var(--error);
+            background: transparent;
+        }
+
+        [data-theme="light"] .btn-outline-danger:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        /* Navigation tabs in light mode */
+        [data-theme="light"] .nav-tabs {
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] .nav-tabs::after {
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        [data-theme="light"] .nav-tabs .nav-link {
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+        }
+
+        [data-theme="light"] .nav-tabs .nav-link:hover {
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        [data-theme="light"] .nav-tabs .nav-link.active {
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        [data-theme="light"] .nav-tabs .nav-link i {
+            color: var(--primary);
+        }
+
+        /* Project cards in light mode */
+        [data-theme="light"] .project-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.9) 0%, 
+                rgba(248, 250, 252, 0.8) 100%);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .project-card:hover {
+            border-color: var(--primary);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.1),
+                0 0 40px rgba(37, 99, 235, 0.2);
+        }
+
+        [data-theme="light"] .project-card::before {
+            background: linear-gradient(135deg, 
+                rgba(37, 99, 235, 0.05) 0%, 
+                rgba(139, 92, 246, 0.05) 50%,
+                rgba(20, 184, 166, 0.05) 100%);
+        }
+
+        [data-theme="light"] .card-image {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        [data-theme="light"] .card-image::after {
+            background: linear-gradient(135deg, 
+                rgba(248, 250, 252, 0.3) 0%, 
+                rgba(241, 245, 249, 0.5) 100%);
+        }
+
+        [data-theme="light"] .card-title {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .project-card:hover .card-title {
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .card-description {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .meta-item {
+            background: rgba(248, 250, 252, 0.6);
+            border-left: 3px solid var(--primary);
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .project-card:hover .meta-item {
+            border-left-color: var(--accent);
+        }
+
+        [data-theme="light"] .meta-icon {
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .project-card:hover .meta-icon {
+            color: var(--accent);
+        }
+
+        /* Timeline in light mode */
+        [data-theme="light"] .timeline-item {
+            background-color: rgba(248, 250, 252, 0.8);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--primary);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .timeline-item:hover {
+            background-color: rgba(241, 245, 249, 0.9);
+            border-color: var(--primary);
+        }
+
+        [data-theme="light"] .timeline-date {
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .timeline-date i {
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .timeline-item h6 {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .timeline-item p {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .timeline-controls .btn {
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .timeline-controls .btn:hover {
+            background: var(--surface-light);
+            border-color: var(--primary);
+        }
+
+        [data-theme="light"] .timeline-controls .btn-outline-primary:hover {
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .timeline-controls .btn-outline-danger:hover {
+            color: var(--error);
+            border-color: var(--error);
+        }
+
+        /* Status badges in light mode */
+        [data-theme="light"] .status-badge {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .status-completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        [data-theme="light"] .status-in-progress {
+            background: rgba(37, 99, 235, 0.1);
+            color: #2563eb;
+            border-color: rgba(37, 99, 235, 0.3);
+        }
+
+        [data-theme="light"] .status-planned {
+            background: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        [data-theme="light"] .status-delayed {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        /* Keywords in light mode */
+        [data-theme="light"] .keyword-badge {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+
+        [data-theme="light"] .keyword-badge:hover {
+            background: rgba(37, 99, 235, 0.2);
+        }
+
+        [data-theme="light"] .keyword-badge i:hover {
+            color: var(--error);
+        }
+
+        /* References in light mode */
+        [data-theme="light"] .reference-item {
+            background-color: rgba(248, 250, 252, 0.8);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .reference-item::before {
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+
+        [data-theme="light"] .reference-item:hover {
+            background-color: rgba(241, 245, 249, 0.9);
+            border-color: var(--primary);
+        }
+
+        [data-theme="light"] .reference-item a {
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .reference-item a:hover {
+            color: var(--secondary);
+        }
+
+        [data-theme="light"] .reference-item a::after {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        [data-theme="light"] #references-container {
+            scrollbar-color: rgba(37, 99, 235, 0.3) rgba(248, 250, 252, 0.5);
+        }
+
+        [data-theme="light"] #references-container::-webkit-scrollbar-track {
+            background: rgba(248, 250, 252, 0.5);
+        }
+
+        [data-theme="light"] #references-container::-webkit-scrollbar-thumb {
+            background: rgba(37, 99, 235, 0.3);
+        }
+
+        /* Empty state in light mode */
+        [data-theme="light"] .empty-projects-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .empty-projects-container::before {
+            background: radial-gradient(circle at center, rgba(37, 99, 235, 0.05), transparent 70%);
+        }
+
+        [data-theme="light"] .empty-projects-container::after {
+            background: linear-gradient(to right, 
+                transparent, 
+                rgba(37, 99, 235, 0.2), 
+                transparent);
+        }
+
+        [data-theme="light"] .empty-projects-container:hover {
+            border-color: rgba(37, 99, 235, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 20px rgba(37, 99, 235, 0.1);
+        }
+
+        [data-theme="light"] .empty-projects-container h3 {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .empty-projects-container p {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .create-project-button {
+            background: var(--gradient-primary);
+        }
+
+        [data-theme="light"] .create-project-button:hover {
+            filter: brightness(1.1);
+        }
+
+        /* Modal in light mode */
+        [data-theme="light"] #timelineEditModal .modal-content {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] #timelineEditModal .modal-header {
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] #timelineEditModal .modal-footer {
+            border-top: 1px solid var(--border);
+        }
+
+        [data-theme="light"] #timelineEditModal .modal-title {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] #timelineEditModal .btn-close {
+            filter: none;
+            opacity: 0.7;
+        }
+
+        [data-theme="light"] #timelineEditModal .form-label {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] #timelineEditModal .form-control,
+        [data-theme="light"] #timelineEditModal .form-select {
+            background-color: var(--surface-light);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] #timelineEditModal .form-control:focus,
+        [data-theme="light"] #timelineEditModal .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Footer in light mode */
+        [data-theme="light"] .enhanced-footer {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .enhanced-footer::before {
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(37, 99, 235, 0.3), 
+                rgba(139, 92, 246, 0.3), 
+                rgba(20, 184, 166, 0.3), 
+                transparent);
+        }
+
+        [data-theme="light"] .footer-title {
+            background: linear-gradient(135deg, var(--text-primary), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        [data-theme="light"] .footer-description {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .footer-section-title {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .footer-section-title::after {
+            background: var(--primary);
+        }
+
+        [data-theme="light"] .footer-links a {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .footer-links a::after {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        [data-theme="light"] .social-link {
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .social-link:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        [data-theme="light"] .footer-bottom {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .copyright-text {
+            color: var(--text-muted);
+        }
+
+        /* Spinner and toast in light mode */
+        [data-theme="light"] .spinner-overlay {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        [data-theme="light"] .spinner {
+            border: 4px solid rgba(37, 99, 235, 0.1);
+            border-top-color: var(--primary);
+        }
+
+        [data-theme="light"] .toast {
+            background: white;
+            border: 1px solid var(--border);
+        }
+
+        [data-theme="light"] .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        [data-theme="light"] .toast.error {
+            border-left: 4px solid var(--error);
+        }
+
+        [data-theme="light"] .toast.warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        [data-theme="light"] .toast-title {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .toast-close {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .toast-body {
+            color: var(--text-secondary);
+        }
+
+        /* Particles in light mode */
+        [data-theme="light"] #particles-js {
+            opacity: 0.3;
+        }
+
+        [data-theme="light"] #particles-js canvas {
+            filter: invert(1) opacity(0.2);
+        }
+
+        /* Alert in light mode */
+        [data-theme="light"] .alert {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .alert-light {
+            background: var(--surface-light);
+            border-color: var(--border-light);
+            color: var(--text-primary);
+        }
+
+        /* Badge in light mode */
+        [data-theme="light"] .badge {
+            background: var(--primary);
+            color: white;
+        }
+
+        [data-theme="light"] .badge.bg-secondary {
+            background: var(--text-muted) !important;
+            color: white;
+        }
+
+        /* Text utilities in light mode */
+        [data-theme="light"] .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        [data-theme="light"] .text-primary {
+            color: var(--primary) !important;
+        }
+
+        /* Project badge in light mode */
+        [data-theme="light"] .project-badge {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        [data-theme="light"] .project-badge.private {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--warning) 100%);
+        }
+
+        [data-theme="light"] .form-text {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .form-control:hover,
+        [data-theme="light"] .form-select:hover {
+            border-color: rgba(37, 99, 235, 0.3);
+        }
+
+        /* ===== CLEAN DROPDOWN REDESIGN ===== */
+        
+        /* Reset and base dropdown styling */
+        .form-select {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            padding: 12px 16px;
+            padding-right: 40px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 400;
+            line-height: 1.5;
+            appearance: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            width: 100%;
+            
+            /* Single clean dropdown arrow */
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234cc9f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px 12px;
+        }
+
+        /* Hover state */
+        .form-select:hover {
+            border-color: rgba(76, 201, 240, 0.4);
+            background-color: var(--surface-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Focus state */
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: var(--surface-light);
+            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* Disabled state */
+        .form-select:disabled {
+            background-color: var(--surface);
+            border-color: var(--border);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* Option styling */
+        .form-select option {
+            background-color: var(--surface);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            font-weight: 400;
+        }
+
+        /* Remove any specific dropdown overrides */
+        #supervisor,
+        #privacy,
+        #timelineStatus {
+            /* Inherit all styles from .form-select */
+        }
+
+        /* Enhanced container styling */
+        .dropdown-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .dropdown-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(76, 201, 240, 0.02), rgba(114, 9, 183, 0.02));
+            border-radius: var(--border-radius);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .dropdown-container:hover::before {
+            opacity: 1;
+        }
+
+        /* ===== LIGHT MODE DROPDOWN STYLES ===== */
+        
+        [data-theme="light"] .form-select {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            
+            /* Light mode dropdown arrow */
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        }
+
+        [data-theme="light"] .form-select:hover {
+            border-color: rgba(37, 99, 235, 0.3);
+            background-color: var(--surface-light);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="light"] .form-select:focus {
+            border-color: var(--primary);
+            background-color: var(--surface-light);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        [data-theme="light"] .form-select option {
+            background-color: var(--surface);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .dropdown-container::before {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.02), rgba(139, 92, 246, 0.02));
+        }
+
+        /* Remove any conflicting styles */
+        [data-theme="light"] #supervisor,
+        [data-theme="light"] #privacy,
+        [data-theme="light"] #timelineStatus {
+            /* Inherit all styles from light mode .form-select */
+        }
+
+        /* ===== DROPDOWN RESET - OVERRIDE ALL CONFLICTS ===== */
+        
+        /* Force clean dropdown styling - override any previous definitions */
+        .form-select,
+        #supervisor,
+        #privacy, 
+        #timelineStatus,
+        [data-theme="light"] .form-select,
+        [data-theme="light"] #supervisor,
+        [data-theme="light"] #privacy,
+        [data-theme="light"] #timelineStatus {
+            /* Reset all background images to prevent duplication */
+            background-image: none !important;
+        }
+
+        /* Dark mode dropdown arrow - single clean arrow */
+        .form-select,
+        #supervisor,
+        #privacy,
+        #timelineStatus {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234cc9f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 12px center !important;
+            background-size: 16px 12px !important;
+        }
+
+        /* Light mode dropdown arrow - single clean arrow */
+        [data-theme="light"] .form-select,
+        [data-theme="light"] #supervisor,
+        [data-theme="light"] #privacy,
+        [data-theme="light"] #timelineStatus {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 12px center !important;
+            background-size: 16px 12px !important;
+        }
+
+        /* Ensure no duplicate arrows on focus */
+        .form-select:focus,
+        #supervisor:focus,
+        #privacy:focus,
+        #timelineStatus:focus,
+        [data-theme="light"] .form-select:focus,
+        [data-theme="light"] #supervisor:focus,
+        [data-theme="light"] #privacy:focus,
+        [data-theme="light"] #timelineStatus:focus {
+            /* Keep the same arrow, don't change it */
+            background-image: inherit !important;
+        }
+
+        /* ===== SEARCHABLE SUPERVISOR DROPDOWN ===== */
+        
+        .supervisor-search-container {
+            position: relative;
+        }
+
+        .supervisor-dropdown {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-bottom: none;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 99999;
+            display: none;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .supervisor-dropdown.show {
+            display: block;
+        }
+
+        .supervisor-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .supervisor-option:last-child {
+            border-bottom: none;
+        }
+
+        .supervisor-option:hover,
+        .supervisor-option.highlighted {
+            background: rgba(76, 201, 240, 0.1);
+            color: var(--primary);
+        }
+
+        .supervisor-option .faculty-name {
+            font-weight: 500;
+        }
+
+        .supervisor-option .faculty-info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .supervisor-no-results {
+            padding: 12px 16px;
+            color: var(--text-muted);
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Search input styling */
+        #supervisor {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234cc9f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m11.742 10.344-6.979-6.979a2.21 2.21 0 1 1 3.121-3.121l6.979 6.979a2.21 2.21 0 0 1-3.121 3.121z'/%3e%3cpath fill='none' stroke='%234cc9f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6.5 6.5 10 10'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 12px center !important;
+            background-size: 16px 16px !important;
+            padding-right: 40px !important;
+        }
+
+        #supervisor:focus {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        #supervisor:focus + input + .supervisor-dropdown {
+            border-top: 1px solid var(--primary);
+        }
+
+        /* Light mode styles for searchable dropdown */
+        [data-theme="light"] .supervisor-dropdown {
+            background: var(--surface);
+            border-color: var(--border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .supervisor-option {
+            color: var(--text-primary);
+            border-bottom-color: var(--border);
+        }
+
+        [data-theme="light"] .supervisor-option:hover,
+        [data-theme="light"] .supervisor-option.highlighted {
+            background: rgba(37, 99, 235, 0.08);
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .supervisor-option .faculty-info {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .supervisor-no-results {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] #supervisor {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m11.742 10.344-6.979-6.979a2.21 2.21 0 1 1 3.121-3.121l6.979 6.979a2.21 2.21 0 0 1-3.121 3.121z'/%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6.5 6.5 10 10'/%3e%3c/svg%3e") !important;
+        }
+
+        /* Scrollbar styling for dropdown */
+        .supervisor-dropdown::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .supervisor-dropdown::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+
+        .supervisor-dropdown::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .supervisor-dropdown::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* ===== SEARCHABLE STUDENT DROPDOWN ===== */
+        
+        .student-search-container {
+            position: relative;
+        }
+
+        .student-dropdown {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-bottom: none;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 99999;
+            display: none;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .student-dropdown.show {
+            display: block;
+        }
+
+        .student-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .student-option:last-child {
+            border-bottom: none;
+        }
+
+        .student-option:hover,
+        .student-option.highlighted {
+            background: rgba(76, 201, 240, 0.1);
+            color: var(--primary);
+        }
+
+        .student-option .student-name {
+            font-weight: 500;
+        }
+
+        .student-option .student-info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .student-no-results {
+            padding: 12px 16px;
+            color: var(--text-muted);
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Student search input styling */
+        .member-name.student-search {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234cc9f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m11.742 10.344-6.979-6.979a2.21 2.21 0 1 1 3.121-3.121l6.979 6.979a2.21 2.21 0 0 1-3.121 3.121z'/%3e%3cpath fill='none' stroke='%234cc9f0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6.5 6.5 10 10'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 12px center !important;
+            background-size: 16px 16px !important;
+            padding-right: 40px !important;
+        }
+
+        .member-name.student-search:focus {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        /* Light mode styles for student dropdown */
+        [data-theme="light"] .student-dropdown {
+            background: var(--surface);
+            border-color: var(--border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .student-option {
+            color: var(--text-primary);
+            border-bottom-color: var(--border);
+        }
+
+        [data-theme="light"] .student-option:hover,
+        [data-theme="light"] .student-option.highlighted {
+            background: rgba(37, 99, 235, 0.08);
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .student-option .student-info {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .student-no-results {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .member-name.student-search {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m11.742 10.344-6.979-6.979a2.21 2.21 0 1 1 3.121-3.121l6.979 6.979a2.21 2.21 0 0 1-3.121 3.121z'/%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6.5 6.5 10 10'/%3e%3c/svg%3e") !important;
+        }
+
+        /* Scrollbar styling for student dropdown */
+        .student-dropdown::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .student-dropdown::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+
+        .student-dropdown::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .student-dropdown::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Ensure card containers don't clip dropdowns */
+        .card {
+            overflow: visible !important;
+        }
+
+        .card-body {
+            overflow: visible !important;
+        }
+
+        /* Ensure form containers don't clip dropdowns */
+        .container, .container-fluid {
+            overflow: visible !important;
+        }
+
+        /* Ensure project team section doesn't clip dropdowns */
+        .row {
+            overflow: visible !important;
+        }
+
+        /* Specific fixes for sections that follow Project Team */
+        .row.mb-4 {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Ensure Project Team dropdowns are above everything */
+        .card:has(.supervisor-dropdown),
+        .card:has(.student-dropdown) {
+            position: relative;
+            z-index: 10000;
+        }
+
+        /* Alternative approach for broader browser support */
+        .card .supervisor-search-container,
+        .card .student-search-container {
+            position: relative;
+            z-index: 10000;
+        }
+
+        /* Force dropdowns to appear above all subsequent content */
+        .supervisor-dropdown.show,
+        .student-dropdown.show {
+            position: absolute;
+            z-index: 999999 !important;
+        }
+
+        /* Ensure dropdowns don't get clipped by transform contexts */
+        .supervisor-search-container,
+        .student-search-container {
+            transform: none !important;
+            contain: none !important;
+        }
+
+        /* Dark mode styles for supervisor dropdown */
+        [data-theme="dark"] .supervisor-dropdown {
+            background: #263b5d;
+        }
+
+        /* Scrollbar styling for dropdown */
+        .supervisor-dropdown::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .supervisor-dropdown::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+
+        .supervisor-dropdown::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .supervisor-dropdown::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        [data-theme="light"] .member-name.student-search {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m11.742 10.344-6.979-6.979a2.21 2.21 0 1 1 3.121-3.121l6.979 6.979a2.21 2.21 0 0 1-3.121 3.121z'/%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6.5 6.5 10 10'/%3e%3c/svg%3e") !important;
+        }
+
+        /* Dark mode styles for student dropdown */
+        [data-theme="dark"] .student-dropdown {
+            background: #263b5d;
+        }
+
+        /* Scrollbar styling for student dropdown */
+        .student-dropdown::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .student-dropdown::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+
+        .student-dropdown::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .student-dropdown::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <?php include 'src/includes/navbar.php'; ?>
+    
+    <!-- Enhanced Background Effects -->
+    <div class="background-effects">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+        <div class="cyber-grid"></div>
+    </div>
+    
+    <!-- Background Particles -->
+    <div id="particles-js"></div>
+    
+    <!-- Loading Spinner -->
+    <div class="spinner-overlay" id="spinner">
+        <div class="spinner"></div>
+    </div>
+    
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <div class="header-container">
+        <div class="container text-center hero-content">
+            <h1 class="hero-title" data-aos="fade-down" data-aos-duration="1000">Edit <span class="text-gradient" data-text="Research">Research</span> Projects</h1>
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">Create, edit, and share your groundbreaking research with the academic community.</p>
+        </div>
+    </div>
+    
+    <div class="container my-5" style="margin-top: 40px !important; padding-top: 20px;">
+        <div class="tabs-wrapper" style="padding-top: 60px; position: relative; z-index: 100;">
+            <ul class="nav nav-tabs" id="projectManagementTabs" role="tablist" style="margin-top: 40px;">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="edit-projects-tab" data-bs-toggle="tab" data-bs-target="#edit-projects" type="button" role="tab" aria-controls="edit-projects" aria-selected="true">
+                        <i class="bi bi-collection me-2"></i>My Projects
+                    </button>
+                </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="new-project-tab" data-bs-toggle="tab" data-bs-target="#new-project" type="button" role="tab" aria-controls="new-project" aria-selected="false">
+                    <i class="bi bi-plus-circle me-2"></i>Create New Project
+                </button>
+                            </li>
+            </ul>
+        </div>
+        
+        <div class="tab-content" id="projectManagementTabContent">
+            <!-- Edit Projects Tab -->
+            <div class="tab-pane fade show active" id="edit-projects" role="tabpanel" aria-labelledby="edit-projects-tab">
+                <div id="userProjectsList" class="row g-4">
+                    <!-- User projects will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Create New Project Tab -->
+            <div class="tab-pane fade" id="new-project" role="tabpanel" aria-labelledby="new-project-tab">
+                <!-- Project Creation Form -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <i class="bi bi-file-earmark-plus me-2"></i>New Research Project
+                            </div>
+                            <div class="card-body">
+                                <form id="projectForm" enctype="multipart/form-data">
+                                    <input type="hidden" id="projectId" name="projectId" value="">
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-8">
+                                            <div class="mb-2">
+                                                <label for="title" class="form-label">Project Title*</label>
+                                                <input type="text" class="form-control" id="title" name="title" required>
+                                            </div>
+                                            
+                                            <div class="mb-2">
+                                                <label for="abstract" class="form-label">Abstract*</label>
+                                                <textarea class="form-control" id="abstract" name="abstract" rows="3" required></textarea>
+                                            </div>
+                                            
+                                            <div class="mb-2">
+                                                <label for="description" class="form-label">Full Description</label>
+                                                <textarea class="form-control" id="description" name="description" rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="coverImage" class="form-label">Cover Image</label>
+                                                <div class="file-upload">
+                                                    <div class="file-upload-btn" id="coverImageBtn">
+                                                        <i class="bi bi-cloud-arrow-up"></i>
+                                                        <p>Click or drag to upload an image</p>
+                                                    </div>
+                                                    <input type="file" class="form-control" id="coverImage" name="coverImage" accept="image/*">
+                                                </div>
+                                                <div id="imagePreviewContainer" class="mt-3 text-center" style="display: none;">
+                                                    <img id="imagePreview" class="preview-image">
+                                                    <button type="button" class="btn btn-sm btn-outline-danger mt-2" id="removeImage">
+                                                        <i class="bi bi-trash me-1"></i>Remove
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="field" class="form-label">Research Field*</label>
+                                                <input type="text" class="form-control" id="field" name="field" required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="institution" class="form-label">Institution</label>
+                                                <input type="text" class="form-control" id="institution" name="institution" value="United International University">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="keywords" class="form-label">Keywords</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="keyword" placeholder="Add keyword">
+                                                    <button class="btn btn-outline-primary" type="button" id="addKeyword">
+                                                        <i class="bi bi-plus"></i>
+                                                    </button>
+                                                </div>
+                                                <div id="keywordsContainer" class="mt-2">
+                                                    <!-- Keywords will appear here -->
+                                                </div>
+                                                <input type="hidden" id="keywordsList" name="keywords">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <div class="mb-3 dropdown-container">
+                                                <label for="privacy" class="form-label">Privacy Setting</label>
+                                                <select class="form-select" id="privacy" name="privacy">
+                                                    <option value="0">Public - Visible to everyone</option>
+                                                    <option value="1">Private - Visible only to you and collaborators</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="createdAt" class="form-label">Created At</label>
+                                                <input type="date" class="form-control" id="createdAt" name="createdAt">
+                                                <small class="text-muted">Leave empty for current date</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="updatedAt" class="form-label">Updated At</label>
+                                                <input type="date" class="form-control" id="updatedAt" name="updatedAt">
+                                                <small class="text-muted">Leave empty for current date</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <i class="bi bi-link-45deg me-2"></i>External Links
+                                                </div>
+                                                <div class="card-body pb-2">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="mb-2">
+                                                                <label for="github" class="form-label">GitHub Repository URL</label>
+                                                                <input type="url" class="form-control" id="github" name="github" placeholder="https://github.com/yourusername/your-repo">
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="website" class="form-label">Project Website URL</label>
+                                                                <input type="url" class="form-control" id="website" name="website" placeholder="https://yourproject.example.com">
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="paper" class="form-label">Research Paper URL</label>
+                                                                <input type="url" class="form-control" id="paper" name="paper" placeholder="https://journal.example.com/your-paper">
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="doi" class="form-label">DOI</label>
+                                                                <input type="text" class="form-control" id="doi" name="doi" placeholder="10.xxxx/xxxxx">
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="youtube" class="form-label">YouTube Video URL</label>
+                                                                <input type="url" class="form-control" id="youtube" name="youtube" placeholder="https://youtube.com/watch?v=xxxx">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <i class="bi bi-people-fill me-2"></i>Project Team
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="mb-3 dropdown-container">
+                                                        <label for="supervisor" class="form-label">Project Supervisor</label>
+                                                        <div class="supervisor-search-container position-relative">
+                                                            <input type="text" class="form-control" id="supervisor" name="supervisor" 
+                                                                   placeholder="Type to search faculty..." autocomplete="off">
+                                                            <input type="hidden" id="supervisorId" name="supervisorId">
+                                                            <div class="supervisor-dropdown" id="supervisorDropdown">
+                                                                <!-- Faculty options will be populated here -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-text">Choose a faculty member to supervise this project</div>
+                                                    </div>
+                                                    
+                                                    <label class="form-label">Team Members</label>
+                                                    <div id="membersContainer">
+                                                        <!-- Team members will be dynamically added here -->
+                                                    </div>
+                                                    <button type="button" class="btn btn-outline-primary mt-2" id="addMember">
+                                                        <i class="bi bi-plus-circle me-2"></i>Add Team Member
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Project Timeline Section -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <i class="bi bi-calendar-event me-2"></i>Project Timeline
+                                                </div>
+                                                <div class="card-body">
+                                                    <p class="text-muted mb-3">Add key milestones and events to track your project's progress.</p>
+                                                    
+                                                    <div id="timelineContainer">
+                                                        <!-- Timeline items will be added here -->
+                                                    </div>
+                                                    
+                                                    <button type="button" class="btn btn-outline-primary mt-3" id="addTimelineItem">
+                                                        <i class="bi bi-plus-circle me-2"></i>Add Timeline Item
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Files Section -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <i class="bi bi-file-earmark me-2"></i>Project Files
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label for="projectFiles" class="form-label">Upload Files (Reports, Papers, Data, etc.)</label>
+                                                        <input class="form-control" type="file" id="projectFiles" name="projectFiles[]" multiple>
+                                                        <div id="filesPreview" class="mt-2"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Media Section -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <i class="bi bi-camera-video me-2"></i>Additional Media
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <label for="mediaFiles" class="form-label">Upload Images or Videos</label>
+                                                        <input class="form-control" type="file" id="mediaFiles" name="mediaFiles[]" multiple accept="image/*,video/*">
+                                                        <div id="mediaPreview" class="mt-2 row g-2"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- References Section -->
+                                    <div class="row mb-4">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <i class="bi bi-journal-text me-2"></i>References
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <div id="references-container">
+                                                            <!-- Reference items will be added here -->
+                                                        </div>
+                                                        <div class="row mt-3">
+                                                            <div class="col-md-5">
+                                                                <input type="text" class="form-control" id="reference-title" placeholder="Reference Title">
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <input type="text" class="form-control" id="reference-link" placeholder="Reference Link">
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <button type="button" class="btn btn-primary w-100" id="add-reference-btn">
+                                                                    <i class="bi bi-plus-circle"></i> Add
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" id="references" name="references">
+                                                        <div class="form-text">
+                                                            Add each reference with a title and a link. Example: "Deep Learning for Renewable Energy Forecasting" with link "https://doi.org/10.1016/j.rser.2020.109898"
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Stats Section (Hidden from user but will generate random stats) -->
+                                    <input type="hidden" id="viewsCount" name="viewsCount">
+                                    <input type="hidden" id="downloadsCount" name="downloadsCount">
+                                    <input type="hidden" id="favoritesCount" name="favoritesCount">
+                                    
+                                    <!-- Comments Section (Hidden, will be initialized as empty array) -->
+                                    <input type="hidden" id="commentsArray" name="commentsArray" value="[]">
+                                    
+                                    <div class="text-end mt-3">
+                                        <button type="button" class="btn btn-outline-secondary me-2" id="resetForm">
+                                            <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-save me-1"></i>Save Project
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php include 'src/includes/footer.php'; ?>
+    
+
+
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -2415,8 +3790,35 @@ session_start();
         let uploadedFiles = [];
         let uploadedMedia = [];
         
-        // Initialize - Load user's projects
+        // Global students data for dropdown
+        let allStudentsData = [];
+        
+        // Global current user data
+        let currentUserData = null;
+        
+        // Initialize - Load user's projects and faculty data
         loadUserProjects();
+        loadFacultyForDropdown();
+        loadStudentsForDropdown();
+        loadCurrentUser();
+        
+        // Initialize the initial member row with student search
+        setTimeout(() => {
+            // First add a member row if none exists
+            if (document.querySelectorAll('.member-row').length === 0) {
+                addMemberRow();
+            }
+            
+            const initialMemberRow = document.querySelector('.member-row');
+            if (initialMemberRow) {
+                setupStudentSearch(initialMemberRow);
+                
+                // Auto-populate with creator data if available
+                if (currentUserData) {
+                    populateCurrentUserInFirstRow(initialMemberRow);
+                }
+            }
+        }, 200);
         
         // Form submission
         projectForm.addEventListener('submit', function(e) {
@@ -2455,37 +3857,57 @@ session_start();
             showSpinner();
             
             // Send form data to server
-            const url = isEditing ? 'src/model/update_project.php' : 'src/model/create_project.php';
+            const url = isEditing ? 'src/model/update_project.php' : 'src/model/create_project_debug.php';
+            
+            console.log('Submitting form to:', url);
+            console.log('Form data:', Object.fromEntries(formData));
             
             fetch(url, {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
+            .then(response => {
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text(); // Get as text first to debug
+            })
+            .then(responseText => {
+                console.log('Raw response:', responseText);
                 hideSpinner();
                 
-                if (data.success) {
-                    // Show success toast
-                    showToast('Success', isEditing ? 'Project updated successfully!' : 'Project created successfully!', 'success');
+                try {
+                    const data = JSON.parse(responseText);
+                    console.log('Parsed JSON:', data);
                     
-                    // Reset form
-                    resetForm();
-                    
-                    // Reload user's projects
-                    loadUserProjects();
-                    
-                    // Switch to Edit Projects tab
-                    document.getElementById('edit-projects-tab').click();
-                } else {
-                    // Show error toast
-                    showToast('Error', data.message || 'An error occurred. Please try again.', 'error');
+                    if (data.success) {
+                        // Show success toast
+                        showToast('Success', isEditing ? 'Project updated successfully!' : 'Project created successfully!', 'success');
+                        
+                        // Reset form
+                        resetForm();
+                        
+                        // Reload user's projects
+                        loadUserProjects();
+                        
+                        // Switch to Edit Projects tab
+                        document.getElementById('edit-projects-tab').click();
+                    } else {
+                        // Show error toast
+                        showToast('Error', data.message || 'An error occurred. Please try again.', 'error');
+                    }
+                } catch (parseError) {
+                    console.error('JSON Parse Error:', parseError);
+                    console.error('Raw response was:', responseText);
+                    showToast('Error', 'Invalid response from server.', 'error');
                 }
             })
             .catch(error => {
                 hideSpinner();
-                console.error('Error:', error);
-                showToast('Error', 'An error occurred. Please try again.', 'error');
+                console.error('Fetch Error:', error);
+                showToast('Error', 'Network error: ' + error.message, 'error');
             });
         });
         
@@ -2762,9 +4184,16 @@ session_start();
         function addMemberRow() {
             const row = document.createElement('div');
             row.className = 'row mb-2 member-row';
+            const rowId = 'member-row-' + Date.now();
             row.innerHTML = `
                 <div class="col-md-3">
-                    <input type="text" class="form-control member-name" placeholder="Member Name" required>
+                    <div class="student-search-container position-relative">
+                        <input type="text" class="form-control member-name student-search" placeholder="Type to search students..." autocomplete="off" required>
+                        <input type="hidden" class="member-student-id">
+                        <div class="student-dropdown">
+                            <!-- Student options will be populated here -->
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-3">
                     <input type="text" class="form-control member-role" placeholder="Role (e.g., Author, Researcher)">
@@ -2784,6 +4213,9 @@ session_start();
             
             membersContainer.appendChild(row);
             
+            // Setup student search functionality for this row
+            setupStudentSearch(row);
+            
             // Add event listener to remove button
             row.querySelector('.remove-member').addEventListener('click', function() {
                 row.remove();
@@ -2799,6 +4231,7 @@ session_start();
                 const role = row.querySelector('.member-role').value.trim();
                 const contribution = parseInt(row.querySelector('.member-contribution').value) || 0;
                 const userId = row.querySelector('.member-userid').value.trim();
+                const selectedStudentId = row.querySelector('.member-student-id').value.trim();
                 
                 if (name) {
                     const member = {
@@ -2807,7 +4240,10 @@ session_start();
                         contribution: contribution
                     };
                     
-                    if (userId) {
+                    // Use selected student ID if available, otherwise use manually entered userId
+                    if (selectedStudentId) {
+                        member.userId = { '$oid': selectedStudentId };
+                    } else if (userId) {
                         member.userId = { '$oid': userId };
                     }
                     
@@ -2828,6 +4264,16 @@ session_start();
             membersContainer.innerHTML = '';
             addMemberRow();
             
+            // Auto-populate creator if user is logged in
+            setTimeout(() => {
+                if (currentUserData) {
+                    const firstMemberRow = document.querySelector('.member-row');
+                    if (firstMemberRow) {
+                        populateCurrentUserInFirstRow(firstMemberRow);
+                    }
+                }
+            }, 100);
+            
             // Reset timeline
             timelineContainer.innerHTML = '';
             timelineItems = [];
@@ -2841,6 +4287,9 @@ session_start();
             mediaPreviewContainer.innerHTML = '';
             uploadedFiles = [];
             uploadedMedia = [];
+            
+            // Reset supervisor dropdown to default
+            clearSupervisorSelection();
             
             // Reset editing state
             isEditing = false;
@@ -2894,6 +4343,235 @@ session_start();
             });
         }
         
+        // Faculty Management Functions
+        let allFacultyData = [];
+        let currentHighlightedIndex = -1;
+        
+        function loadFacultyForDropdown() {
+            // Check if global faculty data is available (from Faculty_Page.php)
+            if (window.facultyData && window.facultyData.length > 0) {
+                allFacultyData = window.facultyData;
+                setupSupervisorSearch();
+                return;
+            }
+            
+            // If global data is not available, fetch it directly
+            // This handles cases where project management is accessed without visiting faculty page first
+            fetch('src/model/load_faculty.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        // Store globally for future use
+                        window.facultyData = data;
+                        allFacultyData = data;
+                        setupSupervisorSearch();
+                    } else {
+                        console.error('No faculty data received');
+                        showToast('Warning', 'Could not load faculty data for supervisor dropdown', 'warning');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching faculty data:', error);
+                    showToast('Warning', 'Could not load faculty data for supervisor dropdown', 'warning');
+                });
+        }
+        
+        function setupSupervisorSearch() {
+            const supervisorInput = document.getElementById('supervisor');
+            const supervisorDropdown = document.getElementById('supervisorDropdown');
+            const supervisorIdInput = document.getElementById('supervisorId');
+            
+            if (!supervisorInput || !supervisorDropdown) return;
+            
+            // Input event for filtering
+            supervisorInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                filterAndDisplayFaculty(searchTerm);
+            });
+            
+            // Focus event to show dropdown
+            supervisorInput.addEventListener('focus', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                filterAndDisplayFaculty(searchTerm);
+            });
+            
+            // Blur event to hide dropdown (with delay for clicks)
+            supervisorInput.addEventListener('blur', function() {
+                setTimeout(() => {
+                    hideSupervisorDropdown();
+                }, 150);
+            });
+            
+            // Keyboard navigation
+            supervisorInput.addEventListener('keydown', function(e) {
+                const options = supervisorDropdown.querySelectorAll('.supervisor-option');
+                
+                switch(e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        currentHighlightedIndex = Math.min(currentHighlightedIndex + 1, options.length - 1);
+                        updateHighlight(options);
+                        break;
+                        
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        currentHighlightedIndex = Math.max(currentHighlightedIndex - 1, -1);
+                        updateHighlight(options);
+                        break;
+                        
+                    case 'Enter':
+                        e.preventDefault();
+                        if (currentHighlightedIndex >= 0 && options[currentHighlightedIndex]) {
+                            selectFaculty(options[currentHighlightedIndex]);
+                        }
+                        break;
+                        
+                    case 'Escape':
+                        hideSupervisorDropdown();
+                        supervisorInput.blur();
+                        break;
+                }
+            });
+            
+            // Click outside to close
+            document.addEventListener('click', function(e) {
+                if (!supervisorInput.contains(e.target) && !supervisorDropdown.contains(e.target)) {
+                    hideSupervisorDropdown();
+                }
+            });
+        }
+        
+        function filterAndDisplayFaculty(searchTerm) {
+            const supervisorDropdown = document.getElementById('supervisorDropdown');
+            
+            if (!allFacultyData || allFacultyData.length === 0) {
+                supervisorDropdown.innerHTML = '<div class="supervisor-no-results">No faculty data available</div>';
+                supervisorDropdown.classList.add('show');
+                return;
+            }
+            
+            // Filter faculty based on search term
+            const filteredFaculty = allFacultyData.filter(faculty => 
+                faculty.name.toLowerCase().includes(searchTerm) ||
+                (faculty.email && faculty.email.toLowerCase().includes(searchTerm)) ||
+                (faculty.department && faculty.department.toLowerCase().includes(searchTerm))
+            );
+            
+            // Clear previous options
+            supervisorDropdown.innerHTML = '';
+            currentHighlightedIndex = -1;
+            
+            if (filteredFaculty.length === 0) {
+                supervisorDropdown.innerHTML = '<div class="supervisor-no-results">No faculty found matching your search</div>';
+            } else {
+                filteredFaculty.forEach((faculty, index) => {
+                    const option = document.createElement('div');
+                    option.className = 'supervisor-option';
+                    option.setAttribute('data-faculty-id', faculty._id);
+                    option.setAttribute('data-faculty-name', faculty.name);
+                    
+                    // Create faculty info display
+                    let facultyInfo = '';
+                    if (faculty.email || faculty.department) {
+                        const infoParts = [];
+                        if (faculty.email) infoParts.push(faculty.email);
+                        if (faculty.department) infoParts.push(faculty.department);
+                        facultyInfo = `<div class="faculty-info">${infoParts.join(' • ')}</div>`;
+                    }
+                    
+                    option.innerHTML = `
+                        <div>
+                            <div class="faculty-name">${faculty.name}</div>
+                            ${facultyInfo}
+                        </div>
+                    `;
+                    
+                    // Click event for selection
+                    option.addEventListener('click', function() {
+                        selectFaculty(this);
+                    });
+                    
+                    supervisorDropdown.appendChild(option);
+                });
+            }
+            
+            supervisorDropdown.classList.add('show');
+            
+            // Force the dropdown to appear above the input by default
+            // Only reposition downward if there's not enough space above
+            const containerRect = document.getElementById('supervisor').getBoundingClientRect();
+            const spaceAbove = containerRect.top;
+            
+            // If there's not enough space above, position it below instead
+            if (spaceAbove < 220) { // 220px accounts for dropdown height + some padding
+                supervisorDropdown.style.bottom = 'auto';
+                supervisorDropdown.style.top = '100%';
+                supervisorDropdown.style.borderRadius = '0 0 var(--border-radius) var(--border-radius)';
+                supervisorDropdown.style.borderTop = 'none';
+                supervisorDropdown.style.borderBottom = '1px solid var(--border)';
+                supervisorDropdown.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            } else {
+                // Reset to upward positioning (default)
+                supervisorDropdown.style.bottom = '100%';
+                supervisorDropdown.style.top = 'auto';
+                supervisorDropdown.style.borderRadius = 'var(--border-radius) var(--border-radius) 0 0';
+                supervisorDropdown.style.borderTop = '1px solid var(--border)';
+                supervisorDropdown.style.borderBottom = 'none';
+                supervisorDropdown.style.boxShadow = '0 -4px 12px rgba(0, 0, 0, 0.15)';
+            }
+        }
+        
+        function updateHighlight(options) {
+            // Remove previous highlights
+            options.forEach(option => option.classList.remove('highlighted'));
+            
+            // Add highlight to current option
+            if (currentHighlightedIndex >= 0 && options[currentHighlightedIndex]) {
+                options[currentHighlightedIndex].classList.add('highlighted');
+                
+                // Scroll into view if needed
+                options[currentHighlightedIndex].scrollIntoView({
+                    block: 'nearest',
+                    behavior: 'smooth'
+                });
+            }
+        }
+        
+        function selectFaculty(optionElement) {
+            const facultyId = optionElement.getAttribute('data-faculty-id');
+            const facultyName = optionElement.getAttribute('data-faculty-name');
+            
+            // Set the input values
+            document.getElementById('supervisor').value = facultyName;
+            document.getElementById('supervisorId').value = facultyId;
+            
+            // Hide dropdown
+            hideSupervisorDropdown();
+            
+            // Optional: Show confirmation
+            console.log('Selected faculty:', facultyName, 'ID:', facultyId);
+        }
+        
+        function hideSupervisorDropdown() {
+            const supervisorDropdown = document.getElementById('supervisorDropdown');
+            supervisorDropdown.classList.remove('show');
+            currentHighlightedIndex = -1;
+        }
+        
+        function clearSupervisorSelection() {
+            document.getElementById('supervisor').value = '';
+            document.getElementById('supervisorId').value = '';
+            hideSupervisorDropdown();
+        }
+        
+        // Legacy function for compatibility - now just calls the new setup
+        function populateFacultyDropdown(faculties) {
+            // This function is kept for compatibility but the new searchable dropdown
+            // doesn't need traditional population since it filters on demand
+            allFacultyData = faculties;
+            setupSupervisorSearch();
+        }
+        
         // Project Management Functions
         function loadUserProjects() {
             showSpinner();
@@ -2912,28 +4590,12 @@ session_start();
                         
                         // Display projects, either user's projects or public ones
                         if (data.projects && data.projects.length > 0) {
-                            // Only display projects created by the current user
+                            // Show all user-related projects (created by user, member of, or supervising)
                             if (isLoggedIn) {
-                                const userId = data.debug?.userId || null;
-                                
-                                // Filter projects to only show those created by the current user
-                                const userProjects = data.projects.filter(project => {
-                                    // Check if user is in the members list
-                                    if (project.members && project.members.length > 0) {
-                                        return project.members.some(member => 
-                                            (member.userId && member.userId.$oid === userId) || 
-                                            (member.userId === userId)
-                                        );
-                                    }
-                                    return false;
-                                });
-                                
-                                if (userProjects.length > 0) {
-                                    displayUserProjects(userProjects, false);
-                        } else {
-                                    displayEmptyState('Ready to Innovate?', 
-                                        `Transform your ideas into groundbreaking research projects. Share your discoveries with the academic community and make an impact.`);
-                                }
+                                // The backend already filters for user's projects correctly
+                                // (createdBy, members, and supervisor checks are done server-side)
+                                // So we can display all returned projects
+                                displayUserProjects(data.projects, false);
                             } else {
                                 // For non-logged in users, show empty state
                                 displayEmptyState('Join the Research Community', 
@@ -3248,14 +4910,32 @@ session_start();
             
             // Fill supervisor
             if (project.supervisor) {
+                const supervisorInput = document.getElementById('supervisor');
+                const supervisorIdInput = document.getElementById('supervisorId');
+                
                 if (typeof project.supervisor === 'string') {
-                    document.getElementById('supervisor').value = project.supervisor;
+                    // Simple string supervisor name
+                    supervisorInput.value = project.supervisor;
+                    supervisorIdInput.value = ''; // No ID available for string supervisors
                 } else if (typeof project.supervisor === 'object') {
-                    // In the structured format, supervisor has name, role, and userId
+                    // Structured supervisor object
                     if (project.supervisor.name) {
-                        document.getElementById('supervisor').value = project.supervisor.name;
-                    } else if (project.supervisor.userId && project.supervisor.userId.$oid) {
-                        document.getElementById('supervisor').value = project.supervisor.userId.$oid;
+                        supervisorInput.value = project.supervisor.name;
+                        
+                        // Try to find the faculty ID if available
+                        if (project.supervisor.userId && project.supervisor.userId.$oid) {
+                            supervisorIdInput.value = project.supervisor.userId.$oid;
+                        } else {
+                            // Try to match by name in faculty data
+                            const matchingFaculty = allFacultyData.find(faculty => 
+                                faculty.name.toLowerCase() === project.supervisor.name.toLowerCase()
+                            );
+                            if (matchingFaculty) {
+                                supervisorIdInput.value = matchingFaculty._id;
+                            } else {
+                                supervisorIdInput.value = ''; // Custom supervisor
+                            }
+                        }
                     }
                 }
             }
@@ -3282,12 +4962,25 @@ session_start();
             // Fill members
             membersContainer.innerHTML = '';
             if (project.members && project.members.length > 0) {
-                project.members.forEach(member => {
+                project.members.forEach((member, index) => {
                     const row = document.createElement('div');
                     row.className = 'row mb-2 member-row';
+                    const memberUserId = member.userId && member.userId.$oid ? member.userId.$oid : '';
+                    
+                    // Check if this member is the creator (first member or matches current user)
+                    const isCreator = (index === 0 && member.role === 'Creator') || 
+                                     (currentUserData && memberUserId === currentUserData.id) ||
+                                     member.role === 'Creator';
+                    
                     row.innerHTML = `
                         <div class="col-md-3">
-                            <input type="text" class="form-control member-name" placeholder="Member Name" required value="${member.name || ''}">
+                            <div class="student-search-container position-relative">
+                                <input type="text" class="form-control member-name student-search" placeholder="Type to search students..." autocomplete="off" required value="${member.name || ''}" ${isCreator ? 'readonly' : ''}>
+                                <input type="hidden" class="member-student-id" value="${memberUserId}">
+                                <div class="student-dropdown">
+                                    <!-- Student options will be populated here -->
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <input type="text" class="form-control member-role" placeholder="Role (e.g., Author, Researcher)" value="${member.role || ''}">
@@ -3296,10 +4989,10 @@ session_start();
                             <input type="number" class="form-control member-contribution" placeholder="Contribution %" min="0" max="100" value="${member.contribution || 0}">
                         </div>
                         <div class="col-md-3">
-                            <input type="text" class="form-control member-userid" placeholder="User ID (optional)" value="${member.userId && member.userId.$oid ? member.userId.$oid : ''}">
+                            <input type="text" class="form-control member-userid" placeholder="User ID (optional)" value="${memberUserId}">
                         </div>
                         <div class="col-md-1">
-                            <button type="button" class="btn btn-outline-danger remove-member">
+                            <button type="button" class="btn btn-outline-danger remove-member" ${isCreator ? 'disabled' : ''}>
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -3307,14 +5000,53 @@ session_start();
                     
                     membersContainer.appendChild(row);
                     
+                    // Apply creator styling if this is the creator
+                    if (isCreator) {
+                        const studentInput = row.querySelector('.member-name.student-search');
+                        const removeBtn = row.querySelector('.remove-member');
+                        
+                        // Style the creator field
+                        if (studentInput) {
+                            studentInput.style.backgroundColor = 'transparent';
+                            studentInput.style.color = 'var(--text-secondary, #6c757d)';
+                            
+                            // Add creator badge
+                            const creatorBadge = document.createElement('small');
+                            creatorBadge.className = 'text-primary mt-1 d-block';
+                            creatorBadge.innerHTML = '<i class="bi bi-person-fill me-1"></i>Project Creator';
+                            studentInput.parentElement.appendChild(creatorBadge);
+                        }
+                        
+                        // Style the remove button
+                        if (removeBtn) {
+                            removeBtn.title = 'Cannot remove project creator';
+                            removeBtn.style.opacity = '0.5';
+                        }
+                    }
+                    
+                    // Setup student search functionality for this row (will skip readonly fields)
+                    setupStudentSearch(row);
+                    
                     // Add event listener to remove button
                     row.querySelector('.remove-member').addEventListener('click', function() {
-                        row.remove();
+                        if (!this.disabled) {
+                            row.remove();
+                        }
                     });
                 });
             } else {
                 // Add at least one empty row
                 addMemberRow();
+                
+                // Auto-populate with creator if available
+                setTimeout(() => {
+                    if (currentUserData) {
+                        const firstMemberRow = document.querySelector('.member-row');
+                        if (firstMemberRow) {
+                            populateCurrentUserInFirstRow(firstMemberRow);
+                        }
+                    }
+                }, 100);
             }
             
             // Fill timeline items
@@ -3777,6 +5509,254 @@ session_start();
         
         // Expose the function globally so it can be called when loading project data
         window.fillReferencesFromExisting = fillReferencesFromExisting;
+        
+        // Student Management Functions
+        function loadStudentsForDropdown() {
+            // Check if global students data is available
+            if (window.studentsData && window.studentsData.length > 0) {
+                allStudentsData = window.studentsData;
+                return;
+            }
+            
+            // If global data is not available, fetch it directly
+            fetch('src/model/load_students.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        // Store globally for future use
+                        window.studentsData = data;
+                        allStudentsData = data;
+                        console.log('Students loaded:', allStudentsData.length);
+                    } else {
+                        console.error('No students data received');
+                        showToast('Warning', 'Could not load students data for team member dropdown', 'warning');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching students data:', error);
+                    showToast('Warning', 'Could not load students data for team member dropdown', 'warning');
+                });
+        }
+        
+        function setupStudentSearch(memberRow) {
+            const studentInput = memberRow.querySelector('.member-name.student-search');
+            const studentDropdown = memberRow.querySelector('.student-dropdown');
+            const studentIdInput = memberRow.querySelector('.member-student-id');
+            
+            if (!studentInput || !studentDropdown) return;
+            
+            // Skip setup for readonly fields (creator's row)
+            if (studentInput.hasAttribute('readonly')) {
+                return;
+            }
+            
+            let currentHighlightedIndex = -1;
+            
+            // Input event for filtering
+            studentInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                filterAndDisplayStudents(searchTerm, studentDropdown, () => {
+                    currentHighlightedIndex = -1;
+                });
+            });
+            
+            // Focus event to show dropdown
+            studentInput.addEventListener('focus', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                filterAndDisplayStudents(searchTerm, studentDropdown, () => {
+                    currentHighlightedIndex = -1;
+                });
+            });
+            
+            // Blur event to hide dropdown (with delay for clicks)
+            studentInput.addEventListener('blur', function() {
+                setTimeout(() => {
+                    hideStudentDropdown(studentDropdown);
+                }, 150);
+            });
+            
+            // Keyboard navigation
+            studentInput.addEventListener('keydown', function(e) {
+                const options = studentDropdown.querySelectorAll('.student-option');
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    currentHighlightedIndex = Math.min(currentHighlightedIndex + 1, options.length - 1);
+                    updateStudentHighlight(options, currentHighlightedIndex);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    currentHighlightedIndex = Math.max(currentHighlightedIndex - 1, -1);
+                    updateStudentHighlight(options, currentHighlightedIndex);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (currentHighlightedIndex >= 0 && options[currentHighlightedIndex]) {
+                        selectStudent(options[currentHighlightedIndex], studentInput, studentIdInput, studentDropdown);
+                    }
+                } else if (e.key === 'Escape') {
+                    hideStudentDropdown(studentDropdown);
+                }
+            });
+        }
+        
+        function filterAndDisplayStudents(searchTerm, dropdown, callback) {
+            if (!allStudentsData || allStudentsData.length === 0) {
+                dropdown.innerHTML = '<div class="student-no-results">No students data available</div>';
+                dropdown.classList.add('show');
+                return;
+            }
+            
+            // Filter students based on search term
+            const filteredStudents = allStudentsData.filter(student => 
+                student.name.toLowerCase().includes(searchTerm) ||
+                student.student_id.toLowerCase().includes(searchTerm)
+            );
+            
+            // Clear previous options
+            dropdown.innerHTML = '';
+            
+            if (filteredStudents.length === 0) {
+                dropdown.innerHTML = '<div class="student-no-results">No students found matching your search</div>';
+            } else {
+                filteredStudents.forEach(student => {
+                    const option = document.createElement('div');
+                    option.className = 'student-option';
+                    option.innerHTML = `
+                        <div>
+                            <div class="student-name">${student.name}</div>
+                            <div class="student-info">ID: ${student.student_id}</div>
+                        </div>
+                    `;
+                    
+                    // Store student data in the element
+                    option.studentData = student;
+                    
+                    // Click handler
+                    option.addEventListener('click', function() {
+                        const studentInput = dropdown.closest('.member-row').querySelector('.member-name.student-search');
+                        const studentIdInput = dropdown.closest('.member-row').querySelector('.member-student-id');
+                        selectStudent(this, studentInput, studentIdInput, dropdown);
+                    });
+                    
+                    dropdown.appendChild(option);
+                });
+            }
+            
+            dropdown.classList.add('show');
+            
+            // Force the dropdown to appear above the input by default
+            // Only reposition downward if there's not enough space above
+            const containerRect = dropdown.closest('.student-search-container').getBoundingClientRect();
+            const spaceAbove = containerRect.top;
+            
+            // If there's not enough space above, position it below instead
+            if (spaceAbove < 220) { // 220px accounts for dropdown height + some padding
+                dropdown.style.bottom = 'auto';
+                dropdown.style.top = '100%';
+                dropdown.style.borderRadius = '0 0 var(--border-radius) var(--border-radius)';
+                dropdown.style.borderTop = 'none';
+                dropdown.style.borderBottom = '1px solid var(--border)';
+                dropdown.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            } else {
+                // Reset to upward positioning (default)
+                dropdown.style.bottom = '100%';
+                dropdown.style.top = 'auto';
+                dropdown.style.borderRadius = 'var(--border-radius) var(--border-radius) 0 0';
+                dropdown.style.borderTop = '1px solid var(--border)';
+                dropdown.style.borderBottom = 'none';
+                dropdown.style.boxShadow = '0 -4px 12px rgba(0, 0, 0, 0.15)';
+            }
+            
+            if (callback) callback();
+        }
+        
+        function selectStudent(option, input, hiddenInput, dropdown) {
+            const studentData = option.studentData;
+            if (studentData) {
+                input.value = studentData.name;
+                hiddenInput.value = studentData.id;
+                hideStudentDropdown(dropdown);
+                
+                // Trigger change event
+                input.dispatchEvent(new Event('change'));
+            }
+        }
+        
+        function updateStudentHighlight(options, index) {
+            options.forEach((option, i) => {
+                if (i === index) {
+                    option.classList.add('highlighted');
+                } else {
+                    option.classList.remove('highlighted');
+                }
+            });
+        }
+        
+        function hideStudentDropdown(dropdown) {
+            dropdown.classList.remove('show');
+        }
+        
+        // Current User Management Functions
+        function loadCurrentUser() {
+            fetch('src/model/get_current_user.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.isLoggedIn && data.user) {
+                        currentUserData = data.user;
+                        console.log('Current user loaded:', currentUserData);
+                        
+                        // Auto-populate the first member row with current user data
+                        const firstMemberRow = document.querySelector('.member-row');
+                        if (firstMemberRow) {
+                            populateCurrentUserInFirstRow(firstMemberRow);
+                        }
+                    } else {
+                        console.log('User not logged in or no user data available');
+                        currentUserData = null;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching current user data:', error);
+                    currentUserData = null;
+                });
+        }
+        
+        function populateCurrentUserInFirstRow(memberRow) {
+            if (!currentUserData) return;
+            
+            const studentInput = memberRow.querySelector('.member-name.student-search');
+            const studentIdInput = memberRow.querySelector('.member-student-id');
+            const roleInput = memberRow.querySelector('.member-role');
+            const contributionInput = memberRow.querySelector('.member-contribution');
+            const userIdInput = memberRow.querySelector('.member-userid');
+            
+            if (studentInput && studentIdInput && roleInput && contributionInput && userIdInput) {
+                // Populate the fields with current user data
+                studentInput.value = currentUserData.name;
+                studentIdInput.value = currentUserData.id;
+                roleInput.value = currentUserData.role;
+                contributionInput.value = currentUserData.contribution;
+                userIdInput.value = currentUserData.id;
+                
+                // Mark the input as readonly to prevent accidental changes to creator info
+                studentInput.setAttribute('readonly', true);
+                studentInput.style.backgroundColor = 'transparent';
+                studentInput.style.color = 'var(--text-secondary, #6c757d)';
+                
+                // Add a visual indicator that this is the creator
+                const creatorBadge = document.createElement('small');
+                creatorBadge.className = 'text-primary mt-1 d-block';
+                creatorBadge.innerHTML = '<i class="bi bi-person-fill me-1"></i>Project Creator';
+                studentInput.parentElement.appendChild(creatorBadge);
+                
+                // Disable the remove button for the creator's row
+                const removeBtn = memberRow.querySelector('.remove-member');
+                if (removeBtn) {
+                    removeBtn.disabled = true;
+                    removeBtn.title = 'Cannot remove project creator';
+                    removeBtn.style.opacity = '0.5';
+                }
+            }
+        }
     });
     </script>
 </body>

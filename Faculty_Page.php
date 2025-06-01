@@ -33,10 +33,16 @@ session_start();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Global faculty data storage
+        window.facultyData = null;
+        
         document.addEventListener('DOMContentLoaded', function () {
     fetch('src/model/load_faculty.php')
         .then(response => response.json())
         .then(data => {
+            // Store faculty data globally for other pages to use
+            window.facultyData = data;
+            
             const facultyList = document.getElementById('facultyList');
             if (data.length === 0) {
                 facultyList.innerHTML = '<p class="text-center">No faculty members found.</p>';
@@ -68,5 +74,9 @@ session_start();
 });
 
     </script>
+
+    <!-- Include Footer -->
+    <?php include 'src/includes/footer.php'; ?>
+
 </body>
 </html>
