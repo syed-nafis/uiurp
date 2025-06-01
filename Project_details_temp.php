@@ -1,81 +1,5 @@
 <?php
 session_start();
-
-// Include MongoDB connection
-require __DIR__ . '/vendor/autoload.php';
-
-// Connect to MongoDB
-$client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
-$db = $client->uiurp;
-$studentsCollection = $db->students;
-$facultiesCollection = $db->faculties;
-
-// Helper function to check if a user profile exists and get profile URL
-function getUserProfileInfo($userId, $userType = null) {
-    global $studentsCollection, $facultiesCollection;
-    
-    if (!$userId) {
-        return null;
-    }
-    
-    try {
-        // If userType is specified, check only that collection
-        if ($userType === 'student') {
-            $student = $studentsCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($userId)]);
-            if ($student) {
-                return [
-                    'exists' => true,
-                    'url' => "Student_Profile.php?id=" . $userId,
-                    'type' => 'student'
-                ];
-            }
-        } elseif ($userType === 'faculty') {
-            $faculty = $facultiesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($userId)]);
-            if ($faculty) {
-                return [
-                    'exists' => true,
-                    'url' => "Faculty_Profile.php?id=" . $userId,
-                    'type' => 'faculty'
-                ];
-            }
-        } else {
-            // Check both collections if type is not specified
-            $student = $studentsCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($userId)]);
-            if ($student) {
-                return [
-                    'exists' => true,
-                    'url' => "Student_Profile.php?id=" . $userId,
-                    'type' => 'student'
-                ];
-            }
-            
-            $faculty = $facultiesCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($userId)]);
-            if ($faculty) {
-                return [
-                    'exists' => true,
-                    'url' => "Faculty_Profile.php?id=" . $userId,
-                    'type' => 'faculty'
-                ];
-            }
-        }
-    } catch (Exception $e) {
-        // Invalid ObjectId or other error
-        return null;
-    }
-    
-    return null;
-}
-
-// Helper function to create clickable name with profile link
-function createProfileLink($name, $userId, $userType = null) {
-    $profileInfo = getUserProfileInfo($userId, $userType);
-    
-    if ($profileInfo && $profileInfo['exists']) {
-        return "<a href='{$profileInfo['url']}' class='profile-link' title='View {$profileInfo['type']} profile'>{$name}</a>";
-    }
-    
-    return $name;
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -488,7 +412,7 @@ function createProfileLink($name, $userId, $userType = null) {
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             padding: var(--spacing-xl);
-            margin-bottom: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
             border-radius: var(--border-radius-lg);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: var(--card-shadow);
@@ -627,7 +551,8 @@ function createProfileLink($name, $userId, $userType = null) {
             max-width: 100%;
             margin: 0;
             padding: var(--spacing-2xl) var(--spacing-md) var(--spacing-2xl) var(--spacing-2xl); /* Added right padding */
-            overflow: visible; /* Restore overflow visible for scroll functionality */
+            overflow-x: hidden; /* Prevent horizontal overflow only */
+            overflow-y: visible; /* Allow vertical effects like shadows */
             min-height: 200px;
         }
         
@@ -740,7 +665,936 @@ function createProfileLink($name, $userId, $userType = null) {
         .timeline-item {
             padding: var(--spacing-md) var(--spacing-lg);
             position: relative;
-            width: calc(100% - var(--spacing-md)); /* Reduced spacing to match the reduced gap */
+            width: calc(100% - var(--spacing-2xl) - var(--spacing-lg) - var(--spacing-md)); /* Adjusted to account for container padding and margins */
+            box-sizing: border-box;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: calc(var(--spacing-md) * 1.5);
+        }
+        
+        .timeline-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            z-index: 10;
+        }
+        
+        .timeline-item:hover .timeline-content {
+            transform: translateY(-3px);
+        }
+        
+        /* Enhanced timeline nodes with status-based colors - positioned on left line */
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border: 4px solid rgba(255, 255, 255, 1);
+            border-radius: 50%;
+            top: calc(var(--spacing-lg) + 8px);
+            left: calc(-1 * var(--spacing-2xl) - var(--spacing-lg) - 12px);
+            z-index: 10;
+            box-shadow: 
+                0 0 25px rgba(76, 201, 240, 0.9), 
+                0 0 50px rgba(76, 201, 240, 0.3),
+                inset 0 0 8px rgba(255, 255, 255, 0.4);
+            transition: all var(--transition-speed) cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        
+        /* Status-based node colors */
+        .timeline-item[data-status="completed"]::after {
+            background: linear-gradient(135deg, var(--success-color), #10b981);
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.9), 0 0 50px rgba(16, 185, 129, 0.3);
+        }
+        
+        .timeline-item[data-status="in-progress"]::after {
+            background: linear-gradient(135deg, var(--warning-color), #f59e0b);
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.9), 0 0 50px rgba(245, 158, 11, 0.3);
+            animation: pulse-progress 2s infinite ease-in-out;
+        }
+        
+        .timeline-item[data-status="pending"]::after {
+            background: linear-gradient(135deg, var(--text-muted), #64748b);
+            box-shadow: 0 0 25px rgba(100, 116, 139, 0.6), 0 0 50px rgba(100, 116, 139, 0.2);
+        }
+        
+        @keyframes pulse-progress {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+        
+        .timeline-left::after {
+            left: calc(-1 * var(--spacing-2xl) - var(--spacing-lg) - 12px);
+        }
+        
+        .timeline-right::after {
+            left: calc(-1 * var(--spacing-2xl) - var(--spacing-lg) - 12px);
+        }
+        
+        .timeline-item:hover::after {
+            transform: scale(1.3);
+            box-shadow: 
+                0 0 35px rgba(76, 201, 240, 1), 
+                0 0 70px rgba(76, 201, 240, 0.6), 
+                inset 0 0 12px rgba(255, 255, 255, 0.6);
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            border-width: 3px;
+            animation: intense-pulse 1.5s infinite ease-in-out;
+        }
+        
+        @keyframes intense-pulse {
+            0% { 
+                box-shadow: 0 0 20px var(--primary-color), 0 0 40px rgba(76, 201, 240, 0.4); 
+                transform: scale(1.3);
+            }
+            50% { 
+                box-shadow: 0 0 40px var(--primary-color), 0 0 80px rgba(76, 201, 240, 0.7); 
+                transform: scale(1.4);
+            }
+            100% { 
+                box-shadow: 0 0 20px var(--primary-color), 0 0 40px rgba(76, 201, 240, 0.4); 
+                transform: scale(1.3);
+            }
+        }
+        
+        /* Enhanced timeline connector lines with animations - all from left */
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: calc(var(--spacing-lg) + 4px);
+            width: 0;
+            height: 3px;
+            left: calc(-1 * var(--spacing-2xl) - 8px);
+            z-index: 5;
+            transform: translateY(8px);
+            transition: width 0.6s ease-out 0.3s;
+            background: linear-gradient(to right, var(--primary-color), rgba(30, 64, 175, 0.3));
+            box-shadow: 0 0 10px rgba(30, 64, 175, 0.6);
+        }
+        
+        .timeline-item.aos-animate .timeline-content::before {
+            width: var(--spacing-xl);
+        }
+        
+        .timeline-left .timeline-content::before {
+            left: calc(-1 * var(--spacing-2xl) - 8px);
+            background: linear-gradient(to right, var(--primary-color), rgba(30, 64, 175, 0.3));
+            box-shadow: 0 0 10px rgba(30, 64, 175, 0.6);
+        }
+        
+        .timeline-right .timeline-content::before {
+            left: calc(-1 * var(--spacing-2xl) - 8px);
+            background: linear-gradient(to right, var(--secondary-color), rgba(124, 58, 237, 0.3));
+            box-shadow: 0 0 10px rgba(124, 58, 237, 0.6);
+        }
+        
+        /* Enhanced timeline content styling */
+        .timeline-content {
+            padding: var(--spacing-xl) var(--spacing-2xl);
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: visible;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            margin-bottom: var(--spacing-md);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
+            max-width: none; /* Remove any max-width constraints */
+            box-sizing: border-box;
+            cursor: pointer;
+            text-align: left;
+            align-items: flex-start;
+            border-left: 5px solid var(--primary-color);
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(30, 64, 175, 0.05) 100%);
+        }
+        
+        .timeline-content:hover {
+            box-shadow: 
+                var(--card-shadow-hover), 
+                var(--glow-primary),
+                0 0 40px rgba(76, 201, 240, 0.2);
+            transform: translateY(-6px) scale(1.02);
+            border-left-width: 6px;
+            background: var(--card-bg);
+        }
+        
+        /* Enhanced timeline content layout */
+        .timeline-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: var(--spacing-md);
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+        }
+        
+        .timeline-left .timeline-title-row {
+            flex-direction: row-reverse;
+        }
+        
+        /* Add a subtle glow effect behind content */
+        .timeline-content::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                rgba(76, 201, 240, 0.1) 0%,
+                rgba(124, 58, 237, 0.1) 50%,
+                rgba(76, 201, 240, 0.1) 100%);
+            border-radius: var(--border-radius-lg);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .timeline-content:hover::after {
+            opacity: 1;
+        }
+        
+        /* Enhanced timeline title styling */
+        .timeline-title {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+            transition: all 0.3s ease;
+            flex-direction: row;
+            text-align: left;
+        }
+        
+        .timeline-title:hover {
+            color: var(--accent-color);
+            text-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
+        }
+        
+        .timeline-title .timeline-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.5);
+            order: -1;
+        }
+        
+        .timeline-title-text {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+        
+        .timeline-content:hover .timeline-icon {
+            transform: scale(1.2) rotate(10deg);
+            box-shadow: 0 0 25px rgba(76, 201, 240, 0.8);
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+        }
+        
+        /* Enhanced timeline description text and date */
+        .timeline-content p {
+            margin: 0;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            font-weight: 400;
+            transition: color 0.3s ease;
+            flex-grow: 1;
+        }
+        
+        .timeline-content:hover p {
+            color: var(--text-primary);
+        }
+        
+        .timeline-date {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: var(--spacing-sm);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            width: fit-content;
+            margin-left: 0;
+        }
+        
+        .timeline-content:hover .timeline-date {
+            background: rgba(76, 201, 240, 0.15);
+            color: var(--accent-color);
+            border-color: rgba(76, 201, 240, 0.3);
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.2);
+        }
+        
+        .timeline-date i {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-content:hover .timeline-date i {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        /* Enhanced status badges */
+        .timeline-status {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .timeline-status::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .timeline-content:hover .timeline-status::before {
+            left: 100%;
+        }
+        
+        .timeline-content:hover .timeline-status {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(76, 201, 240, 0.3);
+        }
+        
+        /* Timeline marker label enhancements */
+        .timeline-marker-label {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--card-bg), rgba(15, 23, 42, 0.95));
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border-radius: var(--border-radius);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            box-shadow: var(--card-shadow);
+            z-index: 20;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .timeline-marker-label:hover {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            box-shadow: var(--card-shadow-hover), var(--glow-primary);
+            transform: translateX(-50%) translateY(-2px);
+        }
+        
+        .timeline-left .timeline-content {
+            text-align: right;
+        }
+        
+        .timeline-right .timeline-content {
+            text-align: left;
+        }
+        
+        /* Professional spacing for timeline items */
+        .timeline-item:first-child {
+            margin-top: var(--spacing-xl);
+        }
+        
+        .timeline-item:last-child {
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        /* Enhanced start/end labels */
+        .timeline-start-label {
+            top: -10px;
+            color: var(--success-color);
+        }
+        
+        .timeline-start-label strong {
+            color: var(--success-color);
+        }
+        
+        .timeline-end-label {
+            bottom: -10px;
+            color: var(--warning-color);
+        }
+        
+        .timeline-end-label strong {
+            color: var(--warning-color);
+        }
+        
+        /* Progress percentage indicator */
+        .timeline-progress-indicator {
+            position: sticky;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--card-bg), rgba(15, 23, 42, 0.95));
+            border: 2px solid rgba(76, 201, 240, 0.3);
+            border-radius: 50px;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            backdrop-filter: blur(15px);
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(76, 201, 240, 0.2);
+            z-index: 30;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .timeline-progress-indicator:hover {
+            background: var(--card-bg);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(76, 201, 240, 0.4);
+            transform: translateX(-50%) scale(1.05);
+        }
+        
+        /* Mobile responsiveness improvements */
+        @media (max-width: 768px) {
+            .timeline-container {
+                padding: var(--spacing-lg) var(--spacing-xs) var(--spacing-lg) var(--spacing-lg); /* Added right padding */
+            }
+            
+            .timeline-container::before {
+                left: var(--spacing-md);
+            }
+            
+            .timeline-progress {
+                left: var(--spacing-md);
+            }
+            
+            .timeline-item {
+                width: calc(100% - var(--spacing-xl) - var(--spacing-xs)); /* Account for right padding */
+                margin-left: calc(var(--spacing-lg) + var(--spacing-md));
+            }
+            
+            .timeline-item::after {
+                left: calc(-1 * var(--spacing-lg) - var(--spacing-md) - 12px);
+            }
+            
+            .timeline-content {
+                padding: var(--spacing-lg);
+            }
+            
+            .timeline-content::before {
+                left: calc(-1 * var(--spacing-lg) - 8px);
+            }
+            
+            .timeline-progress-indicator {
+                position: relative;
+                right: auto;
+                top: auto;
+                margin-bottom: var(--spacing-lg);
+                transform: none;
+            }
+            
+            .timeline-marker-label {
+                left: var(--spacing-md);
+                transform: translateX(0);
+                font-size: 0.75rem;
+                padding: var(--spacing-xs) var(--spacing-sm);
+            }
+        
+            .timeline-start-label {
+                top: 5px;
+            }
+        
+            .timeline-end-label {
+                bottom: 5px;
+            }
+        }
+        
+        /* Extra small screens */
+        @media (max-width: 576px) {
+            .timeline-container {
+                padding: var(--spacing-md) var(--spacing-xs) var(--spacing-md) var(--spacing-sm); /* Added right padding */
+            }
+            
+            .timeline-container::before {
+                left: var(--spacing-sm);
+            }
+            
+            .timeline-progress {
+                left: var(--spacing-sm);
+            }
+        
+            .timeline-item {
+                width: calc(100% - var(--spacing-lg) - var(--spacing-xs)); /* Account for right padding */
+                margin-left: calc(var(--spacing-md) + var(--spacing-sm));
+            }
+        
+            .timeline-item::after {
+                left: calc(-1 * var(--spacing-md) - var(--spacing-sm) - 12px);
+            }
+        
+            .timeline-content {
+                padding: var(--spacing-md);
+            }
+        
+            .timeline-content::before {
+                left: calc(-1 * var(--spacing-md) - 8px);
+            }
+            
+            .timeline-marker-label {
+                left: var(--spacing-sm);
+            }
+        }
+        
+        /* Add completion celebration animation */
+        .timeline-item[data-status="completed"] {
+            animation: completion-glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes completion-glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.1); }
+        }
+        
+        /* Timeline connector lines */
+        .timeline-left .timeline-content::before,
+        .timeline-right .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: var(--spacing-lg);
+            width: var(--spacing-lg);
+            height: 2px;
+            z-index: 5;
+            transform: translateY(6px);
+        }
+        
+        .timeline-left .timeline-content::before {
+            right: -24px;
+            background: linear-gradient(to right, var(--primary-color), transparent);
+        }
+        
+        .timeline-right .timeline-content::before {
+            left: -24px;
+            background: linear-gradient(to left, var(--secondary-color), transparent);
+        }
+        
+        /* Enhanced timeline content styling */
+        .timeline-content {
+            padding: var(--spacing-lg) var(--spacing-xl);
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-speed) cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: visible;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            margin-bottom: var(--spacing-md);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-left .timeline-content {
+            text-align: right;
+            border-left: 4px solid var(--primary-color);
+            margin-right: 0; /* Remove right margin to extend to edge */
+            margin-left: 0;
+            align-items: flex-end;
+        }
+        
+        .timeline-right .timeline-content {
+            text-align: left;
+            border-left: 4px solid var(--secondary-color);
+            margin-left: 0; /* Remove left margin conflicts */
+            margin-right: 0; /* Remove right margin to extend to edge */
+            align-items: flex-start;
+        }
+        
+        .timeline-content:hover {
+            box-shadow: var(--card-shadow-hover), var(--glow-primary);
+            transform: translateY(-4px);
+            border-left-width: 5px;
+        }
+        
+        /* Timeline content layout */
+        .timeline-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: var(--spacing-sm);
+            flex-wrap: wrap;
+            gap: var(--spacing-xs);
+        }
+        
+        .timeline-left .timeline-title-row {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0) 0%, 
+                rgba(255, 255, 255, 0.4) 100%);
+            pointer-events: none;
+        }
+        
+        /* Timeline title styling */
+        .timeline-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #ffffff !important;
+            position: relative;
+            line-height: 1.4;
+            width: 100%;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+        }
+        
+        .timeline-left .timeline-title {
+            justify-content: flex-end;
+            text-align: right;
+        }
+        
+        .timeline-right .timeline-title {
+            justify-content: flex-start;
+            text-align: left;
+        }
+        
+        .timeline-title .timeline-icon {
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            transition: all var(--transition-speed) ease;
+            filter: drop-shadow(0 0 4px rgba(76, 201, 240, 0.5));
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: rgba(76, 201, 240, 0.1);
+            border-radius: 50%;
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
+        
+        .timeline-title-text {
+            flex: 1;
+            min-width: 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .timeline-content:hover .timeline-icon {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 0 8px rgba(76, 201, 240, 0.8));
+        }
+        
+        .timeline-right .timeline-title .timeline-icon {
+            color: var(--secondary-color);
+            filter: drop-shadow(0 0 4px rgba(124, 58, 237, 0.5));
+        }
+        
+        /* Enhanced timeline description text and date */
+        .timeline-content p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: var(--spacing-sm) 0;
+            color: rgba(255, 255, 255, 0.9) !important;
+            padding: 0;
+            flex-grow: 1;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+        
+        .timeline-date {
+            display: inline-flex;
+            align-items: center;
+            margin-top: var(--spacing-xs);
+            font-size: 0.8rem;
+            color: #ffffff !important;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.3), rgba(2, 132, 199, 0.2));
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 15px;
+            position: relative;
+            font-weight: 600;
+            transition: all var(--transition-speed) ease;
+            border: 1px solid rgba(76, 201, 240, 0.3);
+            backdrop-filter: blur(10px);
+            align-self: flex-start;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .timeline-left .timeline-date {
+            align-self: flex-end;
+        }
+        
+        .timeline-content:hover .timeline-date {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.5), rgba(2, 132, 199, 0.4));
+            color: #ffffff !important;
+            box-shadow: 0 0 10px rgba(76, 201, 240, 0.4);
+            transform: translateY(-1px);
+        }
+        
+        .timeline-date i {
+            margin-right: var(--spacing-xs);
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            filter: drop-shadow(0 0 2px rgba(76, 201, 240, 0.5));
+            flex-shrink: 0;
+        }
+        
+        /* Status badge improvements */
+        .timeline-status {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            font-size: 0.7rem;
+            border-radius: 12px;
+            font-weight: 600;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all var(--transition-speed) ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .timeline-content:hover .timeline-status {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Timeline marker label enhancements */
+        .timeline-marker-label {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 10px;
+            font-size: 0.75rem;
+            box-shadow: var(--card-shadow);
+            z-index: 15;
+            text-align: center;
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all var(--transition-speed) cubic-bezier(0.19, 1, 0.22, 1);
+            font-weight: 600;
+            color: #ffffff !important;
+            backdrop-filter: blur(20px);
+        }
+        
+        .timeline-marker-label:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: var(--card-shadow-hover), var(--glow-primary);
+            border-color: rgba(76, 201, 240, 0.4);
+        }
+        
+        /* Ensure consistent alignment and spacing */
+        .timeline-left .timeline-content {
+            max-width: none; /* Remove max-width constraint to allow full width */
+        }
+        
+        .timeline-right .timeline-content {
+            max-width: none; /* Remove max-width constraint to allow full width */
+        }
+        
+        /* Professional spacing for timeline items */
+        .timeline-item:first-child {
+            margin-top: var(--spacing-2xl);
+        }
+        
+        .timeline-item:last-child {
+            margin-bottom: var(--spacing-2xl);
+        }
+        
+
+        
+        .timeline-start-label {
+            top: 5px;
+            border-left: 2px solid var(--primary-color);
+        }
+        
+        .timeline-start-label strong {
+            color: var(--primary-color);
+        }
+        
+        .timeline-end-label {
+            bottom: 20px; /* Position it farther from the end of the timeline line */
+            border-left: 2px solid var(--accent-color);
+            padding-bottom: 6px; /* Add a bit more padding for visual spacing */
+        }
+        
+        .timeline-end-label strong {
+            color: var(--accent-color);
+        }
+        
+        /* Improved responsive layout for mobile */
+        @media (max-width: 768px) {
+            .timeline-container::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-left::after, 
+            .timeline-right::after {
+                left: 16px;
+            }
+            
+            .timeline-right {
+                left: 0;
+            }
+            
+            .timeline-left::before,
+            .timeline-right::before {
+                width: 25px;
+                top: 30px;
+            }
+            
+            .timeline-left::before {
+                left: 31px;
+                background: linear-gradient(to right, var(--primary-color), transparent);
+            }
+            
+            .timeline-right::before {
+                left: 31px;
+                background: linear-gradient(to right, var(--secondary-color), transparent);
+            }
+            
+            .timeline-left .timeline-content,
+            .timeline-right .timeline-content {
+                text-align: left;
+                transform: none;
+            }
+            
+            .timeline-left .timeline-title {
+                justify-content: flex-start;
+            }
+            
+            .timeline-left .timeline-title .timeline-icon {
+                order: 0;
+                margin-left: 0;
+                margin-right: 8px;
+            }
+            
+            .timeline-left .timeline-status {
+                margin-right: 0;
+                margin-left: 8px;
+            }
+            
+            .timeline-left .timeline-content:hover,
+            .timeline-right .timeline-content:hover {
+                transform: translateY(-3px);
+            }
+            
+            .timeline-marker-label {
+                left: 31px;
+                transform: translateX(0);
+                padding: 4px 10px;
+            }
+            
+            .timeline-marker-label:hover {
+                transform: translateX(0) translateY(-3px);
+            }
+            
+            .timeline-start-label {
+                top: 45px;
+            }
+            
+            .timeline-end-label {
+                bottom: 20px;
+                left: 60px; /* Move it even further to the right to avoid overlapping */
+                transform: translateX(0);
+            }
+            
+            .timeline-container::before {
+                left: 31px;
+                margin-left: 0;
+            }
+            
+            .timeline-end-marker {
+                left: 31px;
+                margin-left: 0;
+            }
+        }
+        
+        .timeline-end-marker {
+            display: none; /* Hide the end marker instead of removing it completely to avoid breaking code */
+        }
+        
+        /* Pulsing animation for timeline markers */
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 10px rgba(var(--primary-color-rgb, 13, 110, 253), 0.5);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(var(--primary-color-rgb, 13, 110, 253), 0.8);
+                transform: scale(1.1);
+            }
+            100% {
+                box-shadow: 0 0 10px rgba(var(--primary-color-rgb, 13, 110, 253), 0.5);
+                transform: scale(1);
+            }
+        }
+        
+        .timeline-item {
+            padding: var(--spacing-md) var(--spacing-lg);
+            position: relative;
+            width: calc(100% - var(--spacing-xl)); /* Changed from 50% to utilize full available width */
             box-sizing: border-box;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             margin-bottom: calc(var(--spacing-md) * 1.5);
@@ -1887,46 +2741,6 @@ function createProfileLink($name, $userId, $userType = null) {
             color: var(--text-primary);
             border-color: transparent;
             box-shadow: var(--glow-primary);
-        }
-        
-        /* Timeline edit button styles */
-        #editTimelineBtn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-        
-        #editTimelineBtn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3), var(--glow-primary);
-        }
-        
-        #editTimelineBtn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        #editTimelineBtn:hover::before {
-            left: 100%;
-        }
-        
-        #editTimelineBtn i {
-            transition: transform 0.3s ease;
-        }
-        
-        #editTimelineBtn:hover i {
-            transform: scale(1.1) rotate(5deg);
         }
         
         .toast-container {
@@ -3652,7 +4466,7 @@ function createProfileLink($name, $userId, $userType = null) {
         }
 
         [data-theme="light"] .footer-title {
-            background: linear-gradient(135deg, var(--text-primary), var(--modern-blue));
+            background: linear-gradient(135deg, var(--text-primary), var(--primary-color));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -3931,146 +4745,6 @@ function createProfileLink($name, $userId, $userType = null) {
             width: 16px !important;
             text-align: center !important;
         }
-
-        /* Enhanced spacing for specific sections */
-        .metadata-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: var(--spacing-xl);
-            margin-bottom: var(--spacing-xl) !important; /* Increased from spacing-lg */
-            margin-top: var(--spacing-xl) !important; /* Added top spacing */
-            border-radius: var(--border-radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--card-shadow);
-            transition: all var(--transition-speed) var(--transition-ease);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Enhanced spacing for sidebar card sections */
-        .col-lg-4 .card.mb-4 {
-            margin-bottom: var(--spacing-xl) !important; /* Increased from default mb-4 */
-            margin-top: var(--spacing-xl) !important; /* Added top spacing */
-        }
-        
-        /* First section should have reduced top margin to avoid too much space from top */
-        .metadata-card:first-child,
-        .col-lg-4 .card.mb-4:first-child {
-            margin-top: var(--spacing-lg) !important;
-        }
-        
-        /* Last section should have additional bottom spacing */
-        .col-lg-4 .card.mb-4:last-child {
-            margin-bottom: var(--spacing-2xl) !important;
-        }
-        
-        .metadata-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            z-index: 1;
-        }
-        
-        .team-members-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            z-index: 1;
-        }
-        
-        /* Profile Link Styles */
-        .profile-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all var(--transition-speed) var(--transition-ease);
-            position: relative;
-            padding: 2px 4px;
-            border-radius: 4px;
-            display: inline-block;
-        }
-        
-        .profile-link:hover {
-            color: var(--accent-color);
-            background: rgba(30, 64, 175, 0.1);
-            text-decoration: none;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(30, 64, 175, 0.3);
-        }
-        
-        .profile-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            transition: width var(--transition-speed) var(--transition-ease);
-        }
-        
-        .profile-link:hover::after {
-            width: 100%;
-        }
-        
-        /* Supervisor link styling */
-        .supervisor-link {
-            color: var(--accent-color);
-            font-weight: 600;
-            text-decoration: none;
-            transition: all var(--transition-speed) var(--transition-ease);
-            padding: 2px 4px;
-            border-radius: 4px;
-            position: relative;
-        }
-        
-        .supervisor-link:hover {
-            color: var(--secondary-color);
-            background: rgba(2, 132, 199, 0.1);
-            text-decoration: none;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
-        }
-        
-        .supervisor-link::before {
-            content: '👨‍🏫';
-            margin-right: 4px;
-            font-size: 0.9em;
-        }
-        
-        /* Team member link styling */
-        .member-link {
-            color: var(--accent-color);
-            font-weight: 500;
-            text-decoration: none;
-            transition: all var(--transition-speed) var(--transition-ease);
-            padding: 2px 4px;
-            border-radius: 4px;
-            position: relative;
-        }
-        
-        .member-link:hover {
-            color: var(--accent-color);
-            background: rgba(30, 64, 175, 0.1);
-            text-decoration: none;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(30, 64, 175, 0.3);
-        }
-        
-        .member-link::before {
-            content: '👤';
-            margin-right: 4px;
-            font-size: 0.8em;
-        }
     </style>
     
 </head>
@@ -4139,12 +4813,7 @@ function createProfileLink($name, $userId, $userType = null) {
                     </div>
                     
                     <div id="project-timeline" class="mb-5" data-aos="fade-up" data-aos-delay="400">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h3 class="section-title mb-0">Project Timeline</h3>
-                            <button id="editTimelineBtn" class="btn btn-outline-primary btn-sm" style="display: none;" title="Edit Timeline">
-                                <i class="bi bi-pencil-square me-1"></i>Edit Timeline
-                            </button>
-                        </div>
+                        <h3 class="section-title">Project Timeline</h3>
                         <div class="timeline-container" id="timeline-container">
                             <!-- Timeline items will be loaded here -->
                         </div>
@@ -4594,56 +5263,12 @@ function createProfileLink($name, $userId, $userType = null) {
             });
         }
         
-        // Helper function to create clickable profile links
-        async function createProfileLink(name, userId, userType = null) {
-            if (!userId) return name;
-            
-            try {
-                // Check if profile exists via AJAX
-                const response = await fetch('src/model/check_profile_exists.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ userId: userId, userType: userType })
-                });
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.exists) {
-                        const profileType = result.type === 'faculty' ? 'Faculty_Profile.php' : 'Student_Profile.php';
-                        return `<a href="${profileType}?id=${userId}" class="profile-link ${result.type === 'faculty' ? 'supervisor-link' : 'member-link'}" title="View ${result.type} profile">${name}</a>`;
-                    }
-                }
-            } catch (error) {
-                console.log('Profile check failed for user:', userId);
-            }
-            
-            return name;
-        }
-        
         function renderProjectHeader(project) {
             const headerEl = document.getElementById('project-header');
             const isPublic = project.privacy === 0;
             
-            // Create supervisor info with potential link
-            let supervisorInfo = '';
-            if (project.supervisor) {
-                const supervisorName = project.supervisor.name || (typeof project.supervisor === 'string' ? project.supervisor : (project.supervisor.$oid || 'Unknown'));
-                const supervisorId = project.supervisor.userId ? (project.supervisor.userId.$oid || project.supervisor.userId) : null;
-                
-                if (supervisorId) {
-                    // Create clickable supervisor link
-                    createProfileLink(supervisorName, supervisorId, 'faculty').then(linkedName => {
-                        // Update supervisor info in both places after the profile check
-                        document.querySelectorAll('.supervisor-display').forEach(el => {
-                            el.innerHTML = linkedName;
-                        });
-                    });
-                }
-                
-                supervisorInfo = `<div class="meta-item"><i class="bi bi-person-badge"></i><strong>Supervisor:</strong> <span class="supervisor-display">${supervisorName}</span></div>`;
-            }
+            const supervisorInfo = project.supervisor ? 
+                `<div class="meta-item"><i class="bi bi-person-badge"></i><strong>Supervisor:</strong> ${project.supervisor.name || (typeof project.supervisor === 'string' ? project.supervisor : (project.supervisor.$oid || 'Unknown'))}</div>` : '';
             
             // Check if the current user is part of the project team (member or supervisor)
             // We need to fetch the current logged-in user information from PHP session
@@ -4701,7 +5326,10 @@ function createProfileLink($name, $userId, $userType = null) {
                             <i class="bi bi-building"></i>
                             <div><strong>Institution:</strong> ${project.institution || 'United International University'}</div>
                         </div>
-                        ${supervisorInfo}
+                        ${supervisorInfo ? `<div class="meta-item">
+                            <i class="bi bi-person-badge"></i>
+                            <div><strong>Supervisor:</strong> ${project.supervisor.name || (typeof project.supervisor === 'string' ? project.supervisor : (project.supervisor.$oid || 'Unknown'))}</div>
+                        </div>` : ''}
                     </div>
                     <div class="col-md-6">
                         <div class="meta-item">
@@ -4730,23 +5358,6 @@ function createProfileLink($name, $userId, $userType = null) {
                 
                 // Add ripple effect to the button
                 editButton.addEventListener('mousedown', createRipple);
-            }
-            
-            // Show/hide timeline edit button based on authorization
-            const timelineEditBtn = document.getElementById('editTimelineBtn');
-            if (timelineEditBtn) {
-                if (isAuthorized) {
-                    timelineEditBtn.style.display = 'inline-block';
-                    timelineEditBtn.addEventListener('click', function() {
-                        // Redirect to edit_project.php with project ID and scroll to timeline section
-                        window.location.href = `edit_project.php?id=${project._id.$oid}#timeline-section`;
-                    });
-                    
-                    // Add ripple effect to the timeline edit button
-                    timelineEditBtn.addEventListener('mousedown', createRipple);
-                } else {
-                    timelineEditBtn.style.display = 'none';
-                }
             }
             
             // Update page title
@@ -4871,23 +5482,8 @@ function createProfileLink($name, $userId, $userType = null) {
             const updatedDate = formatDate(project.updatedAt);
             
             // Generate supervisor info if available
-            let supervisorInfo = '';
-            if (project.supervisor) {
-                const supervisorName = project.supervisor.name || (typeof project.supervisor === 'string' ? project.supervisor : (project.supervisor.$oid || 'Unknown'));
-                const supervisorId = project.supervisor.userId ? (project.supervisor.userId.$oid || project.supervisor.userId) : null;
-                
-                if (supervisorId) {
-                    // Create clickable supervisor link
-                    createProfileLink(supervisorName, supervisorId, 'faculty').then(linkedName => {
-                        const supervisorInfoEl = document.querySelector('.supervisor-info-display');
-                        if (supervisorInfoEl) {
-                            supervisorInfoEl.innerHTML = linkedName;
-                        }
-                    });
-                }
-                
-                supervisorInfo = `<p><i class="bi bi-person-badge me-2"></i><strong>Supervisor:</strong> <span class="supervisor-info-display">${supervisorName}</span></p>`;
-            }
+            const supervisorInfo = project.supervisor ? 
+                `<p><i class="bi bi-person-badge me-2"></i><strong>Supervisor:</strong> ${project.supervisor.name || (typeof project.supervisor === 'string' ? project.supervisor : (project.supervisor.$oid || 'Unknown'))}</p>` : '';
             
             infoEl.innerHTML = `
                 <p><i class="bi bi-mortarboard-fill me-2"></i><strong>Field:</strong> ${project.field || 'Not specified'}</p>
@@ -4914,10 +5510,9 @@ function createProfileLink($name, $userId, $userType = null) {
                 (b.contribution || 0) - (a.contribution || 0)
             );
             
-            sortedMembers.forEach((member, index) => {
+            sortedMembers.forEach(member => {
                 const name = member.name || 'Unnamed Member';
                 const role = member.role || 'Team Member';
-                const memberId = member.userId ? (member.userId.$oid || member.userId) : null;
                 
                 // Get contribution level label and icon
                 let contributionLabel = '';
@@ -4961,7 +5556,7 @@ function createProfileLink($name, $userId, $userType = null) {
                 membersHTML += `
                     <div class="member-card" data-contribution="${member.contribution || 0}" data-aos="fade-up">
                         <div class="member-name">
-                            <i class="bi bi-person-circle me-2"></i><span class="member-name-display" data-member-id="${memberId || ''}">${name}</span>
+                            <i class="bi bi-person-circle me-2"></i>${name}
                         </div>
                         <div class="member-role">
                             <i class="bi ${roleIcon} me-2"></i>${role}
@@ -4969,18 +5564,6 @@ function createProfileLink($name, $userId, $userType = null) {
                         ${contribution}
                     </div>
                 `;
-                
-                // Check if member has a profile and make it clickable
-                if (memberId) {
-                    setTimeout(() => {
-                        createProfileLink(name, memberId, 'student').then(linkedName => {
-                            const memberNameEl = document.querySelector(`[data-member-id="${memberId}"]`);
-                            if (memberNameEl) {
-                                memberNameEl.innerHTML = linkedName;
-                            }
-                        });
-                    }, index * 100); // Stagger the profile checks
-                }
             });
             
             membersEl.innerHTML = membersHTML;
@@ -5317,11 +5900,6 @@ function createProfileLink($name, $userId, $userType = null) {
                 if (progressIndicator) {
                     progressIndicator.style.opacity = scrollProgress > 0.1 ? '1' : '0';
                     progressIndicator.style.transform = `translateX(-50%) translateY(${scrollProgress < 0.1 ? '-20px' : '0'})`;
-                }
-                
-                // Debug: Log scroll progress (remove this in production)
-                if (scrollProgress > 0) {
-                    console.log('Timeline scroll progress:', scrollProgress);
                 }
             }
             

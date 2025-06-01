@@ -26,65 +26,102 @@ $studentsCollection = $db->students;
 // Get the current user's ID from the session
 $userId = $_SESSION['user_id'];
 
-// Initialize the update array with basic profile information
+// Initialize the update array with the new structure
 $updateData = [
-    'name' => $_POST['name'] ?? '',
-    'email' => $_POST['email'] ?? '',
-    'bio' => $_POST['bio'] ?? '',
-    'phone' => $_POST['phone'] ?? '',
-    'linkedin' => $_POST['linkedin'] ?? '',
-    'github' => $_POST['github'] ?? '',
-    'twitter' => $_POST['twitter'] ?? ''
+    'basic_info.name' => $_POST['name'] ?? '',
+    'contact_info.primary_email' => $_POST['primary_email'] ?? '',
+    'academic_info.department' => $_POST['department'] ?? '',
+    'academic_info.current_status' => $_POST['current_status'] ?? 'Active',
+    'academic_info.current_year_trimester' => $_POST['current_year_trimester'] ?? '',
+    'platform_settings.last_updated_date' => new MongoDB\BSON\UTCDateTime()
 ];
+
+// Update CGPA if provided
+if (isset($_POST['cgpa']) && !empty($_POST['cgpa'])) {
+    $updateData['academic_info.cgpa'] = (float)$_POST['cgpa'];
+}
+
+// Update thesis information if provided
+if (!empty($_POST['thesis_title']) || !empty($_POST['thesis_supervisor']) || !empty($_POST['thesis_status']) || !empty($_POST['thesis_description'])) {
+    if (!empty($_POST['thesis_title'])) {
+        $updateData['academic_info.thesis_info.title'] = $_POST['thesis_title'];
+    }
+    if (!empty($_POST['thesis_supervisor'])) {
+        $updateData['academic_info.thesis_info.supervisor_name'] = $_POST['thesis_supervisor'];
+    }
+    if (!empty($_POST['thesis_status'])) {
+        $updateData['academic_info.thesis_info.status'] = $_POST['thesis_status'];
+    }
+    if (!empty($_POST['thesis_description'])) {
+        $updateData['academic_info.thesis_info.description'] = $_POST['thesis_description'];
+    }
+}
+
+// Handle research interests (convert comma-separated string to array)
+if (isset($_POST['research_interests']) && !empty($_POST['research_interests'])) {
+    $interestsArray = array_map('trim', explode(',', $_POST['research_interests']));
+    $interestsArray = array_filter($interestsArray, function($interest) {
+        return !empty($interest);
+    });
+    $updateData['university_research_profile.research_interests'] = array_values($interestsArray);
+} else {
+    $updateData['university_research_profile.research_interests'] = [];
+}
 
 // Handle skills (convert comma-separated string to array)
 if (isset($_POST['skills']) && !empty($_POST['skills'])) {
-    $skillsString = $_POST['skills'];
-    $skillsArray = array_map('trim', explode(',', $skillsString));
-    // Remove empty skills
+    $skillsArray = array_map('trim', explode(',', $_POST['skills']));
     $skillsArray = array_filter($skillsArray, function($skill) {
         return !empty($skill);
     });
-    $updateData['skills'] = array_values($skillsArray); // Reset array keys
+    $updateData['university_research_profile.skills_expertise'] = array_values($skillsArray);
 } else {
-    $updateData['skills'] = [];
+    $updateData['university_research_profile.skills_expertise'] = [];
 }
 
-// Handle education
-if (isset($_POST['education']) && is_array($_POST['education'])) {
-    $educationData = [];
-    foreach ($_POST['education'] as $education) {
+// Handle publications
+if (isset($_POST['publications']) && is_array($_POST['publications'])) {
+    $publicationsData = [];
+    foreach ($_POST['publications'] as $publication) {
         // Validate required fields
-        if (!empty($education['degree']) && !empty($education['institution'])) {
-            $educationData[] = [
-                'degree' => $education['degree'],
-                'institution' => $education['institution'],
-                'field' => $education['field'] ?? '',
-                'year' => $education['year'] ?? ''
+        if (!empty($publication['title']) && !empty($publication['authors']) && !empty($publication['type']) && !empty($publication['venue'])) {
+            $authors = array_map('trim', explode(',', $publication['authors']));
+            $publicationsData[] = [
+                'title' => $publication['title'],
+                'authors' => $authors,
+                'publication_type' => $publication['type'],
+                'venue_or_journal_name' => $publication['venue'],
+                'publication_date' => !empty($publication['date']) ? new MongoDB\BSON\UTCDateTime(strtotime($publication['date']) * 1000) : null,
+                'doi_url' => $publication['doi'] ?? '',
+                'paper_url' => $publication['paper_url'] ?? '',
+                'status' => $publication['status'] ?? 'Published',
+                'abstract' => $publication['abstract'] ?? ''
             ];
         }
     }
-    $updateData['education'] = $educationData;
+    $updateData['university_research_profile.university_publications'] = $publicationsData;
 } else {
-    $updateData['education'] = [];
+    $updateData['university_research_profile.university_publications'] = [];
 }
 
-// Handle projects
-if (isset($_POST['projects']) && is_array($_POST['projects'])) {
-    $projectsData = [];
-    foreach ($_POST['projects'] as $project) {
+// Handle learning resources
+if (isset($_POST['learning_resources']) && is_array($_POST['learning_resources'])) {
+    $learningResourcesData = [];
+    foreach ($_POST['learning_resources'] as $resource) {
         // Validate required fields
-        if (!empty($project['title']) && !empty($project['description'])) {
-            $projectsData[] = [
-                'title' => $project['title'],
-                'description' => $project['description'],
-                'link' => $project['link'] ?? ''
+        if (!empty($resource['title']) && !empty($resource['url']) && !empty($resource['category']) && !empty($resource['type'])) {
+            $learningResourcesData[] = [
+                'title' => $resource['title'],
+                'url' => $resource['url'],
+                'category' => $resource['category'],
+                'type' => $resource['type'],
+                'description' => $resource['description'] ?? ''
             ];
         }
     }
-    $updateData['projects'] = $projectsData;
+    $updateData['learning_resources'] = $learningResourcesData;
 } else {
-    $updateData['projects'] = [];
+    $updateData['learning_resources'] = [];
 }
 
 // Handle profile image upload
@@ -110,7 +147,7 @@ if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPL
         if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetPath)) {
             // URL path for the image (relative to document root)
             $profileImagePath = 'uploads/profile_images/' . $filename;
-            $updateData['profile_image'] = $profileImagePath;
+            $updateData['basic_info.profile_image_url'] = $profileImagePath;
         } else {
             $_SESSION['error'] = "Failed to upload profile image";
             header('Location: /../../Student_Profile_Edit.php');
