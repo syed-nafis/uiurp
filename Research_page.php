@@ -11,6 +11,24 @@ session_start();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/styles/home.css">
+    <link rel="stylesheet" href="assets/styles/theme.css">
+    <!-- Performance optimization styles -->
+    <link rel="stylesheet" href="assets/styles/performance.css">
+    
+    <!-- Prevent Theme Flash Script - Must run immediately -->
+    <script>
+    (function() {
+        // Get saved theme immediately to prevent flash
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+    })();
+    </script>
+    
+    <!-- Performance optimization script - Load early for immediate optimizations -->
+    <script src="assets/js/performance-optimizer.js" defer></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
         
@@ -1432,7 +1450,7 @@ session_start();
         }
     </style>
 </head>
-<body>
+<body class="research-page">
   <?php include 'src/includes/navbar.php'; ?>
 
     <!-- Enhanced Background Effects -->
@@ -1514,6 +1532,9 @@ session_start();
     
   <script>
   document.addEventListener('DOMContentLoaded', function() {
+        // Initialize theme FIRST before other components
+        initializeTheme();
+        
         // Initialize enhanced particles
         initializeEnhancedParticles();
         
@@ -1534,145 +1555,158 @@ session_start();
     });
 
     function initializeEnhancedParticles() {
-      particlesJS('particles-js', {
-          "particles": {
-              "number": {
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        
+        // Theme-specific particle configurations
+        const particleConfig = {
+            dark: {
+                colors: ["#2563eb", "#0ea5e9", "#06b6d4", "#3b82f6"],
+                strokeColor: "rgba(37, 99, 235, 0.3)",
+                lineColor: "#2563eb",
+                opacity: 0.3,
+                lineOpacity: 0.2
+            },
+            light: {
+                colors: ["#1e40af", "#0369a1", "#0891b2", "#1d4ed8"],
+                strokeColor: "rgba(30, 64, 175, 0.2)",
+                lineColor: "#1e40af",
+                opacity: 0.15,
+                lineOpacity: 0.1
+            }
+        };
+        
+        const config = particleConfig[currentTheme];
+        
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
                     "value": 60,
-                  "density": {
-                      "enable": true,
-                      "value_area": 1000
-                  }
-              },
-              "color": {
-                    "value": ["#2563eb", "#0ea5e9", "#06b6d4", "#3b82f6"]
-              },
-              "shape": {
+                    "density": {
+                        "enable": true,
+                        "value_area": 1000
+                    }
+                },
+                "color": {
+                    "value": config.colors
+                },
+                "shape": {
                     "type": "circle",
-                  "stroke": {
+                    "stroke": {
                         "width": 1,
-                        "color": "rgba(37, 99, 235, 0.3)"
-                  }
-              },
-              "opacity": {
-                  "value": 0.3,
-                  "random": true,
-                  "anim": {
-                      "enable": true,
+                        "color": config.strokeColor
+                    }
+                },
+                "opacity": {
+                    "value": config.opacity,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
                         "speed": 1,
-                      "opacity_min": 0.1,
-                      "sync": false
-                  }
-              },
-              "size": {
+                        "opacity_min": config.opacity * 0.3,
+                        "sync": false
+                    }
+                },
+                "size": {
                     "value": 4,
-                  "random": true,
-                  "anim": {
-                      "enable": true,
-                      "speed": 2,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 2,
                         "size_min": 1,
-                      "sync": false
-                  }
-              },
-              "line_linked": {
-                  "enable": true,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
                     "distance": 150,
-                    "color": "#2563eb",
-                    "opacity": 0.2,
+                    "color": config.lineColor,
+                    "opacity": config.lineOpacity,
                     "width": 1.5,
                     "shadow": {
                         "enable": true,
-                        "color": "#2563eb",
+                        "color": config.lineColor,
                         "blur": 5
                     }
-              },
-              "move": {
-                  "enable": true,
+                },
+                "move": {
+                    "enable": true,
                     "speed": 1.5,
-                  "direction": "none",
-                  "random": true,
-                  "straight": false,
-                  "out_mode": "bounce",
-                  "bounce": true,
-                  "attract": {
-                      "enable": true,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "bounce",
+                    "bounce": true,
+                    "attract": {
+                        "enable": true,
                         "rotateX": 300,
                         "rotateY": 600
-                  }
-              }
-          },
-          "interactivity": {
-              "detect_on": "window",
-              "events": {
-                  "onhover": {
-                      "enable": true,
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "window",
+                "events": {
+                    "onhover": {
+                        "enable": true,
                         "mode": "grab"
-                  },
-                  "onclick": {
-                      "enable": true,
-                      "mode": "push"
-                  },
-                  "resize": true
-              },
-              "modes": {
-                  "grab": {
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
                         "distance": 200,
-                      "line_linked": {
-                            "opacity": 0.6
-                      }
-                  },
-                  "bubble": {
+                        "line_linked": {
+                            "opacity": config.lineOpacity * 3
+                        }
+                    },
+                    "bubble": {
                         "distance": 250,
                         "size": 8,
                         "duration": 2,
-                        "opacity": 0.6,
-                      "speed": 3
-                  },
-                  "repulse": {
+                        "opacity": config.opacity * 2,
+                        "speed": 3
+                    },
+                    "repulse": {
                         "distance": 200,
-                      "duration": 0.4
-                  },
-                  "push": {
+                        "duration": 0.4
+                    },
+                    "push": {
                         "particles_nb": 4
-                  },
-                  "remove": {
-                      "particles_nb": 2
-                  }
-              }
-          },
-          "retina_detect": true
-      });
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
     }
 
     function initializeEnhancedAOS() {
+        // Use performance optimizer for AOS if available
+        if (window.performanceOptimizer) {
+            window.performanceOptimizer.optimizeAOS();
+        } else {
+            // Fallback optimized AOS configuration
+            const isMobile = window.innerWidth <= 768;
+            
       AOS.init({
-            duration: 1000,
-          once: false,
-          mirror: true,
+                duration: isMobile ? 300 : 600,
+                once: true, // Only animate once for better performance
+                mirror: false, // Disable mirror for better performance
             offset: 50,
-            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                easing: 'ease-out',
             anchorPlacement: 'top-bottom',
-            disable: false,
-            startEvent: 'DOMContentLoaded',
-            initClassName: 'aos-init',
-            animatedClassName: 'aos-animate',
-            useClassNames: false,
-          disableMutationObserver: false,
+                disable: isMobile ? 'mobile' : false,
             debounceDelay: 50,
-            throttleDelay: 99
-        });
-
-        // Enhanced scroll handler for AOS
-        let aosTicking = false;
-        
-        window.addEventListener('scroll', function() {
-            if (!aosTicking) {
-                requestAnimationFrame(() => {
-          AOS.refresh();
-                    aosTicking = false;
-                });
-                aosTicking = true;
-            }
-        }, { passive: true });
+                throttleDelay: 100
+            });
+        }
     }
 
     function initializeScrollAnimations() {
@@ -1698,17 +1732,30 @@ session_start();
             observer.observe(el);
         });
 
-        // Parallax effect for background elements
+        // Use performance optimizer for parallax if available
+        if (window.performanceOptimizer) {
+            window.performanceOptimizer.addScrollListener('parallax', (scrollY) => {
+                // Only update parallax on desktop for performance
+                if (window.innerWidth > 768) {
+                    document.querySelectorAll('.floating-orb').forEach((orb, index) => {
+                        const speed = 0.3 + (index * 0.1);
+                        orb.style.transform = `translateY(${scrollY * speed}px)`;
+                    });
+                }
+            });
+        } else {
+            // Fallback parallax with throttling
         let parallaxTicking = false;
         
         function updateParallax() {
+                if (window.innerWidth > 768) { // Only on desktop
             const scrolled = window.pageYOffset;
             
             document.querySelectorAll('.floating-orb').forEach((orb, index) => {
                 const speed = 0.3 + (index * 0.1);
                 orb.style.transform = `translateY(${scrolled * speed}px)`;
             });
-            
+                }
             parallaxTicking = false;
         }
 
@@ -1718,16 +1765,14 @@ session_start();
                 parallaxTicking = true;
             }
         }, { passive: true });
+        }
     }
 
     function initializeHeroScrollEffects() {
         const heroSection = document.getElementById('hero-section');
         if (!heroSection) return;
 
-        let scrollTicking = false;
-
-        function updateHeroBackground() {
-            const scrollY = window.pageYOffset;
+        function updateHeroBackground(scrollY) {
             const heroHeight = heroSection.offsetHeight;
             const scrollProgress = Math.min(scrollY / (heroHeight * 0.8), 1);
 
@@ -1743,7 +1788,8 @@ session_start();
                 heroSection.classList.add('scrolled-small');
             }
 
-            // Additional smooth transformations
+            // Additional smooth transformations (only on desktop)
+            if (window.innerWidth > 768) {
             const layers = heroSection.querySelectorAll('.bg-layer-1, .bg-layer-2, .bg-layer-3');
             layers.forEach((layer, index) => {
                 const layerSpeed = (index + 1) * 0.1;
@@ -1754,23 +1800,31 @@ session_start();
                     layer.style.transform = `translateY(${translateY}px) scale(${scale})`;
                 }
             });
-
-            scrollTicking = false;
+            }
         }
 
-        // Throttled scroll handler
+        // Use performance optimizer if available
+        if (window.performanceOptimizer) {
+            window.performanceOptimizer.addScrollListener('hero', updateHeroBackground);
+        } else {
+            // Fallback with throttling
+            let scrollTicking = false;
+
         function handleScroll() {
             if (!scrollTicking) {
-                requestAnimationFrame(updateHeroBackground);
+                    requestAnimationFrame(() => {
+                        updateHeroBackground(window.pageYOffset);
+                        scrollTicking = false;
+                    });
                 scrollTicking = true;
             }
         }
 
-        // Initialize on scroll
         window.addEventListener('scroll', handleScroll, { passive: true });
+        }
         
         // Initialize on load
-        updateHeroBackground();
+        updateHeroBackground(window.pageYOffset);
     }
       
     function initializeEnhancedSearch() {
@@ -2277,7 +2331,39 @@ session_start();
 
         // Initialize card animations after a short delay
         setTimeout(initializeCardAnimations, 500);
-  });
+    });
+
+    // Theme Management System
+    function initializeTheme() {
+        // Get saved theme from localStorage or default to dark
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        
+        // Apply theme to document
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        // Listen for theme changes from navbar
+        document.addEventListener('themeChanged', function(e) {
+            // Reinitialize particles with new theme
+            initializeEnhancedParticles();
+            
+            // Add transition effect
+            document.body.style.transition = 'all 0.4s ease';
+            setTimeout(() => {
+                document.body.style.transition = '';
+            }, 400);
+        });
+    }
+
+    // Listen for theme changes from other pages/tabs
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'theme') {
+            const newTheme = e.newValue || 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            // Reinitialize particles with new theme
+            initializeEnhancedParticles();
+        }
+    });
   </script>
 </body>
 </html>
+

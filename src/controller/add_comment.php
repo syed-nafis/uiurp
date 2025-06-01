@@ -19,13 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-        // Sanitize the comment
+        session_start();
+        $username = $_SESSION['user_data']['name'] ?? 'Anonymous';
         $sanitizedComment = htmlspecialchars($comment, ENT_QUOTES, 'UTF-8');
 
-        // Update the post's comments array
+        $commentData = [
+            'user' => $username,
+            'text' => $sanitizedComment,
+            'time' => new MongoDB\BSON\UTCDateTime()
+        ];
+
         $result = $collection->updateOne(
-            ['_id' => new MongoDB\BSON\ObjectId($postId)], // Query by ObjectId
-            ['$push' => ['comments' => $sanitizedComment]] // Add the sanitized comment
+            ['_id' => new MongoDB\BSON\ObjectId($postId)],
+            ['$push' => ['comments' => $commentData]]
         );
 
         if ($result->getModifiedCount() === 1) {

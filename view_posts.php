@@ -5,7 +5,24 @@ $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb
 $db = $client->uiurp;
 $collection = $db->forum;
 
-$posts = $collection->find()->toArray();
+// Sorting logic
+$sortOption = $_GET['sort'] ?? '';
+$sort = [];
+
+switch ($sortOption) {
+    case 'newest':
+        $sort = ['timestamp' => -1];
+        break;
+    case 'upvotes':
+        $sort = ['upvotes' => -1];
+        break;
+
+    default:
+        $sort = ['timestamp' => -1];
+        break;
+}
+
+$posts = $collection->find([], ['sort' => $sort])->toArray();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,13 +66,30 @@ $posts = $collection->find()->toArray();
   <?php include 'src/includes/navbar.php'; ?>
 
   <div class="container">
+      <form method="GET" class="mb-3">
+        <label for="sort" class="form-label">Sort by:</label>
+        <select name="sort" id="sort" class="form-select w-auto d-inline" onchange="this.form.submit()">
+          <option value="">-- Select --</option>
+          <option value="newest" <?= isset($_GET['sort']) && $_GET['sort'] == 'newest' ? 'selected' : '' ?>>Newest</option>
+          <option value="upvotes" <?= isset($_GET['sort']) && $_GET['sort'] == 'upvotes' ? 'selected' : '' ?>>Most Upvoted</option>
+          
+        </select>
+      </form>
       <h1>All Posts</h1>
       <div id="postsContainer">
           <?php foreach ($posts as $post): ?>
               <div class="forum-post border p-3 mb-3">
-                  <h3><?= htmlspecialchars($post['title']) ?></h3>
+<?php
+    $posterName = $post['user_name'] ?? 'Unknown';
+?>
+                  <div class="text-start text-muted mb-2" style="font-size: 0.9rem;">
+                      Posted by <?= htmlspecialchars($posterName) ?>
+                  </div>
+                  <h3>
+                      <?= htmlspecialchars($post['title']) ?>
+                  </h3>
                   <p><?= htmlspecialchars($post['content']) ?></p>
-                  <p><strong>Views:</strong> <?= $post['views'] ?? 0 ?></p>
+                 
                   <p>
                       <button class="btn btn-success btn-sm upvote-btn" data-post-id="<?= $post['_id'] ?>">Upvote</button>
                       <span id="upvotes-<?= $post['_id'] ?>" class="ms-2"><?= $post['upvotes'] ?? 0 ?></span>
@@ -65,7 +99,14 @@ $posts = $collection->find()->toArray();
                       <?php if (!empty($post['comments'])): ?>
                           <ul>
                               <?php foreach ($post['comments'] as $comment): ?>
-                                  <li><?= htmlspecialchars($comment) ?></li>
+                                  <li>
+                                      <strong><?= htmlspecialchars($comment['user'] ?? 'Anonymous') ?>:</strong>
+                                      <?= htmlspecialchars($comment['text'] ?? '') ?>
+                                      <br>
+                                      <small>
+                                          <?= isset($comment['time']) ? date('g:i a, F j, Y', $comment['time']->toDateTime()->getTimestamp()) : '' ?>
+                                      </small>
+                                  </li>
                               <?php endforeach; ?>
                           </ul>
                       <?php else: ?>

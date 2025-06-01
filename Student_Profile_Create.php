@@ -36,7 +36,7 @@ $userData = $_SESSION['user_data'] ?? [];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Your Profile</title>
+    <title>Create Student Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
     <style>
@@ -77,27 +77,29 @@ $userData = $_SESSION['user_data'] ?? [];
             color: #dc3545;
             font-size: 20px;
         }
+        .card {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .required-field::after {
+            content: "*";
+            color: red;
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body>
     <?php include 'src/includes/navbar.php'; ?>
 
-    <div class="container py-5 mt-5">
-        <div class="welcome-banner">
-            <h1 class="display-4">Welcome to UIURP!</h1>
-            <p class="lead">Let's set up your profile to help you get the most out of our research platform. Your profile will showcase your skills, education, and projects to the community.</p>
-        </div>
-        
+    <div class="container py-5">
         <div class="row">
             <div class="col-md-12">
-                <?php if(isset($_SESSION['success'])): ?>
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <?= $_SESSION['success'] ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <?php unset($_SESSION['success']); ?>
-                <?php endif; ?>
-
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>Create Your Student Profile</h1>
+                    <a href="index.php" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Cancel
+                    </a>
+                </div>
+                
                 <?php if(isset($_SESSION['error'])): ?>
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <?= $_SESSION['error'] ?>
@@ -115,26 +117,16 @@ $userData = $_SESSION['user_data'] ?? [];
                 <?php endif; ?>
 
                 <form action="src/controller/create_student_profile.php" method="POST" enctype="multipart/form-data">
-                    <!-- Personal Information Section -->
+                    <!-- Basic Information Section -->
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h2 class="section-title">Personal Information</h2>
+                            <h2 class="section-title">Basic Information</h2>
                             
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="<?= htmlspecialchars($userData['name'] ?? '') ?>" required>
-                                        <label for="name">Name</label>
-                                    </div>
-                                    
-                                    <div class="form-floating mb-3">
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="<?= htmlspecialchars($userData['email'] ?? '') ?>" required>
-                                        <label for="email">Email</label>
-                                    </div>
-                                    
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone">
-                                        <label for="phone">Phone (optional)</label>
+                                        <label for="name" class="required-field">Full Name</label>
                                     </div>
                                 </div>
                                 
@@ -144,104 +136,147 @@ $userData = $_SESSION['user_data'] ?? [];
                                         <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*">
                                         <div class="form-text">Upload a profile picture (optional)</div>
                                     </div>
-                                    
-                                    <div class="form-floating">
-                                        <textarea class="form-control" id="bio" name="bio" style="height: 100px;" placeholder="Bio"></textarea>
-                                        <label for="bio">Bio</label>
-                                        <div class="form-text">Tell us about yourself, your research interests, and goals.</div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Social Links Section -->
+                    <!-- Contact Information Section -->
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h2 class="section-title">Social Links</h2>
+                            <h2 class="section-title">Contact Information</h2>
                             
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-floating mb-3">
-                                        <input type="url" class="form-control" id="linkedin" name="linkedin" placeholder="LinkedIn">
-                                        <label for="linkedin">LinkedIn Profile</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-4">
-                                    <div class="form-floating mb-3">
-                                        <input type="url" class="form-control" id="github" name="github" placeholder="GitHub">
-                                        <label for="github">GitHub Profile</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-4">
-                                    <div class="form-floating mb-3">
-                                        <input type="url" class="form-control" id="twitter" name="twitter" placeholder="Twitter">
-                                        <label for="twitter">Twitter Profile</label>
+                                        <input type="email" class="form-control" id="primary_email" name="primary_email" placeholder="Email" value="<?= htmlspecialchars($userData['email'] ?? '') ?>" required>
+                                        <label for="primary_email" class="required-field">Primary Email</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Education Section -->
+                    <!-- Academic Information Section -->
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h2 class="section-title">Education</h2>
+                            <h2 class="section-title">Academic Information</h2>
                             
-                            <div id="education-container">
-                                <div class="dynamic-form-item education-item">
-                                    <button type="button" class="remove-btn" onclick="removeEducation(this)">
-                                        <i class="bi bi-x-circle"></i>
-                                    </button>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" class="form-control" name="education[0][degree]" placeholder="Degree" required>
-                                                <label>Degree</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" class="form-control" name="education[0][institution]" placeholder="Institution" required>
-                                                <label>Institution</label>
-                                            </div>
-                                        </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="student_id" name="student_id" placeholder="Student ID" required>
+                                        <label for="student_id" class="required-field">Student ID</label>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" class="form-control" name="education[0][field]" placeholder="Field of Study">
-                                                <label>Field of Study</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-floating mb-3">
-                                                <input type="text" class="form-control" name="education[0][year]" placeholder="Year">
-                                                <label>Year</label>
-                                            </div>
-                                        </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-control" id="department" name="department" required>
+                                            <option value="">Select Department</option>
+                                            <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+                                            <option value="Electrical & Electronic Engineering">Electrical & Electronic Engineering</option>
+                                            <option value="Civil Engineering">Civil Engineering</option>
+                                            <option value="Business Administration">Business Administration</option>
+                                            <option value="Data Science">Data Science</option>
+                                        </select>
+                                        <label for="department" class="required-field">Department</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-control" id="faculty" name="faculty" required>
+                                            <option value="">Select Faculty</option>
+                                            <option value="School of Science & Engineering">School of Science & Engineering</option>
+                                            <option value="School of Business & Economics">School of Business & Economics</option>
+                                        </select>
+                                        <label for="faculty" class="required-field">Faculty</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="current_year_trimester" name="current_year_trimester" placeholder="Year/Trimester" required>
+                                        <label for="current_year_trimester" class="required-field">Current Year & Trimester</label>
+                                        <div class="form-text">Example: 2nd Year, Spring Trimester</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="date" class="form-control" id="enrollment_date" name="enrollment_date" required>
+                                        <label for="enrollment_date" class="required-field">Enrollment Date</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="date" class="form-control" id="expected_graduation_date" name="expected_graduation_date" required>
+                                        <label for="expected_graduation_date" class="required-field">Expected Graduation Date</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="number" step="0.01" min="0" max="4" class="form-control" id="cgpa" name="cgpa" placeholder="CGPA">
+                                        <label for="cgpa">CGPA (if applicable)</label>
                                     </div>
                                 </div>
                             </div>
                             
-                            <button type="button" class="btn btn-outline-primary add-btn" onclick="addEducation()">
-                                <i class="bi bi-plus-circle"></i> Add Education
-                            </button>
+                            <h4 class="mt-4 mb-3">Current Degree Information</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="degree_name" name="degree_name" placeholder="Degree" required>
+                                        <label for="degree_name" class="required-field">Degree Name</label>
+                                        <div class="form-text">Example: B.Sc. in Computer Science and Engineering</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="major_field" name="major_field" placeholder="Major" required>
+                                        <label for="major_field" class="required-field">Major Field of Study</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Skills Section -->
+                    <!-- Research Profile Section -->
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h2 class="section-title">Skills</h2>
+                            <h2 class="section-title">Research Profile</h2>
                             
                             <div class="mb-3">
-                                <label for="skills-input" class="form-label">Skills (comma separated)</label>
-                                <input type="text" class="form-control" id="skills-input" name="skills" placeholder="e.g. JavaScript, Python, React, MongoDB">
+                                <label for="research-interests-input" class="form-label">Research Interests</label>
+                                <input type="text" class="form-control" id="research-interests-input" name="research_interests" placeholder="e.g. Machine Learning, Cybersecurity, Data Science">
+                                <div class="form-text">Enter your research interests separated by commas</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="skills-input" class="form-label">Skills & Expertise</label>
+                                <input type="text" class="form-control" id="skills-input" name="skills" placeholder="e.g. Python, JavaScript, React, MongoDB">
                                 <div class="form-text">Enter your skills separated by commas</div>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Learning Resources Section -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h2 class="section-title">Learning Resources</h2>
+                            <p class="text-muted mb-4">Share useful resources, tutorials, documentation, and learning materials that have helped you learn your skills. This is optional but helps other students discover valuable content!</p>
+                            
+                            <div id="learning-resources-container">
+                                <!-- Learning resources will be added dynamically -->
+                            </div>
+                            
+                            <button type="button" class="btn btn-outline-primary add-btn" onclick="addLearningResource()">
+                                <i class="bi bi-plus-circle"></i> Add Learning Resource
+                            </button>
                         </div>
                     </div>
                     
@@ -254,58 +289,83 @@ $userData = $_SESSION['user_data'] ?? [];
     </div>
 
     <script>
-        // Variables to track the current index for dynamic fields
-        let educationIndex = 1;
+        // Variable to track the current index for learning resources
+        let learningResourceIndex = 0;
         
-        // Function to add a new education field
-        function addEducation() {
-            const container = document.getElementById('education-container');
+        // Function to add a new learning resource field
+        function addLearningResource() {
+            const container = document.getElementById('learning-resources-container');
             const newItem = document.createElement('div');
-            newItem.className = 'dynamic-form-item education-item';
+            newItem.className = 'dynamic-form-item';
             newItem.innerHTML = `
-                <button type="button" class="remove-btn" onclick="removeEducation(this)">
+                <button type="button" class="remove-btn" onclick="removeLearningResource(this)">
                     <i class="bi bi-x-circle"></i>
                 </button>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" name="education[${educationIndex}][degree]" placeholder="Degree" required>
-                            <label>Degree</label>
+                            <input type="text" class="form-control" name="learning_resources[${learningResourceIndex}][title]" placeholder="Title" required>
+                            <label>Resource Title</label>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" name="education[${educationIndex}][institution]" placeholder="Institution" required>
-                            <label>Institution</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" name="education[${educationIndex}][field]" placeholder="Field of Study">
-                            <label>Field of Study</label>
+                            <input type="url" class="form-control" name="learning_resources[${learningResourceIndex}][url]" placeholder="URL" required>
+                            <label>Resource URL</label>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" name="education[${educationIndex}][year]" placeholder="Year">
-                            <label>Year</label>
+                            <select class="form-control" name="learning_resources[${learningResourceIndex}][category]" required>
+                                <option value="">Select Category</option>
+                                <option value="Programming">Programming</option>
+                                <option value="Machine Learning">Machine Learning</option>
+                                <option value="Data Science">Data Science</option>
+                                <option value="Web Development">Web Development</option>
+                                <option value="Mobile Development">Mobile Development</option>
+                                <option value="Cybersecurity">Cybersecurity</option>
+                                <option value="Database">Database</option>
+                                <option value="DevOps">DevOps</option>
+                                <option value="Research Methods">Research Methods</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Statistics">Statistics</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <label>Category</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <select class="form-control" name="learning_resources[${learningResourceIndex}][type]" required>
+                                <option value="">Select Type</option>
+                                <option value="Tutorial">Tutorial</option>
+                                <option value="Documentation">Documentation</option>
+                                <option value="Course">Online Course</option>
+                                <option value="Video">Video</option>
+                                <option value="Article">Article</option>
+                                <option value="Book">Book</option>
+                                <option value="Tool">Tool/Software</option>
+                                <option value="Repository">Code Repository</option>
+                                <option value="Dataset">Dataset</option>
+                                <option value="Paper">Research Paper</option>
+                            </select>
+                            <label>Resource Type</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                            <textarea class="form-control" name="learning_resources[${learningResourceIndex}][description]" style="height: 80px;" placeholder="Description"></textarea>
+                            <label>Description (optional)</label>
                         </div>
                     </div>
                 </div>
             `;
             container.appendChild(newItem);
-            educationIndex++;
+            learningResourceIndex++;
         }
         
-        // Function to remove an education field
-        function removeEducation(button) {
-            // Don't remove if it's the last item
-            if (document.querySelectorAll('.education-item').length <= 1) {
-                alert('You must have at least one education entry');
-                return;
-            }
+        // Function to remove a learning resource field
+        function removeLearningResource(button) {
             button.parentElement.remove();
         }
     </script>

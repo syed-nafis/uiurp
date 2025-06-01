@@ -123,26 +123,58 @@ if (!empty($_POST['timeline'])) {
 // Process supervisor
 $supervisor = null;
 if (!empty($_POST['supervisor'])) {
-    // In the JSON file, supervisor is an object with userId, name, and role
-    $supervisorValue = $_POST['supervisor'];
-    if (preg_match('/^[a-f\d]{24}$/i', $supervisorValue)) {
-        $supervisor = [
-            'userId' => ['$oid' => $supervisorValue],
-            'name' => $_POST['supervisor'],
-            'role' => 'Supervisor'
-        ];
+    $supervisorName = $_POST['supervisor'];
+    $supervisorId = !empty($_POST['supervisorId']) ? $_POST['supervisorId'] : null;
+    
+    if ($supervisorId) {
+        // Faculty supervisor with ID - fetch faculty details
+        try {
+            $facultyCollection = $db->faculties;
+            $faculty = $facultyCollection->findOne(['_id' => new ObjectId($supervisorId)]);
+            
+            if ($faculty) {
+                $supervisor = [
+                    'userId' => ['$oid' => $supervisorId],
+                    'name' => $faculty['name'],
+                    'role' => 'Supervisor'
+                ];
+                
+                // Add additional faculty info if available
+                if (isset($faculty['email'])) {
+                    $supervisor['email'] = $faculty['email'];
+                }
+                if (isset($faculty['department'])) {
+                    $supervisor['department'] = $faculty['department'];
+                }
+            } else {
+                // Faculty ID provided but not found - treat as custom supervisor
+                $supervisor = [
+                    'name' => $supervisorName,
+                    'role' => 'Supervisor'
+                ];
+            }
+        } catch (Exception $e) {
+            // Error with faculty lookup - treat as custom supervisor
+            error_log("Error looking up faculty supervisor: " . $e->getMessage());
+            $supervisor = [
+                'name' => $supervisorName,
+                'role' => 'Supervisor'
+            ];
+        }
     } else {
+        // Custom supervisor (no ID provided)
         $supervisor = [
-            'name' => $supervisorValue,
+            'name' => $supervisorName,
             'role' => 'Supervisor'
         ];
         
-        // If user is logged in, add their ID
+        // If user is logged in, add their ID as fallback
         if ($userId) {
             $supervisor['userId'] = ['$oid' => $userId];
         }
     }
 } else if ($userId) {
+    // No supervisor specified, use logged-in user as supervisor
     $supervisor = [
         'userId' => ['$oid' => $userId],
         'name' => $username,

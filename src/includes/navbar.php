@@ -1,5 +1,30 @@
 <?php
 // No need for session_start() here since it's now called at the beginning of each page
+
+// Fetch current user data if logged in
+$currentUser = null;
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['user_id'])) {
+    try {
+        // Include MongoDB connection
+        require_once __DIR__ . '/../../vendor/autoload.php';
+        
+        // Connect to MongoDB
+        $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
+        $db = $client->uiurp;
+        $studentsCollection = $db->students;
+        
+        // Fetch the student data
+        $studentData = $studentsCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($_SESSION['user_id'])]);
+        
+        if ($studentData) {
+            $currentUser = json_decode(json_encode($studentData), true);
+        }
+    } catch (Exception $e) {
+        // If there's an error, we'll use default values
+        error_log("Error fetching user data for navbar: " . $e->getMessage());
+    }
+}
+
 // Determine the base path for correct relative links
 $current_path = $_SERVER['PHP_SELF'];
 $path_parts = explode('/', $current_path);
@@ -10,6 +35,17 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
 <!-- Modern Navbar with Fluid Animations -->
 <!-- Include Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Prevent Theme Flash Script - Must run immediately -->
+<script>
+(function() {
+    // Get saved theme immediately to prevent flash
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+})();
+</script>
 
 <nav class="neo-navbar">
     <!-- Animated Background Layer -->
@@ -53,6 +89,12 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                     <span class="nav-highlight"></span>
                 </a>
                 
+                <a href="events.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'events.php' ? 'active' : ''; ?>">
+                    <span class="nav-icon"><i class="bi bi-calendar-event"></i></span>
+                    <span class="nav-text">Events</span>
+                    <span class="nav-highlight"></span>
+                </a>
+                
                 <a href="forum_index.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'forum_index.php' ? 'active' : ''; ?>">
                     <span class="nav-icon"><i class="bi bi-chat-square-text"></i></span>
                     <span class="nav-text">Forum</span>
@@ -78,23 +120,32 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                     <div class="user-profile">
                         <div class="user-trigger" id="userMenuTrigger">
                             <div class="user-avatar">
-                                <img src="assets/resources/user_avatar.png" alt="User">
+                                <?php 
+                                $profileImage = 'assets/resources/user_avatar.png';
+                                if ($currentUser) {
+                                    $userImage = $currentUser['basic_info']['profile_image_url'] ?? $currentUser['profile_image'] ?? $currentUser['profile_image_url'] ?? null;
+                                    if (!empty($userImage)) {
+                                        $profileImage = $userImage;
+                                    }
+                                }
+                                ?>
+                                <img src="<?= htmlspecialchars($profileImage) ?>" alt="User">
                                 <div class="avatar-status"></div>
                                 <div class="avatar-glow"></div>
                             </div>
-                            <span class="user-name"><?= htmlspecialchars($_SESSION['user_data']['name'] ?? 'User') ?></span>
+                            <span class="user-name"><?= htmlspecialchars($currentUser ? ($currentUser['basic_info']['name'] ?? $currentUser['name'] ?? 'User') : 'User') ?></span>
                             <i class="bi bi-chevron-down"></i>
                         </div>
                         
                         <div class="user-menu-dropdown">
                             <div class="dropdown-header">
                                 <div class="header-avatar">
-                                    <img src="assets/resources/user_avatar.png" alt="User">
+                                    <img src="<?= htmlspecialchars($profileImage) ?>" alt="User">
                                     <div class="header-avatar-glow"></div>
                                 </div>
                                 <div class="header-info">
-                                    <p class="header-name"><?= htmlspecialchars($_SESSION['user_data']['name'] ?? 'User') ?></p>
-                                    <p class="header-email"><?= htmlspecialchars($_SESSION['user_data']['email'] ?? 'email@example.com') ?></p>
+                                    <p class="header-name"><?= htmlspecialchars($currentUser ? ($currentUser['basic_info']['name'] ?? $currentUser['name'] ?? 'User') : 'User') ?></p>
+                                    <p class="header-email"><?= htmlspecialchars($currentUser ? ($currentUser['contact_info']['primary_email'] ?? $currentUser['email'] ?? 'email@example.com') : 'email@example.com') ?></p>
                                 </div>
                             </div>
                             
@@ -103,12 +154,6 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                                 <a href="<?= $base_path ?>Student_Profile.php" class="menu-item">
                                     <i class="bi bi-person-circle"></i>
                                     <span>View Profile</span>
-                                    <div class="menu-item-glow"></div>
-                                </a>
-                                
-                                <a href="<?= $base_path ?>Student_Profile_Edit.php" class="menu-item">
-                                    <i class="bi bi-pencil-square"></i>
-                                    <span>Edit Profile</span>
                                     <div class="menu-item-glow"></div>
                                 </a>
                                 

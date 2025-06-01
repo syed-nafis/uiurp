@@ -1,0 +1,20 @@
+2025-05-28 19:41:25 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [name] => samin
+            [email] => www.mayen017@gmail.com
+            [role] => resident
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-05-28 19:41:25 - UserId extracted: 6833436be5c16779b409aa42
