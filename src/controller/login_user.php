@@ -30,6 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_type'] = 'faculty';
                 $_SESSION['user_data'] = json_decode(json_encode($facultyData),true);
+                $_SESSION['username'] = $facultyData['name']; // Store username in session
+                $_SESSION['profile_pic'] = $facultyData['profile_image']; // Store user ID in session
+                $_SESSION['email'] = $facultyData['email']; // Store user ID in session
                 header('Location: /../../index.php'); // Redirect to faculty dashboard
                 exit();
             }
@@ -41,6 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($studentData) {
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_type'] = 'student';
+                $_SESSION['username'] = $studentData['basic_info']['name'];
+                $_SESSION['profile_pic'] = $studentData['basic_info']['profile_image_url'];// Store user ID in session
+                $_SESSION['email'] = $studentData['contact_info']['primary_email']; // Store user ID in session
                 $_SESSION['user_data'] = json_decode(json_encode($studentData),true);
                 header('Location: /../../index.php'); // Redirect to student dashboard
                 exit();

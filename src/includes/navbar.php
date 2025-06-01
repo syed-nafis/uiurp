@@ -1,30 +1,6 @@
 <?php
 // No need for session_start() here since it's now called at the beginning of each page
-
 // Fetch current user data if logged in
-$currentUser = null;
-if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['user_id'])) {
-    try {
-        // Include MongoDB connection
-        require_once __DIR__ . '/../../vendor/autoload.php';
-        
-        // Connect to MongoDB
-        $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
-        $db = $client->uiurp;
-        $studentsCollection = $db->students;
-        
-        // Fetch the student data
-        $studentData = $studentsCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($_SESSION['user_id'])]);
-        
-        if ($studentData) {
-            $currentUser = json_decode(json_encode($studentData), true);
-        }
-    } catch (Exception $e) {
-        // If there's an error, we'll use default values
-        error_log("Error fetching user data for navbar: " . $e->getMessage());
-    }
-}
-
 // Determine the base path for correct relative links
 $current_path = $_SERVER['PHP_SELF'];
 $path_parts = explode('/', $current_path);
@@ -122,18 +98,14 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                             <div class="user-avatar">
                                 <?php 
                                 $profileImage = 'assets/resources/user_avatar.png';
-                                if ($currentUser) {
-                                    $userImage = $currentUser['basic_info']['profile_image_url'] ?? $currentUser['profile_image'] ?? $currentUser['profile_image_url'] ?? null;
-                                    if (!empty($userImage)) {
-                                        $profileImage = $userImage;
-                                    }
-                                }
+                                $username = 'user';
+                                $user_email = 'addyouremail@gmail.com';
                                 ?>
-                                <img src="<?= htmlspecialchars($profileImage) ?>" alt="User">
+                                <img src="<?= htmlspecialchars($profileImage ? $_SESSION['profice_pic'] : 'assets/resources/user_avatar.png') ?>" alt="User">
                                 <div class="avatar-status"></div>
                                 <div class="avatar-glow"></div>
                             </div>
-                            <span class="user-name"><?= htmlspecialchars($currentUser ? ($currentUser['basic_info']['name'] ?? $currentUser['name'] ?? 'User') : 'User') ?></span>
+                            <span class="user-name"><?= htmlspecialchars($username ? $_SESSION['username'] : 'User') ?></span>
                             <i class="bi bi-chevron-down"></i>
                         </div>
                         
@@ -144,8 +116,8 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                                     <div class="header-avatar-glow"></div>
                                 </div>
                                 <div class="header-info">
-                                    <p class="header-name"><?= htmlspecialchars($currentUser ? ($currentUser['basic_info']['name'] ?? $currentUser['name'] ?? 'User') : 'User') ?></p>
-                                    <p class="header-email"><?= htmlspecialchars($currentUser ? ($currentUser['contact_info']['primary_email'] ?? $currentUser['email'] ?? 'email@example.com') : 'email@example.com') ?></p>
+                                    <p class="header-name"><?= htmlspecialchars($username ? $_SESSION['username'] : 'User') ?></p>
+                                    <p class="header-email"><?= htmlspecialchars($user_email ? $_SESSION['email'] : 'addyouremail@gmail.com')?></p>
                                 </div>
                             </div>
                             
