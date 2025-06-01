@@ -31,14 +31,15 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     }
 } else {
     // Viewing own profile
-    $userId = new MongoDB\BSON\ObjectId($_SESSION['user_id']);
+    //$userId = new MongoDB\BSON\ObjectId($_SESSION['user_data']['_id']);
     $isOwnProfile = true;
 }
 
 // Fetch the student data from MongoDB
-$studentData = $studentsCollection->findOne(['_id' => $userId]);
+$student = $_SESSION['user_data'];
 
 // If student data not found
+/*
 if (!$studentData) {
     if ($isOwnProfile) {
         $_SESSION['info'] = "You need to set up your profile first";
@@ -50,9 +51,10 @@ if (!$studentData) {
         exit();
     }
 }
+*/
 
 // Convert MongoDB document to an array
-$student = json_decode(json_encode($studentData), true);
+//$student = json_decode(json_encode($studentData), true);
 
 // Default profile image if not set
 $profileImage = $student['basic_info']['profile_image_url'] ?? $student['profile_image'] ?? $student['profile_image_url'] ?? null;

@@ -96,28 +96,23 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                     <div class="user-profile">
                         <div class="user-trigger" id="userMenuTrigger">
                             <div class="user-avatar">
-                                <?php 
-                                $profileImage = 'assets/resources/user_avatar.png';
-                                $username = 'user';
-                                $user_email = 'addyouremail@gmail.com';
-                                ?>
-                                <img src="<?= htmlspecialchars($profileImage ? $_SESSION['profice_pic'] : 'assets/resources/user_avatar.png') ?>" alt="User">
+                                <img src="<?= htmlspecialchars($_SESSION['profile_pic'] ?? 'assets/resources/user_avatar.png') ?>" alt="User">
                                 <div class="avatar-status"></div>
                                 <div class="avatar-glow"></div>
                             </div>
-                            <span class="user-name"><?= htmlspecialchars($username ? $_SESSION['username'] : 'User') ?></span>
+                            <span class="user-name"><?= htmlspecialchars($_SESSION['username'] ?? 'User') ?></span>
                             <i class="bi bi-chevron-down"></i>
                         </div>
                         
                         <div class="user-menu-dropdown">
                             <div class="dropdown-header">
                                 <div class="header-avatar">
-                                    <img src="<?= htmlspecialchars($profileImage) ?>" alt="User">
+                                    <img src="<?= htmlspecialchars($_SESSION['profile_pic']) ?>" alt="User">
                                     <div class="header-avatar-glow"></div>
                                 </div>
                                 <div class="header-info">
-                                    <p class="header-name"><?= htmlspecialchars($username ? $_SESSION['username'] : 'User') ?></p>
-                                    <p class="header-email"><?= htmlspecialchars($user_email ? $_SESSION['email'] : 'addyouremail@gmail.com')?></p>
+                                    <p class="header-name"><?= htmlspecialchars($_SESSION['username'] ?? 'User') ?></p>
+                                    <p class="header-email"><?= htmlspecialchars($_SESSION['email'] ?? 'addyouremail@gmail.com')?></p>
                                 </div>
                             </div>
                             
