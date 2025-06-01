@@ -4590,28 +4590,12 @@ session_start();
                         
                         // Display projects, either user's projects or public ones
                         if (data.projects && data.projects.length > 0) {
-                            // Only display projects created by the current user
+                            // Show all user-related projects (created by user, member of, or supervising)
                             if (isLoggedIn) {
-                                const userId = data.debug?.userId || null;
-                                
-                                // Filter projects to only show those created by the current user
-                                const userProjects = data.projects.filter(project => {
-                                    // Check if user is in the members list
-                                    if (project.members && project.members.length > 0) {
-                                        return project.members.some(member => 
-                                            (member.userId && member.userId.$oid === userId) || 
-                                            (member.userId === userId)
-                                        );
-                                    }
-                                    return false;
-                                });
-                                
-                                if (userProjects.length > 0) {
-                                    displayUserProjects(userProjects, false);
-                        } else {
-                                    displayEmptyState('Ready to Innovate?', 
-                                        `Transform your ideas into groundbreaking research projects. Share your discoveries with the academic community and make an impact.`);
-                                }
+                                // The backend already filters for user's projects correctly
+                                // (createdBy, members, and supervisor checks are done server-side)
+                                // So we can display all returned projects
+                                displayUserProjects(data.projects, false);
                             } else {
                                 // For non-logged in users, show empty state
                                 displayEmptyState('Join the Research Community', 
