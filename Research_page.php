@@ -1866,7 +1866,7 @@ session_start();
                         performSearch(query);
       }, 300);
                 } else if (query.length === 0) {
-                    loadProjects(showAllProjects ? 'src/model/fetch_all_projects.php?limit=15' : 'src/model/fetch_projects.php?limit=15');
+                    loadProjects('src/model/fetch_projects.php?limit=15');
                 }
             });
         }
@@ -1914,9 +1914,7 @@ session_start();
                     this.style.transform = 'scale(1)';
                 }, 150);
                 
-                const endpoint = showAllProjects ? 
-                    'src/model/fetch_all_projects.php?limit=15' : 
-                    'src/model/fetch_projects.php?limit=15';
+                const endpoint = 'src/model/fetch_projects.php?limit=15';
                 
                 loadProjects(endpoint);
             });
@@ -1953,9 +1951,7 @@ session_start();
         }
 
         function performSearch(query) {
-          const searchEndpoint = showAllProjects ? 
-              'src/model/search_all_projects.php' : 
-              'src/model/search_projects.php';
+          const searchEndpoint = 'src/model/search_projects.php';
               
           showLoader();
             

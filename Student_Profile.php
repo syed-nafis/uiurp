@@ -1891,61 +1891,118 @@ if (empty($profileImage)) {
         const noProjects = document.getElementById('no-projects');
         
         console.log('Loading user projects...');
+        console.log('Elements found:', {
+            projectsGrid: !!projectsGrid,
+            projectsLoading: !!projectsLoading,
+            noProjects: !!noProjects
+        });
         
         // Show loading
-        projectsLoading.style.display = 'block';
-        noProjects.style.display = 'none';
-        projectsGrid.innerHTML = '';
+        if (projectsLoading) projectsLoading.style.display = 'block';
+        if (noProjects) noProjects.style.display = 'none';
+        if (projectsGrid) projectsGrid.innerHTML = '';
         
         // Fetch all user projects (both owned and member projects)
+        console.log('Making fetch request to: src/model/fetch_all_user_projects.php');
         fetch('src/model/fetch_all_user_projects.php')
             .then(response => {
                 console.log('Response status:', response.status);
                 console.log('Response OK:', response.ok);
+                console.log('Response headers:', response.headers);
+                
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    console.error('Response not OK. Status:', response.status, 'StatusText:', response.statusText);
+                    throw new Error('Network response was not ok: ' + response.status + ' ' + response.statusText);
                 }
-                return response.json();
+                
+                // Get response text first to see what we actually received
+                return response.text();
             })
-            .then(projects => {
+            .then(responseText => {
+                console.log('Raw response text:', responseText);
+                
+                // Try to parse as JSON
+                let projects;
+                try {
+                    projects = JSON.parse(responseText);
+                    console.log('Parsed projects:', projects);
+                } catch (jsonError) {
+                    console.error('JSON parse error:', jsonError);
+                    console.error('Response text that failed to parse:', responseText);
+                    throw new Error('Invalid JSON response: ' + jsonError.message);
+                }
+                
                 console.log('Projects received:', projects);
                 console.log('Number of projects:', projects ? projects.length : 0);
+                console.log('Type of projects:', typeof projects);
+                console.log('Is array:', Array.isArray(projects));
                 
                 // Hide loading
-                projectsLoading.style.display = 'none';
-                projectsGrid.innerHTML = '';
+                if (projectsLoading) projectsLoading.style.display = 'none';
+                if (projectsGrid) projectsGrid.innerHTML = '';
                 
                 const projectsNote = document.getElementById('projects-note');
                 
                 if (projects && projects.length > 0) {
                     console.log('Displaying projects...');
+                    
+                    // Limit to first 3 projects for profile display
+                    const displayProjects = projects.slice(0, 3);
+                    const hasMoreProjects = projects.length > 3;
+                    
                     // Display projects
-                    projects.forEach((project, index) => {
-                        console.log('Creating card for project:', project.title || project._id);
-                        const projectCard = createProjectCard(project, index);
-                        projectsGrid.appendChild(projectCard);
+                    displayProjects.forEach((project, index) => {
+                        console.log(`Creating card for project ${index}:`, project.title || project._id);
+                        try {
+                            const projectCard = createProjectCard(project, index);
+                            if (projectsGrid) projectsGrid.appendChild(projectCard);
+                        } catch (cardError) {
+                            console.error('Error creating project card:', cardError, 'Project data:', project);
+                        }
                     });
                     
-                    // Show the note about random selection
-                    projectsNote.style.display = 'block';
+                    // Show note about displaying limited projects
+                    if (projectsNote) {
+                        if (hasMoreProjects) {
+                            projectsNote.innerHTML = `
+                                <p class="text-muted mb-2">
+                                    <i class="bi bi-info-circle"></i> 
+                                    Showing 3 of ${projects.length} research projects
+                                </p>
+                                <a href="project_management.php" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-arrow-right"></i> View All ${projects.length} Projects
+                                </a>
+                            `;
+                        } else {
+                            projectsNote.innerHTML = `
+                                <p class="text-muted">
+                                    <i class="bi bi-check-circle"></i> 
+                                    Showing all ${projects.length} research project${projects.length === 1 ? '' : 's'}
+                                </p>
+                            `;
+                        }
+                        projectsNote.style.display = 'block';
+                    }
                 } else {
                     console.log('No projects found, showing empty state');
                     // Show no projects message
-                    noProjects.style.display = 'block';
-                    projectsNote.style.display = 'none';
+                    if (noProjects) noProjects.style.display = 'block';
+                    if (projectsNote) projectsNote.style.display = 'none';
                 }
             })
             .catch(error => {
                 console.error('Error loading projects:', error);
-                projectsLoading.style.display = 'none';
-                noProjects.style.display = 'block';
-                document.getElementById('projects-note').style.display = 'none';
+                console.error('Error stack:', error.stack);
+                if (projectsLoading) projectsLoading.style.display = 'none';
+                if (noProjects) noProjects.style.display = 'block';
+                const projectsNote = document.getElementById('projects-note');
+                if (projectsNote) projectsNote.style.display = 'none';
                 
                 // Update no projects message for error case
-                const noProjectsTitle = noProjects.querySelector('h4');
-                const noProjectsText = noProjects.querySelector('p');
-                noProjectsTitle.textContent = 'Error Loading Projects';
-                noProjectsText.textContent = 'There was an error loading your research projects. Please try refreshing the page.';
+                const noProjectsTitle = noProjects ? noProjects.querySelector('h4') : null;
+                const noProjectsText = noProjects ? noProjects.querySelector('p') : null;
+                if (noProjectsTitle) noProjectsTitle.textContent = 'Error Loading Projects';
+                if (noProjectsText) noProjectsText.textContent = 'There was an error loading your research projects. Please check the browser console for details.';
             });
     }
     
