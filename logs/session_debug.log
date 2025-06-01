@@ -2932,6 +2932,502 @@
 
 )
 
-2025-06-01 13:17:44 - UserId extracted: 6833436be5c16779b409aa42, isLoggedIn: true
-2025-06-01 13:17:44 - Filter: {"$or":[{"createdBy":{"$oid":"6833436be5c16779b409aa42"}},{"createdBy.$oid":{"$oid":"6833436be5c16779b409aa42"}},{"members":{"$elemMatch":{"userId":{"$oid":"6833436be5c16779b409aa42"}}}},{"members":{"$elemMatch":{"userId.$oid":{"$oid":"6833436be5c16779b409aa42"}}}},{"supervisor.userId.$oid":{"$oid":"6833436be5c16779b409aa42"}},{"supervisor.userId":{"$oid":"6833436be5c16779b409aa42"}}]}
-2025-06-01 13:17:45 - Found 0 projects
+2025-06-01 12:17:50 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2c5, isLoggedIn: true
+2025-06-01 12:17:51 - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2c5"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2c5"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2c5"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2c5"}}},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2c5"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2c5"}]}
+2025-06-01 12:17:52 - Found 0 projects
+2025-06-01 15:50:52 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 67e19fa9ebb89e49e04ddf28
+                )
+
+            [name] => Mr. Mir Moynuddin Ahmed Shibly
+            [email] => moynuddin@cse.uiu.ac.bd
+            [phone] => +8801877425176
+            [bio] => Mr. Mir Moynuddin Ahmed Shibly is an Assistant Professor in the Department of CSE at UIU. He specializes in Machine Learning, Data Mining, and Bioinformatics. With a background in Data Science, he has experience as both a lecturer and a teaching assistant.
+            [job_title] => Assistant Professor
+            [office_number] => Room: 536
+            [profile_image] => https://i.imgur.com/rRzCUAI.jpg
+            [interested_fields_of_research] => Array
+                (
+                    [0] => Machine Learning
+                    [1] => Data Mining
+                    [2] => Bioinformatics
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => MS in Computer Science and Engineering
+                            [major] => Data Science
+                            [year] => 2021-2022
+                            [institution] => East West University, Dhaka
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => BS in Computer Science and Engineering
+                            [year] => 2016-2020
+                            [institution] => East West University, Dhaka
+                        )
+
+                )
+
+            [experience] => Array
+                (
+                    [0] => Array
+                        (
+                            [position] => Assistant Professor
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => United International University
+                            [period] => February 2022 – present
+                        )
+
+                    [1] => Array
+                        (
+                            [position] => Lecturer
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => Primeasia University
+                            [period] => February 2021 – January 2022
+                        )
+
+                    [2] => Array
+                        (
+                            [position] => Undergraduate Teaching Assistant
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => East West University
+                            [period] => January 2019 – May 2020
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => Pre-trained Deep Learning Models in Automatic COVID-19 Diagnosis
+                            [description] => A research paper on using pre-trained deep learning models for automatic COVID-19 diagnosis, published in the Indonesian Journal of Electrical Engineering and Computer Science.
+                            [year] => 2021
+                            [publication] => Indonesian Journal of Electrical Engineering and Computer Science
+                            [authors] => Array
+                                (
+                                    [0] => Ahmed Wasif Reza
+                                    [1] => Mir Moynuddin Ahmed Shibly
+                                    [2] => Md Mahamudul Hasan
+                                    [3] => Nazla Nowrin
+                                )
+
+                        )
+
+                )
+
+            [prerequisites] => Array
+                (
+                    [0] => Machine Learning Fundamentals
+                    [1] => Deep Learning
+                    [2] => Python Programming
+                    [3] => Basic Statistics
+                )
+
+            [resources_to_learn_prerequisites] => Array
+                (
+                    [0] => Array
+                        (
+                            [topic] => Machine Learning Fundamentals
+                            [link] => https://www.youtube.com/playlist?list=PLqYmG7hTraZCDxZ44o4p3N5Anz3lLRVZF
+                        )
+
+                    [1] => Array
+                        (
+                            [topic] => Deep Learning
+                            [link] => https://www.coursera.org/specializations/deep-learning
+                        )
+
+                    [2] => Array
+                        (
+                            [topic] => Basic Statistics
+                            [link] => https://www.youtube.com/playlist?list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1
+                        )
+
+                )
+
+            [username] => mshibly
+        )
+
+)
+
+2025-06-01 15:50:52 - UserId extracted: 67e19fa9ebb89e49e04ddf28, isLoggedIn: true
+2025-06-01 15:50:52 - Filter: {"$or":[{"createdBy":"67e19fa9ebb89e49e04ddf28"},{"createdBy.$oid":"67e19fa9ebb89e49e04ddf28"},{"members":{"$elemMatch":{"userId":"67e19fa9ebb89e49e04ddf28"}}},{"members":{"$elemMatch":{"userId.$oid":"67e19fa9ebb89e49e04ddf28"}}},{"supervisor.userId.$oid":"67e19fa9ebb89e49e04ddf28"},{"supervisor.userId":"67e19fa9ebb89e49e04ddf28"}]}
+2025-06-01 15:50:52 - Found 0 projects
+2025-06-01 15:55:13 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 67e19fa9ebb89e49e04ddf28
+                )
+
+            [name] => Mr. Mir Moynuddin Ahmed Shibly
+            [email] => moynuddin@cse.uiu.ac.bd
+            [phone] => +8801877425176
+            [bio] => Mr. Mir Moynuddin Ahmed Shibly is an Assistant Professor in the Department of CSE at UIU. He specializes in Machine Learning, Data Mining, and Bioinformatics. With a background in Data Science, he has experience as both a lecturer and a teaching assistant.
+            [job_title] => Assistant Professor
+            [office_number] => Room: 536
+            [profile_image] => https://i.imgur.com/rRzCUAI.jpg
+            [interested_fields_of_research] => Array
+                (
+                    [0] => Machine Learning
+                    [1] => Data Mining
+                    [2] => Bioinformatics
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => MS in Computer Science and Engineering
+                            [major] => Data Science
+                            [year] => 2021-2022
+                            [institution] => East West University, Dhaka
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => BS in Computer Science and Engineering
+                            [year] => 2016-2020
+                            [institution] => East West University, Dhaka
+                        )
+
+                )
+
+            [experience] => Array
+                (
+                    [0] => Array
+                        (
+                            [position] => Assistant Professor
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => United International University
+                            [period] => February 2022 – present
+                        )
+
+                    [1] => Array
+                        (
+                            [position] => Lecturer
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => Primeasia University
+                            [period] => February 2021 – January 2022
+                        )
+
+                    [2] => Array
+                        (
+                            [position] => Undergraduate Teaching Assistant
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => East West University
+                            [period] => January 2019 – May 2020
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => Pre-trained Deep Learning Models in Automatic COVID-19 Diagnosis
+                            [description] => A research paper on using pre-trained deep learning models for automatic COVID-19 diagnosis, published in the Indonesian Journal of Electrical Engineering and Computer Science.
+                            [year] => 2021
+                            [publication] => Indonesian Journal of Electrical Engineering and Computer Science
+                            [authors] => Array
+                                (
+                                    [0] => Ahmed Wasif Reza
+                                    [1] => Mir Moynuddin Ahmed Shibly
+                                    [2] => Md Mahamudul Hasan
+                                    [3] => Nazla Nowrin
+                                )
+
+                        )
+
+                )
+
+            [prerequisites] => Array
+                (
+                    [0] => Machine Learning Fundamentals
+                    [1] => Deep Learning
+                    [2] => Python Programming
+                    [3] => Basic Statistics
+                )
+
+            [resources_to_learn_prerequisites] => Array
+                (
+                    [0] => Array
+                        (
+                            [topic] => Machine Learning Fundamentals
+                            [link] => https://www.youtube.com/playlist?list=PLqYmG7hTraZCDxZ44o4p3N5Anz3lLRVZF
+                        )
+
+                    [1] => Array
+                        (
+                            [topic] => Deep Learning
+                            [link] => https://www.coursera.org/specializations/deep-learning
+                        )
+
+                    [2] => Array
+                        (
+                            [topic] => Basic Statistics
+                            [link] => https://www.youtube.com/playlist?list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1
+                        )
+
+                )
+
+            [username] => mshibly
+        )
+
+)
+
+2025-06-01 15:55:13 - UserId extracted: 67e19fa9ebb89e49e04ddf28, isLoggedIn: true
+2025-06-01 15:55:13 - Filter: {"$or":[{"createdBy":"67e19fa9ebb89e49e04ddf28"},{"createdBy.$oid":"67e19fa9ebb89e49e04ddf28"},{"members":{"$elemMatch":{"userId":"67e19fa9ebb89e49e04ddf28"}}},{"members":{"$elemMatch":{"userId.$oid":"67e19fa9ebb89e49e04ddf28"}}},{"supervisor.userId.$oid":"67e19fa9ebb89e49e04ddf28"},{"supervisor.userId":"67e19fa9ebb89e49e04ddf28"}]}
+2025-06-01 15:55:13 - Found 0 projects
+2025-06-01 15:55:24 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 67e19fa9ebb89e49e04ddf28
+                )
+
+            [name] => Mr. Mir Moynuddin Ahmed Shibly
+            [email] => moynuddin@cse.uiu.ac.bd
+            [phone] => +8801877425176
+            [bio] => Mr. Mir Moynuddin Ahmed Shibly is an Assistant Professor in the Department of CSE at UIU. He specializes in Machine Learning, Data Mining, and Bioinformatics. With a background in Data Science, he has experience as both a lecturer and a teaching assistant.
+            [job_title] => Assistant Professor
+            [office_number] => Room: 536
+            [profile_image] => https://i.imgur.com/rRzCUAI.jpg
+            [interested_fields_of_research] => Array
+                (
+                    [0] => Machine Learning
+                    [1] => Data Mining
+                    [2] => Bioinformatics
+                )
+
+            [education] => Array
+                (
+                    [0] => Array
+                        (
+                            [degree] => MS in Computer Science and Engineering
+                            [major] => Data Science
+                            [year] => 2021-2022
+                            [institution] => East West University, Dhaka
+                        )
+
+                    [1] => Array
+                        (
+                            [degree] => BS in Computer Science and Engineering
+                            [year] => 2016-2020
+                            [institution] => East West University, Dhaka
+                        )
+
+                )
+
+            [experience] => Array
+                (
+                    [0] => Array
+                        (
+                            [position] => Assistant Professor
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => United International University
+                            [period] => February 2022 – present
+                        )
+
+                    [1] => Array
+                        (
+                            [position] => Lecturer
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => Primeasia University
+                            [period] => February 2021 – January 2022
+                        )
+
+                    [2] => Array
+                        (
+                            [position] => Undergraduate Teaching Assistant
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => East West University
+                            [period] => January 2019 – May 2020
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => Pre-trained Deep Learning Models in Automatic COVID-19 Diagnosis
+                            [description] => A research paper on using pre-trained deep learning models for automatic COVID-19 diagnosis, published in the Indonesian Journal of Electrical Engineering and Computer Science.
+                            [year] => 2021
+                            [publication] => Indonesian Journal of Electrical Engineering and Computer Science
+                            [authors] => Array
+                                (
+                                    [0] => Ahmed Wasif Reza
+                                    [1] => Mir Moynuddin Ahmed Shibly
+                                    [2] => Md Mahamudul Hasan
+                                    [3] => Nazla Nowrin
+                                )
+
+                        )
+
+                )
+
+            [prerequisites] => Array
+                (
+                    [0] => Machine Learning Fundamentals
+                    [1] => Deep Learning
+                    [2] => Python Programming
+                    [3] => Basic Statistics
+                )
+
+            [resources_to_learn_prerequisites] => Array
+                (
+                    [0] => Array
+                        (
+                            [topic] => Machine Learning Fundamentals
+                            [link] => https://www.youtube.com/playlist?list=PLqYmG7hTraZCDxZ44o4p3N5Anz3lLRVZF
+                        )
+
+                    [1] => Array
+                        (
+                            [topic] => Deep Learning
+                            [link] => https://www.coursera.org/specializations/deep-learning
+                        )
+
+                    [2] => Array
+                        (
+                            [topic] => Basic Statistics
+                            [link] => https://www.youtube.com/playlist?list=PLblh5JKOoLUIxGDQs4LFFD--41Vzf-ME1
+                        )
+
+                )
+
+            [username] => mshibly
+        )
+
+)
+
+2025-06-01 15:55:24 - UserId extracted: 67e19fa9ebb89e49e04ddf28, isLoggedIn: true
+2025-06-01 15:55:24 - Filter: {"$or":[{"createdBy":"67e19fa9ebb89e49e04ddf28"},{"createdBy.$oid":"67e19fa9ebb89e49e04ddf28"},{"members":{"$elemMatch":{"userId":"67e19fa9ebb89e49e04ddf28"}}},{"members":{"$elemMatch":{"userId.$oid":"67e19fa9ebb89e49e04ddf28"}}},{"supervisor.userId.$oid":"67e19fa9ebb89e49e04ddf28"},{"supervisor.userId":"67e19fa9ebb89e49e04ddf28"}]}
+2025-06-01 15:55:24 - Found 0 projects
+2025-06-01 16:11:34 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 67e1ad43ebb89e49e04ddf38
+                )
+
+            [name] => Dr. Riasat Azim
+            [email] => kabir@cse.uiu.ac.bd
+            [phone] => +8801842055364
+            [bio] => Dr. Riasat Azim is an Assistant Professor in the Department of Computer Science and Engineering at UIU. His areas of expertise include Machine Learning, Bioinformatics, Advanced Database Systems, Big Data, and Optical Character Recognition (OCR). He has contributed significantly to computational biology and deep learning research.
+            [job_title] => Assistant Professor, Dept of CSE
+            [office_number] => Room- 337 A (3rd floor)
+            [profile_image] => https://i.imgur.com/1YBXErU.jpg
+            [interested_fields_of_research] => Array
+                (
+                    [0] => Machine Learning
+                    [1] => Bioinformatics
+                    [2] => Advanced Database Systems
+                    [3] => Big Data
+                    [4] => Optical Character Recognition (OCR)
+                )
+
+            [projects] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => CoDNet: Controlled Diffusion Network for Structure Based Drug Design
+                            [description] => Research on a deep learning model for drug design using computational biology and bioinformatics methods, published in Bioinformatics Advances.
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => A Patient-Specific Functional Module and Path Identification Technique from RNA-seq Data
+                            [description] => Developing techniques for identifying functional modules and paths in RNA-seq data, published in Computers in Biology and Medicine, 2023.
+                        )
+
+                    [2] => Array
+                        (
+                            [title] => Deep Multi-Modal Approach for Protein Function Prediction and Classification
+                            [description] => A deep learning approach for protein function prediction and classification, presented at the 6th International Conference on Electrical Engineering and Information & Communication Technology, 2024.
+                        )
+
+                    [3] => Array
+                        (
+                            [title] => ENRNN-AU-Net: A Hybrid Deep Learning Model to Classify and Segment Histopathology Images of Breast Cancer
+                            [description] => A hybrid deep learning model for classifying and segmenting histopathology images of breast cancer, presented at the Advances in Computing, Communication, Electrical, and Smart Systems (iCACCESS) conference.
+                        )
+
+                )
+
+            [prerequisites] => Array
+                (
+                    [0] => Machine Learning
+                    [1] => Bioinformatics
+                    [2] => Advanced Database Systems
+                    [3] => Big Data
+                    [4] => OCR
+                )
+
+            [resources_to_learn_prerequisites] => Array
+                (
+                    [0] => Array
+                        (
+                            [topic] => Machine Learning
+                            [link] => https://www.coursera.org/learn/machine-learning
+                        )
+
+                    [1] => Array
+                        (
+                            [topic] => Bioinformatics
+                            [link] => https://www.coursera.org/learn/bioinformatics
+                        )
+
+                    [2] => Array
+                        (
+                            [topic] => Advanced Database Systems
+                            [link] => https://www.coursera.org/learn/advanced-database-systems
+                        )
+
+                    [3] => Array
+                        (
+                            [topic] => Big Data
+                            [link] => https://www.edx.org/course/big-data
+                        )
+
+                    [4] => Array
+                        (
+                            [topic] => Optical Character Recognition (OCR)
+                            [link] => https://www.udemy.com/course/ocr-in-python/
+                        )
+
+                )
+
+            [username] => razim
+        )
+
+)
+
+2025-06-01 16:11:34 - UserId extracted: 67e1ad43ebb89e49e04ddf38, isLoggedIn: true
+2025-06-01 16:11:34 - Filter: {"$or":[{"createdBy":"67e1ad43ebb89e49e04ddf38"},{"createdBy.$oid":"67e1ad43ebb89e49e04ddf38"},{"members":{"$elemMatch":{"userId":"67e1ad43ebb89e49e04ddf38"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1ad43ebb89e49e04ddf38"}}},{"supervisor.userId.$oid":"67e1ad43ebb89e49e04ddf38"},{"supervisor.userId":"67e1ad43ebb89e49e04ddf38"}]}
+2025-06-01 16:11:35 - Found 1 projects
