@@ -132,14 +132,67 @@ if ($targetUserId) {
 if ($isOwnProfile) {
     $student = $_SESSION['user_data'];
 } else {
-    $student = $studentsCollection->findOne(['_id' => $userId]);
-    if (!$student) {
+    $studentDoc = $studentsCollection->findOne(['_id' => $userId]);
+    if (!$studentDoc) {
         $_SESSION['error'] = "Student profile not found";
         header('Location: Research_page.php');
         exit();
     }
-    // Convert to array for consistent handling
-    $student = iterator_to_array($student);
+    // Convert to array for consistent handling and ensure deep array conversion
+    $student = json_decode(json_encode($studentDoc), true);
+}
+
+// Ensure data consistency - normalize the data structure
+if ($student) {
+    // Ensure basic_info exists
+    if (!isset($student['basic_info'])) {
+        $student['basic_info'] = [];
+    }
+    
+    // Ensure academic_info exists
+    if (!isset($student['academic_info'])) {
+        $student['academic_info'] = [];
+    }
+    
+    // Ensure university_research_profile exists
+    if (!isset($student['university_research_profile'])) {
+        $student['university_research_profile'] = [];
+    }
+    
+    // Ensure contact_info exists
+    if (!isset($student['contact_info'])) {
+        $student['contact_info'] = [];
+    }
+    
+    // Normalize name field
+    if (!isset($student['basic_info']['name']) && isset($student['name'])) {
+        $student['basic_info']['name'] = $student['name'];
+    }
+    
+    // Normalize email field
+    if (!isset($student['contact_info']['primary_email']) && isset($student['email'])) {
+        $student['contact_info']['primary_email'] = $student['email'];
+    }
+    
+    // Normalize student_id field
+    if (!isset($student['academic_info']['student_id']) && isset($student['student_id'])) {
+        $student['academic_info']['student_id'] = $student['student_id'];
+    }
+    
+    // Normalize research interests
+    if (!isset($student['university_research_profile']['research_interests']) && isset($student['research_interests'])) {
+        $student['university_research_profile']['research_interests'] = $student['research_interests'];
+    }
+    
+    // Normalize skills
+    if (!isset($student['university_research_profile']['skills_expertise']) && isset($student['skills'])) {
+        $student['university_research_profile']['skills_expertise'] = $student['skills'];
+    }
+    
+    // Ensure learning_resources exists
+    if (!isset($student['learning_resources'])) {
+        $student['learning_resources'] = [];
+    }
 }
 
 // Handle profile image with proper placeholder
@@ -1376,6 +1429,58 @@ if (!file_exists($profileImage)) {
             padding: 2rem 0;
         }
         
+        /* Enhanced Supervisor link styling */
+        .supervisor-link {
+            color: var(--primary-color, var(--accent-blue)) !important;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 2px 4px;
+            border-radius: 4px;
+            background: linear-gradient(135deg, transparent 0%, rgba(0, 212, 255, 0.05) 100%);
+        }
+        
+        .supervisor-link:hover {
+            color: var(--accent-purple) !important;
+            text-decoration: none;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(139, 92, 246, 0.15) 100%);
+            box-shadow: 0 2px 8px rgba(0, 212, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .supervisor-link::before {
+            content: '👨‍🏫';
+            margin-right: 4px;
+            font-size: 0.9em;
+        }
+        
+        /* Member link styling for consistency */
+        .member-link {
+            color: var(--accent-blue) !important;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 2px 4px;
+            border-radius: 4px;
+            background: linear-gradient(135deg, transparent 0%, rgba(0, 212, 255, 0.05) 100%);
+        }
+        
+        .member-link:hover {
+            color: var(--accent-purple) !important;
+            text-decoration: none;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(139, 92, 246, 0.15) 100%);
+            box-shadow: 0 2px 8px rgba(0, 212, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .member-link::before {
+            content: '👨‍🎓';
+            margin-right: 4px;
+            font-size: 0.9em;
+        }
+        
         .research-project-card {
             background: linear-gradient(135deg, 
                 rgba(15, 23, 42, 0.8) 0%, 
@@ -1783,7 +1888,7 @@ if (!file_exists($profileImage)) {
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($student['academic_info']['thesis_info']['title'] ?? 'Thesis Title') ?></h5>
                         <p class="card-text">
-                            <strong>Supervisor:</strong> <?= htmlspecialchars($student['academic_info']['thesis_info']['supervisor_name'] ?? 'N/A') ?><br>
+                            <strong>Supervisor:</strong> <span id="thesis-supervisor-display"><?= htmlspecialchars($student['academic_info']['thesis_info']['supervisor_name'] ?? 'N/A') ?></span><br>
                             <strong>Status:</strong> <span class="badge bg-info"><?= htmlspecialchars($student['academic_info']['thesis_info']['status'] ?? 'N/A') ?></span><br>
                             <strong>Description:</strong> <?= htmlspecialchars($student['academic_info']['thesis_info']['description'] ?? 'N/A') ?>
                         </p>
@@ -2008,10 +2113,97 @@ if (!file_exists($profileImage)) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
   
   <script>
+    // Enhanced function to create clickable profile links with fallback
+    async function createProfileLink(name, userId, userType = null) {
+        if (!name || name === 'N/A') return name;
+        
+        // Primary method: Use userId if available
+        if (userId) {
+            try {
+                const response = await fetch('src/model/check_profile_exists.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userId: userId, userType: userType })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.exists) {
+                        const profileType = result.type === 'faculty' ? 'Faculty_Profile.php' : 'Student_Profile.php';
+                        return `<a href="${profileType}?id=${userId}" class="supervisor-link" title="View ${result.type} profile">${name}</a>`;
+                    }
+                }
+            } catch (error) {
+                console.log('Profile check failed for user:', userId);
+            }
+        }
+        
+        // Fallback method: Try to find supervisor by name in global faculty data
+        if (userType === 'faculty' || !userType) {
+            try {
+                // Check if global faculty data is available
+                if (window.facultyData && Array.isArray(window.facultyData)) {
+                    const matchingFaculty = window.facultyData.find(faculty => 
+                        faculty.name && faculty.name.toLowerCase().trim() === name.toLowerCase().trim()
+                    );
+                    
+                    if (matchingFaculty && matchingFaculty._id) {
+                        console.log(`Found faculty by name: ${name} -> ${matchingFaculty._id}`);
+                        return `<a href="Faculty_Profile.php?id=${matchingFaculty._id}" class="supervisor-link" title="View faculty profile">${name}</a>`;
+                    }
+                }
+                
+                // If global faculty data is not available, try to fetch it
+                if (!window.facultyData) {
+                    const facultyResponse = await fetch('src/model/load_faculty.php');
+                    if (facultyResponse.ok) {
+                        const facultyData = await facultyResponse.json();
+                        window.facultyData = facultyData; // Cache for future use
+                        
+                        const matchingFaculty = facultyData.find(faculty => 
+                            faculty.name && faculty.name.toLowerCase().trim() === name.toLowerCase().trim()
+                        );
+                        
+                        if (matchingFaculty && matchingFaculty._id) {
+                            console.log(`Found faculty by name (from fetch): ${name} -> ${matchingFaculty._id}`);
+                            return `<a href="Faculty_Profile.php?id=${matchingFaculty._id}" class="supervisor-link" title="View faculty profile">${name}</a>`;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.log('Faculty name lookup failed:', error);
+            }
+        }
+        
+        // Return original name if no profile found
+        return name;
+    }
+    
     // Load user projects on page load
     document.addEventListener('DOMContentLoaded', function() {
         loadUserProjects();
+        makeSupervisorClickable();
     });
+    
+    // Make thesis supervisor clickable
+    function makeSupervisorClickable() {
+        const supervisorElement = document.getElementById('thesis-supervisor-display');
+        if (supervisorElement) {
+            const supervisorName = supervisorElement.textContent.trim();
+            if (supervisorName && supervisorName !== 'N/A') {
+                // Try to make supervisor clickable
+                createProfileLink(supervisorName, null, 'faculty').then(linkedName => {
+                    if (linkedName !== supervisorName) {
+                        supervisorElement.innerHTML = linkedName;
+                    }
+                }).catch(error => {
+                    console.log('Failed to create supervisor profile link:', error);
+                });
+            }
+        }
+    }
     
     function loadUserProjects() {
         const projectsGrid = document.getElementById('user-projects-grid');

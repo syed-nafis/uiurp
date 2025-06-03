@@ -4024,21 +4024,22 @@ function createProfileLink($name, $userId, $userType = null) {
         
         /* Supervisor link styling */
         .supervisor-link {
-            color: var(--accent-color);
-            font-weight: 600;
+            color: var(--primary-color) !important;
             text-decoration: none;
+            font-weight: 500;
+            position: relative;
             transition: all var(--transition-speed) var(--transition-ease);
             padding: 2px 4px;
             border-radius: 4px;
-            position: relative;
+            background: linear-gradient(135deg, transparent 0%, rgba(30, 64, 175, 0.05) 100%);
         }
         
         .supervisor-link:hover {
-            color: var(--secondary-color);
-            background: rgba(2, 132, 199, 0.1);
+            color: var(--primary-dark) !important;
             text-decoration: none;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, rgba(30, 64, 175, 0.15) 100%);
+            box-shadow: 0 2px 8px rgba(30, 64, 175, 0.2);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
         }
         
         .supervisor-link::before {
@@ -4047,29 +4048,30 @@ function createProfileLink($name, $userId, $userType = null) {
             font-size: 0.9em;
         }
         
-        /* Team member link styling */
+        /* Member link styling for consistency */
         .member-link {
-            color: var(--accent-color);
-            font-weight: 500;
+            color: var(--accent-color) !important;
             text-decoration: none;
+            font-weight: 500;
+            position: relative;
             transition: all var(--transition-speed) var(--transition-ease);
             padding: 2px 4px;
             border-radius: 4px;
-            position: relative;
+            background: linear-gradient(135deg, transparent 0%, rgba(2, 132, 199, 0.05) 100%);
         }
         
         .member-link:hover {
-            color: var(--accent-color);
-            background: rgba(30, 64, 175, 0.1);
+            color: #0369a1 !important;
             text-decoration: none;
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.1) 0%, rgba(2, 132, 199, 0.15) 100%);
+            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(30, 64, 175, 0.3);
         }
         
         .member-link::before {
-            content: '👤';
+            content: '👨‍🎓';
             margin-right: 4px;
-            font-size: 0.8em;
+            font-size: 0.9em;
         }
     </style>
     
@@ -4598,29 +4600,69 @@ function createProfileLink($name, $userId, $userType = null) {
         
         // Helper function to create clickable profile links
         async function createProfileLink(name, userId, userType = null) {
-            if (!userId) return name;
+            if (!name) return 'Unknown';
             
-            try {
-                // Check if profile exists via AJAX
-                const response = await fetch('src/model/check_profile_exists.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ userId: userId, userType: userType })
-                });
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.exists) {
-                        const profileType = result.type === 'faculty' ? 'Faculty_Profile.php' : 'Student_Profile.php';
-                        return `<a href="${profileType}?id=${userId}" class="profile-link ${result.type === 'faculty' ? 'supervisor-link' : 'member-link'}" title="View ${result.type} profile">${name}</a>`;
+            // Primary method: Use userId if available
+            if (userId) {
+                try {
+                    const response = await fetch('src/model/check_profile_exists.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ userId: userId, userType: userType })
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.exists) {
+                            const profileType = result.type === 'faculty' ? 'Faculty_Profile.php' : 'Student_Profile.php';
+                            return `<a href="${profileType}?id=${userId}" class="profile-link ${result.type === 'faculty' ? 'supervisor-link' : 'member-link'}" title="View ${result.type} profile">${name}</a>`;
+                        }
                     }
+                } catch (error) {
+                    console.log('Profile check failed for user:', userId);
                 }
-            } catch (error) {
-                console.log('Profile check failed for user:', userId);
             }
             
+            // Fallback method: Try to find supervisor by name in global faculty data
+            if (userType === 'faculty' || !userType) {
+                try {
+                    // Check if global faculty data is available
+                    if (window.facultyData && Array.isArray(window.facultyData)) {
+                        const matchingFaculty = window.facultyData.find(faculty => 
+                            faculty.name && faculty.name.toLowerCase().trim() === name.toLowerCase().trim()
+                        );
+                        
+                        if (matchingFaculty && matchingFaculty._id) {
+                            console.log(`Found faculty by name: ${name} -> ${matchingFaculty._id}`);
+                            return `<a href="Faculty_Profile.php?id=${matchingFaculty._id}" class="profile-link supervisor-link" title="View faculty profile">${name}</a>`;
+                        }
+                    }
+                    
+                    // If global faculty data is not available, try to fetch it
+                    if (!window.facultyData) {
+                        const facultyResponse = await fetch('src/model/load_faculty.php');
+                        if (facultyResponse.ok) {
+                            const facultyData = await facultyResponse.json();
+                            window.facultyData = facultyData; // Cache for future use
+                            
+                            const matchingFaculty = facultyData.find(faculty => 
+                                faculty.name && faculty.name.toLowerCase().trim() === name.toLowerCase().trim()
+                            );
+                            
+                            if (matchingFaculty && matchingFaculty._id) {
+                                console.log(`Found faculty by name (from fetch): ${name} -> ${matchingFaculty._id}`);
+                                return `<a href="Faculty_Profile.php?id=${matchingFaculty._id}" class="profile-link supervisor-link" title="View faculty profile">${name}</a>`;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.log('Faculty name lookup failed:', error);
+                }
+            }
+            
+            // Return original name if no profile found
             return name;
         }
         
@@ -4634,17 +4676,21 @@ function createProfileLink($name, $userId, $userType = null) {
                 const supervisorName = project.supervisor.name || (typeof project.supervisor === 'string' ? project.supervisor : (project.supervisor.$oid || 'Unknown'));
                 const supervisorId = project.supervisor.userId ? (project.supervisor.userId.$oid || project.supervisor.userId) : null;
                 
-                if (supervisorId) {
-                    // Create clickable supervisor link
-                    createProfileLink(supervisorName, supervisorId, 'faculty').then(linkedName => {
-                        // Update supervisor info in both places after the profile check
-                        document.querySelectorAll('.supervisor-display').forEach(el => {
-                            el.innerHTML = linkedName;
-                        });
-                    });
-                }
-                
+                // Initially show supervisor name (will be updated to clickable link if profile exists)
                 supervisorInfo = `<div class="meta-item"><i class="bi bi-person-badge"></i><strong>Supervisor:</strong> <span class="supervisor-display">${supervisorName}</span></div>`;
+                
+                // Try to make supervisor clickable (with or without userId)
+                createProfileLink(supervisorName, supervisorId, 'faculty').then(linkedName => {
+                    // Update all supervisor displays with clickable link
+                    document.querySelectorAll('.supervisor-display').forEach(el => {
+                        if (el.textContent.trim() === supervisorName) {
+                            el.innerHTML = linkedName;
+                        }
+                    });
+                }).catch(error => {
+                    console.log('Failed to create supervisor profile link:', error);
+                    // Keep the original name if profile check fails
+                });
             }
             
             // Check if the current user is part of the project team (member or supervisor)
@@ -5674,42 +5720,80 @@ function createProfileLink($name, $userId, $userType = null) {
         function renderStats(project) {
             const statsEl = document.getElementById('stats-container');
             
-            if (!project.stats) {
-                statsEl.innerHTML = '<p class="text-muted">No statistics available</p>';
-                return;
+            // Initialize stats if they don't exist
+            if (!project.stats || typeof project.stats !== 'object') {
+                project.stats = { views: 0, downloads: 0, favorites: 0 };
             }
+            
+            // Ensure numeric values
+            const views = parseInt(project.stats.views) || 0;
+            const downloads = parseInt(project.stats.downloads) || 0;
+            const favorites = parseInt(project.stats.favorites) || 0;
             
             let statsHTML = '<ul class="list-group list-group-flush">';
             
-            if (project.stats.views) {
-                statsHTML += `
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-eye me-2"></i>Views</span>
-                        <span class="badge bg-primary rounded-pill">${project.stats.views}</span>
-                    </li>
-                `;
-            }
+            // Always show views (most basic stat)
+            statsHTML += `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-eye me-2"></i>Views</span>
+                    <span class="badge bg-primary rounded-pill">${views}</span>
+                </li>
+            `;
             
-            if (project.stats.downloads) {
+            // Show downloads if greater than 0 or if files exist
+            if (downloads > 0 || (project.files && project.files.length > 0)) {
                 statsHTML += `
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span><i class="bi bi-download me-2"></i>Downloads</span>
-                        <span class="badge bg-primary rounded-pill">${project.stats.downloads}</span>
+                        <span class="badge bg-primary rounded-pill">${downloads}</span>
                     </li>
                 `;
             }
             
-            if (project.stats.favorites) {
+            // Always show favorites
+            statsHTML += `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-star me-2"></i>Favorites</span>
+                    <span class="badge bg-primary rounded-pill">${favorites}</span>
+                </li>
+            `;
+            
+            // Add team size as a stat
+            const teamSize = (project.members ? project.members.length : 0) + (project.supervisor ? 1 : 0);
+            if (teamSize > 0) {
                 statsHTML += `
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-star me-2"></i>Favorites</span>
-                        <span class="badge bg-primary rounded-pill">${project.stats.favorites}</span>
+                        <span><i class="bi bi-people me-2"></i>Team Members</span>
+                        <span class="badge bg-success rounded-pill">${teamSize}</span>
+                    </li>
+                `;
+            }
+            
+            // Add file count if files exist
+            if (project.files && project.files.length > 0) {
+                statsHTML += `
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-file-earmark me-2"></i>Files</span>
+                        <span class="badge bg-info rounded-pill">${project.files.length}</span>
                     </li>
                 `;
             }
             
             statsHTML += '</ul>';
             statsEl.innerHTML = statsHTML;
+            
+            // Add fade-in animation for stats
+            const statItems = statsEl.querySelectorAll('.list-group-item');
+            statItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(10px)';
+                
+                setTimeout(() => {
+                    item.style.transition = 'all 0.3s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
         }
         
         // Helper functions
@@ -5717,16 +5801,36 @@ function createProfileLink($name, $userId, $userType = null) {
             if (!dateString) return 'Not specified';
             
             try {
-                // MongoDB dates can come as objects with $date property or as ISO strings
-                const dateValue = typeof dateString === 'object' && dateString.$date 
-                    ? dateString.$date 
-                    : dateString;
-                    
+                let dateValue = dateString;
+                
+                // Handle MongoDB UTCDateTime objects
+                if (typeof dateString === 'object') {
+                    // MongoDB UTCDateTime format: { "$date": "2024-01-01T00:00:00.000Z" }
+                    if (dateString.$date) {
+                        dateValue = dateString.$date;
+                    }
+                    // MongoDB BSON UTCDateTime format with $numberLong
+                    else if (dateString.$date && dateString.$date.$numberLong) {
+                        dateValue = parseInt(dateString.$date.$numberLong);
+                    }
+                    // Direct timestamp (milliseconds)
+                    else if (typeof dateString === 'object' && dateString.toString && !isNaN(new Date(dateString).getTime())) {
+                        dateValue = dateString.toString();
+                    }
+                    // Try extracting timestamp if it's a complex object
+                    else if (dateString.sec) {
+                        // MongoDB internal timestamp format
+                        dateValue = dateString.sec * 1000; // Convert seconds to milliseconds
+                    }
+                }
+                
+                // Create Date object
                 const date = new Date(dateValue);
                 
                 // Check if date is valid
                 if (isNaN(date.getTime())) {
-                    return 'Invalid date';
+                    console.warn('Invalid date value:', dateString);
+                    return 'Date unavailable';
                 }
                 
                 return date.toLocaleDateString('en-US', { 
@@ -5735,7 +5839,7 @@ function createProfileLink($name, $userId, $userType = null) {
                     day: 'numeric'
                 });
             } catch (error) {
-                console.error('Error formatting date:', error);
+                console.error('Error formatting date:', error, 'Input:', dateString);
                 return 'Date format error';
             }
         }
