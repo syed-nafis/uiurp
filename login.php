@@ -1,3 +1,6 @@
+<?php
+session_start(); 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,12 +32,12 @@
         <input type="checkbox" id="chk">
         
         <?php
-        session_start();
         if (isset($_SESSION['error'])) {
             echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
             unset($_SESSION['error']);
         }
         if (isset($_SESSION['success'])) {
+            $_SESSION['faculty_id'] = (string) $faculty['_id'];
             echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
             unset($_SESSION['success']);
         }

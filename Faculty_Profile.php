@@ -104,7 +104,14 @@ if (isset($_GET['id'])) {
 
 <!-- Interested Fields Section -->
 <section id="interested-fields" class="py-5 bg-light">
-    <h2 class="text-center mb-5">Interested Fields</h2>
+    <h2 class="text-center mb-5">Interested Fields
+    <!--Only logged in faculty can see this option --> 
+    <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) && $_SESSION['user_type'] === 'faculty' && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
+        <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#interested-fields" class="btn btn-sm btn-outline-secondary ms-2">Edit</a>
+    <?php endif; ?>
+
+
+    </h2>
     <div class="container">
         <div class="row justify-content-center">
             <?php foreach ($faculty['interested_fields_of_research'] as $field): ?>
@@ -119,9 +126,22 @@ if (isset($_GET['id'])) {
 </section>
 
 
-    <!-- Publications Section -->
-    <section id="projects" class="container py-5">
-    <h2 class="text-center mb-4">Publications</h2>
+<!-- Publications Section -->
+<section id="projects" class="container py-5">
+
+    <!-- Centered heading + edit button -->
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
+        <h2 class="mb-0">Publications</h2>
+        <?php if (
+            isset($_SESSION['user_id'], $_SESSION['user_type']) &&
+            $_SESSION['user_type'] === 'faculty' &&
+            $_SESSION['user_id'] === (string)$faculty['_id']
+        ): ?>
+            <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#projects" class="btn btn-sm btn-outline-secondary">Edit</a>
+        <?php endif; ?>
+    </div>
+
+    <!-- Rest of the content stays the same -->
     <div class="row">
         <?php foreach ($faculty['projects'] as $project): ?>
             <div class="col-md-4 p-3">
@@ -139,10 +159,22 @@ if (isset($_GET['id'])) {
             </div>
         <?php endforeach; ?>
     </div>
+    
 </section>
 
+
 <section id="prerequisite" class="prerequisites-section py-5 bg-white">
-    <h2 class="text-center mb-4">Prerequisites</h2>
+    <!-- Center heading and edit button together -->
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
+        <h2 class="mb-0">Prerequisites</h2>
+        <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) 
+                  && $_SESSION['user_type'] === 'faculty' 
+                  && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
+            <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#interested-fields" 
+               class="btn btn-sm btn-outline-secondary">Edit</a>
+        <?php endif; ?>
+    </div>
+
     <div class="container">
         <?php if (!empty($faculty['prerequisites']) && count($faculty['prerequisites']) > 0): ?>
             <div class="row justify-content-center">
@@ -160,14 +192,26 @@ if (isset($_GET['id'])) {
     </div>
 </section>
 
+
 <section id="resource" class="resources-section py-5 bg-light">
-    <h2 class="text-center mb-4">Resources to Learn Prerequisites</h2>
+    <!-- Center heading and edit button together -->
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
+        <h2 class="mb-0">Resources to Learn Prerequisites</h2>
+        <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) 
+                  && $_SESSION['user_type'] === 'faculty' 
+                  && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
+            <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#interested-fields" 
+               class="btn btn-sm btn-outline-secondary">Edit</a>
+        <?php endif; ?>
+    </div>
+
     <div class="container">
         <?php if (!empty($faculty['resources_to_learn_prerequisites']) && count($faculty['resources_to_learn_prerequisites']) > 0): ?>
             <div class="row justify-content-center">
                 <?php foreach ($faculty['resources_to_learn_prerequisites'] as $resource): ?>
                     <div class="col-md-5 col-lg-4 mb-4">
-                        <a href="<?= htmlspecialchars($resource['link']); ?>" target="_blank" class="resource-card d-block p-4 text-decoration-none shadow-sm rounded bg-white h-100">
+                        <a href="<?= htmlspecialchars($resource['link']); ?>" target="_blank" 
+                           class="resource-card d-block p-4 text-decoration-none shadow-sm rounded bg-white h-100">
                             <h5 class="text-primary mb-1"><?= htmlspecialchars($resource['topic']); ?></h5>
                             <small class="text-muted">Click to learn more</small>
                         </a>
@@ -179,6 +223,7 @@ if (isset($_GET['id'])) {
         <?php endif; ?>
     </div>
 </section>
+
 
     <!-- Contact Section -->
     <section class="bg-dark text-light py-5">
