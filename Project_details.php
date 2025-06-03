@@ -4478,13 +4478,15 @@ function createProfileLink($name, $userId, $userType = null) {
             }
             
             // Fetch project details
-            fetch(`src/model/fetch_project_by_id.php?id=${projectId}`)
+            fetch(`src/model/get_project.php?id=${projectId}`)
                 .then(response => response.json())
-                .then(project => {
-                    if (project.error) {
+                .then(data => {
+                    if (!data.success || data.error) {
                         showProjectNotFound();
                         return;
                     }
+                    
+                    const project = data.project;
                     
                     // Hide loading spinner and show project details with nice fade effect
                     const loadingSpinner = document.getElementById('loading-spinner');
@@ -6079,6 +6081,7 @@ function createProfileLink($name, $userId, $userType = null) {
               });
           }
       });
+      
       
       // Create periodic wave effects through particles
       setInterval(() => {

@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['username'] = $facultyData['name']; // Store username in session
                 $_SESSION['profile_pic'] = $facultyData['profile_image']; // Store user ID in session
                 $_SESSION['email'] = $facultyData['email']; // Store user ID in session
+                $_SESSION['user_id'] = (string)$facultyData['_id']; // Store user ID in session
                 header('Location: /../../index.php'); // Redirect to faculty dashboard
                 exit();
             }
@@ -48,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['profile_pic'] = $studentData['basic_info']['profile_image_url'];// Store user ID in session
                 $_SESSION['email'] = $studentData['contact_info']['primary_email']; // Store user ID in session
                 $_SESSION['user_data'] = json_decode(json_encode($studentData),true);
+                $_SESSION['user_id'] = (string)$studentData['_id']; // Store user ID in session
                 header('Location: /../../index.php'); // Redirect to student dashboard
                 exit();
             }

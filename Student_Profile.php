@@ -11,19 +11,74 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
 // Include MongoDB connection
 require __DIR__ . '/vendor/autoload.php';
 
+// Helper function to safely convert various ObjectId formats
+function convertToObjectId($id) {
+    if (empty($id)) {
+        return null;
+    }
+    
+    try {
+        // If it's already a MongoDB ObjectId object
+        if (is_object($id) && $id instanceof MongoDB\BSON\ObjectId) {
+            return $id;
+        }
+        
+        // If it's an array (serialized ObjectId format)
+        if (is_array($id)) {
+            if (isset($id['$oid'])) {
+                return new MongoDB\BSON\ObjectId($id['$oid']);
+            }
+            // Sometimes it might be nested differently
+            if (isset($id['oid'])) {
+                return new MongoDB\BSON\ObjectId($id['oid']);
+            }
+        }
+        
+        // If it's a string representation
+        if (is_string($id)) {
+            // Remove any whitespace
+            $id = trim($id);
+            // Check if it's a valid 24-character hex string
+            if (strlen($id) === 24 && ctype_xdigit($id)) {
+                return new MongoDB\BSON\ObjectId($id);
+            }
+        }
+        
+        // If we can't convert it, log for debugging and return null
+        error_log("Unable to convert ID to ObjectId: " . print_r($id, true));
+        return null;
+        
+    } catch (Exception $e) {
+        error_log("Error converting ID to ObjectId: " . $e->getMessage() . " | ID: " . print_r($id, true));
+        return null;
+    }
+}
+
 // Connect to MongoDB
 $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
 $db = $client->uiurp;
 $studentsCollection = $db->students;
+$loginInfoCollection = $db->login_info;
 
 // Get user ID - either from URL parameter (viewing other profiles) or session (own profile)
 $userId = null;
 $isOwnProfile = false;
+$targetUserId = null;
 
 if (isset($_GET['id']) && !empty($_GET['id'])) {
-    // Viewing another student's profile
+    // Viewing another user's profile
     try {
         $userId = new MongoDB\BSON\ObjectId($_GET['id']);
+        $targetUserId = $userId;
+        
+        // First, get the student data to check if it exists
+        $targetStudent = $studentsCollection->findOne(['_id' => $userId]);
+        if (!$targetStudent) {
+            $_SESSION['error'] = "Profile not found";
+            header('Location: Research_page.php');
+            exit();
+        }
+        
     } catch (Exception $e) {
         $_SESSION['error'] = "Invalid profile ID";
         header('Location: Research_page.php');
@@ -31,33 +86,103 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     }
 } else {
     // Viewing own profile
-    $userId = new MongoDB\BSON\ObjectId($_SESSION['user_id']);
     $isOwnProfile = true;
-}
-
-// Fetch the student data from MongoDB
-$studentData = $studentsCollection->findOne(['_id' => $userId]);
-
-// If student data not found
-if (!$studentData) {
-    if ($isOwnProfile) {
-        $_SESSION['info'] = "You need to set up your profile first";
-        header('Location: Student_Profile_Create.php');
-        exit();
+    // Get current user's ID from session using the helper function
+    if (isset($_SESSION['user_data']['_id'])) {
+        $targetUserId = convertToObjectId($_SESSION['user_data']['_id']);
+        
+        if (!$targetUserId) {
+            $_SESSION['error'] = "Invalid user session data";
+            header('Location: login.php');
+            exit();
+        }
     } else {
-        $_SESSION['error'] = "Student profile not found";
-        header('Location: Research_page.php');
+        $_SESSION['error'] = "User session incomplete";
+        header('Location: login.php');
         exit();
     }
 }
 
-// Convert MongoDB document to an array
-$student = json_decode(json_encode($studentData), true);
+// Check user type from login_info collection using the user ID
+if ($targetUserId) {
+    $loginInfo = $loginInfoCollection->findOne(['id' => $targetUserId]);
+    
+    if ($loginInfo && isset($loginInfo['type'])) {
+        $accountType = $loginInfo['type'];
+        
+        // Debug: Log the account type for troubleshooting
+        // error_log("Account type for user ID $targetUserId: $accountType");
+        
+        // If the user is faculty type, redirect to Faculty_Profile.php
+        if ($accountType === 'faculty') {
+            // Debug: Log the redirect
+            // error_log("Redirecting faculty user ID $targetUserId to Faculty_Profile.php?id=$targetUserId");
+            header("Location: Faculty_Profile.php?id=" . $targetUserId);
+            exit();
+        }
+        // If type is 'student' or anything else, continue with student profile
+    } else {
+        // If no login info found or no type field, assume student
+        // This provides backward compatibility for existing accounts
+        // error_log("No login info or type found for user ID $targetUserId, assuming student");
+    }
+}
 
-// Default profile image if not set
-$profileImage = $student['basic_info']['profile_image_url'] ?? $student['profile_image'] ?? $student['profile_image_url'] ?? null;
+// Fetch the student data from MongoDB
+if ($isOwnProfile) {
+    $student = $_SESSION['user_data'];
+} else {
+    $student = $studentsCollection->findOne(['_id' => $userId]);
+    if (!$student) {
+        $_SESSION['error'] = "Student profile not found";
+        header('Location: Research_page.php');
+        exit();
+    }
+    // Convert to array for consistent handling
+    $student = iterator_to_array($student);
+}
+
+// Handle profile image with proper placeholder
+$profileImage = null;
+
+// Try multiple possible locations for profile image
+$possibleImagePaths = [
+    $student['basic_info']['profile_image_url'] ?? null,
+    $student['profile_image'] ?? null,
+    $student['profile_image_url'] ?? null,
+    $student['basic_info']['profile_image'] ?? null
+];
+
+foreach ($possibleImagePaths as $imagePath) {
+    if (!empty($imagePath) && is_string($imagePath) && trim($imagePath) !== '') {
+        $profileImage = $imagePath;
+        break;
+    }
+}
+
+// If no valid profile image found, use placeholder
 if (empty($profileImage)) {
-    $profileImage = 'assets/resources/student.jpeg';
+    $profileImage = 'assets/resources/user_avater.png';
+}
+
+// Verify placeholder exists, if not use a backup
+if (!file_exists($profileImage)) {
+    // Try alternative placeholders
+    $placeholders = [
+        'assets/resources/user_avater.png',
+        'assets/resources/imgPlaceholder.png',
+        'assets/resources/default-profile.jpg',
+        'https://via.placeholder.com/250x250/6c757d/ffffff?text=Student'
+    ];
+    
+    $profileImage = 'https://via.placeholder.com/250x250/6c757d/ffffff?text=Student'; // Default fallback
+    
+    foreach ($placeholders as $placeholder) {
+        if (file_exists($placeholder)) {
+            $profileImage = $placeholder;
+            break;
+        }
+    }
 }
 ?>
 
@@ -79,7 +204,7 @@ if (empty($profileImage)) {
             --glass-border: rgba(255, 255, 255, 0.2);
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.8);
-            --text-muted: rgba(255, 255, 255, 0.6);
+            --text-secondary: rgba(255, 255, 255, 0.6);
             --accent-blue: #00d4ff;
             --accent-purple: #8b5cf6;
             --accent-pink: #ec4899;
@@ -94,7 +219,7 @@ if (empty($profileImage)) {
             --glass-border: rgba(0, 0, 0, 0.1);
             --text-primary: #1e293b;
             --text-secondary: #475569;
-            --text-muted: #64748b;
+            --text-secondary: #64748b;
             --accent-blue: #0ea5e9;
             --accent-purple: #8b5cf6;
             --accent-pink: #ec4899;
@@ -744,7 +869,7 @@ if (empty($profileImage)) {
         }
 
         .section-card .card-subtitle {
-            color: var(--text-muted) !important;
+            color: var(--text-secondary) !important;
         }
 
         .section-card strong {
@@ -971,7 +1096,7 @@ if (empty($profileImage)) {
         }
 
         .empty-state i {
-            color: var(--text-muted);
+            color: var(--text-secondary);
             font-size: 4rem;
             margin-bottom: 1.5rem;
             animation: float 3s ease-in-out infinite;
@@ -988,7 +1113,7 @@ if (empty($profileImage)) {
         }
 
         .empty-state p {
-            color: var(--text-muted);
+            color: var(--text-secondary);
             margin-bottom: 2rem;
         }
 
@@ -1060,8 +1185,8 @@ if (empty($profileImage)) {
         }
 
         .btn-outline-secondary {
-            border: 2px solid var(--text-muted);
-            color: var(--text-muted);
+            border: 2px solid var(--text-secondary);
+            color: var(--text-secondary);
             background: transparent;
             border-radius: 15px;
             padding: 10px 18px;
@@ -1070,7 +1195,7 @@ if (empty($profileImage)) {
         }
 
         .btn-outline-secondary:hover {
-            background: var(--text-muted);
+            background: var(--text-secondary);
             color: var(--dark-gradient);
             transform: translateY(-2px);
         }
@@ -1090,7 +1215,7 @@ if (empty($profileImage)) {
         }
 
         footer small {
-            color: var(--text-muted);
+            color: var(--text-secondary);
         }
 
         /* Alert Styling */
@@ -1492,7 +1617,7 @@ if (empty($profileImage)) {
       <div class="row align-items-center">
           <div class="col-md-8">
               <h1 class="display-4">Hi, I'm <strong><?= htmlspecialchars($student['basic_info']['name'] ?? $student['name'] ?? 'Student') ?></strong></h1>
-              <p class="lead text-muted">Student ID: <?= htmlspecialchars($student['academic_info']['student_id'] ?? $student['student_id'] ?? 'N/A') ?></p>
+              <p class="lead text-secondary">Student ID: <?= htmlspecialchars($student['academic_info']['student_id'] ?? $student['student_id'] ?? 'N/A') ?></p>
               
               <div class="info-item">
                   <i class="bi bi-mortarboard-fill"></i> 
@@ -1532,7 +1657,10 @@ if (empty($profileImage)) {
           
           <div class="col-md-4 profile-image-container">
               <div class="profile-image-wrapper">
-                  <img src="<?= htmlspecialchars($profileImage) ?>" alt="Profile Picture" loading="lazy">
+                  <img src="<?= htmlspecialchars($profileImage) ?>" 
+                       alt="Profile Picture" 
+                       loading="lazy"
+                       onerror="this.onerror=null; this.src='https://via.placeholder.com/250x250/6c757d/ffffff?text=Student'; this.alt='Default Profile Picture';">
           </div>
               <?php if ($isOwnProfile): ?>
               <div class="mt-3">
@@ -1555,7 +1683,7 @@ if (empty($profileImage)) {
                 <div class="card section-card">
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($student['academic_info']['current_degree_info']['degree_name'] ?? $student['degree_name'] ?? $student['degree'] ?? 'Degree Information') ?></h5>
-                        <h6 class="card-subtitle mb-2 text-muted"><?= htmlspecialchars($student['academic_info']['current_degree_info']['institution_name'] ?? $student['institution'] ?? 'United International University') ?></h6>
+                        <h6 class="card-subtitle mb-2 text-secondary"><?= htmlspecialchars($student['academic_info']['current_degree_info']['institution_name'] ?? $student['institution'] ?? 'United International University') ?></h6>
                         <p class="card-text">
                             <strong>Major:</strong> <?= htmlspecialchars($student['academic_info']['current_degree_info']['major_field_of_study'] ?? $student['major_field'] ?? $student['field'] ?? 'N/A') ?><br>
                             <strong>Enrollment:</strong> <?php 
@@ -1682,7 +1810,7 @@ if (empty($profileImage)) {
                                 <span class="skills-tag"><?= htmlspecialchars($interest) ?></span>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p class="text-muted">No research interests added yet.</p>
+                            <p class="text-secondary">No research interests added yet.</p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -1699,7 +1827,7 @@ if (empty($profileImage)) {
                                 <span class="skills-tag"><?= htmlspecialchars($skill) ?></span>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p class="text-muted">No skills added yet.</p>
+                            <p class="text-secondary">No skills added yet.</p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -1728,7 +1856,7 @@ if (empty($profileImage)) {
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading projects...</span>
             </div>
-            <p class="mt-2 text-muted">Loading your research projects...</p>
+            <p class="mt-2 text-secondary">Loading your research projects...</p>
         </div>
         
         <!-- Projects Grid -->
@@ -1743,10 +1871,10 @@ if (empty($profileImage)) {
         <!-- No Projects Message -->
         <div class="empty-state" id="no-projects" style="display: none;">
             <div class="mb-3">
-                <i class="bi bi-folder2-open text-muted" style="font-size: 4rem;"></i>
+                <i class="bi bi-folder2-open text-secondary" style="font-size: 4rem;"></i>
             </div>
-            <h4 class="text-muted">No Research Projects Yet</h4>
-            <p class="text-muted">You haven't joined any research projects yet. Start by creating a new project or join an existing one!</p>
+            <h4 class="text-secondary">No Research Projects Yet</h4>
+            <p class="text-secondary">You haven't joined any research projects yet. Start by creating a new project or join an existing one!</p>
             <div class="mt-3">
                 <a href="project_management.php" class="btn btn-primary me-2">
                     <i class="bi bi-plus-circle"></i> Create Your First Project
@@ -1801,10 +1929,10 @@ if (empty($profileImage)) {
         <?php else: ?>
             <div class="empty-state">
                 <div class="mb-3">
-                    <i class="bi bi-book text-muted" style="font-size: 4rem;"></i>
+                    <i class="bi bi-book text-secondary" style="font-size: 4rem;"></i>
                 </div>
-                <h4 class="text-muted">No Learning Resources Added</h4>
-                <p class="text-muted">Share useful resources, tutorials, and learning materials related to your skills and interests!</p>
+                <h4 class="text-secondary">No Learning Resources Added</h4>
+                <p class="text-secondary">Share useful resources, tutorials, and learning materials related to your skills and interests!</p>
                 <?php if ($isOwnProfile): ?>
                 <a href="Student_Profile_Edit.php#learning-resources" class="btn btn-primary">
                     <i class="bi bi-plus-circle"></i> Add Your First Resource
@@ -1825,7 +1953,7 @@ if (empty($profileImage)) {
                 <?php foreach($student['university_research_profile']['university_publications'] as $publication): ?>
                     <div class="publication-item">
                         <h5><?= htmlspecialchars($publication['title']) ?></h5>
-                        <p class="text-muted mb-2">
+                        <p class="text-secondary mb-2">
                             <strong>Authors:</strong> <?= htmlspecialchars(implode(', ', $publication['authors'])) ?><br>
                             <strong>Type:</strong> <?= htmlspecialchars($publication['publication_type']) ?><br>
                             <strong>Venue:</strong> <?= htmlspecialchars($publication['venue_or_journal_name']) ?><br>
@@ -1891,61 +2019,118 @@ if (empty($profileImage)) {
         const noProjects = document.getElementById('no-projects');
         
         console.log('Loading user projects...');
+        console.log('Elements found:', {
+            projectsGrid: !!projectsGrid,
+            projectsLoading: !!projectsLoading,
+            noProjects: !!noProjects
+        });
         
         // Show loading
-        projectsLoading.style.display = 'block';
-        noProjects.style.display = 'none';
-        projectsGrid.innerHTML = '';
+        if (projectsLoading) projectsLoading.style.display = 'block';
+        if (noProjects) noProjects.style.display = 'none';
+        if (projectsGrid) projectsGrid.innerHTML = '';
         
         // Fetch all user projects (both owned and member projects)
+        console.log('Making fetch request to: src/model/fetch_all_user_projects.php');
         fetch('src/model/fetch_all_user_projects.php')
             .then(response => {
                 console.log('Response status:', response.status);
                 console.log('Response OK:', response.ok);
+                console.log('Response headers:', response.headers);
+                
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    console.error('Response not OK. Status:', response.status, 'StatusText:', response.statusText);
+                    throw new Error('Network response was not ok: ' + response.status + ' ' + response.statusText);
                 }
-                return response.json();
+                
+                // Get response text first to see what we actually received
+                return response.text();
             })
-            .then(projects => {
+            .then(responseText => {
+                console.log('Raw response text:', responseText);
+                
+                // Try to parse as JSON
+                let projects;
+                try {
+                    projects = JSON.parse(responseText);
+                    console.log('Parsed projects:', projects);
+                } catch (jsonError) {
+                    console.error('JSON parse error:', jsonError);
+                    console.error('Response text that failed to parse:', responseText);
+                    throw new Error('Invalid JSON response: ' + jsonError.message);
+                }
+                
                 console.log('Projects received:', projects);
                 console.log('Number of projects:', projects ? projects.length : 0);
+                console.log('Type of projects:', typeof projects);
+                console.log('Is array:', Array.isArray(projects));
                 
                 // Hide loading
-                projectsLoading.style.display = 'none';
-                projectsGrid.innerHTML = '';
+                if (projectsLoading) projectsLoading.style.display = 'none';
+                if (projectsGrid) projectsGrid.innerHTML = '';
                 
                 const projectsNote = document.getElementById('projects-note');
                 
                 if (projects && projects.length > 0) {
                     console.log('Displaying projects...');
+                    
+                    // Limit to first 3 projects for profile display
+                    const displayProjects = projects.slice(0, 3);
+                    const hasMoreProjects = projects.length > 3;
+                    
                     // Display projects
-                    projects.forEach((project, index) => {
-                        console.log('Creating card for project:', project.title || project._id);
-                        const projectCard = createProjectCard(project, index);
-                        projectsGrid.appendChild(projectCard);
+                    displayProjects.forEach((project, index) => {
+                        console.log(`Creating card for project ${index}:`, project.title || project._id);
+                        try {
+                            const projectCard = createProjectCard(project, index);
+                            if (projectsGrid) projectsGrid.appendChild(projectCard);
+                        } catch (cardError) {
+                            console.error('Error creating project card:', cardError, 'Project data:', project);
+                        }
                     });
                     
-                    // Show the note about random selection
-                    projectsNote.style.display = 'block';
+                    // Show note about displaying limited projects
+                    if (projectsNote) {
+                        if (hasMoreProjects) {
+                            projectsNote.innerHTML = `
+                                <p class="text-secondary mb-2">
+                                    <i class="bi bi-info-circle"></i> 
+                                    Showing 3 of ${projects.length} research projects
+                                </p>
+                                <a href="project_management.php" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-arrow-right"></i> View All ${projects.length} Projects
+                                </a>
+                            `;
+                        } else {
+                            projectsNote.innerHTML = `
+                                <p class="text-secondary">
+                                    <i class="bi bi-check-circle"></i> 
+                                    Showing all ${projects.length} research project${projects.length === 1 ? '' : 's'}
+                                </p>
+                            `;
+                        }
+                        projectsNote.style.display = 'block';
+                    }
                 } else {
                     console.log('No projects found, showing empty state');
                     // Show no projects message
-                    noProjects.style.display = 'block';
-                    projectsNote.style.display = 'none';
+                    if (noProjects) noProjects.style.display = 'block';
+                    if (projectsNote) projectsNote.style.display = 'none';
                 }
             })
             .catch(error => {
                 console.error('Error loading projects:', error);
-                projectsLoading.style.display = 'none';
-                noProjects.style.display = 'block';
-                document.getElementById('projects-note').style.display = 'none';
+                console.error('Error stack:', error.stack);
+                if (projectsLoading) projectsLoading.style.display = 'none';
+                if (noProjects) noProjects.style.display = 'block';
+                const projectsNote = document.getElementById('projects-note');
+                if (projectsNote) projectsNote.style.display = 'none';
                 
                 // Update no projects message for error case
-                const noProjectsTitle = noProjects.querySelector('h4');
-                const noProjectsText = noProjects.querySelector('p');
-                noProjectsTitle.textContent = 'Error Loading Projects';
-                noProjectsText.textContent = 'There was an error loading your research projects. Please try refreshing the page.';
+                const noProjectsTitle = noProjects ? noProjects.querySelector('h4') : null;
+                const noProjectsText = noProjects ? noProjects.querySelector('p') : null;
+                if (noProjectsTitle) noProjectsTitle.textContent = 'Error Loading Projects';
+                if (noProjectsText) noProjectsText.textContent = 'There was an error loading your research projects. Please check the browser console for details.';
             });
     }
     

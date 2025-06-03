@@ -1761,38 +1761,17 @@ session_start();
                         projectLoadingState.style.display = 'none';
                         editProjectForm.style.display = 'block';
                     } else {
-                        // Project not found in database, try JSON file as fallback
-                        if (DEBUG) console.log('Project not found in database, trying JSON file...');
-                        return fetch(`src/model/get_project_from_json.php?id=${id}`)
-                            .then(response => {
-                                if (DEBUG) console.log('JSON file server response:', response);
-                                return response.json();
-                            })
-                            .then(jsonData => {
-                                hideSpinner();
-                                
-                                if (jsonData.success && jsonData.project) {
-                                    // Project found in JSON file
-                                    if (DEBUG) console.log('Project found in JSON file:', jsonData.project);
-                                    buildEditForm(jsonData.project);
-                                    projectLoadingState.style.display = 'none';
-                                    editProjectForm.style.display = 'block';
-                                    
-                                    // Show a warning that we're using JSON data
-                                    showToast('Using JSON Data', 'Project loaded from JSON file instead of database.', 'warning');
-                                } else {
-                                    // Project not found anywhere
-                                    if (DEBUG) console.error('Project not found in database or JSON file');
-                                    projectLoadingState.style.display = 'none';
-                                    projectNotFound.style.display = 'block';
-                                    
-                                    // Add error details to the UI
-                                    const errorDetails = document.createElement('p');
-                                    errorDetails.className = 'text-danger mt-2';
-                                    errorDetails.textContent = jsonData.message || 'Project not found in database or JSON file';
-                                    projectNotFound.querySelector('p').after(errorDetails);
-                                }
-                            });
+                        // Project not found
+                        if (DEBUG) console.error('Project not found');
+                        hideSpinner();
+                        projectLoadingState.style.display = 'none';
+                        projectNotFound.style.display = 'block';
+                        
+                        // Add error details to the UI
+                        const errorDetails = document.createElement('p');
+                        errorDetails.className = 'text-danger mt-2';
+                        errorDetails.textContent = data.message || 'Project not found';
+                        projectNotFound.querySelector('p').after(errorDetails);
                     }
                 })
                 .catch(error => {
