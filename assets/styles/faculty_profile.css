@@ -1,34 +1,232 @@
-.field-box {
-    width: 100%;
-    padding: 2rem;
-    background-color: #f3eeee;
-    border: 2px solid #6c757d;
-    border-radius: 12px;
-    text-align: center;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+/* Base */
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #f7f9fb;
+    color: #2c3e50;
+    margin: 0;
+    padding: 0;
 }
 
-.bg-light {
-    background-color: #e1e2e4 !important;
+h1, h2, h3, h4, h5 {
+    font-weight: 600;
+}
+
+a {
+    text-decoration: none;
+    color: #1a73e8;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Header Section */
+header {
+    background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 60px 0;
+}
+
+#facultyName {
+    font-size: 48px;
+    color: #333333;
+}
+
+#facultyBio {
+    font-size: 18px;
+    color: #555;
+    margin-top: 15px;
+    max-width: 600px;
+}
+
+#facultyImage {
+    max-width: 300px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Button Styling */
+.btn {
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.btn-primary {
+    background-color: #1a73e8;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* Interested Fields Styling */
+#interested-fields {
+    background: linear-gradient(to right, #f8f9fa, #f1f3f5);
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+#interested-fields h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+#interested-fields h2::after {
+    content: "";
+    width: 60px;
+    height: 4px;
+    background-color: #0d6efd;
+    display: block;
+    margin: 12px auto 0 auto;
+    border-radius: 2px;
+}
+
+.field-box {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-left: 5px solid #0d6efd;
+    transition: all 0.3s ease;
 }
 
 .field-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #0b5ed7;
 }
 
-.field-box h3 {
-    font-size: 1.5rem;
+.field-box h5 {
     font-weight: 600;
-    color: #495057;
+    font-size: 1rem;
+    color: #2c3e50;
 }
 
-@media (max-width: 768px) {
-    .field-box {
-        padding: 1.5rem;
-    }
 
-    .field-box h3 {
-        font-size: 1.2rem;
-    }
+/* Publications Section */
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.card-text {
+    font-size: 15px;
+    color: #444;
+}
+
+/* Prerequisites Section */
+#prerequisite h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    position: relative;
+    text-transform: uppercase;
+}
+
+#prerequisite h2::after {
+    content: "";
+    width: 60px;
+    height: 4px;
+    background-color: #0d6efd; 
+    display: block;
+    margin: 12px auto 0 auto;
+    border-radius: 2px;
+}
+
+.prerequisite-card {
+    border-left: 5px solid #0d6efd;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: left;
+}
+
+.prerequisite-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    background-color: #e9f7ef;
+}
+
+
+/* Resources Section */
+#resource h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    position: relative;
+    text-transform: uppercase;
+}
+
+#resource h2::after {
+    content: "";
+    width: 60px;
+    height: 4px;
+    background-color: #0d6efd;
+    display: block;
+    margin: 12px auto 0 auto;
+    border-radius: 2px;
+}
+
+.resource-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-left: 5px solid #0d6efd;
+    text-align: left;
+}
+
+.resource-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    background-color: #f0f8ff;
+}
+
+.resource-card h5 {
+    font-weight: 600;
+}
+
+.resource-card small {
+    display: block;
+    margin-top: 5px;
+}
+
+
+/* Contact Section */
+.bg-dark {
+    background-color: #2d3436 !important;
+}
+
+.bg-dark h2,
+.bg-dark h4,
+.bg-dark p {
+    color: #ffffff;
+}
+
+form .form-control {
+    border-radius: 8px;
+}
+
+form .btn {
+    border-radius: 25px;
 }

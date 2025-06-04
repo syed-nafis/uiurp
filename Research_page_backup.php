@@ -1,8 +1,5 @@
 <?php
 session_start();
-
-// Get search parameter from URL if it exists
-$searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1491,7 +1488,7 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
                         <div class="search-box-compact">
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-search search-icon-compact"></i>
-                                <input type="text" class="search-input-compact" placeholder="Search projects, keywords, or authors..." id="search-bar" autocomplete="off" value="<?php echo htmlspecialchars($searchQuery, ENT_QUOTES, 'UTF-8'); ?>">
+                                <input type="text" class="search-input-compact" placeholder="Search projects, keywords, or authors..." id="search-bar" autocomplete="off">
                                 <button class="search-btn-compact" id="search-bttn">
                                     <i class="fas fa-arrow-right"></i>
             </button>
@@ -1917,11 +1914,6 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
                     this.style.transform = 'scale(1)';
                 }, 150);
                 
-                // Clear search input and reload default projects
-                if (searchBar) {
-                    searchBar.value = '';
-                }
-                
                 const endpoint = 'src/model/fetch_projects.php?limit=15';
                 
                 loadProjects(endpoint);
@@ -1960,15 +1952,6 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 
         function performSearch(query) {
           const searchEndpoint = 'src/model/search_projects.php';
-          
-          // Update URL with search parameter
-          const newUrl = new URL(window.location);
-          if (query && query.trim()) {
-              newUrl.searchParams.set('search', query.trim());
-          } else {
-              newUrl.searchParams.delete('search');
-          }
-          window.history.replaceState({}, '', newUrl);
               
           showLoader();
             
@@ -2006,11 +1989,6 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
         }
 
         function loadProjects(url) {
-            // Clear search parameter from URL when loading default projects
-            const newUrl = new URL(window.location);
-            newUrl.searchParams.delete('search');
-            window.history.replaceState({}, '', newUrl);
-            
             showLoader();
             
             fetch(url)
@@ -2094,16 +2072,6 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
             card.setAttribute('data-aos', 'fade-up');
             card.setAttribute('data-aos-delay', Math.min(index * 100, 600));
             
-            // Handle project ID format properly
-            let projectId = '';
-            if (project._id) {
-                if (typeof project._id === 'object' && project._id.$oid) {
-                    projectId = project._id.$oid;
-                } else {
-                    projectId = project._id;
-                }
-            }
-            
             // Format project data
             const formattedDate = formatDate(project.createdAt);
             const authorsList = formatAuthors(project.members);
@@ -2112,7 +2080,7 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
             const badgeInfo = getProjectBadge(project.privacy);
             
             card.innerHTML = `
-                <a href="Project_details.php?id=${projectId}" class="text-decoration-none">
+                <a href="Project_details.php?id=${project._id.$oid || project._id}" class="text-decoration-none">
                     <div class="card-image">
                         <img src="${imageSrc}" alt="${project.title}" loading="lazy" onerror="this.src='assets/resources/research_picture/pub_1.jpg'">
                   </div>
@@ -2228,19 +2196,8 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
             return text.substring(0, maxLength) + '...';
         }
 
-        // Initialize with URL search parameter or default projects
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlSearchQuery = urlParams.get('search');
-        
-        if (urlSearchQuery && urlSearchQuery.trim()) {
-            // Auto-search if URL has search parameter
-            setTimeout(() => {
-                performSearch(urlSearchQuery.trim());
-            }, 100);
-        } else {
-            // Load default projects
-            loadProjects('src/model/fetch_projects.php?limit=15');
-        }
+        // Initialize with default projects
+        loadProjects('src/model/fetch_projects.php?limit=15');
     }
 
     function initializeCardAnimations() {

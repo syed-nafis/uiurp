@@ -9,74 +9,13 @@ $loginInfoCollection = $db->login_info;
 session_start(); // Start session to track user login status
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Check if this is a signup request (email and role fields are present)
-    if (isset($_POST['email']) && isset($_POST['role'])) {
-        // Handle signup
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        $role = strtolower($_POST['role']);
-        
-        // Validate role (only allow 'resident' or 'admin')
-        if ($role !== 'resident' && $role !== 'admin') {
-            $_SESSION['error'] = 'Invalid role. Please use resident or admin.';
-            header('Location: /../../login.php');
-            exit();
-        }
-        
-        // Check if username already exists
-        $existingUser = $loginInfoCollection->findOne(['username' => $username]);
-        if ($existingUser) {
-            $_SESSION['error'] = 'Username already exists. Please choose another username.';
-            header('Location: /../../login.php');
-            exit();
-        }
-        
-        // Create a new user ID
-        $userId = (string) new MongoDB\BSON\ObjectId();
-        
-        // Add user to login_info collection
-        $newUser = [
-            'type' => $role === 'resident' ? 'student' : 'faculty', // Map resident to student, admin to faculty
-            'id' => $userId,
-            'username' => $username,
-            'password' => $password
-        ];
-        
-        $loginInfoCollection->insertOne($newUser);
-        
-        // Create corresponding user document in appropriate collection
-        if ($role === 'resident') {
-            $studentCollection = $db->students;
-            $newStudent = [
-                '_id' => new MongoDB\BSON\ObjectId($userId),
-                'name' => $username,
-                'email' => $email,
-                'role' => $role
-            ];
-            $studentCollection->insertOne($newStudent);
-        } else {
-            $facultyCollection = $db->faculties;
-            $newFaculty = [
-                '_id' => new MongoDB\BSON\ObjectId($userId),
-                'name' => $username,
-                'email' => $email,
-                'role' => $role
-            ];
-            $facultyCollection->insertOne($newFaculty);
-        }
-        
-        // Set session and redirect
-        $_SESSION['success'] = 'Account created successfully. Please log in.';
-        header('Location: /../../login.php');
-        exit();
-    } else {
-        // Handle login
-        $username = $_POST['username'];
-        $password = $_POST['Password'];
-        
-        // Check if username and password match
-        $user = $loginInfoCollection->findOne(['username' => $username]);
+    $username = $_POST['username'];
+    $password = $_POST['Password'];
+    
+    
+
+    // Check if username and password match
+    $user = $loginInfoCollection->findOne(['username' => $username]);
 
     if ($user && $password === $user['password']) {
         $type = $user['type'];
@@ -91,8 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_type'] = 'faculty';
                 $_SESSION['user_data'] = json_decode(json_encode($facultyData),true);
-                $_SESSION['user_id'] = $id;
-                header('Location: /../../index.php'); // Redirect to faculty dashboard
+                $_SESSION['username'] = $facultyData['name']; // Store username in session
+                $_SESSION['profile_pic'] = $facultyData['profile_image']; // Store user ID in session
+                $_SESSION['email'] = $facultyData['email']; // Store user ID in session
+                $_SESSION['user_id'] = (string)$facultyData['_id']; // Store user ID in session
+                header('Location: ../../index.php'); // Redirect to faculty dashboard
                 exit();
             }
         } elseif ($type === 'student') {
@@ -102,19 +44,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<script>console.log('" . json_encode($studentData) . "');</script>"; // Log the data for debugging
             if ($studentData) {
                 $_SESSION['logged_in'] = true;
-                $_SESSION['user_type'] = 'faculty';
+                $_SESSION['user_type'] = 'student';
+                $_SESSION['username'] = $studentData['basic_info']['name'];
+                $_SESSION['profile_pic'] = $studentData['basic_info']['profile_image_url'];// Store user ID in session
+                $_SESSION['email'] = $studentData['contact_info']['primary_email']; // Store user ID in session
                 $_SESSION['user_data'] = json_decode(json_encode($studentData),true);
-                $_SESSION['user_id'] = $id;
-                header('Location: /../../index.php'); // Redirect to student dashboard
+                $_SESSION['user_id'] = (string)$studentData['_id']; // Store user ID in session
+                header('Location: ../../index.php'); // Redirect to student dashboard
                 exit();
             }
         }
     }
 
-        // If login fails
-        $_SESSION['error'] = 'Invalid username or password';
-        header('Location: /../../login.php'); // Redirect back to login page
-        exit();
-    }
+    // If login fails
+    $_SESSION['error'] = 'Invalid username or password';
+    header('Location: /../../login.php'); // Redirect back to login page
+    exit();
 }
 ?>

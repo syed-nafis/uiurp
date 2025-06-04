@@ -71,6 +71,9 @@ if (isset($_GET['id'])) {
                     <button class="btn btn-secondary mb-2" data-bs-toggle="modal" data-bs-target="#scheduleModal">
                         Current Schedule
                     </button>
+                    <a href="#interested-fields" class="btn btn-primary me-2 mb-2">Interested Field</a>
+                    <a href="#prerequisite" class="btn btn-primary me-2 mb-2">Prerequisite</a>
+                    <a href="#resource" class="btn btn-primary me-2 mb-2">Learning Resource</a>
                 </div>
             </div>
             <div class="col-md-6">
@@ -99,15 +102,22 @@ if (isset($_GET['id'])) {
 </div>
 
 
-    <!-- Interested Fields Section -->
-    <section class="py-5 bg-light">
-    <h2 class="text-center mb-4">Interested Fields</h2>
-    <div class="container p-3 text-center align-items-center">
-        <div class="row text-center align-items-center justify-content-center">
+<!-- Interested Fields Section -->
+<section id="interested-fields" class="py-5 bg-light">
+    <h2 class="text-center mb-5">Interested Fields
+    <!--Only logged in faculty can see this option --> 
+    <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) && $_SESSION['user_type'] === 'faculty' && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
+        <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#interested-fields" class="btn btn-sm btn-outline-secondary ms-2">Edit</a>
+    <?php endif; ?>
+
+
+    </h2>
+    <div class="container">
+        <div class="row justify-content-center">
             <?php foreach ($faculty['interested_fields_of_research'] as $field): ?>
-                <div class="col-md-3 mb-4">
-                    <div class="field-box p-4 shadow-sm rounded-lg">
-                        <h3 class="text-secondary"><?= $field; ?></h3>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="field-box p-4 shadow-sm rounded-4 bg-white h-100 d-flex align-items-center justify-content-center text-center">
+                        <h5 class="mb-0 text-dark"><?= $field; ?></h5>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -116,27 +126,106 @@ if (isset($_GET['id'])) {
 </section>
 
 
-    <!-- Publications Section -->
-    <section id="projects" class="container py-5">
-    <h2 class="text-center mb-4">Publications</h2>
+<!-- Publications Section -->
+<section id="projects" class="container py-5">
+
+    <!-- Centered heading + edit button -->
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
+        <h2 class="mb-0">Publications</h2>
+        <?php if (
+            isset($_SESSION['user_id'], $_SESSION['user_type']) &&
+            $_SESSION['user_type'] === 'faculty' &&
+            $_SESSION['user_id'] === (string)$faculty['_id']
+        ): ?>
+            <a href="edit_faculty.php?id=<?= htmlspecialchars((string)$faculty['_id']); ?>#projects" class="btn btn-sm btn-outline-secondary">Edit</a>
+        <?php endif; ?>
+    </div>
+
+    <!-- Projects grid -->
     <div class="row">
         <?php foreach ($faculty['projects'] as $project): ?>
             <div class="col-md-4 p-3">
-                <div class="card p-3">
-                    <?php 
-                        // Select a random image from the folder
-                        $randomImage = $images[array_rand($images)]; 
-                    ?>
-                    <img src="<?= $randomImage; ?>" class="card-img-top" alt="Project Image" style="width: 100%; height: auto;">
-                    <div class="card-body">
-                        <h5 class="card-title"><?= $project['title']; ?></h5>
-                        <p class="card-text"><?= $project['description']; ?></p>
+                <a href="<?= htmlspecialchars($project['link'] ?? '#'); ?>" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <div class="card p-3">
+                        <?php 
+                            $randomImage = $images[array_rand($images)]; 
+                        ?>
+                        <img src="<?= htmlspecialchars($randomImage); ?>" class="card-img-top" alt="Project Image" style="width: 100%; height: auto;">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= htmlspecialchars($project['title']); ?></h5>
+                            <p class="card-text"><?= htmlspecialchars($project['description']); ?></p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         <?php endforeach; ?>
     </div>
+
 </section>
+
+
+
+<section id="prerequisite" class="prerequisites-section py-5 bg-white">
+    <!-- Center heading and edit button together -->
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
+        <h2 class="mb-0">Prerequisites</h2>
+        <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) 
+                  && $_SESSION['user_type'] === 'faculty' 
+                  && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
+            <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#interested-fields" 
+               class="btn btn-sm btn-outline-secondary">Edit</a>
+        <?php endif; ?>
+    </div>
+
+    <div class="container">
+        <?php if (!empty($faculty['prerequisites']) && count($faculty['prerequisites']) > 0): ?>
+            <div class="row justify-content-center">
+                <?php foreach ($faculty['prerequisites'] as $prerequisite): ?>
+                    <div class="col-md-5 col-lg-4 mb-4">
+                        <div class="prerequisite-card p-4 shadow-sm rounded bg-light h-100">
+                            <h5 class="text-dark mb-0"><?= htmlspecialchars($prerequisite); ?></h5>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p class="text-center text-muted">No prerequisites available at the moment.</p>
+        <?php endif; ?>
+    </div>
+</section>
+
+
+<section id="resource" class="resources-section py-5 bg-light">
+    <!-- Center heading and edit button together -->
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
+        <h2 class="mb-0">Resources to Learn Prerequisites</h2>
+        <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) 
+                  && $_SESSION['user_type'] === 'faculty' 
+                  && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
+            <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#interested-fields" 
+               class="btn btn-sm btn-outline-secondary">Edit</a>
+        <?php endif; ?>
+    </div>
+
+    <div class="container">
+        <?php if (!empty($faculty['resources_to_learn_prerequisites']) && count($faculty['resources_to_learn_prerequisites']) > 0): ?>
+            <div class="row justify-content-center">
+                <?php foreach ($faculty['resources_to_learn_prerequisites'] as $resource): ?>
+                    <div class="col-md-5 col-lg-4 mb-4">
+                        <a href="<?= htmlspecialchars($resource['link']); ?>" target="_blank" 
+                            class="resource-card d-block p-4 text-decoration-none shadow-sm rounded bg-white h-100">
+                            <h5 class="text-primary mb-1"><?= htmlspecialchars($resource['topic']); ?></h5>
+                            <small class="text-muted">Click to learn more</small>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p class="text-center text-muted">No resources available at the moment.</p>
+        <?php endif; ?>
+    </div>
+</section>
+
 
     <!-- Contact Section -->
     <section class="bg-dark text-light py-5">
@@ -169,9 +258,6 @@ if (isset($_GET['id'])) {
             </div>
         </div>
     </section>
-
-    <!-- Include Footer -->
-    <?php include 'src/includes/footer.php'; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

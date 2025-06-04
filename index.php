@@ -800,6 +800,10 @@ session_start();
             color: var(--text-muted) !important;
         }
 
+        [data-theme="light"] .card-meta {
+            color: var(--text-muted) !important;
+        }
+
         [data-theme="light"] .neo-button {
             background: var(--neo-primary) !important;
             color: white !important;
@@ -7058,31 +7062,17 @@ session_start();
               });
           });
 
-      // Handle search input
+      // Handle search input - redirect to Research_page.php with search parameter
       searchBar.addEventListener('keypress', function(event) {
           if (event.key === 'Enter') {
               const searchString = searchBar.value.trim();
               if (searchString) {
-                  handleSearch(searchString);
+                  // Redirect to Research_page.php with search parameter
+                  const searchUrl = `Research_page.php?search=${encodeURIComponent(searchString)}`;
+                  window.location.href = searchUrl;
               }
           }
       });
-
-      function handleSearch(searchString) {
-          fetch('src/model/search_projects.php', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ searchString })
-          })
-          .then(response => response.json())
-          .then(data => {
-              // Redirect to Research_page.html with the search results
-              localStorage.setItem('searchResults', JSON.stringify(data));
-              window.location.href = 'Research_page.php';
-          });
-      }
 
       // Fetch and display the FAQs
       fetch('src/model/fetch_faqs.php')
@@ -7646,6 +7636,127 @@ session_start();
             }
         });
     </script>
+
+    <!-- Search Functionality Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBar = document.getElementById('search-bar');
+            const searchButton = document.getElementById('search-bttn');
+            
+            // Function to perform search
+            function performSearch() {
+                const searchQuery = searchBar.value.trim();
+                if (searchQuery) {
+                    // Redirect to Research_page.php with search parameter
+                    const searchUrl = `Research_page.php?search=${encodeURIComponent(searchQuery)}`;
+                    window.location.href = searchUrl;
+                }
+            }
+            
+            // Handle search button click
+            if (searchButton) {
+                searchButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    performSearch();
+                });
+            }
+            
+            // Handle Enter key press in search input
+            if (searchBar) {
+                searchBar.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        performSearch();
+                    }
+                });
+                
+                // Add real-time search suggestions (optional enhancement)
+                searchBar.addEventListener('input', function() {
+                    const query = this.value.trim();
+                    if (query.length >= 2) {
+                        // Show search suggestions or highlight popular searches
+                        highlightMatchingKeywords(query);
+                    } else {
+                        // Reset keyword highlights
+                        resetKeywordHighlights();
+                    }
+                });
+            }
+            
+            // Function to highlight matching keywords
+            function highlightMatchingKeywords(query) {
+                const keywords = document.querySelectorAll('.keyword-tag');
+                keywords.forEach(keyword => {
+                    const keywordText = keyword.textContent.toLowerCase();
+                    if (keywordText.includes(query.toLowerCase())) {
+                        keyword.classList.add('highlighted');
+                    } else {
+                        keyword.classList.remove('highlighted');
+                    }
+                });
+            }
+            
+            // Function to reset keyword highlights
+            function resetKeywordHighlights() {
+                const keywords = document.querySelectorAll('.keyword-tag');
+                keywords.forEach(keyword => {
+                    keyword.classList.remove('highlighted');
+                });
+            }
+            
+            // Make keyword tags clickable
+            const keywordTags = document.querySelectorAll('.keyword-tag');
+            keywordTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const keyword = this.textContent.trim();
+                    searchBar.value = keyword;
+                    performSearch();
+                });
+                
+                // Make them focusable and accessible
+                tag.setAttribute('tabindex', '0');
+                tag.setAttribute('role', 'button');
+                tag.setAttribute('aria-label', `Search for ${this.textContent}`);
+                
+                // Handle keyboard navigation
+                tag.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const keyword = this.textContent.trim();
+                        searchBar.value = keyword;
+                        performSearch();
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- Enhanced Keyword Highlighting Styles -->
+    <style>
+        .keyword-tag.highlighted {
+            background: linear-gradient(135deg, var(--neo-blue), var(--neo-purple)) !important;
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+            transform: translateY(-2px) scale(1.05);
+        }
+        
+        .keyword-tag {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .keyword-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 201, 240, 0.3);
+        }
+        
+        .keyword-tag:focus {
+            outline: 2px solid var(--neo-blue);
+            outline-offset: 2px;
+        }
+    </style>
+
+    <!-- Theme Initialization Script -->
 
     <!-- Scroll snapping enhancement script -->
     <script>
