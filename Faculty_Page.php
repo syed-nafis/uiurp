@@ -74,9 +74,5 @@ session_start();
 });
 
     </script>
-
-    <!-- Include Footer -->
-    <?php include 'src/includes/footer.php'; ?>
-
 </body>
 </html>

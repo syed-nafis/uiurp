@@ -5530,3 +5530,5 @@
 2025-06-03 20:26:33 - UserId extracted: 67e1ad43ebb89e49e04ddf38, isLoggedIn: true
 2025-06-03 20:26:33 - Filter: {"$or":[{"createdBy":"67e1ad43ebb89e49e04ddf38"},{"createdBy.$oid":"67e1ad43ebb89e49e04ddf38"},{"members":{"$elemMatch":{"userId":"67e1ad43ebb89e49e04ddf38"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1ad43ebb89e49e04ddf38"}}},{"members.userId":"67e1ad43ebb89e49e04ddf38"},{"members.userId.$oid":"67e1ad43ebb89e49e04ddf38"},{"supervisor.userId.$oid":"67e1ad43ebb89e49e04ddf38"},{"supervisor.userId":"67e1ad43ebb89e49e04ddf38"}]}
 2025-06-03 20:26:34 - Found 0 projects
+2025-06-04 19:54:51 - fetch_all_user_projects.php - User ID: 6656d4b4f7e5b8c9a0a1b2cb
+2025-06-04 19:54:51 - fetch_all_user_projects.php - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2cb"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2cb"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2cb"}]}
