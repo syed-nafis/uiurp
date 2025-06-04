@@ -137,30 +137,32 @@ if (isset($_GET['id'])) {
             $_SESSION['user_type'] === 'faculty' &&
             $_SESSION['user_id'] === (string)$faculty['_id']
         ): ?>
-            <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#projects" class="btn btn-sm btn-outline-secondary">Edit</a>
+            <a href="edit_faculty.php?id=<?= htmlspecialchars((string)$faculty['_id']); ?>#projects" class="btn btn-sm btn-outline-secondary">Edit</a>
         <?php endif; ?>
     </div>
 
-    <!-- Rest of the content stays the same -->
+    <!-- Projects grid -->
     <div class="row">
         <?php foreach ($faculty['projects'] as $project): ?>
             <div class="col-md-4 p-3">
-                <div class="card p-3">
-                    <?php 
-                        // Select a random image from the folder
-                        $randomImage = $images[array_rand($images)]; 
-                    ?>
-                    <img src="<?= $randomImage; ?>" class="card-img-top" alt="Project Image" style="width: 100%; height: auto;">
-                    <div class="card-body">
-                        <h5 class="card-title"><?= $project['title']; ?></h5>
-                        <p class="card-text"><?= $project['description']; ?></p>
+                <a href="<?= htmlspecialchars($project['link'] ?? '#'); ?>" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <div class="card p-3">
+                        <?php 
+                            $randomImage = $images[array_rand($images)]; 
+                        ?>
+                        <img src="<?= htmlspecialchars($randomImage); ?>" class="card-img-top" alt="Project Image" style="width: 100%; height: auto;">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= htmlspecialchars($project['title']); ?></h5>
+                            <p class="card-text"><?= htmlspecialchars($project['description']); ?></p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         <?php endforeach; ?>
     </div>
-    
+
 </section>
+
 
 
 <section id="prerequisite" class="prerequisites-section py-5 bg-white">
@@ -211,7 +213,7 @@ if (isset($_GET['id'])) {
                 <?php foreach ($faculty['resources_to_learn_prerequisites'] as $resource): ?>
                     <div class="col-md-5 col-lg-4 mb-4">
                         <a href="<?= htmlspecialchars($resource['link']); ?>" target="_blank" 
-                           class="resource-card d-block p-4 text-decoration-none shadow-sm rounded bg-white h-100">
+                            class="resource-card d-block p-4 text-decoration-none shadow-sm rounded bg-white h-100">
                             <h5 class="text-primary mb-1"><?= htmlspecialchars($resource['topic']); ?></h5>
                             <small class="text-muted">Click to learn more</small>
                         </a>
@@ -256,9 +258,6 @@ if (isset($_GET['id'])) {
             </div>
         </div>
     </section>
-
-    <!-- Include Footer -->
-    <!-- <?php include 'src/includes/footer.php'; ?> -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
