@@ -34,7 +34,7 @@ try {
 
 <div class="container my-5">
     <div class="card shadow p-4">
-        <h2 class="mb-4 text-center">Edit Faculty Profile</h2>
+        <h2 class="mb-4 text-center">Edit Profile</h2>
 
         <form method="POST" action="update_faculty.php" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?= $faculty['_id']; ?>">
