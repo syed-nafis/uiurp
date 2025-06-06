@@ -76,6 +76,14 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                     <span class="nav-text">Forum</span>
                     <span class="nav-highlight"></span>
                 </a>
+
+                <a href="#" id="navChatButton" class="nav-item chat-icon-only">
+                    <span class="nav-icon"><i class="bi bi-chat-dots-fill" style="color: var(--neo-blue);"></i></span>
+                    <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in']): ?>
+                        <span class="nav-notification-badge">3</span>
+                    <?php endif; ?>
+                    <span class="nav-highlight"></span>
+                </a>
             </div>
 
             <!-- Theme Toggle -->
@@ -158,6 +166,9 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                 </div>
         </div>
     </div>
+    
+    <!-- Include Project Chat Overlay -->
+    <?php include_once('project_chat_overlay.php'); ?>
 </nav>
 
 <!-- Navbar Styling and Animations -->
