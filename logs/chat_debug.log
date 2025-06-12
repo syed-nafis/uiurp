@@ -789,3 +789,63 @@
 2025-06-06 12:07:22 - Chat Groups - User ID: 6833436be5c16779b409aa42
 2025-06-06 12:07:22 - Chat Groups - Filter: {"$or":[{"createdBy":"6833436be5c16779b409aa42"},{"createdBy.$oid":"6833436be5c16779b409aa42"},{"members":{"$elemMatch":{"userId":"6833436be5c16779b409aa42"}}},{"members":{"$elemMatch":{"userId.$oid":"6833436be5c16779b409aa42"}}},{"members.userId":"6833436be5c16779b409aa42"},{"members.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId":"6833436be5c16779b409aa42"}]}
 2025-06-06 12:07:23 - Chat Groups - Found 9 groups
+2025-06-11 10:21:58 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 10:21:58 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 10:21:58 - Chat Groups - Found 3 groups
+2025-06-11 11:12:19 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 11:12:19 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 11:12:19 - Chat Groups - Found 3 groups
+2025-06-11 11:12:34 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 11:12:34 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 11:12:34 - Chat Groups - Found 3 groups
+2025-06-11 11:12:47 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 11:12:47 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 11:12:47 - Chat Groups - Found 3 groups
+2025-06-11 11:13:15 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 11:13:15 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 11:13:16 - Chat Groups - Found 3 groups
+2025-06-11 11:17:07 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 11:17:07 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 11:17:07 - Chat Groups - Found 3 groups
+2025-06-11 11:17:52 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 11:17:52 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 11:17:52 - Chat Groups - Found 3 groups
+2025-06-11 11:18:22 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 11:18:22 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 11:18:23 - Chat Groups - Found 3 groups
+2025-06-11 11:50:58 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 11:50:58 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 11:50:58 - Chat Groups - Found 3 groups
+2025-06-11 14:05:00 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 14:05:00 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 14:05:00 - Chat Groups - Found 3 groups
+2025-06-11 14:05:09 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 14:05:09 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 14:05:09 - Chat Groups - Found 3 groups
+2025-06-11 14:05:27 - Chat Groups - User ID: 6833436be5c16779b409aa42
+2025-06-11 14:05:27 - Chat Groups - Filter: {"$or":[{"createdBy":"6833436be5c16779b409aa42"},{"createdBy.$oid":"6833436be5c16779b409aa42"},{"members":{"$elemMatch":{"userId":"6833436be5c16779b409aa42"}}},{"members":{"$elemMatch":{"userId.$oid":"6833436be5c16779b409aa42"}}},{"members.userId":"6833436be5c16779b409aa42"},{"members.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId":"6833436be5c16779b409aa42"}]}
+2025-06-11 14:05:27 - Chat Groups - Found 9 groups
+2025-06-11 14:05:48 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 14:05:48 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 14:05:49 - Chat Groups - Found 3 groups
+2025-06-11 18:02:16 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 18:02:16 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 18:02:16 - Chat Groups - Found 3 groups
+2025-06-11 18:02:35 - Chat Groups - User ID: 6833436be5c16779b409aa42
+2025-06-11 18:02:35 - Chat Groups - Filter: {"$or":[{"createdBy":"6833436be5c16779b409aa42"},{"createdBy.$oid":"6833436be5c16779b409aa42"},{"members":{"$elemMatch":{"userId":"6833436be5c16779b409aa42"}}},{"members":{"$elemMatch":{"userId.$oid":"6833436be5c16779b409aa42"}}},{"members.userId":"6833436be5c16779b409aa42"},{"members.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId":"6833436be5c16779b409aa42"}]}
+2025-06-11 18:02:35 - Chat Groups - Found 9 groups
+2025-06-11 18:02:45 - Chat Groups - User ID: 6833436be5c16779b409aa42
+2025-06-11 18:02:45 - Chat Groups - Filter: {"$or":[{"createdBy":"6833436be5c16779b409aa42"},{"createdBy.$oid":"6833436be5c16779b409aa42"},{"members":{"$elemMatch":{"userId":"6833436be5c16779b409aa42"}}},{"members":{"$elemMatch":{"userId.$oid":"6833436be5c16779b409aa42"}}},{"members.userId":"6833436be5c16779b409aa42"},{"members.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId":"6833436be5c16779b409aa42"}]}
+2025-06-11 18:02:45 - Chat Groups - Found 9 groups
+2025-06-11 18:02:55 - Chat Groups - User ID: 6833436be5c16779b409aa42
+2025-06-11 18:02:55 - Chat Groups - Filter: {"$or":[{"createdBy":"6833436be5c16779b409aa42"},{"createdBy.$oid":"6833436be5c16779b409aa42"},{"members":{"$elemMatch":{"userId":"6833436be5c16779b409aa42"}}},{"members":{"$elemMatch":{"userId.$oid":"6833436be5c16779b409aa42"}}},{"members.userId":"6833436be5c16779b409aa42"},{"members.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId":"6833436be5c16779b409aa42"}]}
+2025-06-11 18:02:55 - Chat Groups - Found 9 groups
+2025-06-11 18:03:09 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 18:03:09 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 18:03:09 - Chat Groups - Found 3 groups
+2025-06-11 18:28:10 - Chat Groups - User ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-11 18:28:10 - Chat Groups - Filter: {"$or":[{"createdBy":"67e1a9f6ebb89e49e04ddf35"},{"createdBy.$oid":"67e1a9f6ebb89e49e04ddf35"},{"members":{"$elemMatch":{"userId":"67e1a9f6ebb89e49e04ddf35"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a9f6ebb89e49e04ddf35"}}},{"members.userId":"67e1a9f6ebb89e49e04ddf35"},{"members.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId.$oid":"67e1a9f6ebb89e49e04ddf35"},{"supervisor.userId":"67e1a9f6ebb89e49e04ddf35"}]}
+2025-06-11 18:28:10 - Chat Groups - Found 3 groups
+2025-06-11 18:28:25 - Chat Groups - User ID: 6833436be5c16779b409aa42
+2025-06-11 18:28:25 - Chat Groups - Filter: {"$or":[{"createdBy":"6833436be5c16779b409aa42"},{"createdBy.$oid":"6833436be5c16779b409aa42"},{"members":{"$elemMatch":{"userId":"6833436be5c16779b409aa42"}}},{"members":{"$elemMatch":{"userId.$oid":"6833436be5c16779b409aa42"}}},{"members.userId":"6833436be5c16779b409aa42"},{"members.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId.$oid":"6833436be5c16779b409aa42"},{"supervisor.userId":"6833436be5c16779b409aa42"}]}
+2025-06-11 18:28:25 - Chat Groups - Found 9 groups

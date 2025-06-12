@@ -11,6 +11,7 @@ session_start();
 // Initialize response
 $response = [
     'success' => false,
+    'messageId' => null,
     'message' => ''
 ];
 
@@ -22,6 +23,18 @@ if (!isset($_SESSION['user_id']) && !isset($_SESSION['user_data'])) {
     echo json_encode($response);
     exit;
 }
+
+// Check if required data is provided
+if (!isset($_POST['projectId']) || !isset($_POST['message']) || trim($_POST['message']) === '') {
+    $response['message'] = 'Missing required fields';
+    echo json_encode($response);
+    exit;
+}
+
+$projectId = $_POST['projectId'];
+$messageText = trim($_POST['message']);
+$userType = isset($_POST['userType']) ? $_POST['userType'] : null;
+$userName = isset($_POST['userName']) ? $_POST['userName'] : null;
 
 // Set user ID
 $userId = null;
@@ -38,32 +51,13 @@ if (isset($_SESSION['user_id'])) {
     $userId = (string)$_SESSION['user_data']['_id'];
 }
 
-// Check if required data is provided
-if (!isset($_POST['projectId']) || !isset($_POST['message']) || trim($_POST['message']) === '') {
-    $response['message'] = 'Missing required fields';
-    echo json_encode($response);
-    exit;
-}
-
-$projectId = $_POST['projectId'];
-$messageText = trim($_POST['message']);
-$userType = isset($_POST['userType']) ? $_POST['userType'] : null;
-$userName = isset($_POST['userName']) ? $_POST['userName'] : null;
-
-// If userName isn't provided, try to get it from session
-if (!$userName && isset($_SESSION['user_data']) && isset($_SESSION['user_data']['name'])) {
-    $userName = $_SESSION['user_data']['name'];
-} elseif (!$userName && isset($_SESSION['name'])) {
-    $userName = $_SESSION['name'];
-}
-
 try {
     // Connect to MongoDB
     $client = connectToDatabase();
     $db = $client->uiurp;
     
-    // Determine user type and get profile data if not provided
-    if (!$userType || !$userName) {
+    // If userName and userType aren't provided, try to get them from session or database
+    if (!$userName || !$userType) {
         // Check if user is faculty
         $faculty = $db->faculties->findOne(['_id' => new ObjectId($userId)]);
         if ($faculty) {
@@ -82,10 +76,7 @@ try {
                         $student['name'] ?? null,
                         $student['full_name'] ?? null,
                         $student['basic_info']['name'] ?? null,
-                        $student['basic_info']['full_name'] ?? null,
-                        $student['profile']['name'] ?? null,
-                        $student['personal_info']['name'] ?? null,
-                        $student['personal_info']['full_name'] ?? null
+                        $student['basic_info']['full_name'] ?? null
                     ];
                     
                     foreach ($possibleNameFields as $nameField) {
@@ -110,10 +101,10 @@ try {
     }
     
     // Current UTC timestamp
-    $currentTime = new UTCDateTime(time() * 1000);
+    $currentTime = new UTCDateTime();
     
     // Create message document
-    $message = [
+    $messageDoc = [
         'projectId' => new ObjectId($projectId),
         'sender' => [
             'userId' => new ObjectId($userId),
@@ -126,7 +117,7 @@ try {
     ];
     
     // Insert message
-    $result = $db->project_chat_messages->insertOne($message);
+    $result = $db->project_chat_messages->insertOne($messageDoc);
     
     // Update project's lastUpdated timestamp
     $db->projectsV2->updateOne(
@@ -138,7 +129,18 @@ try {
         $response['success'] = true;
         $response['message'] = 'Message sent successfully';
         $response['messageId'] = (string)$result->getInsertedId();
-        $response['timestamp'] = $currentTime->toDateTime()->format('Y-m-d H:i:s');
+        
+        // Mark message as read for the sender
+        $db->user_chat_read_timestamps->updateOne(
+            [
+                'userId' => new ObjectId($userId),
+                'projectId' => new ObjectId($projectId)
+            ],
+            [
+                '$set' => ['timestamp' => $currentTime]
+            ],
+            ['upsert' => true]
+        );
     } else {
         $response['message'] = 'Failed to send message';
     }

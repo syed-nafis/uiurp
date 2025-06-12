@@ -80,22 +80,10 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                 <a href="#" id="navChatButton" class="nav-item chat-icon-only">
                     <span class="nav-icon"><i class="bi bi-chat-dots-fill" style="color: var(--neo-blue);"></i></span>
                     <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in']): ?>
-                        <span class="nav-notification-badge">3</span>
+                        <span class="nav-notification-badge" id="chatNotificationBadge" style="display: none;">0</span>
                     <?php endif; ?>
                     <span class="nav-highlight"></span>
                 </a>
-            </div>
-
-            <!-- Theme Toggle -->
-            <div class="theme-toggle-container">
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                    <div class="toggle-track">
-                        <div class="toggle-thumb">
-                            <i class="bi bi-sun-fill sun-icon"></i>
-                            <i class="bi bi-moon-fill moon-icon"></i>
-                        </div>
-                    </div>
-                </button>
             </div>
 
             <!-- User Profile Section -->
@@ -145,6 +133,23 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                                         <span>Create New Project</span>
                                         <div class="menu-item-glow"></div>
                                     </a>
+                                </div>
+                                
+                                <div class="menu-divider"></div>
+                                
+                                <!-- Theme Toggle -->
+                                <div class="dropdown-theme-toggle">
+                                    <span class="theme-label"><i class="bi bi-palette me-2"></i>Theme Preferences</span>
+                                    <div class="theme-toggle-container">
+                                        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                                            <div class="toggle-track">
+                                                <div class="toggle-thumb">
+                                                    <i class="bi bi-sun-fill sun-icon"></i>
+                                                    <i class="bi bi-moon-fill moon-icon"></i>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </div>
                                 </div>
                                 
                                 <div class="menu-divider"></div>
@@ -798,6 +803,26 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     margin: 10px 0;
 }
 
+/* Dropdown Theme Toggle Styling */
+.dropdown-theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin: 5px 0;
+}
+
+.dropdown-theme-toggle .theme-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.dropdown-theme-toggle .theme-toggle-container {
+    margin-right: 0;
+}
+
 .logout {
     color: rgba(247, 37, 133, 0.8);
 }
@@ -1364,5 +1389,51 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
             }, 150);
         });
     }
+});
+</script>
+
+<!-- Include Notifications Initializer -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to update notification badge
+    function updateChatNotificationBadge() {
+        const badge = document.getElementById('chatNotificationBadge');
+        if (!badge) return;
+        
+        fetch('src/model/get_unread_messages.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const oldCount = parseInt(badge.textContent) || 0;
+                    const newCount = data.count || 0;
+                    
+                    // Update count and visibility
+                    if (newCount > 0) {
+                        badge.textContent = newCount > 99 ? '99+' : newCount;
+                        badge.style.display = 'flex';
+                        
+                        // Add pulse animation if count increased
+                        if (newCount > oldCount) {
+                            badge.classList.add('pulse-animation');
+                            setTimeout(() => {
+                                badge.classList.remove('pulse-animation');
+                            }, 1000);
+                        }
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                }
+            })
+            .catch(error => console.error('Error updating chat notification badge:', error));
+    }
+    
+    // Update immediately when page loads
+    updateChatNotificationBadge();
+    
+    // Update every 5 seconds
+    setInterval(updateChatNotificationBadge, 5000);
+    
+    // Make the function available globally for other scripts to call
+    window.updateChatNotificationBadge = updateChatNotificationBadge;
 });
 </script>

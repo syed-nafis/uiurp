@@ -1257,17 +1257,76 @@
     color: white;
     font-size: 9px;
     font-weight: 600;
-    width: 16px;
+    min-width: 16px;
     height: 16px;
-    border-radius: 50%;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0 4px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    box-shadow: 0 0 5px rgba(247, 37, 133, 0.5);
+}
+
+/* Pulse animation for new notifications */
+.pulse-animation {
+    animation: notification-pulse 1s ease-out;
+}
+
+@keyframes notification-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); background-color: var(--neo-accent); }
+    100% { transform: scale(1); }
 }
 
 /* Active member state */
 .project-chat-overlay .member-item.active {
     background-color: rgba(var(--primary-rgb), 0.15);
+}
+
+/* New message highlight animation */
+.new-message-highlight {
+    animation: message-highlight 2s ease;
+}
+
+@keyframes message-highlight {
+    0% { background-color: rgba(var(--primary-rgb), 0.1); transform: translateY(-2px); }
+    70% { background-color: rgba(var(--primary-rgb), 0.05); transform: translateY(0); }
+    100% { background-color: transparent; }
+}
+
+/* New messages indicator */
+.new-messages-indicator {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--neo-primary);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.3);
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.new-messages-indicator.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.new-messages-indicator i {
+    margin-right: 8px;
+    animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-3px); }
 }
 
 .project-chat-overlay .panel-header {
@@ -1328,11 +1387,119 @@
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     // Create backdrop element
     const backdrop = document.createElement('div');
     backdrop.classList.add('project-chat-backdrop');
     document.body.appendChild(backdrop);
+    
+    // Use the global function for updating unread chat notification count
+    function loadUnreadMessageCount() {
+        // Check if the global function exists
+        if (typeof window.updateChatNotificationBadge === 'function') {
+            window.updateChatNotificationBadge();
+        } else {
+            // Fallback if global function not available
+            fetch('src/model/get_unread_messages.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const badge = document.getElementById('chatNotificationBadge');
+                        if (badge) {
+                            if (data.count > 0) {
+                                badge.textContent = data.count > 99 ? '99+' : data.count;
+                                badge.style.display = 'flex';
+                            } else {
+                                badge.style.display = 'none';
+                            }
+                        }
+                    }
+                })
+                .catch(error => console.error('Error fetching unread message count:', error));
+        }
+    }
+    
+    // Initial check for notifications (the interval is already set in navbar.php)
+    loadUnreadMessageCount();
+    
+    // Function to update the read timestamp when user views messages
+    function updateReadTimestamp(projectId) {
+        if (!projectId) return;
+        
+        const formData = new FormData();
+        formData.append('projectId', projectId);
+        
+        fetch('src/model/update_chat_read.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update notification count after marking messages as read
+                loadUnreadMessageCount();
+            }
+        })
+        .catch(error => console.error('Error updating read timestamp:', error));
+    }
+    
+    // Function to fetch a single message by ID and append it to the chat
+    function fetchSingleMessage(messageId, projectId) {
+        if (!messageId || !projectId || !messagesContainer) return;
+        
+        fetch(`src/model/get_single_message.php?id=${messageId}&projectId=${projectId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.message) {
+                    // Check if no messages placeholder is showing
+                    const noMessagesPlaceholder = document.getElementById('noMessagesPlaceholder');
+                    if (noMessagesPlaceholder) {
+                        noMessagesPlaceholder.style.display = 'none';
+                    }
+                    
+                    // Check if message is already in the DOM
+                    if (!document.querySelector(`[data-message-id="${data.message.id}"]`)) {
+                        // Check if we need to add a date separator
+                        const messageDate = new Date(data.message.timestamp * 1000).toLocaleDateString();
+                        let dateSeparatorNeeded = true;
+                        
+                        // Check for an existing date separator for this day
+                        const dateSeparators = messagesContainer.querySelectorAll('.date-separator');
+                        dateSeparators.forEach(separator => {
+                            if (separator.textContent === messageDate) {
+                                dateSeparatorNeeded = false;
+                            }
+                        });
+                        
+                        // Add date separator if needed
+                        if (dateSeparatorNeeded) {
+                            const dateSeparator = document.createElement('div');
+                            dateSeparator.className = 'date-separator';
+                            dateSeparator.textContent = messageDate;
+                            messagesContainer.appendChild(dateSeparator);
+                        }
+                        
+                        // Append the message
+                        appendSingleMessage(data.message, messagesContainer);
+                        
+                        // Scroll to the bottom
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                        
+                        // Add highlight animation to new message
+                        setTimeout(() => {
+                            const newMessage = document.querySelector(`[data-message-id="${data.message.id}"]`);
+                            if (newMessage) {
+                                newMessage.classList.add('new-message-highlight');
+                                setTimeout(() => {
+                                    newMessage.classList.remove('new-message-highlight');
+                                }, 2000);
+                            }
+                        }, 100);
+                    }
+                }
+            })
+            .catch(error => console.error('Error fetching message:', error));
+    }
 
     // Ensure the chat overlay exists in the body for better positioning
     const chatOverlay = document.getElementById('projectChatOverlay');
@@ -1615,6 +1782,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Preload faculty data for better performance
             preloadFacultyData();
             
+            // Update notification badge immediately
+            loadUnreadMessageCount();
+            
             // Disable scrolling completely
             disableScroll();
         });
@@ -1633,6 +1803,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 clearInterval(pollingInterval);
                 pollingInterval = null;
             }
+            
+            // Update notification badge immediately
+            loadUnreadMessageCount();
         });
     }
     
@@ -1815,8 +1988,14 @@ document.addEventListener('DOMContentLoaded', function() {
             sendingIndicator.classList.remove('active');
             
             if (data.success) {
-                // Load new messages
-                loadChatMessages(currentProjectId);
+                // Instead of reloading all messages, just fetch the new message
+                fetchSingleMessage(data.messageId, currentProjectId);
+                
+                // Mark this project's messages as read
+                updateReadTimestamp(currentProjectId);
+                
+                // Update notification count across all projects
+                loadUnreadMessageCount();
             } else {
                 console.error('Failed to send message:', data.message);
                 // Show error toast if available
@@ -2080,12 +2259,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Load messages for this group
                 loadChatMessages(groupId);
                 
-                // Start polling for new messages
+                // Mark messages as read
+                updateReadTimestamp(groupId);
+                
+                // Start polling for new messages with a higher frequency
                 pollingInterval = setInterval(() => {
                     if (currentProjectId === groupId) {
                         loadChatMessages(groupId, true);
+                        updateReadTimestamp(groupId);
                     }
-                }, 10000); // Poll every 10 seconds
+                }, 3000); // Poll every 3 seconds for better real-time experience
             }
         });
     }
@@ -2537,6 +2720,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     // If this is a poll and we have new messages, append them
                     if (isPoll && data.messages.length > 0) {
                         appendMessages(data.messages);
+                        // Update notification count when new messages are detected
+                        loadUnreadMessageCount();
+                        
+                        // Highlight new messages with animation
+                        data.messages.forEach(msg => {
+                            // Slight delay to ensure DOM is updated
+                            setTimeout(() => {
+                                const msgElement = document.querySelector(`[data-message-id="${msg.id}"]`);
+                                if (msgElement) {
+                                    msgElement.classList.add('new-message-highlight');
+                                    setTimeout(() => {
+                                        msgElement.classList.remove('new-message-highlight');
+                                    }, 2000);
+                                }
+                            }, 100);
+                        });
                     } 
                     // If this is the first load or not a poll, replace all messages
                     else if (!isPoll || isFirstLoad) {
@@ -2635,11 +2834,24 @@ document.addEventListener('DOMContentLoaded', function() {
             noMessagesPlaceholder.style.display = 'none';
         }
         
+        // Check if user is at the bottom before adding new messages
+        const isAtBottom = messagesContainer.scrollTop + messagesContainer.clientHeight >= messagesContainer.scrollHeight - 100;
+        
         // Get last date in the current message list
         let lastDateEl = messagesContainer.querySelector('.date-separator:last-of-type');
         let lastDate = lastDateEl ? lastDateEl.textContent : null;
         
+        // Keep track of messages we're adding
+        const newMessageIds = [];
+        
         messages.forEach(message => {
+            // Skip if message already exists
+            if (document.querySelector(`[data-message-id="${message.id}"]`)) {
+                return;
+            }
+            
+            newMessageIds.push(message.id);
+            
             // Format message timestamp to date
             const messageDate = new Date(message.timestamp * 1000).toLocaleDateString();
             
@@ -2656,11 +2868,49 @@ document.addEventListener('DOMContentLoaded', function() {
             appendSingleMessage(message, messagesContainer);
         });
         
-        // Scroll to the bottom only if user is already at the bottom
-        const isAtBottom = messagesContainer.scrollTop + messagesContainer.clientHeight >= messagesContainer.scrollHeight - 100;
-        
-        if (isAtBottom) {
+        // Show a "new messages" indicator if the user is not at the bottom and new messages were added
+        if (!isAtBottom && newMessageIds.length > 0) {
+            // Check if we already have an indicator
+            let newMsgIndicator = document.getElementById('newMessagesIndicator');
+            if (!newMsgIndicator) {
+                newMsgIndicator = document.createElement('div');
+                newMsgIndicator.id = 'newMessagesIndicator';
+                newMsgIndicator.className = 'new-messages-indicator';
+                newMsgIndicator.innerHTML = `
+                    <i class="bi bi-arrow-down-circle-fill"></i>
+                    <span>New messages</span>
+                `;
+                newMsgIndicator.addEventListener('click', function() {
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    this.classList.remove('visible');
+                });
+                document.querySelector('.chat-messages-panel').appendChild(newMsgIndicator);
+            }
+            
+            // Make it visible
+            newMsgIndicator.classList.add('visible');
+            
+            // Show the count of new messages
+            const msgSpan = newMsgIndicator.querySelector('span');
+            if (msgSpan) {
+                msgSpan.textContent = `${newMessageIds.length} new message${newMessageIds.length > 1 ? 's' : ''}`;
+            }
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                if (newMsgIndicator) {
+                    newMsgIndicator.classList.remove('visible');
+                }
+            }, 5000);
+        } else if (isAtBottom) {
+            // If user was at bottom, scroll to show new messages
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Hide the indicator if it exists
+            const newMsgIndicator = document.getElementById('newMessagesIndicator');
+            if (newMsgIndicator) {
+                newMsgIndicator.classList.remove('visible');
+            }
         }
     }
     
