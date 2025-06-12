@@ -4529,8 +4529,7 @@ session_start();
             <div class="row mb-5">
                 <div class="col-lg-6" data-aos="fade-right" data-aos-duration="800">
                     <div class="section-header">
-                        <span class="futuristic-badge">Featured Research</span>
-                        <h2 class="section-title futuristic-title">Innovative <span class="text-gradient">Projects</span></h2>
+                        <h2 class="section-title futuristic-title">Innovative <span class="text-gradient">Projects</span>
                         <p class="section-subtitle">Explore some of our most groundbreaking research projects from across the university, pushing the boundaries of knowledge and technology.</p>
                         <div class="title-underline"></div>
                     </div>

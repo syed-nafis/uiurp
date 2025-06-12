@@ -4,6 +4,9 @@
     <div class="chat-header">
         <div class="chat-title">Project Chat</div>
         <div class="chat-controls">
+            <button id="pinChat" class="panel-control" title="Pin chat">
+                <i class="bi bi-pin"></i>
+            </button>
             <button id="minimizeLeftPanel" class="panel-control" title="Toggle groups">
                 <i class="bi bi-layout-sidebar"></i>
             </button>
@@ -140,6 +143,8 @@
 /* Additional CSS variables needed for chat */
 :root {
     --primary-rgb: 67, 97, 238;  /* RGB values for --neo-primary #4361ee */
+    --chat-transition-easing: cubic-bezier(0.22, 1, 0.36, 1);
+    --chat-panel-transition: all 0.45s var(--chat-transition-easing);
 }
 
 /* Chat Overlay Styling */
@@ -149,42 +154,64 @@
     left: 50%;
     width: 1200px;
     height: 800px;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(0.98);
     background-color: var(--bg-primary);
     z-index: 99999;
     display: flex;
     flex-direction: column;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    border-radius: 16px;
-    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    border-radius: 20px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 10px 30px rgba(0, 0, 0, 0.3);
     overflow: hidden;
     max-width: 95vw;
     max-height: 95vh;
-    will-change: transform;
+    will-change: transform, opacity;
     isolation: isolate;
     contain: content;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transform-origin: center center;
 }
 
 .project-chat-overlay.active {
     opacity: 1;
     visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.project-chat-overlay * {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.project-chat-overlay .chat-container,
+.project-chat-overlay .chat-messages-panel,
+.project-chat-overlay .chat-groups-panel,
+.project-chat-overlay .group-members-panel,
+.project-chat-overlay .messages-container,
+.project-chat-overlay .groups-list,
+.project-chat-overlay .members-list {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
 }
 
 /* Chat Header */
 .chat-header {
-    height: 60px;
-    padding: 0 24px;
+    height: 64px;
+    padding: 0 26px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(to right, var(--bg-secondary), rgba(var(--primary-rgb), 0.05));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(to right, var(--bg-secondary), rgba(var(--primary-rgb), 0.08));
     position: relative;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    z-index: 10;
+    transform: translateZ(0);
 }
 
 .chat-title {
@@ -245,22 +272,34 @@
     width: 0;
     min-width: 0;
     padding: 0;
+    padding-right: 30px; /* Space for the collapse button */
     overflow: hidden;
+    transform: translateX(-40px);
+    opacity: 0;
 }
 
 .group-members-panel.collapsed {
     width: 0;
     min-width: 0;
     padding: 0;
+    padding-left: 30px; /* Space for the collapse button */
     overflow: hidden;
+    transform: translateX(40px);
+    opacity: 0;
 }
 
 .chat-groups-panel {
-    transition: width 0.3s ease, min-width 0.3s ease, padding 0.3s ease;
+    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: width, transform, opacity;
+    transform: translateX(0);
+    opacity: 1;
 }
 
 .group-members-panel {
-    transition: width 0.3s ease, min-width 0.3s ease, padding 0.3s ease;
+    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: width, transform, opacity;
+    transform: translateX(0);
+    opacity: 1;
 }
 
 .chat-groups-panel.collapsed + .chat-messages-panel {
@@ -269,6 +308,88 @@
 
 .chat-messages-panel + .group-members-panel.collapsed {
     border-right: none;
+}
+
+/* Position collapse buttons when panels are collapsed */
+/* Absolutely positioned collapse buttons with !important flags for all properties */
+.chat-groups-panel.collapsed #collapseProjects,
+.chat-groups-panel.collapsed #collapseProjects.panel-collapse-btn,
+.chat-groups-panel.collapsed .panel-collapse-btn#collapseProjects,
+.chat-groups-panel.collapsed button#collapseProjects {
+    position: fixed !important;
+    left: 5px !important;
+    top: 64px !important; /* Position below the header */
+    z-index: 99999 !important;
+    background: rgba(var(--primary-rgb), 0.2) !important;
+    border-radius: 50% !important;
+    opacity: 1 !important;
+    width: 28px !important;
+    height: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1px solid rgba(var(--primary-rgb), 0.3) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+    transition: none !important;
+    min-width: auto !important;
+    min-height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+}
+
+.chat-groups-panel.collapsed #collapseProjects i,
+.chat-groups-panel.collapsed .panel-collapse-btn i {
+    font-size: 16px !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: var(--neo-primary) !important;
+}
+
+.group-members-panel.collapsed #collapseMembers,
+.group-members-panel.collapsed #collapseMembers.panel-collapse-btn,
+.group-members-panel.collapsed .panel-collapse-btn#collapseMembers,
+.group-members-panel.collapsed button#collapseMembers {
+    position: fixed !important;
+    right: 5px !important;
+    top: 64px !important; /* Position below the header */
+    z-index: 99999 !important;
+    background: rgba(var(--primary-rgb), 0.2) !important;
+    border-radius: 50% !important;
+    opacity: 1 !important;
+    width: 28px !important;
+    height: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1px solid rgba(var(--primary-rgb), 0.3) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+    transition: none !important;
+    min-width: auto !important;
+    min-height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+}
+
+.group-members-panel.collapsed #collapseMembers i,
+.group-members-panel.collapsed .panel-collapse-btn i {
+    font-size: 16px !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: var(--neo-primary) !important;
 }
 
 .panel-controls {
@@ -280,27 +401,54 @@
 .panel-control, .close-chat {
     background: none;
     border: none;
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     color: var(--text-secondary);
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
+    transform-origin: center;
+    backface-visibility: hidden;
+}
+
+.panel-control::before, .close-chat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(var(--primary-rgb), 0);
+    border-radius: inherit;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: -1;
+    box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0);
 }
 
 .panel-control:hover, .close-chat:hover {
-    background: rgba(var(--primary-rgb), 0.15);
+    background: rgba(var(--primary-rgb), 0.08);
     color: var(--neo-primary);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.panel-control:hover::before, .close-chat:hover::before {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
 }
 
 .panel-control:active, .close-chat:active {
-    transform: translateY(1px);
+    transform: translateY(0);
+    transition-duration: 0.1s;
+    background: rgba(var(--primary-rgb), 0.15);
 }
 
 /* Chat spinner */
@@ -320,6 +468,7 @@
     display: flex;
     position: relative;
     overflow: hidden;
+    transition: var(--chat-panel-transition);
 }
 
 /* Left Panel - Chat Groups */
@@ -333,6 +482,7 @@
     position: relative;
     z-index: 2;
     box-shadow: inset -5px 0 20px rgba(0, 0, 0, 0.05);
+    transform: translateZ(0);
 }
 
 .add-group {
@@ -379,26 +529,48 @@
 .group-item {
     display: flex;
     align-items: center;
-    padding: 14px;
-    border-radius: 12px;
+    padding: 16px;
+    border-radius: 14px;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    margin-bottom: 6px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-bottom: 8px;
     position: relative;
     border: 1px solid transparent;
+    transform: translateZ(0);
+    will-change: transform, box-shadow;
+}
+
+.group-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(var(--primary-rgb), 0), rgba(var(--primary-rgb), 0));
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.4s ease;
 }
 
 .group-item:hover {
-    background-color: rgba(255, 255, 255, 0.03);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    border-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.04);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.group-item:hover::before {
+    opacity: 0.15;
+    background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--primary-rgb), 0.05));
 }
 
 .group-item.active {
     background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.2), rgba(var(--primary-rgb), 0.1));
-    border-color: rgba(var(--primary-rgb), 0.3);
-    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.15);
+    border-color: rgba(var(--primary-rgb), 0.4);
+    box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.2), 0 0 0 1px rgba(var(--primary-rgb), 0.1);
+    transform: translateY(-2px);
 }
 
 .group-avatar {
@@ -515,11 +687,13 @@
 .message-item {
     display: flex;
     max-width: 80%;
-    transition: transform 0.2s ease;
+    opacity: 1;
+    will-change: auto;
+    transform-origin: left center;
 }
 
 .message-item:hover {
-    transform: translateY(-1px);
+    /* No hover animation */
 }
 
 .message-item.other-message {
@@ -567,28 +741,49 @@
 
 .message-content {
     background-color: var(--bg-secondary);
-    padding: 14px 16px;
-    border-radius: 16px;
+    padding: 16px 18px;
+    border-radius: 18px;
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: none;
+    overflow: hidden;
+}
+
+.message-content::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    opacity: 0;
+    z-index: 1;
 }
 
 .message-content:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1);
+    /* No transform on hover */
+}
+
+.message-content:hover::after {
+    /* No hover effect */
 }
 
 .message-item.other-message .message-content {
-    border-top-left-radius: 4px;
+    border-top-left-radius: 2px;
 }
 
 .message-item.my-message .message-content {
     background: linear-gradient(135deg, var(--neo-primary), rgba(var(--primary-rgb), 0.85));
     color: white;
-    border-top-right-radius: 4px;
-    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
-    border-color: rgba(255, 255, 255, 0.1);
+    border-top-right-radius: 2px;
+    box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.15), 0 2px 8px rgba(var(--primary-rgb), 0.2);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .message-header {
@@ -637,10 +832,13 @@
     -webkit-backdrop-filter: blur(4px);
     max-width: 80%;
     animation: fadeIn 0.5s ease;
+    transform: translateZ(0);
+    transition: all 0.3s var(--chat-transition-easing);
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
+    /* Disabled animation */
+    from { opacity: 1; }
     to { opacity: 1; }
 }
 
@@ -662,14 +860,37 @@
     display: flex;
     align-items: center;
     background-color: var(--bg-secondary);
-    border-radius: 16px;
-    padding: 4px 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.05);
-    transition: all 0.3s ease;
+    border-radius: 18px;
+    padding: 6px 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.06);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateZ(0);
+    position: relative;
+    overflow: hidden;
+}
+
+.input-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(var(--primary-rgb), 0), rgba(var(--primary-rgb), 0));
+    opacity: 0;
+    transition: opacity 0.4s ease, background 0.4s ease;
+    pointer-events: none;
+    border-radius: inherit;
 }
 
 .input-container:focus-within {
-    box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.15), 0 0 0 1px rgba(var(--primary-rgb), 0.2);
+    box-shadow: 0 6px 24px rgba(var(--primary-rgb), 0.15), 0 0 0 1px rgba(var(--primary-rgb), 0.25);
+    transform: translateY(-2px);
+}
+
+.input-container:focus-within::after {
+    opacity: 0.08;
+    background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--primary-rgb), 0.05));
 }
 
 .message-input {
@@ -955,13 +1176,15 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
     z-index: 99990;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transform: translateZ(0);
+    will-change: opacity;
 }
 
 .project-chat-backdrop.active {
@@ -1028,17 +1251,22 @@
 
 .file-preview-container.active {
     display: block;
-    animation: fadeInUp 0.3s ease forwards;
+    animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes fadeInUp {
-    from {
+    0% {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px) scale(0.96);
+        filter: blur(3px);
     }
-    to {
+    60% {
+        filter: blur(0);
+    }
+    100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
+        filter: blur(0);
     }
 }
 
@@ -1115,13 +1343,14 @@
     display: flex;
     align-items: center;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all 0.2s ease;
+    transition: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .message-attachment:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* No hover effect */
+    background-color: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .attachment-icon {
@@ -1209,6 +1438,7 @@
 /* Image attachment specific styling */
 .image-attachment {
     margin-top: 8px;
+    transition: none;
 }
 
 .image-attachment img {
@@ -1216,6 +1446,7 @@
     max-height: 300px;
     border-radius: 8px;
     cursor: pointer;
+    transition: none;
 }
 
 /* Separator for messages from different days */
@@ -1286,13 +1517,17 @@
 
 /* New message highlight animation */
 .new-message-highlight {
-    animation: message-highlight 2s ease;
+    /* No highlight animation */
 }
 
 @keyframes message-highlight {
-    0% { background-color: rgba(var(--primary-rgb), 0.1); transform: translateY(-2px); }
-    70% { background-color: rgba(var(--primary-rgb), 0.05); transform: translateY(0); }
-    100% { background-color: transparent; }
+    /* Disabled animation */
+    0% { 
+        background-color: transparent;
+    }
+    100% { 
+        background-color: transparent;
+    }
 }
 
 /* New messages indicator */
@@ -1300,23 +1535,43 @@
     position: absolute;
     bottom: 80px;
     left: 50%;
-    transform: translateX(-50%) translateY(100px);
+    transform: translateX(-50%) translateY(100px) scale(0.9);
     background: var(--neo-primary);
     color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.3);
+    padding: 10px 20px;
+    border-radius: 24px;
+    box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.3), 0 2px 8px rgba(var(--primary-rgb), 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     opacity: 0;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     cursor: pointer;
     z-index: 10;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    will-change: transform, opacity;
+}
+
+.new-messages-indicator::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+    opacity: 0.2;
+    pointer-events: none;
 }
 
 .new-messages-indicator.visible {
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%) translateY(0) scale(1);
     opacity: 1;
+}
+
+.new-messages-indicator:hover {
+    transform: translateX(-50%) translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 32px rgba(var(--primary-rgb), 0.35), 0 4px 12px rgba(var(--primary-rgb), 0.25);
 }
 
 .new-messages-indicator i {
@@ -1384,6 +1639,480 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
     border-color: rgba(255, 255, 255, 0.08);
 }
+
+/* Add ripple effect to buttons */
+@keyframes rippleEffect {
+    0% {
+        transform: translate(-50%, -50%) scale(0.1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(20);
+        opacity: 0;
+    }
+}
+
+.ripple-effect {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(var(--primary-rgb), 0.3);
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+    animation: rippleEffect 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 0;
+}
+
+/* Active member state */
+.project-chat-overlay .member-item.active {
+    background-color: rgba(var(--primary-rgb), 0.15);
+}
+
+/* Pinned Chat Styling */
+.project-chat-overlay.pinned {
+    top: 0;
+    left: 0;
+    width: 380px;
+    height: 100vh;
+    transform: none;
+    border-radius: 0;
+    max-width: 100%;
+    max-height: 100%;
+    box-shadow: 5px 0 30px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    visibility: visible;
+    transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1040; /* Ensure proper stacking with other fixed elements */
+    position: fixed;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.project-chat-overlay.pinned .chat-container {
+    flex-direction: column;
+    height: calc(100% - 64px); /* Subtract header height */
+    overflow: hidden;
+}
+
+.project-chat-overlay.pinned .chat-groups-panel {
+    width: 100%;
+    height: auto;
+    max-height: 35%;
+    min-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-chat-overlay.pinned .chat-groups-panel .panel-header {
+    background: linear-gradient(to right, rgba(var(--primary-rgb), 0.12), rgba(var(--primary-rgb), 0.05));
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.project-chat-overlay.pinned .chat-groups-panel .groups-list {
+    height: calc(100% - 54px);
+    overflow-y: auto;
+    flex: 1;
+}
+
+.project-chat-overlay.pinned .chat-messages-panel {
+    width: 100%;
+    border-left: none;
+    border-right: none;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.project-chat-overlay.pinned .chat-messages-panel .messages-container {
+    flex: 1;
+    overflow-y: auto;
+    height: auto;
+    max-height: 100%;
+    padding-bottom: 10px;
+}
+
+.project-chat-overlay.pinned .message-input-area {
+    flex-shrink: 0;
+    width: 100%;
+    padding: 12px 15px;
+    position: relative;
+    background-color: var(--bg-secondary);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 5;
+}
+
+.project-chat-overlay.pinned .file-preview-container {
+    padding: 8px 10px;
+    max-width: 100%;
+}
+
+.project-chat-overlay.pinned .file-preview {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.project-chat-overlay.pinned .message-input-area .input-container {
+    max-width: 100%;
+}
+
+.project-chat-overlay.pinned .message-item {
+    max-width: 90%;
+}
+
+.project-chat-overlay.pinned .message-content {
+    max-width: 100%;
+    word-break: break-word;
+}
+
+.project-chat-overlay.pinned .image-attachment img {
+    max-width: 100%;
+    max-height: 200px;
+}
+
+.project-chat-overlay.pinned .message-attachment {
+    flex-wrap: wrap;
+}
+
+.project-chat-overlay.pinned .attachment-details {
+    width: 100%;
+    margin-top: 4px;
+}
+
+.project-chat-overlay.pinned .group-members-panel {
+    display: none;
+}
+
+.project-chat-overlay.pinned .chat-header {
+    border-radius: 0;
+    background: linear-gradient(to right, rgba(var(--primary-rgb), 0.15), rgba(var(--primary-rgb), 0.08));
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.project-chat-overlay.pinned #pinChat i {
+    color: var(--neo-primary);
+}
+
+.project-chat-overlay.pinned #minimizeRightPanel {
+    display: none;
+}
+
+.project-chat-overlay.pinned .resize-handle {
+    display: none;
+}
+
+.project-chat-overlay.pinned .group-item {
+    padding: 12px 14px;
+    margin-bottom: 6px;
+    max-width: 100%;
+}
+
+.project-chat-overlay.pinned .group-info {
+    width: calc(100% - 56px);
+    overflow: hidden;
+}
+
+.project-chat-overlay.pinned .group-name,
+.project-chat-overlay.pinned .group-last-msg {
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* New toggle for pinned chat groups */
+.project-chat-overlay.pinned .groups-toggle {
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 16px;
+    background: rgba(var(--primary-rgb), 0.15);
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+    cursor: pointer;
+    z-index: 20;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.project-chat-overlay.pinned .groups-toggle:hover {
+    background: rgba(var(--primary-rgb), 0.25);
+}
+
+.project-chat-overlay.pinned .groups-toggle i {
+    font-size: 12px;
+    color: var(--text-primary);
+    transform: translateY(0px);
+}
+
+.project-chat-overlay.pinned .chat-groups-panel.collapsed {
+    max-height: 54px;
+    min-height: auto;
+    overflow: hidden;
+}
+
+/* New messages indicator */
+}
+
+/* Handle main page content when chat is pinned */
+body.chat-pinned {
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    margin-right: 0; /* Prevent horizontal scrollbar */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    box-sizing: border-box; /* Ensure padding is included in width calculations */
+}
+
+body.chat-pinned .project-chat-backdrop {
+    display: none;
+}
+
+body.chat-pinned section,
+body.chat-pinned .container,
+body.chat-pinned .container-fluid {
+    pointer-events: auto; /* Ensure clickable elements work */
+}
+
+/* Ensure fluid containers adjust correctly */
+body.chat-pinned .container-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Add a wrapper for all content to be shifted */
+body.chat-pinned {
+    padding-left: 380px;
+}
+
+/* Remove individual margins to prevent misalignment */
+body.chat-pinned .container,
+body.chat-pinned section,
+body.chat-pinned header,
+body.chat-pinned footer,
+body.chat-pinned nav,
+body.chat-pinned .navbar,
+body.chat-pinned main,
+body.chat-pinned .main-wrapper,
+body.chat-pinned #main-content,
+body.chat-pinned .wrapper,
+body.chat-pinned #wrapper,
+body.chat-pinned .page-wrapper,
+body.chat-pinned .content-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Special handling for sticky elements that need to remain accessible */
+body.chat-pinned .navbar-fixed-top,
+body.chat-pinned .sticky-top,
+body.chat-pinned .fixed-top,
+body.chat-pinned nav.fixed-top,
+body.chat-pinned header.fixed-top,
+body.chat-pinned .navbar.fixed-top,
+body.chat-pinned .navbar.sticky-top,
+body.chat-pinned #header,
+body.chat-pinned header,
+body.chat-pinned .navbar,
+body.chat-pinned nav {
+    left: 380px !important;
+    width: calc(100% - 380px) !important;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    z-index: 1030 !important;
+    transform: none !important;
+    margin-left: 0 !important;
+}
+
+/* Fix Bootstrap grid alignment issues */
+body.chat-pinned .row {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+}
+
+/* Ensure section alignments are correct */
+body.chat-pinned section,
+body.chat-pinned .section {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Ensure centered content remains centered */
+body.chat-pinned .text-center,
+body.chat-pinned .mx-auto,
+body.chat-pinned .centered-content {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Fix full-width elements */
+body.chat-pinned .w-100,
+body.chat-pinned .full-width,
+body.chat-pinned .full-width-container {
+    width: 100% !important;
+}
+
+/* Maintain background elements and full-width sections */
+body.chat-pinned [class*="-fluid"],
+body.chat-pinned .full-bleed,
+body.chat-pinned .full-width-bg {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    left: 0;
+    right: 0;
+}
+
+/* Make chat interfaces click-through in pinned mode */
+.project-chat-overlay.pinned {
+    pointer-events: none; /* Make the chat container transparent to clicks by default */
+}
+
+/* But ensure the actual chat elements remain clickable */
+.project-chat-overlay.pinned .chat-container,
+.project-chat-overlay.pinned .chat-header,
+.project-chat-overlay.pinned .message-input-area,
+.project-chat-overlay.pinned .chat-groups-panel,
+.project-chat-overlay.pinned .groups-toggle,
+.project-chat-overlay.pinned .panel-control, 
+.project-chat-overlay.pinned .close-chat {
+    pointer-events: auto;
+}
+
+@media (max-width: 1200px) {
+    .project-chat-overlay.pinned {
+        width: 340px;
+    }
+    
+    /* Adjust padding for smaller screens */
+    body.chat-pinned {
+        padding-left: 340px;
+    }
+    
+    /* Fixed elements need special handling */
+    body.chat-pinned .navbar-fixed-top,
+    body.chat-pinned .sticky-top,
+    body.chat-pinned .fixed-top,
+    body.chat-pinned nav.fixed-top,
+    body.chat-pinned header.fixed-top,
+    body.chat-pinned .navbar.fixed-top,
+    body.chat-pinned .navbar.sticky-top,
+    body.chat-pinned .navbar {
+        left: 340px !important;
+        width: calc(100% - 340px) !important;
+        position: fixed !important;
+        top: 0 !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .project-chat-overlay.pinned {
+        width: 320px;
+    }
+    
+    /* Adjust padding for medium screens */
+    body.chat-pinned {
+        padding-left: 320px;
+    }
+    
+    /* Fixed elements need special handling */
+    body.chat-pinned .navbar-fixed-top,
+    body.chat-pinned .sticky-top,
+    body.chat-pinned .fixed-top,
+    body.chat-pinned nav.fixed-top,
+    body.chat-pinned header.fixed-top,
+    body.chat-pinned .navbar.fixed-top,
+    body.chat-pinned .navbar.sticky-top,
+    body.chat-pinned .navbar {
+        left: 320px !important;
+        width: calc(100% - 320px) !important;
+        position: fixed !important;
+        top: 0 !important;
+    }
+    
+    .project-chat-overlay.pinned .chat-groups-panel {
+        max-height: 30%;
+    }
+    
+    .project-chat-overlay.pinned .message-item {
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 767px) {
+    .project-chat-overlay.pinned {
+        width: 280px;
+    }
+    
+    /* On mobile, overlay the chat instead of pushing content */
+    body.chat-pinned {
+        padding-left: 0;
+    }
+    
+    body.chat-pinned .navbar-fixed-top,
+    body.chat-pinned .sticky-top,
+    body.chat-pinned .fixed-top {
+        left: 0 !important;
+        width: 100% !important;
+    }
+    
+    body.chat-pinned .project-chat-overlay {
+        z-index: 1050;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    .project-chat-overlay.pinned .chat-header {
+        padding: 0 15px;
+        height: 56px;
+    }
+    
+    .project-chat-overlay.pinned .chat-container {
+        height: calc(100% - 56px);
+    }
+    
+    .project-chat-overlay.pinned .panel-control, 
+    .project-chat-overlay.pinned .close-chat {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .project-chat-overlay.pinned .chat-groups-panel .panel-header,
+    .project-chat-overlay.pinned .chat-groups-panel.collapsed {
+        height: 46px;
+        min-height: 46px;
+    }
+    
+    .project-chat-overlay.pinned .chat-groups-panel .groups-list {
+        height: calc(100% - 46px);
+    }
+}
 </style>
 
 <script>
@@ -1392,6 +2121,158 @@
     const backdrop = document.createElement('div');
     backdrop.classList.add('project-chat-backdrop');
     document.body.appendChild(backdrop);
+    
+    // Navbar fix for pinned chat - create a permanent scroll listener
+    window.pinnedChatNavbarInterval = null;
+    
+    function setupPinnedNavbarFix() {
+        if (window.pinnedChatNavbarInterval) {
+            clearInterval(window.pinnedChatNavbarInterval);
+        }
+        
+        window.pinnedChatNavbarInterval = setInterval(function() {
+            if (document.body.classList.contains('chat-pinned')) {
+                const navbars = document.querySelectorAll('.navbar, .navbar-fixed-top, .fixed-top, .sticky-top, header, nav, #header');
+                navbars.forEach(navbar => {
+                    // Skip elements that are children of the chat overlay
+                    if (navbar.closest('.project-chat-overlay')) return;
+                    
+                    // Force fixed position at top
+                    navbar.style.position = 'fixed';
+                    navbar.style.top = '0';
+                    navbar.style.zIndex = '1030';
+                    navbar.style.transform = 'none';
+                    
+                    // Adjust width based on screen size
+                    if (window.innerWidth <= 767) {
+                        navbar.style.left = '0';
+                        navbar.style.width = '100%';
+                    } else if (window.innerWidth <= 991) {
+                        navbar.style.left = '320px';
+                        navbar.style.width = 'calc(100% - 320px)';
+                    } else if (window.innerWidth <= 1200) {
+                        navbar.style.left = '340px';
+                        navbar.style.width = 'calc(100% - 340px)';
+                    } else {
+                        navbar.style.left = '380px';
+                        navbar.style.width = 'calc(100% - 380px)';
+                    }
+                });
+            } else {
+                // Clear styles if not in pinned mode
+                const navbars = document.querySelectorAll('.navbar, .navbar-fixed-top, .fixed-top, .sticky-top, header, nav, #header');
+                navbars.forEach(navbar => {
+                    // Skip elements that are children of the chat overlay
+                    if (navbar.closest('.project-chat-overlay')) return;
+                    
+                    navbar.style.position = '';
+                    navbar.style.top = '';
+                    navbar.style.left = '';
+                    navbar.style.width = '';
+                    navbar.style.zIndex = '';
+                    navbar.style.transform = '';
+                });
+            }
+        }, 100); // Check every 100ms
+    }
+    
+    // Set up the navbar fix on page load
+    setupPinnedNavbarFix();
+    
+    // Setup MutationObserver to continuously monitor collapse buttons
+    function monitorCollapseButtons() {
+        const chatGroupsPanel = document.getElementById('chatGroupsPanel');
+        const groupMembersPanel = document.getElementById('groupMembersPanel');
+        const collapseProjects = document.getElementById('collapseProjects');
+        const collapseMembers = document.getElementById('collapseMembers');
+        
+        if (chatGroupsPanel && collapseProjects) {
+            // Create observer for left button
+            const leftObserver = new MutationObserver(function() {
+                if (chatGroupsPanel.classList.contains('collapsed')) {
+                    // Force button back to correct position
+                    setTimeout(function() {
+                        fixCollapseButtonAlignment();
+                    }, 0);
+                }
+            });
+            
+            // Observe both the button and its parent panel for changes
+            leftObserver.observe(collapseProjects, { attributes: true, attributeFilter: ['style', 'class'] });
+            leftObserver.observe(chatGroupsPanel, { attributes: true, attributeFilter: ['class'] });
+        }
+        
+        if (groupMembersPanel && collapseMembers) {
+            // Create observer for right button
+            const rightObserver = new MutationObserver(function() {
+                if (groupMembersPanel.classList.contains('collapsed')) {
+                    // Force button back to correct position
+                    setTimeout(function() {
+                        fixCollapseButtonAlignment();
+                    }, 0);
+                }
+            });
+            
+            // Observe both the button and its parent panel for changes
+            rightObserver.observe(collapseMembers, { attributes: true, attributeFilter: ['style', 'class'] });
+            rightObserver.observe(groupMembersPanel, { attributes: true, attributeFilter: ['class'] });
+        }
+        
+        // Check and fix alignment repeatedly
+        setInterval(function() {
+            if ((chatGroupsPanel && chatGroupsPanel.classList.contains('collapsed')) ||
+                (groupMembersPanel && groupMembersPanel.classList.contains('collapsed'))) {
+                fixCollapseButtonAlignment();
+            }
+        }, 500);
+    }
+    
+    // Start monitoring collapse buttons
+    setTimeout(monitorCollapseButtons, 500);
+    
+    // Add a dedicated scroll event listener for pinned mode
+    window.addEventListener('scroll', function() {
+        if (document.body.classList.contains('chat-pinned')) {
+            const navbars = document.querySelectorAll('.navbar, .navbar-fixed-top, .fixed-top, .sticky-top, header, nav, #header');
+            navbars.forEach(navbar => {
+                // Skip elements that are children of the chat overlay
+                if (navbar.closest('.project-chat-overlay')) return;
+                
+                // Force navbar to stay at top
+                navbar.style.position = 'fixed';
+                navbar.style.top = '0';
+            });
+        }
+    }, { passive: true });
+    
+    // Add ripple effect to buttons and clickable items
+    function addRippleEffect() {
+        const buttons = document.querySelectorAll('.panel-control, .close-chat, .send-btn, .attachment-btn, .emoji-btn, .group-item, .member-item');
+        
+        buttons.forEach(button => {
+            if (button.getAttribute('data-has-ripple') === 'true') return;
+            button.setAttribute('data-has-ripple', 'true');
+            
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple-effect');
+                ripple.style.width = ripple.style.height = Math.max(this.offsetWidth, this.offsetHeight) * 2 + 'px';
+                
+                const rect = this.getBoundingClientRect();
+                ripple.style.left = (e.clientX - rect.left) + 'px';
+                ripple.style.top = (e.clientY - rect.top) + 'px';
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 800);
+            });
+        });
+    }
+    
+    // Call initially and whenever chat is opened
+    setTimeout(addRippleEffect, 500);
     
     // Use the global function for updating unread chat notification count
     function loadUnreadMessageCount() {
@@ -1418,9 +2299,6 @@
                 .catch(error => console.error('Error fetching unread message count:', error));
         }
     }
-    
-    // Initial check for notifications (the interval is already set in navbar.php)
-    loadUnreadMessageCount();
     
     // Function to update the read timestamp when user views messages
     function updateReadTimestamp(projectId) {
@@ -1482,19 +2360,15 @@
                         // Append the message
                         appendSingleMessage(data.message, messagesContainer);
                         
-                        // Scroll to the bottom
-                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                                // Smooth scroll to the bottom
+        if (typeof smoothScrollToBottom === 'function') {
+            smoothScrollToBottom(400);
+        } else {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
                         
-                        // Add highlight animation to new message
-                        setTimeout(() => {
-                            const newMessage = document.querySelector(`[data-message-id="${data.message.id}"]`);
-                            if (newMessage) {
-                                newMessage.classList.add('new-message-highlight');
-                                setTimeout(() => {
-                                    newMessage.classList.remove('new-message-highlight');
-                                }, 2000);
-                            }
-                        }, 100);
+                        // No highlight animation for new messages
+                        // Removed animation for static message display
                     }
                 }
             })
@@ -1534,12 +2408,276 @@
     // Track original scroll position
     let scrollPosition = 0;
     
+    // Flag to track if chat is pinned
+    let isChatPinned = localStorage.getItem('chatPinned') === 'true';
+    
     // Original window event handlers
     let originalWheel = null;
     let originalScroll = null;
+
+    // Function to save chat state
+    function saveChatState() {
+        localStorage.setItem('chatPinned', isChatPinned);
+        // If we want to save more chat state in the future, add it here
+    }
+    
+    // Enhanced function to fix collapse button alignment issues
+    function fixCollapseButtonAlignment() {
+        const chatGroupsPanel = document.getElementById('chatGroupsPanel');
+        const groupMembersPanel = document.getElementById('groupMembersPanel');
+        const collapseProjects = document.getElementById('collapseProjects');
+        const collapseMembers = document.getElementById('collapseMembers');
+        
+        // Position relative to chat overlay for consistent positioning
+        const chatOverlay = document.getElementById('projectChatOverlay');
+        const chatRect = chatOverlay ? chatOverlay.getBoundingClientRect() : null;
+        
+        // Fix left panel collapse button with extreme force
+        if (chatGroupsPanel && collapseProjects) {
+            if (chatGroupsPanel.classList.contains('collapsed')) {
+                // Completely reset the button first
+                collapseProjects.removeAttribute('style');
+                
+                // Direct DOM styling with important flags for each property
+                Object.assign(collapseProjects.style, {
+                    position: 'fixed',
+                    left: '5px',
+                    top: '64px', // Fixed position below header
+                    zIndex: '99999',
+                    background: 'rgba(var(--primary-rgb), 0.2)',
+                    borderRadius: '50%',
+                    opacity: '1',
+                    width: '28px',
+                    height: '28px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transform: 'none',
+                    margin: '0',
+                    padding: '0',
+                    border: '1px solid rgba(var(--primary-rgb), 0.3)',
+                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+                    minWidth: 'auto',
+                    minHeight: 'auto',
+                    lineHeight: '1',
+                    outline: 'none',
+                    transition: 'none'
+                });
+                
+                // Force each style to have !important
+                for (let prop in collapseProjects.style) {
+                    if (collapseProjects.style[prop] && typeof collapseProjects.style[prop] === 'string') {
+                        collapseProjects.style.setProperty(prop, collapseProjects.style[prop], 'important');
+                    }
+                }
+                
+                // Also apply using setAttribute for maximum compatibility
+                collapseProjects.setAttribute('style', `
+                    position: fixed !important;
+                    left: 5px !important;
+                    top: 64px !important;
+                    z-index: 99999 !important;
+                    background: rgba(var(--primary-rgb), 0.2) !important;
+                    border-radius: 50% !important;
+                    opacity: 1 !important;
+                    width: 28px !important;
+                    height: 28px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    transform: none !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    border: 1px solid rgba(var(--primary-rgb), 0.3) !important;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+                    min-width: auto !important;
+                    min-height: auto !important;
+                    line-height: 1 !important;
+                    outline: none !important;
+                    transition: none !important;
+                `);
+                
+                // Make sure icon is correct
+                const leftIcon = collapseProjects.querySelector('i');
+                if (leftIcon) {
+                    leftIcon.className = 'bi bi-chevron-right';
+                    leftIcon.style.cssText = `
+                        font-size: 16px !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        color: var(--neo-primary) !important;
+                    `;
+                }
+                
+                // Force immediate render
+                collapseProjects.offsetHeight;
+            } else {
+                collapseProjects.removeAttribute('style');
+                
+                // Restore default styles for expanded state
+                Object.assign(collapseProjects.style, {
+                    position: '',
+                    left: '',
+                    top: '',
+                    zIndex: '',
+                    background: '',
+                    borderRadius: '',
+                    opacity: '',
+                    width: '',
+                    height: '',
+                    display: '',
+                    alignItems: '',
+                    justifyContent: '',
+                    transform: '',
+                    margin: '',
+                    padding: '',
+                    border: '',
+                    boxShadow: '',
+                    minWidth: '',
+                    minHeight: '',
+                    lineHeight: '',
+                    outline: '',
+                    transition: ''
+                });
+                
+                // Make sure icon is correct
+                const leftIcon = collapseProjects.querySelector('i');
+                if (leftIcon) {
+                    leftIcon.className = 'bi bi-chevron-left';
+                    leftIcon.removeAttribute('style');
+                }
+            }
+        }
+        
+        // Fix right panel collapse button with extreme force
+        if (groupMembersPanel && collapseMembers) {
+            if (groupMembersPanel.classList.contains('collapsed')) {
+                // Completely reset the button first
+                collapseMembers.removeAttribute('style');
+                
+                // Direct DOM styling with important flags for each property
+                Object.assign(collapseMembers.style, {
+                    position: 'fixed',
+                    right: '5px',
+                    top: '64px', // Fixed position below header
+                    zIndex: '99999',
+                    background: 'rgba(var(--primary-rgb), 0.2)',
+                    borderRadius: '50%',
+                    opacity: '1',
+                    width: '28px',
+                    height: '28px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transform: 'none',
+                    margin: '0',
+                    padding: '0',
+                    border: '1px solid rgba(var(--primary-rgb), 0.3)',
+                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)',
+                    minWidth: 'auto',
+                    minHeight: 'auto',
+                    lineHeight: '1',
+                    outline: 'none',
+                    transition: 'none'
+                });
+                
+                // Force each style to have !important
+                for (let prop in collapseMembers.style) {
+                    if (collapseMembers.style[prop] && typeof collapseMembers.style[prop] === 'string') {
+                        collapseMembers.style.setProperty(prop, collapseMembers.style[prop], 'important');
+                    }
+                }
+                
+                // Also apply using setAttribute for maximum compatibility
+                collapseMembers.setAttribute('style', `
+                    position: fixed !important;
+                    right: 5px !important;
+                    top: 64px !important;
+                    z-index: 99999 !important;
+                    background: rgba(var(--primary-rgb), 0.2) !important;
+                    border-radius: 50% !important;
+                    opacity: 1 !important;
+                    width: 28px !important;
+                    height: 28px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    transform: none !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    border: 1px solid rgba(var(--primary-rgb), 0.3) !important;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+                    min-width: auto !important;
+                    min-height: auto !important;
+                    line-height: 1 !important;
+                    outline: none !important;
+                    transition: none !important;
+                `);
+                
+                // Make sure icon is correct
+                const rightIcon = collapseMembers.querySelector('i');
+                if (rightIcon) {
+                    rightIcon.className = 'bi bi-chevron-left';
+                    rightIcon.style.cssText = `
+                        font-size: 16px !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        color: var(--neo-primary) !important;
+                    `;
+                }
+                
+                // Force immediate render
+                collapseMembers.offsetHeight;
+            } else {
+                collapseMembers.removeAttribute('style');
+                
+                // Restore default styles for expanded state
+                Object.assign(collapseMembers.style, {
+                    position: '',
+                    right: '',
+                    top: '',
+                    zIndex: '',
+                    background: '',
+                    borderRadius: '',
+                    opacity: '',
+                    width: '',
+                    height: '',
+                    display: '',
+                    alignItems: '',
+                    justifyContent: '',
+                    transform: '',
+                    margin: '',
+                    padding: '',
+                    border: '',
+                    boxShadow: '',
+                    minWidth: '',
+                    minHeight: '',
+                    lineHeight: '',
+                    outline: '',
+                    transition: ''
+                });
+                
+                // Make sure icon is correct
+                const rightIcon = collapseMembers.querySelector('i');
+                if (rightIcon) {
+                    rightIcon.className = 'bi bi-chevron-right';
+                    rightIcon.removeAttribute('style');
+                }
+            }
+        }
+    }
     
     // Function to disable scrolling completely
     function disableScroll() {
+        // If chat is pinned, don't disable scrolling
+        if (isChatPinned) return;
+        
         // Store current scroll position
         scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
         
@@ -1586,6 +2724,9 @@
 
     // Function to enable scrolling
     function enableScroll() {
+        // If chat is pinned, don't enable scrolling
+        if (isChatPinned) return;
+        
         // Remove helper classes
         document.body.classList.remove('no-scroll');
         document.documentElement.classList.remove('no-scroll');
@@ -1628,13 +2769,16 @@
     
     // Function to stop event propagation completely
     function stopPropagation(e) {
-        e.stopPropagation();
-        e.stopImmediatePropagation();
+        // Only stop propagation if not in pinned mode
+        if (!isChatPinned) {
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+        }
     }
     
     // Function to prevent scrolling
     function preventScroll(e) {
-        if (chatOverlay.classList.contains('active')) {
+        if (chatOverlay.classList.contains('active') && !isChatPinned) {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
@@ -1644,7 +2788,7 @@
 
     // Capture and cancel wheel events at document level
     document.addEventListener('wheel', function(e) {
-        if (chatOverlay.classList.contains('active')) {
+        if (chatOverlay.classList.contains('active') && !isChatPinned) {
             // We need to let events within the overlay work for scrolling chat content
             if (!chatOverlay.contains(e.target)) {
                 e.preventDefault();
@@ -1660,7 +2804,7 @@
 
     // Prevent touch move events
     document.addEventListener('touchmove', function(e) {
-        if (chatOverlay.classList.contains('active')) {
+        if (chatOverlay.classList.contains('active') && !isChatPinned) {
             if (!chatOverlay.contains(e.target)) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1673,7 +2817,7 @@
     
     // Completely override scroll event
     window.addEventListener('scroll', function(e) {
-        if (chatOverlay.classList.contains('active')) {
+        if (chatOverlay.classList.contains('active') && !isChatPinned) {
             // If we're scrolling the window while chat is open, prevent it
             e.preventDefault();
             e.stopPropagation();
@@ -1684,7 +2828,7 @@
 
     // Prevent keyboard scroll events
     document.addEventListener('keydown', function(e) {
-        if (chatOverlay.classList.contains('active')) {
+        if (chatOverlay.classList.contains('active') && !isChatPinned) {
             // Prevent space, page up/down, home, end, up/down arrow keys
             const scrollKeys = [32, 33, 34, 35, 36, 38, 40];
             if (scrollKeys.includes(e.keyCode)) {
@@ -1741,11 +2885,28 @@
         }
     });
     
-    // Prevent backdrop from closing chat to avoid accidental clicks
+    // Allow backdrop to close chat when clicked
     backdrop.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        return false;
+        
+        // If chat is pinned, don't close on backdrop click
+        if (isChatPinned) return;
+        
+        // Close the chat overlay
+        chatOverlay.classList.remove('active');
+        
+        // Re-enable scrolling
+        enableScroll();
+        
+        // Stop polling
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+        }
+        
+        // Update notification badge immediately
+        loadUnreadMessageCount();
     });
     
     // Isolate scroll events in scrollable containers
@@ -1774,6 +2935,9 @@
     if (chatButton) {
         chatButton.addEventListener('click', function(e) {
             e.preventDefault();
+            
+            // Reset display style first to ensure it's visible
+            chatOverlay.style.display = '';
             chatOverlay.classList.add('active');
             
             // Load chat groups
@@ -1785,18 +2949,280 @@
             // Update notification badge immediately
             loadUnreadMessageCount();
             
-            // Disable scrolling completely
-            disableScroll();
+            // Apply ripple effects to buttons
+            setTimeout(addRippleEffect, 300);
+            
+            // Check and apply saved chat state
+            applyChatState();
+            
+            // If in pinned mode, update the visibility state
+            if (isChatPinned) {
+                localStorage.setItem('chatVisible', 'true');
+                document.body.classList.add('chat-pinned');
+            } else {
+                disableScroll();
+            }
+        });
+    }
+    
+    // Apply saved chat state
+    function applyChatState() {
+        // Fix any collapsed button alignment issues
+        fixCollapseButtonAlignment();
+        
+        // Apply pinned state if needed
+        if (isChatPinned) {
+            chatOverlay.classList.add('pinned');
+            document.body.classList.add('chat-pinned');
+            
+            // Update pin icon if exists
+            const pinIcon = document.querySelector('#pinChat i');
+            if (pinIcon) {
+                pinIcon.classList.remove('bi-pin');
+                pinIcon.classList.add('bi-pin-fill');
+                document.getElementById('pinChat').setAttribute('title', 'Unpin chat');
+            }
+            
+            // Find navbar and ensure it's properly positioned
+            const navbars = document.querySelectorAll('.navbar, .navbar-fixed-top, .fixed-top, .sticky-top');
+            navbars.forEach(navbar => {
+                navbar.style.position = 'fixed';
+                navbar.style.top = '0';
+                navbar.style.left = '380px';
+                navbar.style.width = 'calc(100% - 380px)';
+                navbar.style.zIndex = '1030';
+                
+                // Adjust width based on screen size
+                if (window.innerWidth <= 1200) {
+                    navbar.style.left = '340px';
+                    navbar.style.width = 'calc(100% - 340px)';
+                }
+                if (window.innerWidth <= 991) {
+                    navbar.style.left = '320px';
+                    navbar.style.width = 'calc(100% - 320px)';
+                }
+                if (window.innerWidth <= 767) {
+                    navbar.style.left = '0';
+                    navbar.style.width = '100%';
+                }
+            });
+            
+            // Add groups toggle button for pinned view if it doesn't exist
+            const chatGroupsPanel = document.getElementById('chatGroupsPanel');
+            if (chatGroupsPanel && !document.querySelector('.groups-toggle')) {
+                const toggleBtn = document.createElement('button');
+                toggleBtn.className = 'groups-toggle';
+                toggleBtn.innerHTML = '<i class="bi bi-chevron-up"></i>';
+                toggleBtn.title = 'Toggle projects panel';
+                
+                // Add event listener
+                toggleBtn.addEventListener('click', function() {
+                    chatGroupsPanel.classList.toggle('collapsed');
+                    
+                    // Update icon
+                    const icon = this.querySelector('i');
+                    if (chatGroupsPanel.classList.contains('collapsed')) {
+                        icon.classList.remove('bi-chevron-up');
+                        icon.classList.add('bi-chevron-down');
+                    } else {
+                        icon.classList.remove('bi-chevron-down');
+                        icon.classList.add('bi-chevron-up');
+                    }
+                });
+                
+                chatGroupsPanel.appendChild(toggleBtn);
+            }
+        }
+    }
+    
+    // Pin chat button
+    const pinButton = document.getElementById('pinChat');
+    if (pinButton) {
+        pinButton.addEventListener('click', function() {
+            // Toggle pinned state
+            isChatPinned = !isChatPinned;
+            
+            // Save state to localStorage
+            saveChatState();
+            
+            // Update UI
+            chatOverlay.classList.toggle('pinned', isChatPinned);
+            
+            // Update icon
+            const pinIcon = this.querySelector('i');
+            if (pinIcon) {
+                if (isChatPinned) {
+                    pinIcon.classList.remove('bi-pin');
+                    pinIcon.classList.add('bi-pin-fill');
+                    this.setAttribute('title', 'Unpin chat');
+                    
+                    // Add groups toggle button for pinned view if it doesn't exist
+                    const chatGroupsPanel = document.getElementById('chatGroupsPanel');
+                    if (chatGroupsPanel && !document.querySelector('.groups-toggle')) {
+                        const toggleBtn = document.createElement('button');
+                        toggleBtn.className = 'groups-toggle';
+                        toggleBtn.innerHTML = '<i class="bi bi-chevron-up"></i>';
+                        toggleBtn.title = 'Toggle projects panel';
+                        
+                        // Add event listener
+                        toggleBtn.addEventListener('click', function() {
+                            chatGroupsPanel.classList.toggle('collapsed');
+                            
+                            // Update icon
+                            const icon = this.querySelector('i');
+                            if (chatGroupsPanel.classList.contains('collapsed')) {
+                                icon.classList.remove('bi-chevron-up');
+                                icon.classList.add('bi-chevron-down');
+                            } else {
+                                icon.classList.remove('bi-chevron-down');
+                                icon.classList.add('bi-chevron-up');
+                            }
+                        });
+                        
+                        chatGroupsPanel.appendChild(toggleBtn);
+                    }
+                } else {
+                    pinIcon.classList.remove('bi-pin-fill');
+                    pinIcon.classList.add('bi-pin');
+                    this.setAttribute('title', 'Pin chat');
+                    
+                    // Remove groups toggle if it exists
+                    const toggleBtn = document.querySelector('.groups-toggle');
+                    if (toggleBtn) {
+                        toggleBtn.remove();
+                    }
+                    
+                    // Ensure chat groups panel is not collapsed
+                    const chatGroupsPanel = document.getElementById('chatGroupsPanel');
+                    if (chatGroupsPanel) {
+                        chatGroupsPanel.classList.remove('collapsed');
+                    }
+                }
+            }
+            
+            // Toggle backdrop and update body for pinned layout
+            if (isChatPinned) {
+                backdrop.classList.remove('active');
+                
+                // Allow page scrolling when pinned
+                document.body.classList.remove('no-scroll');
+                document.documentElement.classList.remove('no-scroll');
+                document.body.style.top = '';
+                window.scrollTo(0, scrollPosition);
+                
+                // Re-enable scroll snapping in index.php
+                if (typeof window.allowFreeScroll !== 'undefined') {
+                    window.allowFreeScroll = false;
+                }
+                
+                // Re-enable scroll handlers in index.php
+                if (typeof window.isScrolling !== 'undefined') {
+                    window.isScrolling = false;
+                }
+                
+                // Restore original event handlers
+                if (originalWheel) {
+                    window.onwheel = originalWheel;
+                }
+                if (originalScroll) {
+                    window.onscroll = originalScroll;
+                }
+                
+                // Add chat-pinned class to body for layout adjustment
+                document.body.classList.add('chat-pinned');
+                
+                // Fix navbar positioning when pinned
+                const navbars = document.querySelectorAll('.navbar, .navbar-fixed-top, .fixed-top, .sticky-top');
+                navbars.forEach(navbar => {
+                    navbar.style.position = 'fixed';
+                    navbar.style.top = '0';
+                    navbar.style.left = '380px';
+                    navbar.style.width = 'calc(100% - 380px)';
+                    navbar.style.zIndex = '1030';
+                    
+                    // Adjust width based on screen size
+                    if (window.innerWidth <= 1200) {
+                        navbar.style.left = '340px';
+                        navbar.style.width = 'calc(100% - 340px)';
+                    }
+                    if (window.innerWidth <= 991) {
+                        navbar.style.left = '320px';
+                        navbar.style.width = 'calc(100% - 320px)';
+                    }
+                    if (window.innerWidth <= 767) {
+                        navbar.style.left = '0';
+                        navbar.style.width = '100%';
+                    }
+                });
+                
+                // Remove event blocking
+                window.removeEventListener('scroll', preventScroll, { capture: true });
+            } else {
+                backdrop.classList.add('active');
+                disableScroll();
+                
+                // Remove chat-pinned class from body
+                document.body.classList.remove('chat-pinned');
+            }
+            
+            // Refresh layout
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+                
+                // Scroll messages to bottom
+                if (messagesContainer) {
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            }, 300);
         });
     }
     
     // Close chat overlay
     if (closeChat) {
         closeChat.addEventListener('click', function() {
+            // Force hide the chat overlay regardless of pinned state
             chatOverlay.classList.remove('active');
+            chatOverlay.style.display = 'none';
             
-            // Re-enable scrolling
-            enableScroll();
+            // Handle closing in pinned mode
+            if (isChatPinned) {
+                // Remove chat-pinned class from body
+                document.body.classList.remove('chat-pinned');
+                
+                // Update localStorage to remember the chat is closed
+                localStorage.setItem('chatVisible', 'false');
+                
+                // Reset any fixed elements that may have been adjusted for pinned mode
+                const fixedElements = document.querySelectorAll('.navbar, .navbar-fixed-top, .sticky-top, .fixed-top, header, nav, #header');
+                fixedElements.forEach(el => {
+                    // Skip elements that are children of the chat overlay
+                    if (el.closest('.project-chat-overlay')) return;
+                    
+                    // Reset all positioning and styles
+                    el.style.position = '';
+                    el.style.left = '';
+                    el.style.width = '';
+                    el.style.top = '';
+                    el.style.right = '';
+                    el.style.transform = '';
+                    el.style.margin = '';
+                    el.style.zIndex = '';
+                });
+                
+                // Force reset the body padding and styles
+                document.body.style.paddingLeft = '';
+                document.body.style.width = '';
+                document.body.style.overflow = '';
+                document.body.style.position = '';
+                
+                // Force a layout recalculation
+                setTimeout(() => {
+                    window.dispatchEvent(new Event('resize'));
+                }, 100);
+            } else {
+                // Re-enable scrolling for non-pinned mode
+                enableScroll();
+            }
             
             // Stop polling
             if (pollingInterval) {
@@ -1808,6 +3234,28 @@
             loadUnreadMessageCount();
         });
     }
+    
+    // Check for pinned state on page load and apply immediately if needed
+    if (isChatPinned && chatOverlay) {
+        // If we have a visible chat that should be pinned, show it right away
+        if (localStorage.getItem('chatVisible') === 'true') {
+            chatOverlay.classList.add('active');
+            applyChatState();
+            
+            // Load chat content
+            setTimeout(() => {
+                loadChatGroups();
+                preloadFacultyData();
+            }, 500);
+        }
+    }
+    
+    // Before unload, save visibility state if pinned
+    window.addEventListener('beforeunload', function() {
+        if (isChatPinned && chatOverlay) {
+            localStorage.setItem('chatVisible', chatOverlay.classList.contains('active'));
+        }
+    });
     
     // Message input handling
     const chatMessageInput = document.getElementById('chatMessageInput');
@@ -2073,36 +3521,34 @@
     const collapseMembers = document.getElementById('collapseMembers');
     
     if (collapseProjects) {
-        collapseProjects.addEventListener('click', function() {
+        collapseProjects.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
             const panel = document.getElementById('chatGroupsPanel');
             panel.classList.toggle('collapsed');
             
-            // Rotate chevron icon
-            const icon = this.querySelector('i');
-            if (panel.classList.contains('collapsed')) {
-                icon.classList.remove('bi-chevron-left');
-                icon.classList.add('bi-chevron-right');
-            } else {
-                icon.classList.remove('bi-chevron-right');
-                icon.classList.add('bi-chevron-left');
-            }
+            // Call alignment fix function with multiple attempts to ensure it works
+            setTimeout(fixCollapseButtonAlignment, 0);
+            setTimeout(fixCollapseButtonAlignment, 10);
+            setTimeout(fixCollapseButtonAlignment, 50);
+            setTimeout(fixCollapseButtonAlignment, 100);
         });
     }
     
     if (collapseMembers) {
-        collapseMembers.addEventListener('click', function() {
+        collapseMembers.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
             const panel = document.getElementById('groupMembersPanel');
             panel.classList.toggle('collapsed');
             
-            // Rotate chevron icon
-            const icon = this.querySelector('i');
-            if (panel.classList.contains('collapsed')) {
-                icon.classList.remove('bi-chevron-right');
-                icon.classList.add('bi-chevron-left');
-            } else {
-                icon.classList.remove('bi-chevron-left');
-                icon.classList.add('bi-chevron-right');
-            }
+            // Call alignment fix function with multiple attempts to ensure it works
+            setTimeout(fixCollapseButtonAlignment, 0);
+            setTimeout(fixCollapseButtonAlignment, 10);
+            setTimeout(fixCollapseButtonAlignment, 50);
+            setTimeout(fixCollapseButtonAlignment, 100);
         });
     }
     
@@ -2128,6 +3574,34 @@
             if (rightPanel) rightPanel.classList.remove('minimized');
             if (leftPanel) leftPanel.classList.remove('active');
             if (rightPanel) rightPanel.classList.remove('active');
+        }
+        
+        // Fix any collapsed button alignment issues on resize
+        setTimeout(fixCollapseButtonAlignment, 100);
+        
+        // Update navbar positioning if chat is pinned
+        if (isChatPinned && document.body.classList.contains('chat-pinned')) {
+            const navbars = document.querySelectorAll('.navbar, .navbar-fixed-top, .fixed-top, .sticky-top');
+            navbars.forEach(navbar => {
+                navbar.style.position = 'fixed';
+                navbar.style.top = '0';
+                navbar.style.zIndex = '1030';
+                
+                // Adjust width based on screen size
+                if (window.innerWidth <= 767) {
+                    navbar.style.left = '0';
+                    navbar.style.width = '100%';
+                } else if (window.innerWidth <= 991) {
+                    navbar.style.left = '320px';
+                    navbar.style.width = 'calc(100% - 320px)';
+                } else if (window.innerWidth <= 1200) {
+                    navbar.style.left = '340px';
+                    navbar.style.width = 'calc(100% - 340px)';
+                } else {
+                    navbar.style.left = '380px';
+                    navbar.style.width = 'calc(100% - 380px)';
+                }
+            });
         }
     });
     
@@ -2723,19 +4197,7 @@
                         // Update notification count when new messages are detected
                         loadUnreadMessageCount();
                         
-                        // Highlight new messages with animation
-                        data.messages.forEach(msg => {
-                            // Slight delay to ensure DOM is updated
-                            setTimeout(() => {
-                                const msgElement = document.querySelector(`[data-message-id="${msg.id}"]`);
-                                if (msgElement) {
-                                    msgElement.classList.add('new-message-highlight');
-                                    setTimeout(() => {
-                                        msgElement.classList.remove('new-message-highlight');
-                                    }, 2000);
-                                }
-                            }, 100);
-                        });
+                        // No highlighting for new messages - keep messages static
                     } 
                     // If this is the first load or not a poll, replace all messages
                     else if (!isPoll || isFirstLoad) {
@@ -2820,8 +4282,33 @@
             appendSingleMessage(message, messagesContainer);
         });
         
-        // Scroll to the bottom of the messages container
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        // Smooth scroll to the bottom of the messages container
+        smoothScrollToBottom(400);
+    }
+    
+    // Smooth scroll function
+    function smoothScrollToBottom(duration = 300) {
+        if (!messagesContainer) return;
+        
+        const target = messagesContainer.scrollHeight;
+        const start = messagesContainer.scrollTop;
+        const distance = target - start;
+        const startTime = performance.now();
+        
+        function scrollStep(timestamp) {
+            const currentTime = timestamp - startTime;
+            if (currentTime < duration) {
+                const progress = Math.min(currentTime / duration, 1);
+                // Easing function for smooth deceleration
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                messagesContainer.scrollTop = start + distance * easeOut;
+                requestAnimationFrame(scrollStep);
+            } else {
+                messagesContainer.scrollTop = target;
+            }
+        }
+        
+        requestAnimationFrame(scrollStep);
     }
     
     // Function to append new messages
@@ -2881,7 +4368,7 @@
                     <span>New messages</span>
                 `;
                 newMsgIndicator.addEventListener('click', function() {
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    smoothScrollToBottom(500);
                     this.classList.remove('visible');
                 });
                 document.querySelector('.chat-messages-panel').appendChild(newMsgIndicator);
@@ -2903,8 +4390,8 @@
                 }
             }, 5000);
         } else if (isAtBottom) {
-            // If user was at bottom, scroll to show new messages
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            // If user was at bottom, smooth scroll to show new messages
+            smoothScrollToBottom(400);
             
             // Hide the indicator if it exists
             const newMsgIndicator = document.getElementById('newMessagesIndicator');

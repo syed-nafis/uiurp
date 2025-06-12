@@ -14,9 +14,6 @@ $response = [
     'message' => ''
 ];
 
-// Log file for debugging
-$log_path = __DIR__ . '/../../logs/chat_debug.log';
-
 // Check if user is logged in
 if (!isset($_SESSION['user_id']) && !isset($_SESSION['user_data'])) {
     $response['message'] = 'User not logged in';
@@ -39,9 +36,6 @@ if (isset($_SESSION['user_id'])) {
     $userId = (string)$_SESSION['user_data']['_id'];
 }
 
-// Log user ID for debugging
-file_put_contents($log_path, date('Y-m-d H:i:s') . " - Chat Groups - User ID: $userId\n", FILE_APPEND);
-
 try {
     // Connect to MongoDB
     $client = connectToDatabase();
@@ -61,9 +55,6 @@ try {
             ['supervisor.userId' => $userId]  // String format
         ]
     ];
-    
-    // Logging the filter for debugging
-    file_put_contents($log_path, date('Y-m-d H:i:s') . " - Chat Groups - Filter: " . json_encode($filter) . "\n", FILE_APPEND);
     
     $options = [
         'sort' => ['updatedAt' => -1], // Sort by most recently updated
@@ -94,16 +85,12 @@ try {
         $chatGroups[] = $group;
     }
     
-    // Log the result
-    file_put_contents($log_path, date('Y-m-d H:i:s') . " - Chat Groups - Found " . count($chatGroups) . " groups\n", FILE_APPEND);
-    
     $response['success'] = true;
     $response['chatGroups'] = $chatGroups;
     echo json_encode($response);
     
 } catch (Exception $e) {
     $errorMsg = "Error fetching chat groups: " . $e->getMessage();
-    file_put_contents($log_path, date('Y-m-d H:i:s') . " - Chat Groups - Error: " . $errorMsg . "\n", FILE_APPEND);
     
     $response['message'] = $errorMsg;
     echo json_encode($response);

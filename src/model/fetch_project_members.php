@@ -15,9 +15,6 @@ $response = [
     'message' => ''
 ];
 
-// Log file for debugging
-$log_path = __DIR__ . '/../../logs/chat_debug.log';
-
 // Check if user is logged in
 if (!isset($_SESSION['user_id']) && !isset($_SESSION['user_data'])) {
     $response['message'] = 'User not logged in';
@@ -49,9 +46,6 @@ if (isset($_SESSION['user_id'])) {
 
 // Get project ID
 $projectId = $_GET['projectId'];
-
-// Log for debugging
-file_put_contents($log_path, date('Y-m-d H:i:s') . " - Fetch Project Members - Project ID: $projectId, User ID: $userId\n", FILE_APPEND);
 
 // Helper function to create profile link for users
 function createProfileLink($name, $userId, $userType) {
@@ -180,7 +174,6 @@ try {
                     }
                 } catch (Exception $e) {
                     // Just continue if we can't find student info
-                    file_put_contents($log_path, date('Y-m-d H:i:s') . " - Error fetching student info: " . $e->getMessage() . "\n", FILE_APPEND);
                 }
             }
             
@@ -248,16 +241,13 @@ try {
                 }
             } catch (Exception $e) {
                 // Just continue if we can't find faculty info
-                file_put_contents($log_path, date('Y-m-d H:i:s') . " - Error fetching faculty info: " . $e->getMessage() . "\n", FILE_APPEND);
             }
         }
         
         $supervisor = $supervisorInfo;
     }
     
-    // Log the result
-    file_put_contents($log_path, date('Y-m-d H:i:s') . " - Fetch Project Members - Found " . count($members) . " members and " . ($supervisor ? "1 supervisor" : "0 supervisors") . "\n", FILE_APPEND);
-    
+    // Transform results to match the response format
     $response['success'] = true;
     $response['members'] = $members;
     $response['supervisor'] = $supervisor;
@@ -266,8 +256,6 @@ try {
     
 } catch (Exception $e) {
     $errorMsg = "Error fetching project members: " . $e->getMessage();
-    file_put_contents($log_path, date('Y-m-d H:i:s') . " - Fetch Project Members - Error: " . $errorMsg . "\n", FILE_APPEND);
-    
     $response['message'] = $errorMsg;
     echo json_encode($response);
 }
