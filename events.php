@@ -132,6 +132,9 @@ function isEventCreator($event) {
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+    
     <style>
         :root {
             /* Modern Futuristic Color Scheme */
@@ -427,6 +430,12 @@ function isEventCreator($event) {
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        
+        .view-calendar-btn {
+            background: linear-gradient(135deg, #4c9af1 0%, #4361ee 100%);
+            border: none;
+            margin-right: 10px;
         }
 
         .filter-btn::before, .create-btn::before {
@@ -1383,6 +1392,9 @@ function isEventCreator($event) {
                             <button type="submit" class="filter-btn ripple me-2 flex-grow-1">
                                 <i class="bi bi-funnel me-2"></i>Apply Filters
                             </button>
+                            <button type="button" class="filter-btn view-calendar-btn ripple me-2" title="View Calendar">
+                                <i class="bi bi-calendar-week me-2"></i>Calendar
+                            </button>
                             <a href="create_event.php" class="create-btn ripple" title="Create New Event">
                                 <i class="bi bi-plus-lg me-md-2"></i>
                                 <span class="d-none d-sm-inline">Create Event</span>
@@ -1584,6 +1596,9 @@ function isEventCreator($event) {
     </div>
 
     <?php
+    // Include calendar overlay
+    include 'calendar-overlay.php';
+    
     // Include footer
     $footer_path = 'src/includes/footer.php';
     if (file_exists($footer_path)) {
@@ -1624,6 +1639,7 @@ function isEventCreator($event) {
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
     <script>
         // Page loader
         window.addEventListener('load', () => {

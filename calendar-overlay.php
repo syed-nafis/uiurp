@@ -1,0 +1,1407 @@
+<?php
+// Only run these functions if not already defined in the parent file (events.php)
+if (!function_exists('connectToMongoDB')) {
+// Function to connect to MongoDB
+function connectToMongoDB() {
+    try {
+        $mongoClient = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
+        return $mongoClient->uiurp;
+    } catch (Exception $e) {
+        error_log("MongoDB connection failed: " . $e->getMessage());
+        return null;
+        }
+    }
+}
+
+if (!function_exists('getAllEventsFromMongoDB')) {
+// Function to get all events
+function getAllEventsFromMongoDB() {
+    $db = connectToMongoDB();
+    if (!$db) {
+        return [];
+    }
+    
+    try {
+        $collection = $db->events;
+        $cursor = $collection->find([], ['sort' => ['eventDate' => 1]]);
+        $events = [];
+        
+        foreach ($cursor as $event) {
+            // Convert MongoDB document to array
+            $eventArray = json_decode(json_encode($event), true);
+            
+            // Helper function to convert MongoDB date - improved to handle more formats
+            $convertDate = function($dateValue) {
+                if (is_array($dateValue) && isset($dateValue['$date'])) {
+                    // Format 1: MongoDB Extended JSON v2 - $date is a string (ISO date)
+                    if (is_string($dateValue['$date'])) {
+                        return $dateValue['$date'];
+                    }
+                    // Format 2: MongoDB Legacy Extended JSON - $date with $numberLong
+                    elseif (is_array($dateValue['$date']) && isset($dateValue['$date']['$numberLong'])) {
+                        return date('Y-m-d\TH:i:s\Z', intval($dateValue['$date']['$numberLong']) / 1000);
+                    }
+                    // Format 3: MongoDB Legacy - $date is numeric (timestamp in milliseconds)
+                    elseif (is_numeric($dateValue['$date'])) {
+                        return date('Y-m-d\TH:i:s\Z', $dateValue['$date'] / 1000);
+                    }
+                }
+                return $dateValue;
+            };
+            
+            // Convert MongoDB UTCDateTime objects to readable dates
+            if (isset($eventArray['eventDate'])) {
+                $eventArray['eventDate'] = $convertDate($eventArray['eventDate']);
+                
+                // Ensure we have a valid date for calendar display
+                if (is_string($eventArray['eventDate'])) {
+                    try {
+                        $dateObj = new DateTime($eventArray['eventDate']);
+                        $eventArray['datePart'] = $dateObj->format('Y-m-d');
+                    } catch (Exception $e) {
+                        error_log("Date parsing error: " . $e->getMessage());
+                        continue;  // Skip this event if date parsing fails
+                    }
+                }
+            }
+            
+            $events[] = $eventArray;
+        }
+        
+        return $events;
+    } catch (Exception $e) {
+        error_log("Error fetching events: " . $e->getMessage());
+        return [];
+        }
+    }
+}
+
+// Get all events data if not already fetched in events.php
+if (!isset($events) || empty($events)) {
+$allEvents = getAllEventsFromMongoDB();
+} else {
+    $allEvents = $events; // Use events already fetched in events.php
+}
+
+// Skip debug logging when included in other files
+
+// Format events for calendar display
+$calendarEvents = [];
+foreach ($allEvents as $event) {
+    if (isset($event['eventDate'])) {
+        try {
+            $date = new DateTime($event['eventDate']);
+            $formattedDate = $date->format('Y-m-d');
+            
+            $eventForCalendar = [
+                'title' => $event['title'],
+                'date' => $formattedDate,
+                'type' => $event['eventType'] ?? 'Event',
+                'id' => isset($event['_id_string']) ? $event['_id_string'] : (string)$event['_id']
+            ];
+            $calendarEvents[] = $eventForCalendar;
+            
+            // Skip debug logging
+        } catch (Exception $e) {
+            error_log("Error formatting event date: " . $e->getMessage());
+        }
+    }
+}
+
+// Skip debug logging for calendar events
+?>
+
+<!-- Simple Calendar Overlay -->
+<div id="calendarOverlay" class="calendar-overlay">
+    <div class="calendar-overlay-bg"></div>
+    <div class="calendar-overlay-content">
+        <div class="calendar-header">
+            <h3><i class="bi bi-calendar-week me-2"></i>Event Calendar</h3>
+            <button class="close-calendar-btn">&times;</button>
+        </div>
+        <div id="fullCalendar"></div>
+    </div>
+</div>
+
+<!-- Enhanced Calendar Styles -->
+<style>
+.calendar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.calendar-overlay.active {
+    opacity: 1;
+}
+
+.calendar-overlay-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(10, 17, 33, 0.95) 0%, rgba(0, 0, 0, 0.98) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.calendar-overlay-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.75), 
+                0 0 0 1px rgba(255, 255, 255, 0.12),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 0 30px rgba(76, 201, 240, 0.06);
+    transform: translateY(50px) scale(0.95);
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    filter: blur(5px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    /* Add futuristic border glow */
+    position: relative;
+}
+
+.calendar-overlay.active .calendar-overlay-content {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    filter: blur(0);
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), 
+                0 0 0 1px rgba(255, 255, 255, 0.15),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.calendar-overlay-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 24px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.4), rgba(114, 9, 183, 0.4), rgba(76, 201, 240, 0), rgba(114, 9, 183, 0), rgba(76, 201, 240, 0.4));
+    background-size: 300% 300%;
+    animation: borderGlow 8s linear infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+@keyframes borderGlow {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+    position: relative;
+}
+
+.calendar-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+                transparent, 
+                rgba(76, 201, 240, 0.5), 
+                rgba(114, 9, 183, 0.5), 
+                rgba(76, 201, 240, 0.5), 
+                transparent);
+    filter: blur(0.5px);
+}
+
+.calendar-header h3 {
+    color: #fff;
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #4cc9f0 0%, #7209b7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    position: relative;
+    text-shadow: 0 0 30px rgba(76, 201, 240, 0.3);
+}
+
+.calendar-header h3::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, #4cc9f0, #7209b7);
+    border-radius: 3px;
+}
+
+.calendar-header h3 i {
+    position: relative;
+    z-index: 1;
+    animation: pulseIcon 2s infinite ease-in-out;
+}
+
+@keyframes pulseIcon {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.1); filter: brightness(1.2) drop-shadow(0 0 3px rgba(76, 201, 240, 0.6)); }
+}
+
+.close-calendar-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: #fff;
+    font-size: 26px;
+    cursor: pointer;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+                0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.close-calendar-btn::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.5) 0%, rgba(114, 9, 183, 0.5) 50%, rgba(76, 201, 240, 0) 100%);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    filter: blur(2px);
+}
+
+.close-calendar-btn::after {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+    z-index: -1;
+}
+
+.close-calendar-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 20px -5px rgba(76, 201, 240, 0.4),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.close-calendar-btn:hover::before {
+    opacity: 1;
+    animation: spinGlow 2s infinite linear;
+}
+
+@keyframes spinGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Enhanced FullCalendar Custom Styling */
+#fullCalendar {
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 20px;
+    padding: 24px 24px 30px; /* Added more bottom padding */
+    color: #fff;
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.4), 
+                inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+                inset 0 0 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    min-height: 650px; /* Increased minimum height */
+    max-height: 80vh; /* Increased maximum height */
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+/* Ensure consistent display for view containers */
+#fullCalendar .fc-view-harness {
+    min-height: 550px !important;
+    height: auto !important;
+    margin-bottom: 15px !important; /* Added spacing at bottom of view */
+}
+
+/* Add space after the last row */
+#fullCalendar .fc-daygrid-body {
+    padding-bottom: 15px !important;
+}
+
+/* Ensure consistent spacing for month view */
+#fullCalendar .fc-dayGridMonth-view .fc-daygrid {
+    height: 100% !important;
+}
+
+#fullCalendar::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(114, 9, 183, 0.1));
+    border-radius: 22px;
+    z-index: -1;
+    filter: blur(10px);
+    opacity: 0.7;
+}
+
+/* Remove all table borders and grid lines */
+#fullCalendar table,
+#fullCalendar .fc-scrollgrid,
+#fullCalendar td,
+#fullCalendar th,
+#fullCalendar .fc-theme-standard td,
+#fullCalendar .fc-theme-standard th {
+    border: none !important;
+}
+
+/* Add spacing between cells */
+#fullCalendar .fc-scrollgrid {
+    border-collapse: separate !important;
+    border-spacing: 2px !important;
+}
+
+/* Ensure all calendar elements have transparent backgrounds */
+#fullCalendar div,
+#fullCalendar table,
+#fullCalendar thead,
+#fullCalendar tbody,
+#fullCalendar tr,
+#fullCalendar th,
+#fullCalendar td {
+    background-color: transparent !important;
+}
+
+/* Re-apply specific background styling to elements that need it */
+#fullCalendar .fc-daygrid-day {
+    background: rgba(30, 41, 59, 0.3) !important;
+}
+
+#fullCalendar .fc-col-header-cell {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(58, 12, 163, 0.2) 100%) !important;
+}
+
+#fullCalendar .fc-day-today {
+    background: rgba(76, 201, 240, 0.1) !important;
+}
+
+/* Add hover effect to calendar */
+#fullCalendar:hover {
+    box-shadow: 0 15px 40px -5px rgba(0, 0, 0, 0.4), 
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transform: translateY(-5px);
+}
+
+/* Calendar toolbar */
+#fullCalendar .fc-toolbar {
+    margin-bottom: 2rem !important;
+    padding: 0 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#fullCalendar .fc-toolbar-chunk {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Calendar buttons */
+#fullCalendar .fc-button-group {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    background: transparent !important;
+}
+
+#fullCalendar .fc-button {
+    background: rgba(76, 201, 240, 0.1) !important;
+    border-color: rgba(76, 201, 240, 0.2) !important;
+    color: #fff !important;
+    padding: 8px 16px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.3px !important;
+    text-transform: uppercase !important;
+    font-size: 0.8rem !important;
+    transition: all 0.3s ease !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#fullCalendar .fc-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(76, 201, 240, 0.15) !important;
+}
+
+#fullCalendar .fc-button:hover {
+    background: rgba(76, 201, 240, 0.2) !important;
+    transform: translateY(-2px);
+}
+
+#fullCalendar .fc-button-active {
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.4) 0%, rgba(114, 9, 183, 0.4) 100%) !important;
+    box-shadow: 0 5px 15px -3px rgba(76, 201, 240, 0.3) !important;
+    transform: translateY(-2px);
+}
+
+#fullCalendar .fc-today-button {
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.3) 0%, rgba(114, 9, 183, 0.3) 100%) !important;
+    background-size: 200% 100% !important;
+    border-radius: 10px !important;
+    position: relative;
+    overflow: hidden;
+    border: none !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+#fullCalendar .fc-today-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.6s ease;
+}
+
+#fullCalendar .fc-today-button:hover {
+    box-shadow: 0 7px 15px -3px rgba(76, 201, 240, 0.4) !important;
+    transform: translateY(-3px);
+    animation: glow 2s infinite;
+}
+
+#fullCalendar .fc-today-button:hover::after {
+    left: 100%;
+}
+
+/* Today's date styling */
+#fullCalendar .fc-toolbar-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.5rem !important;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #4cc9f0 0%, #7209b7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Calendar header styling - FIXED DAYS HEADER */
+#fullCalendar .fc-col-header {
+    margin-bottom: 10px;
+}
+
+/* Fix white background in days of week header */
+#fullCalendar .fc-scroller-harness,
+#fullCalendar .fc-scroller,
+#fullCalendar .fc-col-header-inner {
+    background: transparent !important;
+    border: none !important;
+    overflow: visible !important;
+}
+
+#fullCalendar .fc-col-header-cell {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(58, 12, 163, 0.2) 100%);
+    border: none !important;
+    height: 40px;
+}
+
+#fullCalendar .fc-scrollgrid {
+    border: none !important;
+}
+
+#fullCalendar .fc-col-header-cell-cushion {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    padding: 12px;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: block;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(58, 12, 163, 0.2) 0%, rgba(76, 201, 240, 0.1) 100%);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    margin: 0 2px;
+}
+
+#fullCalendar .fc-col-header-cell-cushion:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(76, 201, 240, 0.6) 0%, rgba(114, 9, 183, 0.6) 100%);
+    transition: all 0.3s ease;
+}
+
+#fullCalendar .fc-col-header-cell:hover .fc-col-header-cell-cushion:after {
+    width: 80%;
+}
+
+/* Day grid styling - FIXED DATE CELLS */
+#fullCalendar .fc-daygrid-body {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#fullCalendar .fc-daygrid-day {
+    background: rgba(30, 41, 59, 0.3);
+    border: none !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    height: 130px !important; /* Increased height */
+    margin: 3px;
+    border-radius: 12px;
+    position: relative;
+    overflow: visible;
+}
+
+/* Fix for bottom row cells to ensure they have same height */
+#fullCalendar .fc-daygrid-body {
+    min-height: 100% !important;
+}
+
+#fullCalendar .fc-daygrid-body-balanced {
+    height: auto !important;
+}
+
+/* Fix the layout of day cells */
+#fullCalendar .fc-daygrid-day-frame {
+    height: 100%;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+}
+
+#fullCalendar .fc-daygrid-day::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+                rgba(76, 201, 240, 0.03) 0%, 
+                rgba(114, 9, 183, 0.03) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+#fullCalendar .fc-daygrid-day:hover {
+    background: rgba(30, 41, 59, 0.4) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px -2px rgba(0, 0, 0, 0.1);
+}
+
+#fullCalendar .fc-daygrid-day:hover::after {
+    opacity: 1;
+}
+
+#fullCalendar .fc-day-today {
+    background: rgba(76, 201, 240, 0.08) !important;
+    box-shadow: 0 0 15px rgba(76, 201, 240, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+#fullCalendar .fc-day-today::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+                rgba(76, 201, 240, 0.05) 0%, 
+                rgba(114, 9, 183, 0.05) 100%);
+    z-index: -1;
+    animation: shimmer 3s infinite linear;
+    background-size: 200% 200%;
+}
+
+/* FIXED DATE NUMBER STYLING */
+#fullCalendar .fc-daygrid-day-top {
+    justify-content: center;
+    padding: 5px 0;
+}
+
+#fullCalendar .fc-daygrid-day-number {
+    color: #fff;
+    font-weight: 500;
+    padding: 5px;
+    text-decoration: none !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background: rgba(76, 201, 240, 0.1);
+    border-radius: 50%;
+    min-width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 3px 0 0 3px;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+#fullCalendar .fc-daygrid-day-number::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+    transition: 0.6s ease;
+    opacity: 0;
+}
+
+#fullCalendar .fc-daygrid-day:hover .fc-daygrid-day-number::after {
+    left: 100%;
+    opacity: 1;
+}
+
+#fullCalendar .fc-day-today .fc-daygrid-day-number {
+    font-weight: 700;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.7) 0%, rgba(114, 9, 183, 0.7) 100%);
+    background-size: 200% 100%;
+    box-shadow: 0 3px 15px rgba(76, 201, 240, 0.6), 
+                0 0 0 2px rgba(76, 201, 240, 0.2),
+                inset 0 0 10px rgba(255, 255, 255, 0.15);
+    animation: pulse 2s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95), 
+               shimmer 3s infinite;
+    position: relative;
+    color: rgba(255, 255, 255, 0.95);
+    transform: scale(1.1);
+    z-index: 2;
+    margin: 1px 0 0 1px;
+}
+
+#fullCalendar .fc-day-today .fc-daygrid-day-number::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(135deg, 
+                rgba(76, 201, 240, 0.4) 0%, 
+                rgba(114, 9, 183, 0.4) 100%);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0.7;
+    filter: blur(5px);
+    animation: glow 3s infinite alternate;
+}
+
+#fullCalendar .fc-day-today .fc-daygrid-day-number::after {
+    background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent);
+    opacity: 1;
+    animation: shimmer 2s infinite;
+}
+
+/* Fix for proper cell sizing and day cell body */
+#fullCalendar .fc-daygrid-day-frame {
+    min-height: 100%;
+    height: 100%;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* Fix the spacing of day top (date number container) */
+#fullCalendar .fc-daygrid-day-top {
+    justify-content: center;
+    padding: 3px 0;
+    margin-bottom: 2px;
+}
+
+/* Ensure proper layout for event container */
+#fullCalendar .fc-daygrid-day-events {
+    overflow: hidden;
+}
+
+/* Force table to use full height */
+#fullCalendar table,
+#fullCalendar .fc-scrollgrid-sync-table {
+    height: 100% !important;
+}
+
+/* Ensure ALL rows have consistent height, especially the bottom row */
+#fullCalendar .fc-scrollgrid-sync-table > tbody > tr {
+    height: 130px !important;
+}
+
+/* Specific fix for last row to ensure proper spacing */
+#fullCalendar .fc-scrollgrid-sync-table > tbody > tr:last-child {
+    height: 130px !important;
+    margin-bottom: 10px;
+}
+
+/* Make day frames fill cell height consistently */
+#fullCalendar .fc-scrollgrid-sync-table > tbody > tr > td {
+    height: 130px !important;
+    vertical-align: top;
+    padding-bottom: 5px;
+}
+
+#fullCalendar .fc-daygrid-day-events {
+    padding: 0;
+    margin: 5px 2px 0;
+    min-height: 20px;
+    overflow: visible;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: calc(100% - 4px);
+}
+
+/* Improve event container spacing */
+#fullCalendar .fc-daygrid-event-harness {
+    margin-bottom: 4px;
+    margin-right: 0;
+    margin-left: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    padding: 0 2px;
+}
+
+/* FIXED EVENT STYLING */
+#fullCalendar .fc-event {
+    background: linear-gradient(135deg, rgba(114, 9, 183, 0.85) 0%, rgba(76, 201, 240, 0.85) 100%);
+    background-size: 200% 100%;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.76rem;
+    padding: 5px 8px;
+    margin-bottom: 3px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25), 
+                0 0 0 1px rgba(255, 255, 255, 0.12),
+                inset 0 0 5px rgba(255, 255, 255, 0.1);
+    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+               background-position 0.8s ease, 
+               box-shadow 0.4s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    letter-spacing: 0.2px;
+    font-weight: 500;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box;
+    position: relative;
+    /* Prevent text overflow */
+    min-width: 0;
+}
+
+#fullCalendar .fc-event::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+    margin-right: 5px;
+    flex-shrink: 0;
+    opacity: 0.9;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
+               box-shadow 0.4s ease, 
+               background-color 0.4s ease;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+    position: relative;
+}
+
+/* Style for event title to prevent clipping */
+#fullCalendar .fc-event-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    padding-right: 2px;
+}
+
+#fullCalendar .fc-event::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+}
+
+#fullCalendar .fc-event:hover {
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 8px 15px rgba(114, 9, 183, 0.5), 
+               0 0 0 1px rgba(255, 255, 255, 0.2);
+    background-position: 100% 0;
+    z-index: 5;
+}
+
+#fullCalendar .fc-event:hover::before {
+    transform: scale(1.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+#fullCalendar .fc-event:hover::after {
+    transform: translateX(100%);
+}
+
+/* Fix event title and time display */
+#fullCalendar .fc-event-title,
+#fullCalendar .fc-event-time {
+    font-size: 0.76rem;
+    line-height: 1.2;
+    font-weight: 500;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Add a slight shadow to the text for better visibility */
+#fullCalendar .fc-event-main {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Apply proper width constraints to event content */
+#fullCalendar .fc-event-main-frame {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* Improve the display of multiple events */
+#fullCalendar .fc-daygrid-day-bottom {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+/* Fix for event list display in popover */
+.fc-popover .fc-daygrid-event {
+    margin: 4px 0 !important;
+}
+
+/* Create more consistent event coloring */
+#fullCalendar .fc-event.fc-daygrid-event {
+    background-size: 300% 100%;
+    animation: gradientShift 8s infinite alternate linear;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+/* FIXED MORE LINK STYLING */
+#fullCalendar .fc-daygrid-more-link {
+    color: rgba(76, 201, 240, 1);
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(76, 201, 240, 0.15);
+    border-radius: 20px;
+    padding: 3px 8px;
+    margin: 3px auto;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-align: center;
+    display: block;
+    width: fit-content;
+    max-width: 90%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-decoration: none !important;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#fullCalendar .fc-daygrid-more-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+#fullCalendar .fc-daygrid-more-link:hover {
+    background: rgba(76, 201, 240, 0.25);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+#fullCalendar .fc-daygrid-more-link:hover::after {
+    transform: translateX(100%);
+}
+
+/* FIXED OTHER MONTH DATE STYLING */
+#fullCalendar .fc-day-other {
+    background: rgba(30, 41, 59, 0.15);
+}
+
+#fullCalendar .fc-day-other .fc-daygrid-day-number {
+    opacity: 0.5;
+    background: transparent;
+}
+
+/* Event dot styling for list view */
+#fullCalendar .fc-list-event-dot {
+    border-color: #7209b7;
+}
+
+/* List view styling */
+#fullCalendar .fc-list {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#fullCalendar .fc-list-day-cushion {
+    background: rgba(76, 201, 240, 0.15) !important;
+}
+
+#fullCalendar .fc-list-event:hover td {
+    background: rgba(76, 201, 240, 0.1) !important;
+}
+
+/* FIXED POPOVERS FOR EVENT CLICK */
+.fc-popover {
+    background: rgba(30, 41, 59, 0.95) !important;
+    border: 1px solid rgba(76, 201, 240, 0.3) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(15px);
+    max-width: 300px !important;
+    width: 280px !important;
+    overflow: hidden !important;
+    z-index: 1000 !important;
+}
+
+/* Fix popover positioning */
+.fc-popover.fc-more-popover {
+    margin-top: 10px !important;
+}
+
+.fc-popover .fc-popover-header {
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.3) 0%, rgba(114, 9, 183, 0.3) 100%) !important;
+    padding: 8px !important;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+}
+
+.fc-popover .fc-popover-title {
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.fc-popover .fc-popover-body {
+    padding: 12px !important;
+    max-height: 300px !important;
+    overflow-y: auto !important;
+}
+
+.fc-popover .fc-daygrid-event-harness {
+    margin-bottom: 8px !important;
+    width: 100% !important;
+}
+
+.fc-popover .fc-event {
+    width: calc(100% - 6px) !important;
+    margin-left: 3px !important;
+    margin-right: 3px !important;
+}
+
+.fc-popover .fc-popover-close {
+    color: white !important;
+    opacity: 0.8 !important;
+    font-size: 1.2rem !important;
+    padding: 5px !important;
+}
+
+.fc-popover .fc-popover-close:hover {
+    opacity: 1 !important;
+}
+
+/* Animation keyframes for calendar effects */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.03); opacity: 0.9; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes float {
+    0% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-8px) rotate(1deg); }
+    75% { transform: translateY(4px) rotate(-1deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px rgba(76, 201, 240, 0.3); }
+    50% { box-shadow: 0 0 15px rgba(76, 201, 240, 0.6); }
+    100% { box-shadow: 0 0 5px rgba(76, 201, 240, 0.3); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -100% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Calendar overlay animation for mobile */
+@media (max-width: 768px) {
+    .calendar-overlay-content {
+        width: 95%;
+        margin: 20px auto;
+        padding: 15px;
+    }
+    
+    #fullCalendar {
+        padding: 10px;
+        min-height: 450px;
+    }
+    
+    #fullCalendar .fc-toolbar-title {
+        font-size: 1.2rem !important;
+    }
+    
+    .calendar-header h3 {
+        font-size: 1.4rem;
+    }
+    
+    #fullCalendar .fc-daygrid-day {
+        min-height: 80px;
+    }
+}
+
+/* Ensure responsive design on mobile */
+@media (max-width: 576px) {
+    #fullCalendar .fc-toolbar {
+        flex-direction: column !important;
+        gap: 10px;
+    }
+    
+    #fullCalendar .fc-toolbar-chunk {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    #fullCalendar .fc-toolbar-chunk:first-child {
+        margin-bottom: 10px;
+    }
+    
+    #fullCalendar .fc-toolbar-chunk:last-child {
+        margin-top: 10px;
+    }
+    
+    #fullCalendar .fc-today-button {
+        width: 80px;
+    }
+    
+    #fullCalendar .fc-daygrid-day-number {
+        min-width: 25px;
+        height: 25px;
+        font-size: 0.7rem;
+    }
+    
+    #fullCalendar .fc-col-header-cell-cushion {
+        padding: 5px;
+        font-size: 0.7rem;
+    }
+    
+    #fullCalendar .fc-event {
+        padding: 2px 4px;
+        font-size: 0.65rem;
+    }
+    
+    #fullCalendar .fc-event::before {
+        width: 6px;
+        height: 6px;
+        margin-right: 3px;
+    }
+}
+</style>
+
+<!-- Enhanced Calendar JavaScript -->
+<script>
+// Use a self-executing function to avoid variable collisions
+(function() {
+    // Calendar events data from PHP
+    const calendarEventsData = <?php echo json_encode($calendarEvents); ?>;
+    
+    // Format events for FullCalendar with enhanced data
+    const formattedEvents = calendarEventsData.map(event => ({
+        title: event.title,
+        start: event.date,
+        id: event.id,
+        allDay: true,
+        eventType: event.type || 'Event',
+        // Add random colors for different event types to simulate variety
+        backgroundColor: getEventColor(event.type),
+        borderColor: getEventColor(event.type),
+    }));
+    
+    // Function to get color based on event type
+    function getEventColor(type) {
+        const colors = {
+            'Conference': 'rgba(114, 9, 183, 0.9)',
+            'Workshop': 'rgba(76, 201, 240, 0.9)',
+            'Seminar': 'rgba(247, 37, 133, 0.9)',
+            'Meeting': 'rgba(67, 97, 238, 0.9)',
+            'Webinar': 'rgba(58, 12, 163, 0.9)'
+        };
+        
+        return colors[type] || 'rgba(114, 9, 183, 0.9)';
+    }
+    
+    // Initialize calendar when DOM is fully loaded
+    function initializeCalendar() {
+    const calendarEl = document.getElementById('fullCalendar');
+        const calendarOverlay = document.getElementById('calendarOverlay');
+        
+        if (!calendarEl) {
+            console.error('Calendar element not found');
+            return;
+        }
+        
+        // Initialize FullCalendar with enhanced options
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,listMonth'
+        },
+        events: formattedEvents,
+        eventClick: function(info) {
+                // Add a subtle animation before navigating
+                info.el.style.transform = 'scale(1.1)';
+                info.el.style.boxShadow = '0 10px 25px rgba(114, 9, 183, 0.5)';
+                
+                setTimeout(() => {
+            window.location.href = `events.php?event_id=${info.event.id}`;
+                }, 300);
+        },
+            height: 'auto',
+            contentHeight: 'auto',
+            // Add animation to day cells
+            dayCellDidMount: function(info) {
+                // Add subtle animation delay based on date for staggered effect
+                const day = info.date.getDate();
+                info.el.style.animationDelay = (day * 0.02) + 's';
+                info.el.style.animationDuration = '0.5s';
+                info.el.classList.add('calendar-cell-animate');
+            },
+            // Add animation when events are rendered
+            eventDidMount: function(info) {
+                info.el.style.opacity = '0';
+                info.el.style.transform = 'translateY(10px)';
+                
+                setTimeout(() => {
+                    info.el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    info.el.style.opacity = '1';
+                    info.el.style.transform = 'translateY(0)';
+                }, 100 + Math.random() * 400); // Staggered animation
+            },
+            themSystem: 'standard'
+        });
+        
+        // Enhanced view calendar button functionality with animations
+    document.querySelectorAll('.view-calendar-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+                
+                // Show overlay with animation
+                calendarOverlay.style.display = 'block';
+                
+                // Trigger reflow for animation to work properly
+                void calendarOverlay.offsetWidth;
+                
+                // Add active class for animation
+                calendarOverlay.classList.add('active');
+            
+            // Ensure calendar is rendered and events are visible
+            setTimeout(() => {
+                calendar.render();
+                    
+                    // Add particle effects
+                    createParticles();
+            }, 100);
+            
+            document.body.style.overflow = 'hidden';
+        });
+    });
+    
+        // Enhanced close calendar overlay with animations
+    document.querySelector('.close-calendar-btn').addEventListener('click', function() {
+            closeCalendarOverlay();
+    });
+    
+    // Close calendar when clicking background
+    document.querySelector('.calendar-overlay-bg').addEventListener('click', function() {
+            closeCalendarOverlay();
+        });
+        
+        // Function to close calendar overlay with animation
+        function closeCalendarOverlay() {
+            calendarOverlay.classList.remove('active');
+            
+            // Wait for animation to finish before hiding
+            setTimeout(() => {
+                calendarOverlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
+                
+                // Remove any particles
+                document.querySelectorAll('.calendar-particle').forEach(particle => {
+                    particle.remove();
+    });
+            }, 400);
+        }
+        
+        // Add escape key support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && calendarOverlay.classList.contains('active')) {
+                closeCalendarOverlay();
+            }
+        });
+        
+        // Create particle effects for the calendar
+        function createParticles() {
+            const container = document.querySelector('.calendar-overlay-content');
+            
+            // Remove existing particles
+            document.querySelectorAll('.calendar-particle').forEach(particle => {
+                particle.remove();
+            });
+            
+            // Create new particles with enhanced animation
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('calendar-particle');
+                
+                // Random styling with more variety
+                const size = Math.random() * 6 + 1;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 15 + 10;
+                
+                // Random particle type (circle or square or star)
+                const particleType = Math.floor(Math.random() * 3);
+                let particleShape = 'border-radius: 50%;';
+                
+                if (particleType === 1) {
+                    // Square particle
+                    particleShape = 'border-radius: 2px; transform: rotate(45deg);';
+                } else if (particleType === 2) {
+                    // Star-like particle
+                    particleShape = `
+                        clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+                        transform: scale(${Math.random() * 0.5 + 0.5});
+                    `;
+                }
+                
+                // Random color between blue and purple gradient
+                const hue = Math.floor(Math.random() * 60) + 220; // 220-280 range (blue to purple)
+                const saturation = Math.floor(Math.random() * 40) + 60; // 60-100%
+                const lightness = Math.floor(Math.random() * 30) + 60; // 60-90%
+                
+                // Apply enhanced styles
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: hsla(${hue}, ${saturation}%, ${lightness}%, ${Math.random() * 0.5 + 0.2});
+                    ${particleShape}
+                    top: ${posY}%;
+                    left: ${posX}%;
+                    pointer-events: none;
+                    opacity: ${Math.random() * 0.6 + 0.3};
+                    animation: float ${duration}s ease-in-out ${delay}s infinite;
+                    filter: blur(${Math.random()}px);
+                    box-shadow: 0 0 ${Math.floor(Math.random() * 8) + 2}px hsla(${hue}, ${saturation}%, ${lightness}%, 0.5);
+                `;
+                
+                container.appendChild(particle);
+            }
+        }
+    }
+    
+    // Check if the DOM is already loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeCalendar);
+    } else {
+        // DOM already loaded, run the function now
+        initializeCalendar();
+    }
+})();
+</script> 

@@ -39,6 +39,1616 @@ session_start();
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FullCalendar styles and scripts -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    
+    <style>
+        :root {
+            /* Core colors */
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --accent-secondary: #f72585;
+            --neo-teal: #4cc9f0;
+            --neo-purple: #7209b7;
+            --neo-blue: #4361ee;
+            --neo-magenta: #f72585;
+            --light: #f8f9fa;
+            --dark: #0f172a;
+            --dark-surface: #1e293b;
+            
+            /* Theme Variables - Dark Mode (Default) */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: rgba(76, 201, 240, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --hero-bg: rgba(15, 23, 42, 0.95);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #4361ee, #3a0ca3);
+            --gradient-accent: linear-gradient(135deg, #7209b7, #f72585);
+            --gradient-neo: linear-gradient(135deg, #4cc9f0, #7209b7);
+            --gradient-button: linear-gradient(135deg, #4361ee, #3a0ca3);
+            --gradient-text: linear-gradient(135deg, #4cc9f0, #f72585);
+            
+            /* Animations */
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-smooth: all 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+            --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            
+            /* Effects */
+            --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.1);
+            --shadow-neo: 0 10px 30px rgba(76, 201, 240, 0.3);
+            --shadow-glow: 0 0 20px rgba(76, 201, 240, 0.5);
+            
+            /* Design System */
+            --border-radius: 12px;
+            --border-radius-xl: 20px;
+            --border-radius-pill: 50px;
+        }
+
+        /* Light Theme Variables */
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: rgba(67, 97, 238, 0.15);
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --hero-bg: rgba(248, 250, 252, 0.98);
+        }
+
+        /* Light Theme Search Section */
+        [data-theme="light"] .search-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        [data-theme="light"] .search-blur-effect {
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.08), transparent 70%);
+        }
+
+        [data-theme="light"] .search-glow {
+            background: radial-gradient(ellipse at center, rgba(114, 9, 183, 0.06), transparent 70%);
+        }
+
+        [data-theme="light"] .futuristic-search-bar {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .futuristic-search-bar:focus-within {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(67, 97, 238, 0.4);
+            box-shadow: 0 12px 40px rgba(67, 97, 238, 0.15);
+        }
+
+        [data-theme="light"] .search-icon-container {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .futuristic-search-bar .form-control {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .futuristic-search-bar .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .keyword-tag {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--neo-primary);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+
+        [data-theme="light"] .keyword-tag:hover {
+            background: rgba(67, 97, 238, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+        }
+
+        [data-theme="light"] .popular-label {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .scroll-down-arrow {
+            background: rgba(67, 97, 238, 0.1);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+            color: var(--neo-primary);
+        }
+
+        /* Light Theme Hero Section */
+        [data-theme="light"] .neo-hero-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        [data-theme="light"] .neo-glow-orb.orb-1 {
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.08), transparent 70%);
+        }
+
+        [data-theme="light"] .neo-glow-orb.orb-2 {
+            background: radial-gradient(circle, rgba(114, 9, 183, 0.06), transparent 70%);
+        }
+
+        [data-theme="light"] .neo-glow-orb.orb-3 {
+            background: radial-gradient(circle, rgba(247, 37, 133, 0.05), transparent 70%);
+        }
+
+        [data-theme="light"] .neo-grid {
+            background-image: 
+                linear-gradient(rgba(67, 97, 238, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(67, 97, 238, 0.08) 1px, transparent 1px);
+        }
+
+        [data-theme="light"] .neo-hero-title .title-line {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .neo-hero-subtitle {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .neo-badge {
+            background: rgba(67, 97, 238, 0.1);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+
+        [data-theme="light"] .badge-text {
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .neo-button.secondary {
+            background: transparent;
+            border: 2px solid var(--neo-primary);
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .neo-button.secondary:hover {
+            background: var(--neo-primary);
+            color: white;
+        }
+
+        [data-theme="light"] .neo-stat-item {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(67, 97, 238, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .stat-value {
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .stat-label {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .stats-header h6 {
+            color: var(--text-primary);
+        }
+
+        /* Light Theme Featured Projects Section */
+        [data-theme="light"] .featured-projects {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .projects-bg-gradient {
+            background: radial-gradient(circle at 30% 50%, rgba(67, 97, 238, 0.05) 0%, transparent 60%), 
+                        radial-gradient(circle at 70% 20%, rgba(114, 9, 183, 0.03) 0%, transparent 60%);
+        }
+
+        [data-theme="light"] .projects-grid-overlay {
+            background-image: linear-gradient(to right, rgba(67, 97, 238, 0.08) 1px, transparent 1px), 
+                              linear-gradient(to bottom, rgba(67, 97, 238, 0.08) 1px, transparent 1px);
+        }
+
+        [data-theme="light"] .projects-glow-sphere {
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.06), transparent 70%);
+        }
+
+        [data-theme="light"] .futuristic-badge {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--neo-primary);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+
+        [data-theme="light"] .futuristic-title {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .section-subtitle {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .filter-btn {
+            background: rgba(67, 97, 238, 0.05);
+            border: 1px solid rgba(67, 97, 238, 0.15);
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .filter-btn:hover,
+        [data-theme="light"] .filter-btn.active {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--neo-primary);
+            border-color: rgba(67, 97, 238, 0.3);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.15);
+        }
+
+        [data-theme="light"] .futuristic-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(67, 97, 238, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .futuristic-card:hover {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(67, 97, 238, 0.2);
+            box-shadow: 0 16px 48px rgba(67, 97, 238, 0.12);
+        }
+
+        [data-theme="light"] .card-title {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .card-text {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .card-meta {
+            color: var(--text-muted);
+        }
+
+        /* Light Theme Research Impact Section */
+        [data-theme="light"] .research-impact {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .impact-shape-1 {
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.08), transparent);
+        }
+
+        [data-theme="light"] .impact-shape-2 {
+            background: radial-gradient(circle, rgba(114, 9, 183, 0.06), transparent);
+        }
+
+        [data-theme="light"] .grid-overlay {
+            background-image: 
+                linear-gradient(rgba(67, 97, 238, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(67, 97, 238, 0.08) 1px, transparent 1px);
+        }
+
+        [data-theme="light"] .glowing-orb.orb-1 {
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.1), transparent 70%);
+        }
+
+        [data-theme="light"] .glowing-orb.orb-2 {
+            background: radial-gradient(circle, rgba(114, 9, 183, 0.08), transparent 70%);
+        }
+
+        [data-theme="light"] .glowing-orb.orb-3 {
+            background: radial-gradient(circle, rgba(247, 37, 133, 0.06), transparent 70%);
+        }
+
+        [data-theme="light"] .impact-chart-container {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(67, 97, 238, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .impact-chart-container:hover {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(67, 97, 238, 0.25);
+            box-shadow: 0 12px 48px rgba(67, 97, 238, 0.12);
+        }
+
+        [data-theme="light"] .chart-wrapper {
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid rgba(67, 97, 238, 0.1);
+        }
+
+        [data-theme="light"] .chart-header h4 {
+            background: linear-gradient(135deg, var(--text-primary), var(--neo-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        [data-theme="light"] .chart-controls .btn {
+            background: rgba(67, 97, 238, 0.1);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .chart-controls .btn:hover,
+        [data-theme="light"] .chart-controls .btn.active {
+            background: rgba(67, 97, 238, 0.15);
+            color: var(--neo-primary);
+        }
+
+        /* Light Theme Faculty Spotlight Section */
+        [data-theme="light"] .faculty-spotlight {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .neo-badge {
+            background: rgba(67, 97, 238, 0.1);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .neo-badge-link:hover .neo-badge {
+            background: rgba(67, 97, 238, 0.15);
+            border-color: rgba(67, 97, 238, 0.3);
+            box-shadow: 0 4px 16px rgba(67, 97, 238, 0.2);
+        }
+
+        [data-theme="light"] .futuristic-title {
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--neo-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        [data-theme="light"] .neo-faculty-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(67, 97, 238, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .neo-faculty-card:hover {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(67, 97, 238, 0.2);
+            box-shadow: 0 8px 32px rgba(67, 97, 238, 0.12);
+        }
+
+        [data-theme="light"] .faculty-name {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .faculty-position {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .faculty-quote {
+            background: rgba(248, 250, 252, 0.8) !important;
+            border-left: 3px solid rgba(67, 97, 238, 0.3) !important;
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .faculty-info {
+            background: rgba(255, 255, 255, 0.95) !important;
+        }
+
+        [data-theme="light"] .faculty-title {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .faculty-specialty {
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .faculty-bio {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .faculty-stats {
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid rgba(67, 97, 238, 0.1);
+        }
+
+        [data-theme="light"] .stat-number {
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .stat-label {
+            color: var(--text-muted);
+        }
+
+        /* Light Theme Events Section */
+        [data-theme="light"] .events-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .events-bg-grid {
+            background-image: linear-gradient(to right, rgba(67, 97, 238, 0.08) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(67, 97, 238, 0.08) 1px, transparent 1px);
+        }
+
+        [data-theme="light"] .events-orb.orb-1 {
+            background: radial-gradient(circle, rgba(114, 9, 183, 0.06) 0%, transparent 70%);
+        }
+
+        [data-theme="light"] .events-orb.orb-2 {
+            background: radial-gradient(circle, rgba(247, 37, 133, 0.05) 0%, transparent 70%);
+        }
+
+        [data-theme="light"] .events-glow-effect {
+            background: radial-gradient(ellipse, rgba(114, 9, 183, 0.03), transparent 70%);
+        }
+
+        [data-theme="light"] .events-timeline-line {
+            background: linear-gradient(to right, 
+                rgba(67, 97, 238, 0), 
+                rgba(67, 97, 238, 0.3), 
+                rgba(67, 97, 238, 0.5), 
+                rgba(67, 97, 238, 0.3), 
+                rgba(67, 97, 238, 0));
+        }
+
+        [data-theme="light"] .event-badge {
+            background: rgba(247, 37, 133, 0.1);
+            border: 1px solid rgba(247, 37, 133, 0.2);
+        }
+
+        [data-theme="light"] .neo-event-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(67, 97, 238, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .neo-event-card:hover {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(247, 37, 133, 0.2);
+            box-shadow: 0 12px 48px rgba(247, 37, 133, 0.12);
+        }
+
+        [data-theme="light"] .event-date-badge {
+            background: rgba(247, 37, 133, 0.1);
+            border: 1px solid rgba(247, 37, 133, 0.2);
+        }
+
+        [data-theme="light"] .neo-event-card:hover .event-date-badge {
+            background: rgba(247, 37, 133, 0.15);
+            box-shadow: 0 4px 12px rgba(247, 37, 133, 0.15);
+        }
+
+        [data-theme="light"] .event-day {
+            background: linear-gradient(135deg, var(--text-primary), var(--neo-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        [data-theme="light"] .event-month {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .event-title {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .event-description {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .event-meta {
+            color: var(--text-muted);
+        }
+
+        /* Light Theme FAQ Section */
+        [data-theme="light"] .faq-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .faq-bg-particles {
+            background-image: radial-gradient(rgba(67, 97, 238, 0.08) 2px, transparent 2px);
+        }
+
+        [data-theme="light"] .faq-orb-1 {
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.06) 0%, transparent 70%);
+        }
+
+        [data-theme="light"] .faq-orb-2 {
+            background: radial-gradient(circle, rgba(247, 37, 133, 0.05) 0%, transparent 70%);
+        }
+
+        [data-theme="light"] .faq-mesh-grid {
+            background-image: linear-gradient(to right, rgba(67, 97, 238, 0.08) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(67, 97, 238, 0.08) 1px, transparent 1px);
+        }
+
+        [data-theme="light"] .faq-badge {
+            background: rgba(67, 97, 238, 0.1);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+
+        [data-theme="light"] .neo-accordion .accordion-item {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(67, 97, 238, 0.15);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .neo-accordion .accordion-item:hover {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(67, 97, 238, 0.25);
+            box-shadow: 0 6px 24px rgba(67, 97, 238, 0.12);
+        }
+
+        [data-theme="light"] .neo-accordion .accordion-button {
+            background: rgba(248, 250, 252, 0.8);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .neo-accordion .accordion-button:not(.collapsed) {
+            background: linear-gradient(135deg, rgba(248, 250, 252, 0.9), rgba(226, 232, 240, 0.9));
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .neo-accordion .accordion-button::after {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%231e293b'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+        }
+
+        [data-theme="light"] .neo-accordion .accordion-button:not(.collapsed)::after {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%234361ee'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+        }
+
+        [data-theme="light"] .neo-accordion .accordion-body {
+            background: rgba(248, 250, 252, 0.6);
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(67, 97, 238, 0.1);
+        }
+
+        [data-theme="light"] .neo-accordion .accordion-body strong {
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .neo-accordion .accordion-body a {
+            color: var(--neo-magenta);
+            border-bottom: 1px dashed rgba(247, 37, 133, 0.4);
+        }
+
+        [data-theme="light"] .neo-accordion .accordion-body a:hover {
+            color: var(--neo-magenta);
+            border-bottom: 1px solid rgba(247, 37, 133, 0.6);
+        }
+
+        /* Light Theme Footer Section */
+        [data-theme="light"] .neo-footer {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .footer-orb.orb-1 {
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.06) 0%, transparent 70%);
+        }
+
+        [data-theme="light"] .footer-orb.orb-2 {
+            background: radial-gradient(circle, rgba(114, 9, 183, 0.05) 0%, transparent 70%);
+        }
+
+        [data-theme="light"] .footer-circuit-grid {
+            background-image: linear-gradient(to right, rgba(67, 97, 238, 0.08) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(67, 97, 238, 0.08) 1px, transparent 1px);
+        }
+
+        [data-theme="light"] .footer-text-logo {
+            background: linear-gradient(135deg, var(--neo-primary), var(--neo-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        [data-theme="light"] .footer-tagline {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .footer-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(67, 97, 238, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .footer-card:hover {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(67, 97, 238, 0.2);
+            box-shadow: 0 6px 32px rgba(67, 97, 238, 0.12);
+        }
+
+        [data-theme="light"] .footer-heading {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .footer-icon {
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .footer-links a {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .footer-links a:hover {
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .footer-text {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .neo-input {
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .neo-input:focus {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .neo-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .social-link {
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
+            border: 1px solid rgba(67, 97, 238, 0.1);
+        }
+
+        [data-theme="light"] .social-link:hover {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--neo-primary);
+            border-color: rgba(67, 97, 238, 0.2);
+        }
+
+        [data-theme="light"] .copyright-text {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .footer-bottom-links a {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .footer-bottom-links a:hover {
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .footer-line {
+            background: linear-gradient(to right, transparent, rgba(67, 97, 238, 0.3), transparent);
+        }
+
+        /* Additional Light Theme Global Improvements */
+        [data-theme="light"] .text-light {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        [data-theme="light"] .bg-dark {
+            background: var(--bg-secondary) !important;
+        }
+
+        [data-theme="light"] .border-light {
+            border-color: var(--border-color) !important;
+        }
+
+        /* Light Theme Button Improvements */
+        [data-theme="light"] .btn-outline-light {
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .btn-outline-light:hover {
+            background: var(--bg-secondary);
+            border-color: var(--neo-primary);
+            color: var(--neo-primary);
+        }
+
+        /* Light Theme Card Improvements */
+        [data-theme="light"] .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .card-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        [data-theme="light"] .card-footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Light Theme List Group Improvements */
+        [data-theme="light"] .list-group-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .list-group-item:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Light Theme Badge Improvements */
+        [data-theme="light"] .badge {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--neo-primary);
+        }
+
+        /* Light Theme Smooth Transitions */
+        [data-theme="light"] * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Fix Hardcoded White Text Colors for Light Theme */
+        [data-theme="light"] .futuristic-title {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .card-title {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .card-text {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .card-meta {
+            color: var(--text-muted) !important;
+        }
+
+        [data-theme="light"] .card-meta {
+            color: var(--text-muted) !important;
+        }
+
+        [data-theme="light"] .neo-button {
+            background: var(--neo-primary) !important;
+            color: white !important;
+        }
+
+        [data-theme="light"] .neo-button:hover {
+            color: white !important;
+        }
+
+        [data-theme="light"] .event-title {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .event-description {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .event-meta {
+            color: var(--text-muted) !important;
+        }
+
+        [data-theme="light"] .chart-header h4 {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .section-subtitle {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Fix specific white text elements */
+        [data-theme="light"] h1,
+        [data-theme="light"] h2,
+        [data-theme="light"] h3,
+        [data-theme="light"] h4,
+        [data-theme="light"] h5,
+        [data-theme="light"] h6 {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] p {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .text-white {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .text-light {
+            color: var(--text-primary) !important;
+        }
+
+        /* Fix card tags */
+        [data-theme="light"] .card-tags span {
+            background: rgba(67, 97, 238, 0.1) !important;
+            color: var(--neo-primary) !important;
+            border: 1px solid rgba(67, 97, 238, 0.2) !important;
+        }
+
+        /* Fix link colors */
+        [data-theme="light"] .card-link {
+            color: var(--neo-primary) !important;
+        }
+
+        [data-theme="light"] .card-link:hover {
+            color: var(--neo-secondary) !important;
+        }
+
+        /* Fix hero section text */
+        .hero-text-uiu {
+            color: var(--text-primary);
+            transition: color 0.4s ease;
+        }
+
+        [data-theme="light"] .hero-text-uiu {
+            color: var(--text-primary) !important;
+        }
+
+        /* Fix Research Impact Section Text Colors */
+        [data-theme="light"] .impact-stat-value {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .impact-stat-label {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .chart-text {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .chart-label {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .chart-value {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .chart-legend {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .metric-number {
+            color: var(--neo-primary) !important;
+        }
+
+        [data-theme="light"] .metric-label {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Fix Research Events Section Text Colors */
+        [data-theme="light"] .event-card-title {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .event-card-description {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .event-card-date {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .event-card-time {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .event-card-location {
+            color: var(--text-muted) !important;
+        }
+
+        [data-theme="light"] .event-card-category {
+            color: var(--neo-primary) !important;
+        }
+
+        [data-theme="light"] .event-status {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .event-participants {
+            color: var(--text-muted) !important;
+        }
+
+        /* Fix Chart.js and Canvas Text Colors */
+        [data-theme="light"] canvas {
+            filter: none !important;
+        }
+
+        /* Fix any remaining white text in cards */
+        [data-theme="light"] .neo-event-card h5,
+        [data-theme="light"] .neo-event-card h6,
+        [data-theme="light"] .neo-event-card .card-title {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .neo-event-card p,
+        [data-theme="light"] .neo-event-card .card-text {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .neo-event-card small,
+        [data-theme="light"] .neo-event-card .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        /* Fix Chart Controls and Legend Text */
+        [data-theme="light"] .chart-control-btn {
+            background: rgba(67, 97, 238, 0.1) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid rgba(67, 97, 238, 0.2) !important;
+        }
+
+        [data-theme="light"] .chart-control-btn.active {
+            background: rgba(67, 97, 238, 0.2) !important;
+            color: var(--neo-primary) !important;
+        }
+
+        [data-theme="light"] .chart-legend {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .chart-legend span {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Fix Faculty Specialty Badge */
+        [data-theme="light"] .faculty-specialty-badge {
+            background: rgba(67, 97, 238, 0.1) !important;
+            border: 1px solid rgba(67, 97, 238, 0.2) !important;
+            color: var(--neo-primary) !important;
+        }
+
+        [data-theme="light"] .neo-faculty-card:hover .faculty-specialty-badge {
+            background: rgba(67, 97, 238, 0.15) !important;
+            border-color: rgba(67, 97, 238, 0.3) !important;
+        }
+
+        /* Fix Loading Text */
+        [data-theme="light"] .text-light {
+            color: var(--text-primary) !important;
+        }
+
+        /* Fix Event Date Numbers and Text */
+        [data-theme="light"] .event-day {
+            background: linear-gradient(135deg, var(--text-primary), var(--neo-primary)) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+        }
+
+        [data-theme="light"] .event-month {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Fix any remaining chart text elements */
+        [data-theme="light"] .chart-wrapper * {
+            color: var(--text-primary) !important;
+        }
+
+        /* Fix dynamic content text colors */
+        [data-theme="light"] .dynamic-content,
+        [data-theme="light"] .dynamic-content * {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .dynamic-content p,
+        [data-theme="light"] .dynamic-content .text-secondary {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .dynamic-content small,
+        [data-theme="light"] .dynamic-content .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        /* Fix specific event title and meta item colors */
+        [data-theme="light"] .event-title {
+            color: var(--text-primary) !important;
+            -webkit-text-fill-color: var(--text-primary) !important;
+            background: none !important;
+        }
+
+        [data-theme="light"] .meta-item {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Fix Chart Axis Numbers and Text */
+        [data-theme="light"] .chart-wrapper canvas,
+        [data-theme="light"] .impact-chart-container canvas {
+            color: var(--text-primary) !important;
+        }
+
+        /* Force chart text colors using CSS */
+        [data-theme="light"] .chartjs-render-monitor {
+            color: var(--text-primary) !important;
+        }
+
+        /* Target Chart.js generated text elements */
+        [data-theme="light"] .chart-wrapper text,
+        [data-theme="light"] .impact-chart-container text {
+            fill: var(--text-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        /* Additional chart text targeting */
+        [data-theme="light"] .chart-wrapper *[fill="#ffffff"],
+        [data-theme="light"] .chart-wrapper *[fill="white"],
+        [data-theme="light"] .impact-chart-container *[fill="#ffffff"],
+        [data-theme="light"] .impact-chart-container *[fill="white"] {
+            fill: var(--text-primary) !important;
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .section-padding {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 3rem;
+            max-width: 800px;
+        }
+
+        /* Custom animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 5px rgba(67, 97, 238, 0.5), 0 0 10px rgba(114, 9, 183, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(67, 97, 238, 0.7), 0 0 20px rgba(114, 9, 183, 0.5); }
+            100% { box-shadow: 0 0 5px rgba(67, 97, 238, 0.5), 0 0 10px rgba(114, 9, 183, 0.3); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 30px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .min-vh-90 {
+            min-height: 90vh;
+        }
+        
+        /* Enhanced Hero Section Styles */
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+            min-height: 60vh;
+            padding-top: 80px;
+            padding-bottom: 10px;
+            margin-top: 0px;
+            background-color: var(--hero-bg);
+            transition: background-color 0.4s ease;
+        }
+
+        /* Update row padding for better vertical spacing */
+        .hero-section .row.align-items-center {
+            padding-top: 0;
+            padding-bottom: 1rem;
+        }
+        
+        /* Add responsive padding adjustments */
+        @media (max-width: 991px) {
+            .hero-section {
+                min-height: 70vh;
+                padding-top: 0;
+            }
+            
+            .hero-section .row {
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+        }
+        
+        .hero-bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(67, 97, 238, 0.05), transparent 40%),
+                        radial-gradient(circle at 70% 60%, rgba(114, 9, 183, 0.05), transparent 50%),
+                        radial-gradient(circle at 90% 20%, rgba(247, 37, 133, 0.05), transparent 30%);
+            z-index: -1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 5;
+            padding: 0.5rem 0;
+            border-radius: 20px;
+        }
+        
+        .hero-heading {
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            font-size: 3.25rem;
+            color: var(--text-primary);
+            position: relative;
+            transition: color 0.4s ease;
+        }
+        
+        .gradient-text {
+            background: var(--gradient-primary);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+            padding-right: 10px;
+            font-weight: 900;
+        }
+        
+        .gradient-text::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: none;
+            border-radius: 3px;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .hero-subheading {
+            font-size: 1.2rem;
+            font-weight: 400;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            max-width: 540px;
+            margin-bottom: 2rem;
+            transition: color 0.4s ease;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 10px 20px;
+            border-radius: 30px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(67, 97, 238, 0.15);
+            margin-bottom: 0;
+        }
+        
+        .hero-badge::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 30px;
+            z-index: -1;
+        }
+        
+        .hero-badge::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: badge-shine 3s ease-in-out infinite;
+        }
+        
+        @keyframes badge-shine {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+        
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        
+        .btn-icon-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem 1.75rem;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            padding: 0.7rem 1.7rem;
+            color: var(--primary);
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn-secondary:hover {
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.15);
+        }
+        
+        .research-stats {
+            position: relative;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        
+        .stats-label {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+        
+        .stats-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 50%;
+            margin-right: 8px;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .stat-circle {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        
+        .stat-circle::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            z-index: -1;
+            opacity: 0.4;
+        }
+        
+        .stat-item:hover .stat-circle {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.2);
+        }
+        
+        .stat-number {
+            font-weight: 800;
+            font-size: 1.4rem;
+            background: var(--gradient-primary);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin: 0;
+        }
+        
+        .stat-label {
+            margin-top: 0.3rem;
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.7rem;
+        }
+        
+        .hero-image-container {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .hero-image {
+            position: relative;
+            z-index: 2;
+            max-width: 100%;
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.15));
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .hero-decoration {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .hero-decoration-1 {
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(76, 201, 240, 0.2), transparent 70%);
+            top: 15%;
+            right: 10%;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .hero-decoration-2 {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(114, 9, 183, 0.15), transparent 70%);
+            bottom: 15%;
+            left: 5%;
+            animation: float 6s ease-in-out infinite alternate;
+        }
+        
+        .hero-decoration-3 {
+            width: 80px;
+            height: 80px;
+            border: 3px solid rgba(67, 97, 238, 0.1);
+            top: 30%;
+            left: 20%;
+            animation: float 4s ease-in-out infinite reverse;
+        }
+        
+        .floating-dots {
+            position: absolute;
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
+            background-image: radial-gradient(circle, rgba(67, 97, 238, 0.2) 1px, transparent 1px);
+            background-size: 18px 18px;
+            z-index: 1;
+            opacity: 0.7;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotate 60s linear infinite;
+        }
+        
+        .glowing-circle {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(114, 9, 183, 0.08) 0%, transparent 70%);
+            z-index: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse-subtle 4s ease infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse-subtle {
+            0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
+            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.9; }
+            100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-pulse {
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        /* Custom button styles */
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 30px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .search-button-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+        }
+        
+        .search-button:hover .search-button-effect {
+            animation: search-button-effect 1s ease;
+        }
+        
+        @keyframes search-button-effect {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .tag-cloud span {
+            background-color: #f0f0f0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .tag-cloud span:hover {
+            background-color: white;
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .popular-searches {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        
+<?php
+// Remove debug statements and error reporting
+session_start();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIU Research Portal</title>
+    
+    <!-- Core styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+    <!-- Animation libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="assets/styles/home.css">
+    <link rel="stylesheet" href="assets/styles/theme.css">
+    <!-- Performance optimization styles -->
+    <link rel="stylesheet" href="assets/styles/performance.css">
+    
+    <!-- Prevent Theme Flash Script - Must run immediately -->
+    <script>
+    (function() {
+        // Get saved theme immediately to prevent flash
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+    })();
+    </script>
+    
+    <!-- Performance optimization script - Load early for immediate optimizations -->
+    <script src="assets/js/performance-optimizer.js" defer></script>
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FullCalendar styles and scripts -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    
     <style>
         :root {
             /* Core colors */
@@ -6051,552 +7661,785 @@ session_start();
             margin: 0 auto;
         }
     }
-    </style>
+</style>
 
-    <!-- Futuristic Research Events Section -->
-    <section class="events-section section-padding">
-        <!-- Futuristic background elements -->
-        <div class="events-bg-grid"></div>
-        <div class="events-orb orb-1"></div>
-        <div class="events-orb orb-2"></div>
-        <div class="events-glow-effect"></div>
-        
-        <div class="container position-relative">
-            <div class="section-header text-center mb-5" data-aos="fade-up">
-                <div class="badge-wrapper d-flex justify-content-center mb-3">
-                    <span class="neo-badge event-badge"><i class="bi bi-calendar-event me-2"></i>Upcoming Opportunities</span>
-                    </div>
-                <h2 class="futuristic-title">Research <span class="text-gradient">Events</span></h2>
-                <p class="section-subtitle mx-auto">Discover symposiums, workshops, and networking opportunities to expand your research horizons</p>
-                <div class="title-underline mx-auto"></div>
-            </div>
+<!-- Futuristic Research Events Section -->
+<section class="events-section section-padding">
+    <!-- Futuristic background elements -->
+    <div class="events-bg-grid"></div>
+    <div class="events-orb orb-1"></div>
+    <div class="events-orb orb-2"></div>
+    <div class="events-glow-effect"></div>
+    
+    <?php
+    // Include MongoDB autoloader if not already included
+    if (!class_exists('MongoDB\Client')) {
+        require __DIR__ . '/vendor/autoload.php';
+    }
+
+    // Function to connect to MongoDB and get random events
+    function getRandomEventsFromMongoDB($limit = 3) {
+        try {
+            $mongoClient = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
+            $db = $mongoClient->uiurp;
+            $collection = $db->events;
             
-            <div class="row g-4 event-timeline">
-                <!-- Event 1 -->
-                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up">
-                    <div class="neo-event-card">
-                        <div class="card-border"></div>
-                        <div class="card-glow"></div>
+            // Get all events
+            $allEvents = $collection->find([])->toArray();
+            
+            // If we have events, select random ones
+            if (count($allEvents) > 0) {
+                // Shuffle the array of events
+                shuffle($allEvents);
+                
+                // Take the first $limit events
+                $randomEvents = array_slice($allEvents, 0, $limit);
+                
+                // Convert MongoDB document to arrays and format dates
+                $formattedEvents = [];
+                foreach ($randomEvents as $event) {
+                    $eventArray = json_decode(json_encode($event), true);
+                    
+                    // Helper function to convert MongoDB date
+                    $convertDate = function($dateValue) {
+                        if (is_array($dateValue) && isset($dateValue['$date'])) {
+                            if (is_array($dateValue['$date']) && isset($dateValue['$date']['$numberLong'])) {
+                                return date('Y-m-d\TH:i:s\Z', intval($dateValue['$date']['$numberLong']) / 1000);
+                            } elseif (is_numeric($dateValue['$date'])) {
+                                return date('Y-m-d\TH:i:s\Z', $dateValue['$date'] / 1000);
+                            }
+                        }
+                        return $dateValue;
+                    };
+                    
+                    // Convert MongoDB UTCDateTime objects to readable dates
+                    if (isset($eventArray['eventDate'])) {
+                        $eventArray['eventDate'] = $convertDate($eventArray['eventDate']);
+                    }
+                    
+                    $formattedEvents[] = $eventArray;
+                }
+                
+                return $formattedEvents;
+            }
+            
+            return [];
+        } catch (Exception $e) {
+            error_log("Error fetching random events: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    // Get 3 random events
+    $randomEvents = getRandomEventsFromMongoDB(3);
+    ?>
+    
+    <div class="container position-relative">
+        <div class="section-header text-center mb-5" data-aos="fade-up">
+            <div class="badge-wrapper d-flex justify-content-center mb-3">
+                <span class="neo-badge event-badge"><i class="bi bi-calendar-event me-2"></i>Upcoming Opportunities</span>
+                </div>
+            <h2 class="futuristic-title">Research <span class="text-gradient">Events</span></h2>
+            <p class="section-subtitle mx-auto">Discover symposiums, workshops, and networking opportunities to expand your research horizons</p>
+            <div class="title-underline mx-auto"></div>
+        </div>
+        
+        <div class="row g-4 event-timeline">
+            <?php 
+            // If we have events, display them; otherwise, show default placeholder content
+            if (!empty($randomEvents)): 
+                foreach ($randomEvents as $index => $event):
+                    // Format the date for display
+                    $eventDate = new DateTime($event['eventDate']);
+                    
+                    // Determine if the event has registration or join link
+                    $hasRegistration = isset($event['registration']['required']) && $event['registration']['required'] && !empty($event['registration']['link']);
+                    $hasJoinLink = isset($event['location']['type']) && $event['location']['type'] === 'Virtual' && !empty($event['location']['joinLink']);
+            ?>
+            <!-- Event <?php echo $index + 1; ?> -->
+            <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" <?php echo $index > 0 ? 'data-aos-delay="'.(100*$index).'"' : ''; ?>>
+                <div class="neo-event-card">
+                    <div class="card-border"></div>
+                    <div class="card-glow"></div>
+                    
+                    <div class="event-date-badge">
+                        <div class="date-content">
+                            <span class="event-day"><?php echo $eventDate->format('d'); ?></span>
+                            <span class="event-month"><?php echo strtoupper($eventDate->format('M')); ?></span>
+                        </div>
+                        <div class="date-glow"></div>
+                    </div>
+                    
+                    <div class="event-content">
+                        <div class="event-tags">
+                            <span class="event-tag"><?php echo htmlspecialchars($event['eventType']); ?></span>
+                            <?php if (isset($event['status'])): ?>
+                            <span class="event-tag"><?php echo htmlspecialchars($event['status']); ?></span>
+                            <?php endif; ?>
+                        </div>
                         
-                        <div class="event-date-badge">
-                            <div class="date-content">
+                        <h4 class="event-title"><?php echo htmlspecialchars($event['title']); ?></h4>
+                        
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-clock"></i>
+                                <span><?php echo isset($event['startTime']) ? htmlspecialchars($event['startTime']) : ''; ?> - <?php echo isset($event['endTime']) ? htmlspecialchars($event['endTime']) : ''; ?></span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>
+                                    <?php if (isset($event['location']['type'])): ?>
+                                        <?php if ($event['location']['type'] === 'Virtual'): ?>
+                                            Virtual - <?= htmlspecialchars($event['location']['virtualPlatform'] ?? 'Online') ?>
+                                        <?php elseif ($event['location']['type'] === 'Physical'): ?>
+                                            <?= htmlspecialchars($event['location']['room'] ?? 'On Campus') ?>
+                                        <?php else: ?>
+                                            Hybrid - <?= htmlspecialchars($event['location']['room'] ?? 'Multiple Locations') ?>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        TBD
+                                    <?php endif; ?>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <p class="event-description"><?php echo htmlspecialchars(substr($event['description'] ?? '', 0, 120)) . (strlen($event['description'] ?? '') > 120 ? '...' : ''); ?></p>
+                        
+                        <?php if ($hasRegistration): ?>
+                        <a href="<?php echo htmlspecialchars($event['registration']['link']); ?>" target="_blank" class="neo-button small">
+                            <span class="button-content">Register Now</span>
+                            <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                            <div class="button-glow"></div>
+                        </a>
+                        <?php elseif ($hasJoinLink): ?>
+                        <a href="<?php echo htmlspecialchars($event['location']['joinLink']); ?>" target="_blank" class="neo-button small">
+                            <span class="button-content">Join Online</span>
+                            <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                            <div class="button-glow"></div>
+                        </a>
+                        <?php else: ?>
+                        <a href="events.php" class="neo-button small">
+                            <span class="button-content">View Details</span>
+                            <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                            <div class="button-glow"></div>
+                        </a>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div class="card-circuit-pattern"></div>
+                </div>
+            </div>
+            <?php 
+                endforeach;
+            else:
+                // Display placeholder content if no events are found
+            ?>
+            <!-- Event 1 (Placeholder) -->
+            <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up">
+                <div class="neo-event-card">
+                    <div class="card-border"></div>
+                    <div class="card-glow"></div>
+                    
+                    <div class="event-date-badge">
+                        <div class="date-content">
                             <span class="event-day">15</span>
                             <span class="event-month">DEC</span>
                         </div>
-                            <div class="date-glow"></div>
-                        </div>
-                        
-                        <div class="event-content">
-                            <div class="event-tags">
-                                <span class="event-tag">Conference</span>
-                                <span class="event-tag">Research</span>
-                            </div>
-                            
-                            <h4 class="event-title">Annual Research Symposium</h4>
-                            
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="bi bi-clock"></i>
-                                    <span>10:00 AM - 4:00 PM</span>
-                            </div>
-                                <div class="meta-item">
-                                    <i class="bi bi-geo-alt"></i>
-                                    <span>UIU Main Auditorium</span>
-                                </div>
-                            </div>
-                            
-                            <p class="event-description">Join us for presentations from leading researchers across multiple disciplines, networking opportunities, and research showcases.</p>
-                            
-                            <a href="#" class="neo-button small">
-                                <span class="button-content">Register Now</span>
-                                <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
-                                <div class="button-glow"></div>
-                            </a>
-                        </div>
-                        
-                        <div class="card-circuit-pattern"></div>
+                        <div class="date-glow"></div>
                     </div>
-                </div>
-                
-                <!-- Event 2 -->
-                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="neo-event-card">
-                        <div class="card-border"></div>
-                        <div class="card-glow"></div>
-                        
-                        <div class="event-date-badge">
-                            <div class="date-content">
-                            <span class="event-day">22</span>
-                            <span class="event-month">DEC</span>
-                        </div>
-                            <div class="date-glow"></div>
+                    
+                    <div class="event-content">
+                        <div class="event-tags">
+                            <span class="event-tag">Conference</span>
+                            <span class="event-tag">Research</span>
                         </div>
                         
-                        <div class="event-content">
-                            <div class="event-tags">
-                                <span class="event-tag">Workshop</span>
-                                <span class="event-tag">AI</span>
+                        <h4 class="event-title">Annual Research Symposium</h4>
+                        
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-clock"></i>
+                                <span>10:00 AM - 4:00 PM</span>
                             </div>
-                            
-                            <h4 class="event-title">AI Research Workshop</h4>
-                            
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="bi bi-clock"></i>
-                                    <span>2:00 PM - 5:00 PM</span>
+                            <div class="meta-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>UIU Main Auditorium</span>
                             </div>
-                                <div class="meta-item">
-                                    <i class="bi bi-geo-alt"></i>
-                                    <span>Virtual Event</span>
-                                </div>
-                            </div>
-                            
-                            <p class="event-description">A practical workshop on applying machine learning to research problems with hands-on training sessions and expert guidance.</p>
-                            
-                            <a href="#" class="neo-button small">
-                                <span class="button-content">Join Online</span>
-                                <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
-                                <div class="button-glow"></div>
-                            </a>
                         </div>
                         
-                        <div class="card-circuit-pattern"></div>
+                        <p class="event-description">Join us for presentations from leading researchers across multiple disciplines, networking opportunities, and research showcases.</p>
+                        
+                        <a href="#" class="neo-button small">
+                            <span class="button-content">Register Now</span>
+                            <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                            <div class="button-glow"></div>
+                        </a>
                     </div>
-                </div>
-                
-                <!-- Event 3 -->
-                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="neo-event-card">
-                        <div class="card-border"></div>
-                        <div class="card-glow"></div>
-                        
-                        <div class="event-date-badge">
-                            <div class="date-content">
-                            <span class="event-day">10</span>
-                            <span class="event-month">JAN</span>
-                        </div>
-                            <div class="date-glow"></div>
-                        </div>
-                        
-                        <div class="event-content">
-                            <div class="event-tags">
-                                <span class="event-tag">Workshop</span>
-                                <span class="event-tag">Funding</span>
-                            </div>
-                            
-                            <h4 class="event-title">Grant Writing Workshop</h4>
-                            
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="bi bi-clock"></i>
-                                    <span>9:00 AM - 1:00 PM</span>
-                            </div>
-                                <div class="meta-item">
-                                    <i class="bi bi-geo-alt"></i>
-                                    <span>Science Building, Room 305</span>
-                                </div>
-                            </div>
-                            
-                            <p class="event-description">Learn strategies for writing successful research grant proposals with feedback from experienced researchers and grant reviewers.</p>
-                            
-                            <a href="#" class="neo-button small">
-                                <span class="button-content">Register Now</span>
-                                <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
-                                <div class="button-glow"></div>
-                            </a>
-                        </div>
-                        
-                        <div class="card-circuit-pattern"></div>
-                    </div>
+                    
+                    <div class="card-circuit-pattern"></div>
                 </div>
             </div>
             
-            <div class="text-center mt-5" data-aos="fade-up">
-                <a href="events.php" class="neo-button primary calendar-button">
-                    <span class="button-content">View Full Calendar</span>
-                    <span class="button-icon"><i class="bi bi-calendar-week"></i></span>
-                    <div class="button-glow"></div>
-                </a>
+            <!-- Event 2 (Placeholder) -->
+            <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="neo-event-card">
+                    <div class="card-border"></div>
+                    <div class="card-glow"></div>
+                    
+                    <div class="event-date-badge">
+                        <div class="date-content">
+                            <span class="event-day">22</span>
+                            <span class="event-month">DEC</span>
+                        </div>
+                        <div class="date-glow"></div>
+                    </div>
+                    
+                    <div class="event-content">
+                        <div class="event-tags">
+                            <span class="event-tag">Workshop</span>
+                            <span class="event-tag">AI</span>
+                        </div>
+                        
+                        <h4 class="event-title">AI Research Workshop</h4>
+                        
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-clock"></i>
+                                <span>2:00 PM - 5:00 PM</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>Virtual Event</span>
+                            </div>
+                        </div>
+                        
+                        <p class="event-description">A practical workshop on applying machine learning to research problems with hands-on training sessions and expert guidance.</p>
+                        
+                        <a href="#" class="neo-button small">
+                            <span class="button-content">Join Online</span>
+                            <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                            <div class="button-glow"></div>
+                        </a>
+                    </div>
+                    
+                    <div class="card-circuit-pattern"></div>
+                </div>
             </div>
-    </div>
-  </section>
+            
+            <!-- Event 3 (Placeholder) -->
+            <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="neo-event-card">
+                    <div class="card-border"></div>
+                    <div class="card-glow"></div>
+                    
+                    <div class="event-date-badge">
+                        <div class="date-content">
+                            <span class="event-day">10</span>
+                            <span class="event-month">JAN</span>
+                        </div>
+                        <div class="date-glow"></div>
+                    </div>
+                    
+                    <div class="event-content">
+                        <div class="event-tags">
+                            <span class="event-tag">Workshop</span>
+                            <span class="event-tag">Funding</span>
+                        </div>
+                        
+                        <h4 class="event-title">Grant Writing Workshop</h4>
+                        
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-clock"></i>
+                                <span>9:00 AM - 1:00 PM</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>Science Building, Room 305</span>
+                            </div>
+                        </div>
+                        
+                        <p class="event-description">Learn strategies for writing successful research grant proposals with feedback from experienced researchers and grant reviewers.</p>
+                        
+                        <a href="#" class="neo-button small">
+                            <span class="button-content">Register Now</span>
+                            <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                            <div class="button-glow"></div>
+                        </a>
+                    </div>
+                    
+                    <div class="card-circuit-pattern"></div>
+                </div>
+            </div>
+            <?php endif; ?>
+        </div>
+        
+        <div class="text-center mt-5" data-aos="fade-up">
+            <a href="javascript:void(0)" class="neo-button primary calendar-button view-calendar-btn me-3">
+                <span class="button-content">View Full Calendar</span>
+                <span class="button-icon"><i class="bi bi-calendar-week"></i></span>
+                <div class="button-glow"></div>
+            </a>
+            <a href="events.php" class="neo-button secondary">
+                <span class="button-content">Explore All Events</span>
+                <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                <div class="button-glow"></div>
+            </a>
+        </div>
+</div>
+</section>
 
-    <style>
-    /* Modern Futuristic Events Section Styling */
-    .events-section {
-        background: linear-gradient(135deg, #121729 0%, #1a2151 100%);
-        position: relative;
-        overflow: hidden;
-        color: #fff;
-    }
-    
-    .events-bg-grid {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: linear-gradient(to right, rgba(76, 201, 240, 0.03) 1px, transparent 1px),
-                          linear-gradient(to bottom, rgba(76, 201, 240, 0.03) 1px, transparent 1px);
-        background-size: 30px 30px;
-        z-index: 1;
-        opacity: 0.5;
-        pointer-events: none;
-    }
-    
-    .events-orb {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(60px);
-        z-index: 1;
-        pointer-events: none;
-    }
-    
-    .events-orb.orb-1 {
-        width: 400px;
-        height: 400px;
-        top: -100px;
-        left: -150px;
-        background: radial-gradient(circle, rgba(114, 9, 183, 0.2) 0%, transparent 70%);
-        animation: float-slow 12s ease-in-out infinite alternate-reverse;
-    }
-    
-    .events-orb.orb-2 {
-        width: 300px;
-        height: 300px;
-        bottom: -50px;
-        right: -100px;
-        background: radial-gradient(circle, rgba(247, 37, 133, 0.2) 0%, transparent 70%);
-        animation: float-slow 15s ease-in-out infinite alternate;
-    }
-    
-    .events-glow-effect {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 80%;
-        height: 60%;
-        background: radial-gradient(ellipse, rgba(114, 9, 183, 0.1), transparent 70%);
-        opacity: 0.6;
-        z-index: 1;
-        filter: blur(40px);
-        pointer-events: none;
-    }
-    
-    .events-timeline {
-        position: relative;
-        z-index: 2;
-    }
-    
+<style>
+/* Modern Futuristic Events Section Styling */
+.events-section {
+    background: linear-gradient(135deg, #121729 0%, #1a2151 100%);
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+}
+
+.events-bg-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, rgba(76, 201, 240, 0.03) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(76, 201, 240, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: 1;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.events-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.events-orb.orb-1 {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    left: -150px;
+    background: radial-gradient(circle, rgba(114, 9, 183, 0.2) 0%, transparent 70%);
+    animation: float-slow 12s ease-in-out infinite alternate-reverse;
+}
+
+.events-orb.orb-2 {
+    width: 300px;
+    height: 300px;
+    bottom: -50px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(247, 37, 133, 0.2) 0%, transparent 70%);
+    animation: float-slow 15s ease-in-out infinite alternate;
+}
+
+.events-glow-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 60%;
+    background: radial-gradient(ellipse, rgba(114, 9, 183, 0.1), transparent 70%);
+    opacity: 0.6;
+    z-index: 1;
+    filter: blur(40px);
+    pointer-events: none;
+}
+
+.events-timeline {
+    position: relative;
+    z-index: 2;
+}
+
+.events-timeline-line {
+    position: absolute;
+    top: 115px;
+    left: 50%;
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(to right, 
+        rgba(76, 201, 240, 0), 
+        rgba(76, 201, 240, 0.5), 
+        rgba(76, 201, 240, 0.8), 
+        rgba(76, 201, 240, 0.5), 
+        rgba(76, 201, 240, 0));
+    transform: translateX(-50%);
+    z-index: 1;
+    opacity: 0.5;
+}
+
+.event-badge {
+    background: rgba(247, 37, 133, 0.1);
+    border: 1px solid rgba(247, 37, 133, 0.2);
+}
+
+.event-badge i {
+    color: rgba(247, 37, 133, 0.8);
+}
+
+.neo-event-card {
+    position: relative;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    padding: 0;
+    height: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    transform: perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1);
+    transform-style: preserve-3d;
+}
+
+.neo-event-card:hover {
+    box-shadow: 0 15px 40px rgba(247, 37, 133, 0.2);
+    border-color: rgba(247, 37, 133, 0.3);
+    transform: translateY(-10px) scale(1.02);
+}
+
+.neo-event-card .card-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid transparent;
+    border-radius: 16px;
+    background-image: linear-gradient(to bottom right, 
+        rgba(76, 201, 240, 0), 
+        rgba(76, 201, 240, 0.1), 
+        rgba(247, 37, 133, 0.2), 
+        rgba(76, 201, 240, 0));
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.neo-event-card .card-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(247, 37, 133, 0.2), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.neo-event-card:hover .card-glow {
+    opacity: 1;
+}
+
+.event-date-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 70px;
+    height: 70px;
+    background: rgba(247, 37, 133, 0.15);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(247, 37, 133, 0.3);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.neo-event-card:hover .event-date-badge {
+    transform: scale(1.1);
+    background: rgba(247, 37, 133, 0.2);
+    box-shadow: 0 5px 15px rgba(247, 37, 133, 0.2);
+}
+
+.date-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.event-day {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+    background: linear-gradient(135deg, #ffffff, #e0e0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.event-month {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.date-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, transparent, rgba(247, 37, 133, 0.2), transparent);
+    transform: translateX(-100%);
+    z-index: -1;
+}
+
+.neo-event-card:hover .date-glow {
+    animation: shine 2s infinite;
+}
+
+.event-content {
+    padding: 1.5rem;
+    position: relative;
+    z-index: 3;
+}
+
+.event-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.event-tag {
+    background: rgba(76, 201, 240, 0.1);
+    border: 1px solid rgba(76, 201, 240, 0.2);
+    border-radius: 50px;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+}
+
+.neo-event-card:hover .event-tag {
+    background: rgba(76, 201, 240, 0.15);
+    transform: translateY(-2px);
+}
+
+.event-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #ffffff, #e0e0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.neo-event-card:hover .event-title {
+    transform: scale(1.02);
+}
+
+.event-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.meta-item i {
+    color: rgba(247, 37, 133, 0.8);
+    font-size: 0.9rem;
+}
+
+.event-description {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.card-circuit-pattern {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 120px;
+    height: 120px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTAgMTBjMCAwIDIwIDAgMjAgMjBtLTIwIDIwYzAgMCAyMCAwIDIwLTIgbTIwIDBjMCAwIDAgMjAgLTIgMjBtNDQgLTIwYzAgMCAwIDIwIC0yMCAyMG0yMCAyMGMyIDAgMCAwIC0yMCAtMjAgLTIwbS0yMCAwYzAgMCAwIC0yMCAyMCAtMjAiIHN0cm9rZT0icmdiYSgyNDcsIDM3LCAxMzMsIDAuMikiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==');
+    background-size: 100% 100%;
+    opacity: 0.2;
+    z-index: 1;
+}
+
+.calendar-button {
+    background: linear-gradient(135deg, rgba(247, 37, 133, 0.9), rgba(114, 9, 183, 0.9));
+    border-color: rgba(247, 37, 133, 0.5);
+}
+
+.calendar-button:hover {
+    background: linear-gradient(135deg, rgba(247, 37, 133, 1), rgba(114, 9, 183, 1));
+}
+
+/* Animations for staggered card appearance */
+@keyframes card-float {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Add responsive adjustments */
+@media (max-width: 991px) {
     .events-timeline-line {
-        position: absolute;
-        top: 115px;
-        left: 50%;
-        width: 80%;
-        height: 2px;
-        background: linear-gradient(to right, 
-            rgba(76, 201, 240, 0), 
-            rgba(76, 201, 240, 0.5), 
-            rgba(76, 201, 240, 0.8), 
-            rgba(76, 201, 240, 0.5), 
-            rgba(76, 201, 240, 0));
-        transform: translateX(-50%);
-        z-index: 1;
-        opacity: 0.5;
+        display: none;
     }
-    
-    .event-badge {
-        background: rgba(247, 37, 133, 0.1);
-        border: 1px solid rgba(247, 37, 133, 0.2);
-    }
-    
-    .event-badge i {
-        color: rgba(247, 37, 133, 0.8);
-    }
-    
-    .neo-event-card {
-        position: relative;
-        background: rgba(30, 41, 59, 0.6);
-        border-radius: 16px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        overflow: hidden;
-        padding: 0;
-        height: 100%;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        transition: all 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-        transform: perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1);
-        transform-style: preserve-3d;
-    }
-    
-    .neo-event-card:hover {
-        box-shadow: 0 15px 40px rgba(247, 37, 133, 0.2);
-        border-color: rgba(247, 37, 133, 0.3);
-        transform: translateY(-10px) scale(1.02);
-    }
-    
-    .neo-event-card .card-border {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border: 2px solid transparent;
-        border-radius: 16px;
-        background-image: linear-gradient(to bottom right, 
-            rgba(76, 201, 240, 0), 
-            rgba(76, 201, 240, 0.1), 
-            rgba(247, 37, 133, 0.2), 
-            rgba(76, 201, 240, 0));
-        background-origin: border-box;
-        background-clip: content-box, border-box;
-        pointer-events: none;
-        z-index: 2;
-    }
-    
-    .neo-event-card .card-glow {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle at center, rgba(247, 37, 133, 0.2), transparent 70%);
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        z-index: 1;
-        pointer-events: none;
-    }
-    
-    .neo-event-card:hover .card-glow {
-        opacity: 1;
-    }
-    
-    .event-date-badge {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        width: 70px;
-        height: 70px;
-        background: rgba(247, 37, 133, 0.15);
-        backdrop-filter: blur(5px);
-        border: 1px solid rgba(247, 37, 133, 0.3);
-        border-radius: 12px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 3;
-        overflow: hidden;
-        transition: all 0.3s ease;
-    }
-    
-    .neo-event-card:hover .event-date-badge {
-        transform: scale(1.1);
-        background: rgba(247, 37, 133, 0.2);
-        box-shadow: 0 5px 15px rgba(247, 37, 133, 0.2);
-    }
-    
-    .date-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .event-day {
-        font-size: 1.6rem;
-        font-weight: 700;
-        line-height: 1;
-        background: linear-gradient(135deg, #ffffff, #e0e0e0);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    
-    .event-month {
-        font-size: 0.8rem;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.8);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    
-    .date-glow {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, transparent, rgba(247, 37, 133, 0.2), transparent);
-        transform: translateX(-100%);
-        z-index: -1;
-    }
-    
-    .neo-event-card:hover .date-glow {
-        animation: shine 2s infinite;
-    }
-    
-    .event-content {
-        padding: 1.5rem;
-        position: relative;
-        z-index: 3;
-    }
-    
-    .event-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 12px;
-    }
-    
-    .event-tag {
-        background: rgba(76, 201, 240, 0.1);
-        border: 1px solid rgba(76, 201, 240, 0.2);
-        border-radius: 50px;
-        padding: 4px 12px;
-        font-size: 0.7rem;
-        color: rgba(255, 255, 255, 0.9);
-        transition: all 0.3s ease;
-    }
-    
-    .neo-event-card:hover .event-tag {
-        background: rgba(76, 201, 240, 0.15);
-        transform: translateY(-2px);
-    }
-    
-    .event-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 12px;
-        background: linear-gradient(135deg, #ffffff, #e0e0e0);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        transition: all 0.3s ease;
-    }
-    
-    .neo-event-card:hover .event-title {
-        transform: scale(1.02);
-    }
-    
-    .event-meta {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-bottom: 15px;
-    }
-    
-    .meta-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.7);
-    }
-    
-    .meta-item i {
-        color: rgba(247, 37, 133, 0.8);
-        font-size: 0.9rem;
-    }
-    
-    .event-description {
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.7);
-        margin-bottom: 1.5rem;
-        line-height: 1.5;
-    }
-    
-    .card-circuit-pattern {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 120px;
-        height: 120px;
-        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTAgMTBjMCAwIDIwIDAgMjAgMjBtLTIwIDIwYzAgMCAyMCAwIDIwLTIgbTIwIDBjMCAwIDAgMjAgLTIgMjBtNDQgLTIwYzAgMCAwIDIwIC0yMCAyMG0yMCAyMGMyIDAgMCAwIC0yMCAtMjAgLTIwbS0yMCAwYzAgMCAwIC0yMCAyMCAtMjAiIHN0cm9rZT0icmdiYSgyNDcsIDM3LCAxMzMsIDAuMikiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==');
-        background-size: 100% 100%;
-        opacity: 0.2;
-        z-index: 1;
-    }
-    
-    .calendar-button {
-        background: linear-gradient(135deg, rgba(247, 37, 133, 0.9), rgba(114, 9, 183, 0.9));
-        border-color: rgba(247, 37, 133, 0.5);
-    }
-    
-    .calendar-button:hover {
-        background: linear-gradient(135deg, rgba(247, 37, 133, 1), rgba(114, 9, 183, 1));
-    }
-    
-    /* Animations for staggered card appearance */
-    @keyframes card-float {
-        0% { transform: translateY(20px); opacity: 0; }
-        100% { transform: translateY(0); opacity: 1; }
-    }
-    
-    /* Add responsive adjustments */
-    @media (max-width: 991px) {
-        .events-timeline-line {
-            display: none;
-        }
-    }
-    
+}
+
     @media (max-width: 767px) {
         .neo-event-card {
             max-width: 320px;
             margin: 0 auto;
         }
     }
-    </style>
     
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add parallax effect to event cards
-        const eventCards = document.querySelectorAll('.neo-event-card');
-        
-        eventCards.forEach(card => {
-            card.addEventListener('mousemove', function(e) {
-                const rect = this.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                // Calculate rotation values based on mouse position
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const deltaX = (x - centerX) / 15;
-                const deltaY = (y - centerY) / 15;
-                
-                // Apply 3D rotation
-                this.style.transform = `perspective(1000px) rotateX(${-deltaY}deg) rotateY(${deltaX}deg) translateY(-5px)`;
-                
-                // Move glow to follow cursor
-                const glow = this.querySelector('.card-glow');
-                if (glow) {
-                    glow.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(247, 37, 133, 0.3), transparent 60%)`;
-                    glow.style.opacity = '1';
-                }
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                // Reset transforms and effects
-                this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-                
-                const glow = this.querySelector('.card-glow');
-                if (glow) {
-                    glow.style.background = 'radial-gradient(circle at center, rgba(247, 37, 133, 0.2), transparent 70%)';
-                    glow.style.opacity = '0';
-                }
-            });
-            
-            // Add entry animation
-            const delay = Array.from(eventCards).indexOf(card) * 100;
-            card.style.animation = `card-float 0.8s ease-out ${delay}ms forwards`;
-            card.style.opacity = '0';
-        });
-    });
-    </script>
+    /* Fix for event card display issues */
+    .events-section .neo-event-card {
+        min-height: 380px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .events-section .event-content {
+        min-height: 260px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        z-index: 3;
+        padding-top: 1.8rem;
+    }
+    
+    .events-section .event-date-badge {
+        top: 15px;
+        right: 15px;
+    }
+    
+    .events-section .event-title {
+        min-height: 42px;
+        max-height: 60px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        margin-right: 60px; /* Create space for the date badge */
+    }
+    
+    .events-section .event-description {
+        flex-grow: 1;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        max-height: 90px;
+    }
+    
+    .events-section .event-meta {
+        margin-bottom: 12px;
+    }
+    
+    .events-section .meta-item {
+        display: flex;
+        align-items: flex-start;
+        overflow: hidden;
+    }
+    
+    .events-section .meta-item span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .events-section .neo-button.small {
+        margin-top: auto;
+    }
+    
+    /* Fix specific alignment issues */
+    .events-section .meta-item i {
+        flex-shrink: 0;
+        display: inline-block;
+        width: 20px;
+        margin-right: 8px;
+        text-align: center;
+    }
+    
+    /* Fix indentation in placeholders */
+    .events-section .meta-item span {
+        line-height: 1.4;
+    }
+</style>
 
-  <!-- Futuristic Research Guidance FAQ Section -->
-  <section id="faq-section" class="faq-section section-padding">
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add parallax effect to event cards
+    const eventCards = document.querySelectorAll('.neo-event-card');
+    
+    eventCards.forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Calculate rotation values based on mouse position
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const deltaX = (x - centerX) / 15;
+            const deltaY = (y - centerY) / 15;
+            
+            // Apply 3D rotation
+            this.style.transform = `perspective(1000px) rotateX(${-deltaY}deg) rotateY(${deltaX}deg) translateY(-5px)`;
+            
+            // Move glow to follow cursor
+            const glow = this.querySelector('.card-glow');
+            if (glow) {
+                glow.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(247, 37, 133, 0.3), transparent 60%)`;
+                glow.style.opacity = '1';
+            }
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            // Reset transforms and effects
+            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            
+            const glow = this.querySelector('.card-glow');
+            if (glow) {
+                glow.style.background = 'radial-gradient(circle at center, rgba(247, 37, 133, 0.2), transparent 70%)';
+                glow.style.opacity = '0';
+            }
+        });
+        
+        // Add entry animation
+        const delay = Array.from(eventCards).indexOf(card) * 100;
+        card.style.animation = `card-float 0.8s ease-out ${delay}ms forwards`;
+        card.style.opacity = '0';
+    });
+});
+</script>
+
+<!-- Futuristic Research Guidance FAQ Section -->
+<section id="faq-section" class="faq-section section-padding">
     <!-- Futuristic background elements -->
     <div class="faq-bg-particles"></div>
     <div class="faq-orb faq-orb-1"></div>
@@ -6640,39 +8483,39 @@ session_start();
             </a>
                     </div>
                     </div>
-  </section>
+</section>
 
-  <style>
-  /* Modern Futuristic FAQ Section Styling */
-  .faq-section {
-      background: linear-gradient(135deg, #1a1d2c 0%, #2a1a46 100%);
-      position: relative;
-      overflow: hidden;
-      color: #fff;
-      padding: 100px 0;
-  }
-  
-  .faq-bg-particles {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: radial-gradient(rgba(76, 201, 240, 0.1) 2px, transparent 2px);
-      background-size: 50px 50px;
-      z-index: 1;
-      opacity: 0.2;
-      pointer-events: none;
-  }
-  
-  .faq-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(70px);
-      z-index: 1;
-      pointer-events: none;
-  }
-  
+<style>
+/* Modern Futuristic FAQ Section Styling */
+.faq-section {
+    background: linear-gradient(135deg, #1a1d2c 0%, #2a1a46 100%);
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    padding: 100px 0;
+}
+
+.faq-bg-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(rgba(76, 201, 240, 0.1) 2px, transparent 2px);
+    background-size: 50px 50px;
+    z-index: 1;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+.faq-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    z-index: 1;
+    pointer-events: none;
+}
+
   .faq-orb-1 {
       width: 500px;
       height: 500px;
@@ -6683,27 +8526,27 @@ session_start();
   }
   
   .faq-orb-2 {
-      width: 400px;
-      height: 400px;
+    width: 400px;
+    height: 400px;
       bottom: -150px;
-      left: -150px;
+    left: -150px;
       background: radial-gradient(circle, rgba(247, 37, 133, 0.15) 0%, transparent 70%);
       animation: float-slow 18s ease-in-out infinite alternate-reverse;
-  }
-  
-  .faq-mesh-grid {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+}
+
+.faq-mesh-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
       background-image: linear-gradient(to right, rgba(114, 9, 183, 0.05) 1px, transparent 1px),
                         linear-gradient(to bottom, rgba(114, 9, 183, 0.05) 1px, transparent 1px);
       background-size: 35px 35px;
-      z-index: 1;
+    z-index: 1;
       opacity: 0.4;
-      pointer-events: none;
-  }
+    pointer-events: none;
+}
   
   .faq-badge {
       background: rgba(76, 201, 240, 0.1);
@@ -6719,18 +8562,18 @@ session_start();
       position: relative;
       z-index: 2;
   }
-  
-  .neo-accordion {
+
+.neo-accordion {
       position: relative;
       z-index: 2;
   }
   
   .neo-accordion .accordion-item {
-      background: rgba(30, 41, 59, 0.6);
+    background: rgba(30, 41, 59, 0.6);
       border: 1px solid rgba(76, 201, 240, 0.2);
       border-radius: 12px;
-      backdrop-filter: blur(10px);
-      overflow: hidden;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
       margin-bottom: 16px;
       transition: all 0.3s ease;
       transform: translateY(0);
@@ -6741,20 +8584,20 @@ session_start();
       transform: translateY(-5px);
       box-shadow: 0 8px 25px rgba(76, 201, 240, 0.15);
       border-color: rgba(76, 201, 240, 0.4);
-  }
-  
-  .neo-accordion .accordion-button {
+}
+
+.neo-accordion .accordion-button {
       background: rgba(30, 41, 59, 0.8);
       color: #fff;
       font-weight: 600;
       padding: 20px;
-      border: none;
+    border: none;
       position: relative;
       transition: all 0.3s ease;
       overflow: hidden;
-  }
-  
-  .neo-accordion .accordion-button:not(.collapsed) {
+}
+
+.neo-accordion .accordion-button:not(.collapsed) {
       background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(42, 26, 70, 0.9));
       color: rgba(76, 201, 240, 1);
       box-shadow: none;
@@ -6783,9 +8626,9 @@ session_start();
   
   .neo-accordion .accordion-button:not(.collapsed)::before {
       opacity: 1;
-  }
-  
-  .neo-accordion .accordion-body {
+}
+
+.neo-accordion .accordion-body {
       background: rgba(22, 28, 45, 0.6);
       color: rgba(255, 255, 255, 0.8);
       padding: 20px;
@@ -6841,12 +8684,12 @@ session_start();
   }
   
   /* Question button styling */
-  .question-button {
+.question-button {
       background: linear-gradient(135deg, rgba(76, 201, 240, 0.9), rgba(114, 9, 183, 0.9));
       border-color: rgba(76, 201, 240, 0.5);
-  }
-  
-  .question-button:hover {
+}
+
+.question-button:hover {
       background: linear-gradient(135deg, rgba(76, 201, 240, 1), rgba(114, 9, 183, 1));
   }
   
@@ -6863,7 +8706,7 @@ session_start();
   }
   
   /* Responsive styles */
-  @media (max-width: 767px) {
+@media (max-width: 767px) {
       .neo-accordion .accordion-item {
           margin-bottom: 10px;
       }
@@ -6876,12 +8719,12 @@ session_start();
       .neo-accordion .accordion-body {
           padding: 15px;
           font-size: 0.9rem;
-      }
-  }
-  </style>
-  
-  <script>
-  document.addEventListener('DOMContentLoaded', function() {
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
       // Add animation to FAQ accordion items
       const setupFaqAnimations = () => {
           const accordionItems = document.querySelectorAll('.neo-accordion .accordion-item');
@@ -7622,9 +9465,9 @@ session_start();
                 if (chartCanvas) {
                     chartCanvas.addEventListener('mousemove', (e) => {
                         const rect = chartCanvas.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
                         // Create ripple effect on hover
                         const glowEffect = document.querySelector('.chart-glow-effect');
                         if (glowEffect) {
@@ -7726,9 +9569,9 @@ session_start();
                         performSearch();
                     }
                 });
-            });
-        });
-    </script>
+    });
+});
+</script>
 
     <!-- Enhanced Keyword Highlighting Styles -->
     <style>
@@ -8246,5 +10089,8 @@ session_start();
             }, 2000);
         });
     </script>
+    
+    <!-- Include Calendar Overlay -->
+    <?php include 'calendar-overlay.php'; ?>
 </body>
 </html>
