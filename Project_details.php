@@ -4726,6 +4726,12 @@ function createProfileLink($name, $userId, $userType = null) {
                     <i class="bi bi-pencil-square"></i>Edit Project
                 </button>
             ` : '';
+
+            const litMatrixBtn = isAuthorized ? `
+                <button id="literatureMatrixBtn" class="btn btn-outline-primary ms-2" data-project-id="${project._id.$oid}">
+                    <i class="bi bi-book"></i>Literature Matrix
+                </button>
+            ` : '';
             
             headerEl.innerHTML = `
                 <div class="d-flex justify-content-between align-items-start position-relative z-1">
@@ -4733,6 +4739,7 @@ function createProfileLink($name, $userId, $userType = null) {
                         <h1 class="float-animation display-4">${project.title}</h1>
                         <div class="mb-3 d-flex align-items-center mt-3">
                             ${editBtn}
+                            ${litMatrixBtn}
                         </div>
                     </div>
                 </div>
@@ -4778,6 +4785,17 @@ function createProfileLink($name, $userId, $userType = null) {
                 
                 // Add ripple effect to the button
                 editButton.addEventListener('mousedown', createRipple);
+            }
+
+            const litMatrixButton = document.getElementById('literatureMatrixBtn');
+            if (litMatrixButton) {
+                litMatrixButton.addEventListener('click', function() {
+                    const projectId = this.getAttribute('data-project-id');
+                    window.location.href = `literature_matrix.php?id=${projectId}`;
+                });
+                
+                // Add ripple effect to the button
+                litMatrixButton.addEventListener('mousedown', createRipple);
             }
             
             // Show/hide timeline edit button based on authorization
