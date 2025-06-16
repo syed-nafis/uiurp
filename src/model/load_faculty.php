@@ -1,41 +1,22 @@
 <?php
-require_once 'db_connect.php';
-require_once __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php'; // Updated path to Composer's autoloader
 
-header('Content-Type: application/json');
+$client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
+$collection = $client->uiurp->faculties;
 
-try {
-    // Connect to MongoDB
-    $client = connectToDatabase();
-    $db = $client->uiurp;
-    $collection = $db->faculties;
-    
-    // Get all faculty members, but limit to essential fields
-    $options = [
-        'projection' => [
-            'name' => 1,
-            'email' => 1,
-            'profile_image' => 1,
-            'department' => 1,
-            'title' => 1,
-            'role' => 1
-        ]
-    ];
-    
-    $cursor = $collection->find([], $options);
-    
-    // Convert to array
-    $faculty = [];
-    foreach ($cursor as $document) {
-        $faculty[] = $document;
-    }
-    
-    // Return as JSON
-    echo json_encode($faculty);
-    
-} catch (Exception $e) {
-    echo json_encode([
-        'error' => 'Error loading faculty data: ' . $e->getMessage()
-    ]);
+$faculties = $collection->find([], [
+    'projection' => [
+        '_id' => 1,
+        'name' => 1,
+        'bio' => 1,
+        'profile_image' => 1
+    ]
+])->toArray();
+
+// Convert ObjectId to string
+foreach ($faculties as &$faculty) {
+    $faculty['_id'] = (string) $faculty['_id'];
 }
+
+echo json_encode($faculties);
 ?>
