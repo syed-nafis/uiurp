@@ -547,6 +547,8 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     background: rgba(30, 41, 59, 0.4);
     border: 1px solid rgba(76, 201, 240, 0.2);
     transition: all 0.3s ease;
+    min-width: 120px;
+    max-width: 250px;
 }
 
 .user-trigger:hover {
@@ -565,6 +567,7 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     margin-right: 10px;
     border: 2px solid rgba(76, 201, 240, 0.5);
     transition: all 0.3s ease;
+    flex-shrink: 0;
 }
 
 .user-avatar img {
@@ -606,21 +609,96 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     margin: 0 10px;
     font-size: 14px;
     transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.user-trigger:hover .user-name {
-    color: #ffffff;
+/* Light Mode Styles for User Trigger */
+[data-theme="light"] .user-trigger {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(67, 97, 238, 0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.user-trigger i {
-    color: rgba(255, 255, 255, 0.6);
-    transition: all 0.3s ease;
-    font-size: 14px;
+[data-theme="light"] .user-trigger:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(67, 97, 238, 0.4);
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.1);
 }
 
-.user-trigger:hover i {
-    color: rgba(255, 255, 255, 0.9);
-    transform: translateY(2px);
+[data-theme="light"] .user-name {
+    color: rgba(30, 41, 59, 0.9);
+}
+
+[data-theme="light"] .user-trigger i {
+    color: rgba(30, 41, 59, 0.6);
+}
+
+[data-theme="light"] .user-trigger:hover .user-name {
+    color: rgba(67, 97, 238, 1);
+}
+
+[data-theme="light"] .user-trigger:hover i {
+    color: rgba(67, 97, 238, 0.8);
+}
+
+/* Responsive Styles for User Trigger */
+@media (max-width: 1200px) {
+    .user-trigger {
+        padding: 6px 12px;
+        min-width: 100px;
+    }
+    
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
+    }
+    
+    .user-name {
+        font-size: 13px;
+        margin: 0 6px;
+    }
+}
+
+@media (max-width: 991px) {
+    .user-trigger {
+        width: 100%;
+        padding: 12px 16px;
+        justify-content: space-between;
+        min-width: unset;
+        max-width: unset;
+    }
+    
+    .user-avatar {
+        width: 36px;
+        height: 36px;
+        margin-right: 12px;
+    }
+    
+    .user-name {
+        font-size: 14px;
+        margin: 0 10px;
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-trigger {
+        padding: 10px 14px;
+    }
+    
+    .user-avatar {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+    }
+    
+    .user-name {
+        font-size: 13px;
+        margin: 0 8px;
+    }
 }
 
 /* Dropdown Menu Styling */
