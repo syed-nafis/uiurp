@@ -1,6 +1,30 @@
 <?php
 // No need for session_start() here since it's now called at the beginning of each page
+
 // Fetch current user data if logged in
+$currentUser = null;
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['user_id'])) {
+    try {
+        // Include MongoDB connection
+        require_once __DIR__ . '/../../vendor/autoload.php';
+        
+        // Connect to MongoDB
+        $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
+        $db = $client->uiurp;
+        $studentsCollection = $db->students;
+        
+        // Fetch the student data
+        $studentData = $studentsCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($_SESSION['user_id'])]);
+        
+        if ($studentData) {
+            $currentUser = json_decode(json_encode($studentData), true);
+        }
+    } catch (Exception $e) {
+        // If there's an error, we'll use default values
+        error_log("Error fetching user data for navbar: " . $e->getMessage());
+    }
+}
+
 // Determine the base path for correct relative links
 $current_path = $_SERVER['PHP_SELF'];
 $path_parts = explode('/', $current_path);
@@ -76,14 +100,18 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                     <span class="nav-text">Forum</span>
                     <span class="nav-highlight"></span>
                 </a>
+            </div>
 
-                <a href="#" id="navChatButton" class="nav-item chat-icon-only">
-                    <span class="nav-icon"><i class="bi bi-chat-dots-fill" style="color: var(--neo-blue);"></i></span>
-                    <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in']): ?>
-                        <span class="nav-notification-badge" id="chatNotificationBadge" style="display: none;">0</span>
-                    <?php endif; ?>
-                    <span class="nav-highlight"></span>
-                </a>
+            <!-- Theme Toggle -->
+            <div class="theme-toggle-container">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <div class="toggle-track">
+                        <div class="toggle-thumb">
+                            <i class="bi bi-sun-fill sun-icon"></i>
+                            <i class="bi bi-moon-fill moon-icon"></i>
+                        </div>
+                    </div>
+                </button>
             </div>
 
             <!-- User Profile Section -->
@@ -92,23 +120,32 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                     <div class="user-profile">
                         <div class="user-trigger" id="userMenuTrigger">
                             <div class="user-avatar">
-                                <img src="<?= htmlspecialchars($_SESSION['profile_pic'] ?? 'assets/resources/user_avatar.png') ?>" alt="User">
+                                <?php 
+                                $profileImage = 'assets/resources/user_avatar.png';
+                                if ($currentUser) {
+                                    $userImage = $currentUser['basic_info']['profile_image_url'] ?? $currentUser['profile_image'] ?? $currentUser['profile_image_url'] ?? null;
+                                    if (!empty($userImage)) {
+                                        $profileImage = $userImage;
+                                    }
+                                }
+                                ?>
+                                <img src="<?= htmlspecialchars($profileImage) ?>" alt="User">
                                 <div class="avatar-status"></div>
                                 <div class="avatar-glow"></div>
                             </div>
-                            <span class="user-name"><?= htmlspecialchars($_SESSION['username'] ?? 'User') ?></span>
+                            <span class="user-name"><?= htmlspecialchars($currentUser ? ($currentUser['basic_info']['name'] ?? $currentUser['name'] ?? 'User') : 'User') ?></span>
                             <i class="bi bi-chevron-down"></i>
                         </div>
                         
                         <div class="user-menu-dropdown">
                             <div class="dropdown-header">
                                 <div class="header-avatar">
-                                    <img src="<?= htmlspecialchars($_SESSION['profile_pic']) ?>" alt="User">
+                                    <img src="<?= htmlspecialchars($profileImage) ?>" alt="User">
                                     <div class="header-avatar-glow"></div>
                                 </div>
                                 <div class="header-info">
-                                    <p class="header-name"><?= htmlspecialchars($_SESSION['username'] ?? 'User') ?></p>
-                                    <p class="header-email"><?= htmlspecialchars($_SESSION['email'] ?? 'addyouremail@gmail.com')?></p>
+                                    <p class="header-name"><?= htmlspecialchars($currentUser ? ($currentUser['basic_info']['name'] ?? $currentUser['name'] ?? 'User') : 'User') ?></p>
+                                    <p class="header-email"><?= htmlspecialchars($currentUser ? ($currentUser['contact_info']['primary_email'] ?? $currentUser['email'] ?? 'email@example.com') : 'email@example.com') ?></p>
                                 </div>
                             </div>
                             
@@ -136,23 +173,6 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                                 </div>
                                 
                                 <div class="menu-divider"></div>
-                                
-                                <!-- Theme Toggle -->
-                                <div class="dropdown-theme-toggle">
-                                    <span class="theme-label"><i class="bi bi-palette me-2"></i>Theme Preferences</span>
-                                    <div class="theme-toggle-container">
-                                        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                                            <div class="toggle-track">
-                                                <div class="toggle-thumb">
-                                                    <i class="bi bi-sun-fill sun-icon"></i>
-                                                    <i class="bi bi-moon-fill moon-icon"></i>
-                                                </div>
-                                            </div>
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <div class="menu-divider"></div>
                                 <a href="<?= $base_path ?>logout.php" class="menu-item logout">
                                     <i class="bi bi-box-arrow-right"></i>
                                     <span>Logout</span>
@@ -171,9 +191,6 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                 </div>
         </div>
     </div>
-    
-    <!-- Include Project Chat Overlay -->
-    <?php include_once('project_chat_overlay.php'); ?>
 </nav>
 
 <!-- Navbar Styling and Animations -->
@@ -628,7 +645,7 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
-    width: 320px;
+    width: 280px;
     background: rgba(18, 23, 41, 0.95);
     border-radius: 12px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
@@ -654,7 +671,6 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     align-items: center;
     border-bottom: 1px solid rgba(76, 201, 240, 0.1);
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(22, 28, 45, 0.5));
-    min-height: 80px;
 }
 
 .header-avatar {
@@ -665,7 +681,6 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     overflow: hidden;
     margin-right: 15px;
     border: 2px solid rgba(76, 201, 240, 0.5);
-    flex-shrink: 0;
 }
 
 .header-avatar img {
@@ -687,8 +702,6 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
 
 .header-info {
     flex: 1;
-    min-width: 0;
-    overflow: hidden;
 }
 
 .header-name {
@@ -696,30 +709,15 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     color: #ffffff;
     margin: 0 0 5px;
     font-size: 16px;
-    line-height: 1.3;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
-    max-height: 2.8em;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
 }
 
 .header-email {
     color: rgba(255, 255, 255, 0.6);
     margin: 0;
     font-size: 13px;
-    line-height: 1.2;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
-    max-height: 2.4em;
+    white-space: nowrap;
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
 }
 
 .dropdown-content {
@@ -801,26 +799,6 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
         rgba(76, 201, 240, 0.1), 
         transparent);
     margin: 10px 0;
-}
-
-/* Dropdown Theme Toggle Styling */
-.dropdown-theme-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 15px;
-    border-radius: 8px;
-    margin: 5px 0;
-}
-
-.dropdown-theme-toggle .theme-label {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-secondary);
-}
-
-.dropdown-theme-toggle .theme-toggle-container {
-    margin-right: 0;
 }
 
 .logout {
@@ -1065,7 +1043,7 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
     }
 }
 
-/* Theme Toggle Styles - Subtle & Minimal Design */
+/* Theme Toggle Styles */
 .theme-toggle-container {
     display: flex;
     align-items: center;
@@ -1075,134 +1053,94 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
 .theme-toggle {
     background: none;
     border: none;
-    padding: 8px;
+    padding: 0;
     cursor: pointer;
     position: relative;
     z-index: 10;
-    border-radius: 12px;
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.theme-toggle:hover {
-    background: rgba(255, 255, 255, 0.05);
-    transform: translateY(-1px);
 }
 
 .toggle-track {
-    width: 44px;
-    height: 22px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 11px;
+    width: 60px;
+    height: 30px;
+    background: var(--bg-tertiary);
+    border-radius: 15px;
     position: relative;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
+    transition: var(--navbar-transition);
+    border: 2px solid var(--border-color);
+    box-shadow: inset 0 2px 4px var(--shadow-color);
 }
 
 .toggle-thumb {
-    width: 18px;
-    height: 18px;
-    background: rgba(255, 255, 255, 0.9);
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(135deg, var(--neo-blue), var(--neo-primary));
     border-radius: 50%;
     position: absolute;
     top: 2px;
     left: 2px;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: var(--navbar-transition);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .toggle-thumb i {
-    font-size: 10px;
-    color: #64748b;
-    transition: all 0.3s ease;
-    font-weight: 600;
+    font-size: 12px;
+    color: white;
+    transition: var(--navbar-transition);
 }
 
 .sun-icon {
     opacity: 0;
-    transform: rotate(-180deg) scale(0.8);
+    transform: rotate(-90deg);
 }
 
 .moon-icon {
     opacity: 1;
-    transform: rotate(0deg) scale(1);
+    transform: rotate(0deg);
     position: absolute;
 }
 
-/* Light theme toggle state - More refined transitions */
-[data-theme="light"] .toggle-track {
-    background: rgba(0, 0, 0, 0.06);
-    border-color: rgba(0, 0, 0, 0.08);
-}
-
+/* Light theme toggle state */
 [data-theme="light"] .toggle-thumb {
-    transform: translateX(22px);
-    background: rgba(59, 130, 246, 0.9);
-    box-shadow: 0 2px 12px rgba(59, 130, 246, 0.3);
-}
-
-[data-theme="light"] .toggle-thumb i {
-    color: white;
+    transform: translateX(30px);
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
 }
 
 [data-theme="light"] .sun-icon {
     opacity: 1;
-    transform: rotate(0deg) scale(1);
+    transform: rotate(0deg);
 }
 
 [data-theme="light"] .moon-icon {
     opacity: 0;
-    transform: rotate(180deg) scale(0.8);
-}
-
-[data-theme="light"] .theme-toggle:hover {
-    background: rgba(0, 0, 0, 0.04);
+    transform: rotate(90deg);
 }
 
 .theme-toggle:hover .toggle-track {
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    border-color: var(--neo-primary);
+    box-shadow: 0 0 15px rgba(67, 97, 238, 0.3);
 }
 
-[data-theme="light"] .theme-toggle:hover .toggle-track {
-    background: rgba(0, 0, 0, 0.1);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-}
-
-/* Responsive adjustments - Maintain proportions */
+/* Responsive adjustments */
 @media (max-width: 991px) {
     .theme-toggle-container {
         margin-right: 0.5rem;
     }
     
-    .theme-toggle {
-        padding: 6px;
-    }
-    
     .toggle-track {
-        width: 38px;
-        height: 20px;
-        border-radius: 10px;
+        width: 50px;
+        height: 25px;
     }
     
     .toggle-thumb {
-        width: 16px;
-        height: 16px;
-    }
-    
-    .toggle-thumb i {
-        font-size: 9px;
+        width: 21px;
+        height: 21px;
     }
     
     [data-theme="light"] .toggle-thumb {
-        transform: translateX(18px);
+        transform: translateX(25px);
     }
 }
 </style>
@@ -1389,51 +1327,5 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
             }, 150);
         });
     }
-});
-</script>
-
-<!-- Include Notifications Initializer -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Function to update notification badge
-    function updateChatNotificationBadge() {
-        const badge = document.getElementById('chatNotificationBadge');
-        if (!badge) return;
-        
-        fetch('src/model/get_unread_messages.php')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const oldCount = parseInt(badge.textContent) || 0;
-                    const newCount = data.count || 0;
-                    
-                    // Update count and visibility
-                    if (newCount > 0) {
-                        badge.textContent = newCount > 99 ? '99+' : newCount;
-                        badge.style.display = 'flex';
-                        
-                        // Add pulse animation if count increased
-                        if (newCount > oldCount) {
-                            badge.classList.add('pulse-animation');
-                            setTimeout(() => {
-                                badge.classList.remove('pulse-animation');
-                            }, 1000);
-                        }
-                    } else {
-                        badge.style.display = 'none';
-                    }
-                }
-            })
-            .catch(error => console.error('Error updating chat notification badge:', error));
-    }
-    
-    // Update immediately when page loads
-    updateChatNotificationBadge();
-    
-    // Update every 5 seconds
-    setInterval(updateChatNotificationBadge, 5000);
-    
-    // Make the function available globally for other scripts to call
-    window.updateChatNotificationBadge = updateChatNotificationBadge;
 });
 </script>

@@ -8,9 +8,45 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     exit();
 }
 
+// Get project ID from URL
+$projectId = isset($_GET['id']) ? $_GET['id'] : null;
+if (!$projectId) {
+    header('Location: index.php');
+    exit();
+}
+
 // Connect to MongoDB
 $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
 $db = $client->uiurp;
+$project_collection = $db->projectsV2;
+$literature_collection = $db->literature_matrix;
+
+// Get project details
+$project = $project_collection->findOne(['_id' => new MongoDB\BSON\ObjectId($projectId)]);
+if (!$project) {
+    header('Location: index.php');
+    exit();
+}
+
+$userId = $_SESSION['user_id'];
+
+// Get literature matrix data for this project
+$literatureMatrix = $literature_collection->findOne(['projectId' => new MongoDB\BSON\ObjectId($projectId)]);
+
+// Initialize default tags
+$defaultTags = [
+    ['name' => 'Publication Year', 'color' => 'var(--tag-blue)'],
+    ['name' => 'Research Aim / Objective', 'color' => 'var(--tag-green)'],
+    ['name' => 'Dataset', 'color' => 'var(--tag-purple)'],
+    ['name' => 'Methodology', 'color' => 'var(--tag-orange)'],
+    ['name' => 'Findings', 'color' => 'var(--tag-blue)'],
+    ['name' => 'Research Gap', 'color' => 'var(--tag-green)'],
+    ['name' => 'Future Work', 'color' => 'var(--tag-purple)'],
+    ['name' => 'Relevance', 'color' => 'var(--tag-orange)'],
+    ['name' => 'Keywords/Theme', 'color' => 'var(--tag-blue)'],
+    ['name' => 'Citation/BibTeX', 'color' => 'var(--tag-green)']
+];
+
 ?>
 
 <!DOCTYPE html>
@@ -18,9 +54,10 @@ $db = $client->uiurp;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Literature Matrix</title>
+    <title>Literature Matrix - <?php echo htmlspecialchars($project->title); ?></title>
     <!-- Include Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Include custom CSS for Notion-like design -->
     <style>
         :root {
@@ -35,11 +72,13 @@ $db = $client->uiurp;
         body {
             background-color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif;
+            padding-top: 60px; /* Add padding for fixed navbar */
         }
 
         .container {
             max-width: 1200px;
             margin: 2rem auto;
+            padding: 0 15px; /* Add horizontal padding */
         }
 
         .tag-container {
@@ -60,10 +99,13 @@ $db = $client->uiurp;
             cursor: pointer;
             transition: all 0.2s;
             user-select: none;
+            position: relative;
         }
 
         .tag.selected {
-            background: var(--tag-blue);
+            background-color: var(--tag-blue) !important;
+            color: #000;
+            font-weight: 500;
         }
 
         .tag:hover {
@@ -72,22 +114,37 @@ $db = $client->uiurp;
 
         .literature-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             background: white;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        .literature-table th,
-        .literature-table td {
-            padding: 12px;
-            border: 1px solid var(--notion-border);
+        .literature-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: var(--notion-gray);
         }
 
         .literature-table th {
+            position: sticky;
+            top: 0;
             background: var(--notion-gray);
-            font-weight: 500;
+            z-index: 2;
+            min-width: 200px;
+            white-space: nowrap;
+            padding: 12px 15px;
+            border-bottom: 2px solid var(--notion-border);
+        }
+
+        .literature-table td {
+            background: white;
+            min-width: 200px;
+            padding: 12px 15px;
+            border: 1px solid var(--notion-border);
+            vertical-align: top;
         }
 
         .upload-section {
@@ -159,11 +216,91 @@ $db = $client->uiurp;
         .file-actions {
             display: flex;
             align-items: center;
+            gap: 8px;
         }
 
         .cell-loading {
             background-color: var(--tag-blue);
             opacity: 0.7;
+        }
+
+        .delete-file {
+            color: #dc3545;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .delete-file:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .tag-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .last-edit-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Add loading animation */
+        .analysis-progress {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #f0f0f0;
+            border-radius: 2px;
+            margin-top: 10px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--tag-blue);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Fix table header alignment */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            position: relative;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
@@ -171,11 +308,16 @@ $db = $client->uiurp;
 <body>
     <?php include 'src/includes/navbar.php'; ?>
     <div class="container">
-        <h1 class="mb-4">Literature Matrix</h1>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Literature Matrix - <?php echo htmlspecialchars($project->title); ?></h1>
+            <a href="Project_details.php?id=<?php echo $projectId; ?>" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> Back to Project
+            </a>
+        </div>
         
         <!-- Tag Management Section -->
         <div class="mb-4">
-            <h4>Available Tags</h4>
+            <h4>Choose Your Columns</h4>
             <div class="tag-container" id="tagContainer">
                 <!-- Tags will be dynamically added here -->
             </div>
@@ -188,9 +330,15 @@ $db = $client->uiurp;
         <!-- File Upload Section -->
         <div class="upload-section">
             <h4>Upload PDF Files</h4>
-            <input type="file" id="pdfUpload" accept=".pdf" class="form-control mb-3">
-            <button class="btn btn-notion" onclick="handleFileUpload()">Upload</button>
-            <div id="fileList"></div>
+            <input type="file" id="pdfUpload" accept=".pdf" class="form-control mb-3" multiple>
+            <button class="btn btn-notion" onclick="handleFileUpload()">Upload Files</button>
+            <div id="fileList" class="mt-3"></div>
+            <div id="generateButtonContainer" class="mt-3" style="display: none;">
+                <hr class="my-3">
+                <button class="btn btn-notion" onclick="generateMatrix()" id="generateBtn">
+                    <i class="bi bi-magic"></i> Generate Matrix
+                </button>
+            </div>
         </div>
 
         <!-- Literature Matrix Table -->
@@ -224,25 +372,39 @@ $db = $client->uiurp;
 
         const GEMINI_API_KEY = 'AIzaSyBTQJjyfEL0sNGGU8xFW8Ff-KkrQQwB4rI';
         const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
+        const PROJECT_ID = '<?php echo $projectId; ?>';
+        const USER_ID = '<?php echo $userId; ?>';
+        const USER_NAME = '<?php echo $_SESSION['username']; ?>';
 
         // Available tags with different colors
-        const availableTags = [
-            { name: 'Methodology', color: 'var(--tag-blue)' },
-            { name: 'Findings', color: 'var(--tag-green)' },
-            { name: 'Research Gap', color: 'var(--tag-purple)' },
-            { name: 'Future Work', color: 'var(--tag-orange)' }
-        ];
-
-        let selectedTags = new Set();
-        let uploadedFiles = [];
+        let availableTags = <?php echo json_encode($defaultTags); ?>;
+        let selectedTags = new Set(<?php 
+            if ($literatureMatrix && isset($literatureMatrix['selectedTags'])) {
+                // Convert BSON array to PHP array first
+                $selectedTags = iterator_to_array($literatureMatrix['selectedTags']);
+                echo json_encode(array_map(function($tag) { return $tag['name']; }, $selectedTags));
+            } else {
+                echo '[]';
+            }
+        ?>);
 
         // Store PDF text content for retry functionality
         let pdfContents = new Map(); // Map to store PDF text content by filename
+        let uploadedFiles = <?php 
+            if ($literatureMatrix && isset($literatureMatrix['files'])) {
+                // Convert BSON array to PHP array
+                $files = iterator_to_array($literatureMatrix['files']);
+                echo json_encode($files);
+            } else {
+                echo '[]';
+            }
+        ?>;
 
         // Initialize the page
         function init() {
             renderTags();
             updateTable();
+            updateFileList();
         }
 
         // Render tags in the tag container
@@ -253,8 +415,16 @@ $db = $client->uiurp;
             availableTags.forEach(tag => {
                 const tagElement = document.createElement('span');
                 tagElement.className = `tag ${selectedTags.has(tag.name) ? 'selected' : ''}`;
-                tagElement.textContent = tag.name;
-                tagElement.style.backgroundColor = tag.color;
+                const indicator = document.createElement('span');
+                indicator.className = 'tag-indicator';
+                indicator.style.backgroundColor = tag.color;
+                tagElement.appendChild(indicator);
+                tagElement.appendChild(document.createTextNode(tag.name));
+                
+                // Always set a background color
+                tagElement.style.backgroundColor = selectedTags.has(tag.name) ? tag.color : '#ffffff';
+                tagElement.style.border = '1px solid ' + tag.color;
+                
                 tagElement.onclick = () => toggleTag(tag.name);
                 tagContainer.appendChild(tagElement);
             });
@@ -269,6 +439,7 @@ $db = $client->uiurp;
             }
             renderTags();
             updateTable();
+            saveToDatabase();
         }
 
         // Add new tag
@@ -281,15 +452,24 @@ $db = $client->uiurp;
                 const randomColor = colors[Math.floor(Math.random() * colors.length)];
                 
                 availableTags.push({ name: tagName, color: randomColor });
+                selectedTags.add(tagName);
                 input.value = '';
                 renderTags();
                 updateTable();
+                saveToDatabase();
             }
         }
 
-        // Function to extract text from PDF
+        // Function to extract text from PDF with chunking
         async function extractTextFromPDF(file) {
             return new Promise((resolve, reject) => {
+                // Check file size
+                const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+                if (file.size > MAX_FILE_SIZE) {
+                    reject(`File ${file.name} is too large. Maximum size is 10MB.`);
+                    return;
+                }
+
                 const reader = new FileReader();
                 reader.onload = async function(event) {
                     try {
@@ -312,188 +492,294 @@ $db = $client->uiurp;
             });
         }
 
-        // Function to analyze text with Gemini
+        // Function to analyze text with Gemini (with retry)
         async function analyzeWithGemini(text, tag) {
-            const prompt = `Analyze the following research paper text and extract information relevant to the category "${tag}". 
-                          Provide a concise summary (max 100 words) of the key points related to this category.
-                          Text: ${text}`; // Limiting text length to avoid token limits
+            const MAX_RETRIES = 3;
+            const RETRY_DELAY = 2000; // 2 seconds
+            const CHUNK_SIZE = 5000; // characters per chunk
+
+            // Split text into chunks
+            const chunks = [];
+            for (let i = 0; i < text.length; i += CHUNK_SIZE) {
+                chunks.push(text.slice(i, i + CHUNK_SIZE));
+            }
+
+            let summaries = [];
+            for (let chunk of chunks) {
+                let retries = 0;
+                while (retries < MAX_RETRIES) {
+                    try {
+                        const prompt = `Analyze this part of a research paper text and extract information relevant to the category "${tag}". 
+                                      Provide a very concise summary of the key points related to this category.
+                                      Text: ${chunk}`;
+
+                        const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                contents: [{
+                                    parts: [{
+                                        text: prompt
+                                    }]
+                                }],
+                                generationConfig: {
+                                    temperature: 0.4,
+                                    topK: 32,
+                                    topP: 0.8,
+                                    maxOutputTokens: 512,
+                                },
+                                safetySettings: [
+                                    {
+                                        category: "HARM_CATEGORY_HARASSMENT",
+                                        threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                                    },
+                                    {
+                                        category: "HARM_CATEGORY_HATE_SPEECH",
+                                        threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                                    },
+                                    {
+                                        category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                                        threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                                    },
+                                    {
+                                        category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                                        threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                                    }
+                                ]
+                            })
+                        });
+
+                        if (response.status === 429) {
+                            throw new Error('Rate limit exceeded');
+                        }
+
+                        const data = await response.json();
+                        if (data.candidates && data.candidates[0].content.parts[0].text) {
+                            summaries.push(data.candidates[0].content.parts[0].text);
+                            break; // Success, move to next chunk
+                        }
+                        throw new Error('Analysis failed');
+                    } catch (error) {
+                        retries++;
+                        if (retries === MAX_RETRIES) {
+                            console.error('Gemini API Error:', error);
+                            return "Analysis failed after multiple retries";
+                        }
+                        // Wait before retrying
+                        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+                    }
+                }
+            }
+
+            // Combine summaries
+            return summaries.join('\n\n');
+        }
+
+        // Handle file upload
+        async function handleFileUpload() {
+            const fileInput = document.getElementById('pdfUpload');
+            const files = fileInput.files;
+            
+            if (files.length === 0) {
+                alert('Please select at least one PDF file.');
+                return;
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (file.type !== 'application/pdf') {
+                    alert(`${file.name} is not a PDF file. Skipping...`);
+                    continue;
+                }
+
+                // Create FormData
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('projectId', PROJECT_ID);
+                formData.append('userId', USER_ID);
+                formData.append('userName', USER_NAME);
+
+                try {
+                    // Show loading state
+                    const loadingDiv = document.createElement('div');
+                    loadingDiv.className = 'alert alert-info';
+                    loadingDiv.innerHTML = `Uploading ${file.name}... <div class="loading-spinner"></div>`;
+                    document.getElementById('fileList').appendChild(loadingDiv);
+
+                    // Upload file
+                    const response = await fetch('src/model/upload_literature_file.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        // Extract text from PDF
+                        const text = await extractTextFromPDF(file);
+                        pdfContents.set(file.name, text);
+
+                        // Add file to uploadedFiles array
+                        uploadedFiles.push({
+                            name: file.name,
+                            path: result.filePath,
+                            uploadedAt: new Date().toISOString(),
+                            uploadedBy: {
+                                userId: USER_ID,
+                                name: USER_NAME
+                            },
+                            data: {}
+                        });
+
+                        loadingDiv.remove();
+                        updateFileList();
+                        saveToDatabase();
+                    } else {
+                        loadingDiv.className = 'alert alert-danger';
+                        loadingDiv.textContent = `Failed to upload ${file.name}: ${result.message}`;
+                    }
+                } catch (error) {
+                    console.error('Error uploading file:', error);
+                    loadingDiv.className = 'alert alert-danger';
+                    loadingDiv.textContent = `Error uploading ${file.name}`;
+                }
+            }
+
+            fileInput.value = '';
+        }
+
+        // Update generateMatrix function
+        async function generateMatrix() {
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<div class="loading-spinner"></div> Generating...';
+
+            // Create progress element
+            const progressDiv = document.createElement('div');
+            progressDiv.className = 'analysis-progress';
+            progressDiv.innerHTML = `
+                <div>Analyzing documents...</div>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" style="width: 0%"></div>
+                </div>
+                <div class="progress-text">0%</div>
+            `;
+            document.body.appendChild(progressDiv);
 
             try {
-                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                let totalOperations = uploadedFiles.length * selectedTags.size;
+                let completedOperations = 0;
+
+                for (const file of uploadedFiles) {
+                    const text = pdfContents.get(file.name);
+                    if (!text) continue;
+
+                    for (const tag of selectedTags) {
+                        const analysis = await analyzeWithGemini(text, tag);
+                        file.data[tag] = analysis;
+                        file.lastEditedBy = {
+                            userId: USER_ID,
+                            name: USER_NAME,
+                            timestamp: new Date().toISOString()
+                        };
+
+                        completedOperations++;
+                        const progress = (completedOperations / totalOperations) * 100;
+                        progressDiv.querySelector('.progress-bar-fill').style.width = `${progress}%`;
+                        progressDiv.querySelector('.progress-text').textContent = `${Math.round(progress)}%`;
+                    }
+                }
+
+                updateTable();
+                saveToDatabase();
+            } catch (error) {
+                console.error('Error generating matrix:', error);
+                alert('Error generating matrix. Please try again.');
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<i class="bi bi-magic"></i> Generate Matrix';
+                progressDiv.remove();
+            }
+        }
+
+        // Function to delete a file
+        async function deleteFile(fileName) {
+            if (!confirm(`Are you sure you want to delete ${fileName}?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch('src/model/delete_literature_file.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: prompt
-                            }]
-                        }],
-                        generationConfig: {
-                            temperature: 0.4, // Lower temperature for more focused responses
-                            topK: 32,
-                            topP: 0.8,
-                            maxOutputTokens: 512, // Adjusted for flash model
-                        },
-                        safetySettings: [
-                            {
-                                category: "HARM_CATEGORY_HARASSMENT",
-                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
-                            },
-                            {
-                                category: "HARM_CATEGORY_HATE_SPEECH",
-                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
-                            },
-                            {
-                                category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
-                            },
-                            {
-                                category: "HARM_CATEGORY_DANGEROUS_CONTENT",
-                                threshold: "BLOCK_MEDIUM_AND_ABOVE"
-                            }
-                        ]
+                        projectId: PROJECT_ID,
+                        fileName: fileName
                     })
                 });
-                console.log(response);
-                const data = await response.json();
-                console.log(data);
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    return data.candidates[0].content.parts[0].text;
-                }
-                return "Analysis failed";
-            } catch (error) {
-                console.error('Gemini API Error:', error);
-                return "Analysis failed";
-            }
-        }
 
-        // Modified handleFileUpload function to store PDF content
-        async function handleFileUpload() {
-            const fileInput = document.getElementById('pdfUpload');
-            const file = fileInput.files[0];
-            
-            if (file && file.type === 'application/pdf') {
-                try {
-                    // Show loading state
-                    const loadingDiv = document.createElement('div');
-                    loadingDiv.className = 'alert alert-info';
-                    loadingDiv.textContent = `Analyzing ${file.name}...`;
-                    document.getElementById('fileList').appendChild(loadingDiv);
-
-                    // Extract text from PDF
-                    const text = await extractTextFromPDF(file);
-                    
-                    // Store PDF content for later use
-                    pdfContents.set(file.name, text);
-                    
-                    // Analyze text for each selected tag
-                    const fileData = {
-                        name: file.name,
-                        data: {}
-                    };
-
-                    for (const tag of selectedTags) {
-                        loadingDiv.textContent = `Analyzing ${file.name} for ${tag}...`;
-                        const analysis = await analyzeWithGemini(text, tag);
-                        fileData.data[tag] = analysis;
-                    }
-
-                    uploadedFiles.push(fileData);
-                    
-                    // Remove loading state
-                    loadingDiv.remove();
-                    
-                    // Update UI
+                const result = await response.json();
+                if (result.success) {
+                    uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+                    pdfContents.delete(fileName);
                     updateFileList();
                     updateTable();
-                    fileInput.value = '';
-
-                } catch (error) {
-                    console.error('Error processing file:', error);
-                    alert('Error processing file. Please try again.');
+                    saveToDatabase();
+                } else {
+                    alert(`Failed to delete ${fileName}: ${result.message}`);
                 }
-            }
-        }
-
-        // Function to retry analysis for a specific file
-        async function retryAnalysis(fileName) {
-            const text = pdfContents.get(fileName);
-            if (!text) {
-                alert('PDF content not found. Please upload the file again.');
-                return;
-            }
-
-            // Find the file in uploadedFiles
-            const fileIndex = uploadedFiles.findIndex(f => f.name === fileName);
-            if (fileIndex === -1) return;
-
-            // Update retry button state
-            const retryButton = document.querySelector(`[data-filename="${fileName}"]`);
-            if (retryButton) {
-                retryButton.classList.add('loading');
-                retryButton.disabled = true;
-                retryButton.textContent = 'Analyzing...';
-            }
-
-            // Add loading state to cells
-            const cells = document.querySelectorAll(`td[data-filename="${fileName}"]`);
-            cells.forEach(cell => cell.classList.add('cell-loading'));
-
-            try {
-                // Re-analyze for each selected tag
-                for (const tag of selectedTags) {
-                    const analysis = await analyzeWithGemini(text, tag);
-                    uploadedFiles[fileIndex].data[tag] = analysis;
-                }
-
-                // Update UI
-                updateTable();
             } catch (error) {
-                console.error('Error retrying analysis:', error);
-                alert('Error retrying analysis. Please try again.');
-            } finally {
-                // Reset retry button state
-                if (retryButton) {
-                    retryButton.classList.remove('loading');
-                    retryButton.disabled = false;
-                    retryButton.textContent = 'Retry Analysis';
-                }
-                // Remove loading state from cells
-                cells.forEach(cell => cell.classList.remove('cell-loading'));
+                console.error('Error deleting file:', error);
+                alert(`Error deleting ${fileName}`);
             }
         }
 
-        // Modified updateFileList function to include retry button
+        // Update file list
         function updateFileList() {
             const fileList = document.getElementById('fileList');
+            const generateButtonContainer = document.getElementById('generateButtonContainer');
             fileList.innerHTML = '';
 
-            uploadedFiles.forEach(file => {
-                const fileItem = document.createElement('div');
-                fileItem.className = 'file-item';
-                
-                const fileName = document.createElement('span');
-                fileName.textContent = file.name;
-                
-                const fileActions = document.createElement('div');
-                fileActions.className = 'file-actions';
-                
-                const retryButton = document.createElement('button');
-                retryButton.className = 'retry-button';
-                retryButton.textContent = 'Retry Analysis';
-                retryButton.setAttribute('data-filename', file.name);
-                retryButton.onclick = () => retryAnalysis(file.name);
-                
-                fileActions.appendChild(retryButton);
-                fileItem.appendChild(fileName);
-                fileItem.appendChild(fileActions);
-                fileList.appendChild(fileItem);
-            });
+            if (uploadedFiles.length > 0) {
+                uploadedFiles.forEach(file => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    
+                    const fileName = document.createElement('span');
+                    fileName.textContent = file.name;
+                    
+                    const fileActions = document.createElement('div');
+                    fileActions.className = 'file-actions';
+                    
+                    const retryButton = document.createElement('button');
+                    retryButton.className = 'retry-button';
+                    retryButton.textContent = 'Retry Analysis';
+                    retryButton.setAttribute('data-filename', file.name);
+                    retryButton.onclick = () => retryAnalysis(file.name);
+                    
+                    const deleteButton = document.createElement('i');
+                    deleteButton.className = 'bi bi-x-circle delete-file';
+                    deleteButton.onclick = () => deleteFile(file.name);
+                    
+                    fileActions.appendChild(retryButton);
+                    fileActions.appendChild(deleteButton);
+                    fileItem.appendChild(fileName);
+                    fileItem.appendChild(fileActions);
+                    fileList.appendChild(fileItem);
+                });
+
+                // Show generate button container if there are files
+                generateButtonContainer.style.display = 'block';
+            } else {
+                // Hide generate button container if no files
+                generateButtonContainer.style.display = 'none';
+            }
         }
 
-        // Modified updateTable function to add data attributes
+        // Update table
         function updateTable() {
             const header = document.getElementById('tableHeader');
             const body = document.getElementById('tableBody');
@@ -517,8 +803,27 @@ $db = $client->uiurp;
                     td.contentEditable = true;
                     td.textContent = file.data[tag] || '';
                     td.setAttribute('data-filename', file.name);
+                    td.setAttribute('data-tag', tag);
+                    
+                    // Add last edit info if available
+                    if (file.lastEditedBy) {
+                        const lastEditInfo = document.createElement('div');
+                        lastEditInfo.className = 'last-edit-info';
+                        lastEditInfo.textContent = `Last edited by ${file.lastEditedBy.name} on ${new Date(file.lastEditedBy.timestamp).toLocaleString()}`;
+                        td.appendChild(lastEditInfo);
+                    }
+                    
                     td.onblur = (e) => {
-                        file.data[tag] = e.target.textContent;
+                        const fileObj = uploadedFiles.find(f => f.name === file.name);
+                        if (fileObj) {
+                            fileObj.data[tag] = e.target.textContent;
+                            fileObj.lastEditedBy = {
+                                userId: USER_ID,
+                                name: USER_NAME,
+                                timestamp: new Date().toISOString()
+                            };
+                            saveToDatabase();
+                        }
                     };
                     row.appendChild(td);
                 });
@@ -527,15 +832,77 @@ $db = $client->uiurp;
             });
         }
 
+        // Save to database
+        async function saveToDatabase() {
+            try {
+                // Convert selectedTags Set to array of objects
+                const selectedTagsArray = Array.from(selectedTags).map(tagName => {
+                    const existingTag = availableTags.find(t => t.name === tagName);
+                    return {
+                        name: tagName,
+                        color: existingTag ? existingTag.color : 'var(--tag-blue)'
+                    };
+                });
+
+                // Clean up files data before sending
+                const cleanFiles = uploadedFiles.map(file => {
+                    // Create a clean copy without any functions or complex objects
+                    return {
+                        name: String(file.name),
+                        path: String(file.path || ''),
+                        uploadedAt: String(file.uploadedAt || new Date().toISOString()),
+                        uploadedBy: {
+                            userId: String(file.uploadedBy?.userId || USER_ID),
+                            name: String(file.uploadedBy?.name || USER_NAME)
+                        },
+                        data: Object.fromEntries(
+                            Object.entries(file.data || {}).map(([key, value]) => [key, String(value || '')])
+                        ),
+                        lastEditedBy: file.lastEditedBy ? {
+                            userId: String(file.lastEditedBy.userId),
+                            name: String(file.lastEditedBy.name),
+                            timestamp: String(file.lastEditedBy.timestamp)
+                        } : null
+                    };
+                });
+
+                const response = await fetch('src/model/save_literature_matrix.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        projectId: String(PROJECT_ID),
+                        selectedTags: selectedTagsArray,
+                        files: cleanFiles
+                    })
+                });
+
+                const result = await response.json();
+                if (!result.success) {
+                    throw new Error(result.message || 'Failed to save changes');
+                }
+            } catch (error) {
+                console.error('Failed to save to database:', error);
+                alert('Failed to save changes. Please try again.');
+            }
+        }
+
         // Export table to Excel
         function exportTable() {
             const table = document.getElementById('literatureTable');
             const wb = XLSX.utils.table_to_book(table, { sheet: "Literature Matrix" });
-            XLSX.writeFile(wb, "literature_matrix.xlsx");
+            XLSX.writeFile(wb, `literature_matrix_${PROJECT_ID}.xlsx`);
         }
 
-        // Initialize the page when loaded
-        window.onload = init;
+        // Initialize with some default selected tags
+        window.onload = function() {
+            // Select some default tags
+            ['Publication Year', 'Research Aim / Objective', 'Methodology', 'Findings'].forEach(tagName => {
+                selectedTags.add(tagName);
+            });
+            init();
+        };
     </script>
 </body>
 </html>
