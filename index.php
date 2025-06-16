@@ -6370,11 +6370,11 @@ session_start();
         </div>
         
         <div class="text-center mt-5" data-aos="fade-up">
-            <a href="javascript:void(0)" class="neo-button primary calendar-button view-calendar-btn me-3">
+            <!--<a href="javascript:void(0)" class="neo-button primary calendar-button view-calendar-btn me-3">
                 <span class="button-content">View Full Calendar</span>
                 <span class="button-icon"><i class="bi bi-calendar-week"></i></span>
                 <div class="button-glow"></div>
-            </a>
+            </a>-->
             <a href="events.php" class="neo-button secondary">
                 <span class="button-content">Explore All Events</span>
                 <span class="button-icon"><i class="bi bi-arrow-right"></i></span>

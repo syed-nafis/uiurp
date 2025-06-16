@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (addBtn && container) {
         addBtn.addEventListener('click', function () {
             const newResource = document.createElement('div');
-            newResource.classList.add('mb-3', 'border', 'rounded', 'p-3', 'bg-light', 'resource-block');
+            newResource.classList.add('mb-3', 'p-3', 'resource-block');
 
             newResource.innerHTML = `
                 <label class="form-label">Topic:</label>

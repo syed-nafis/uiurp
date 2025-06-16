@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (addProjectBtn && projectsContainer) {
         addProjectBtn.addEventListener('click', function () {
             const newProject = document.createElement('div');
-            newProject.classList.add('mb-3', 'border', 'rounded', 'p-3', 'bg-light', 'project-block');
+            newProject.classList.add('mb-3', 'p-3', 'project-block');
 
             newProject.innerHTML = `
                 <label class="form-label">Title:</label>

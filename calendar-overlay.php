@@ -154,12 +154,12 @@ foreach ($allEvents as $event) {
 
 .calendar-overlay-content {
     position: relative;
-    width: 90%;
-    max-width: 1200px;
-    margin: 40px auto;
+    width: 80%;
+    max-width: 900px;
+    margin: 30px auto;
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
-    border-radius: 24px;
-    padding: 32px;
+    border-radius: 20px;
+    padding: 20px;
     box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.75), 
                 0 0 0 1px rgba(255, 255, 255, 0.12),
                 inset 0 0 0 1px rgba(255, 255, 255, 0.05),
@@ -169,7 +169,8 @@ foreach ($allEvents as $event) {
     transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), 
                 opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow: hidden;
+    overflow-y: auto;
+    max-height: 85vh;
     filter: blur(5px);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -214,8 +215,8 @@ foreach ($allEvents as $event) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 28px;
-    padding-bottom: 18px;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
     position: relative;
 }
 
@@ -238,7 +239,7 @@ foreach ($allEvents as $event) {
 .calendar-header h3 {
     color: #fff;
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 800;
     letter-spacing: -0.5px;
     background: linear-gradient(135deg, #4cc9f0 0%, #7209b7 100%);
@@ -337,30 +338,156 @@ foreach ($allEvents as $event) {
 /* Enhanced FullCalendar Custom Styling */
 #fullCalendar {
     background: rgba(30, 41, 59, 0.4);
-    border-radius: 20px;
-    padding: 24px 24px 30px; /* Added more bottom padding */
+    border-radius: 18px;
+    padding: 15px 15px 20px; 
     color: #fff;
     box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.4), 
                 inset 0 0 0 1px rgba(255, 255, 255, 0.08),
                 inset 0 0 20px rgba(0, 0, 0, 0.2);
     transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-    min-height: 650px; /* Increased minimum height */
-    max-height: 80vh; /* Increased maximum height */
-    overflow: hidden;
+    min-height: auto; /* Allow natural height */
+    max-height: none; /* Remove max height constraint */
+    overflow: visible; /* Allow content to flow naturally */
     position: relative;
     z-index: 1;
 }
 
 /* Ensure consistent display for view containers */
 #fullCalendar .fc-view-harness {
-    min-height: 550px !important;
+    min-height: auto !important; /* Allow natural height */
     height: auto !important;
-    margin-bottom: 15px !important; /* Added spacing at bottom of view */
+    margin-bottom: 15px !important;
 }
 
-/* Add space after the last row */
-#fullCalendar .fc-daygrid-body {
-    padding-bottom: 15px !important;
+/* Allow table to expand properly */
+#fullCalendar table,
+#fullCalendar .fc-scrollgrid-sync-table {
+    height: auto !important;
+    width: 100% !important;
+}
+
+/* Ensure cells can expand to fit content */
+#fullCalendar .fc-scrollgrid-sync-table > tbody > tr {
+    height: auto !important;
+    min-height: 100px !important;
+}
+
+/* Make sure the last row is fully visible */
+#fullCalendar .fc-scrollgrid-sync-table > tbody > tr:last-child {
+    height: auto !important;
+    min-height: 100px !important;
+}
+
+/* Make day frames fill cell height dynamically */
+#fullCalendar .fc-scrollgrid-sync-table > tbody > tr > td {
+    height: auto !important;
+    min-height: 100px !important;
+    vertical-align: top;
+    padding-bottom: 5px;
+}
+
+/* Ensure proper cell sizing and day cell body */
+#fullCalendar .fc-daygrid-day-frame {
+    min-height: 100px !important;
+    height: auto !important;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* Apply proper height to day cells */
+#fullCalendar .fc-daygrid-day {
+    height: auto !important;
+    min-height: 100px !important;
+}
+
+/* Calendar overlay animation for mobile */
+@media (max-width: 768px) {
+    .calendar-overlay-content {
+        width: 95%;
+        margin: 10px auto;
+        padding: 12px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    #fullCalendar {
+        padding: 8px;
+        min-height: auto;
+    }
+    
+    #fullCalendar .fc-toolbar {
+        margin-bottom: 1rem !important;
+    }
+    
+    #fullCalendar .fc-toolbar-title {
+        font-size: 1.1rem !important;
+    }
+    
+    .calendar-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    #fullCalendar .fc-daygrid-day,
+    #fullCalendar .fc-daygrid-day-frame {
+        min-height: 70px !important;
+    }
+    
+    /* Stack toolbar on smaller screens */
+    #fullCalendar .fc-toolbar {
+        flex-wrap: wrap;
+    }
+    
+    #fullCalendar .fc-toolbar-chunk {
+        margin: 5px 0;
+        flex: 1 0 100%;
+        display: flex;
+        justify-content: center;
+    }
+    
+    /* Ensure buttons fit nicely on small screens */
+    #fullCalendar .fc-toolbar-chunk:first-child {
+        order: 2;
+    }
+    
+    #fullCalendar .fc-toolbar-chunk:nth-child(2) {
+        order: 1;
+    }
+    
+    #fullCalendar .fc-toolbar-chunk:last-child {
+        order: 3;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 576px) {
+    .calendar-overlay-content {
+        width: 98%;
+        padding: 10px;
+        margin: 5px auto;
+    }
+    
+    #fullCalendar {
+        padding: 5px;
+    }
+    
+    /* Adjust cell sizes for very small screens */
+    #fullCalendar .fc-col-header-cell-cushion {
+        padding: 4px;
+        font-size: 0.7rem;
+    }
+    
+    #fullCalendar .fc-daygrid-day-number {
+        min-width: 22px;
+        height: 22px;
+        font-size: 0.7rem;
+    }
+    
+    #fullCalendar .fc-daygrid-day,
+    #fullCalendar .fc-daygrid-day-frame {
+        min-height: 60px !important;
+    }
 }
 
 /* Ensure consistent spacing for month view */
@@ -1116,79 +1243,6 @@ foreach ($allEvents as $event) {
     0% { background-position: -100% 0; }
     100% { background-position: 200% 0; }
 }
-
-/* Calendar overlay animation for mobile */
-@media (max-width: 768px) {
-    .calendar-overlay-content {
-        width: 95%;
-        margin: 20px auto;
-        padding: 15px;
-    }
-    
-    #fullCalendar {
-        padding: 10px;
-        min-height: 450px;
-    }
-    
-    #fullCalendar .fc-toolbar-title {
-        font-size: 1.2rem !important;
-    }
-    
-    .calendar-header h3 {
-        font-size: 1.4rem;
-    }
-    
-    #fullCalendar .fc-daygrid-day {
-        min-height: 80px;
-    }
-}
-
-/* Ensure responsive design on mobile */
-@media (max-width: 576px) {
-    #fullCalendar .fc-toolbar {
-        flex-direction: column !important;
-        gap: 10px;
-    }
-    
-    #fullCalendar .fc-toolbar-chunk {
-        justify-content: center;
-        width: 100%;
-    }
-    
-    #fullCalendar .fc-toolbar-chunk:first-child {
-        margin-bottom: 10px;
-    }
-    
-    #fullCalendar .fc-toolbar-chunk:last-child {
-        margin-top: 10px;
-    }
-    
-    #fullCalendar .fc-today-button {
-        width: 80px;
-    }
-    
-    #fullCalendar .fc-daygrid-day-number {
-        min-width: 25px;
-        height: 25px;
-        font-size: 0.7rem;
-    }
-    
-    #fullCalendar .fc-col-header-cell-cushion {
-        padding: 5px;
-        font-size: 0.7rem;
-    }
-    
-    #fullCalendar .fc-event {
-        padding: 2px 4px;
-        font-size: 0.65rem;
-    }
-    
-    #fullCalendar .fc-event::before {
-        width: 6px;
-        height: 6px;
-        margin-right: 3px;
-    }
-}
 </style>
 
 <!-- Enhanced Calendar JavaScript -->
@@ -1251,8 +1305,12 @@ foreach ($allEvents as $event) {
             window.location.href = `events.php?event_id=${info.event.id}`;
                 }, 300);
         },
-            height: 'auto',
-            contentHeight: 'auto',
+        height: 'auto', // Allow calendar to determine its own best height
+        contentHeight: 'auto', // Let content dictate height
+        aspectRatio: 1.35, // Wider aspect ratio for better display
+        expandRows: true, // Expand rows to fill height
+        // Set sizing to adapt to container
+        stickyHeaderDates: false,
             // Add animation to day cells
             dayCellDidMount: function(info) {
                 // Add subtle animation delay based on date for staggered effect
@@ -1272,6 +1330,10 @@ foreach ($allEvents as $event) {
                     info.el.style.transform = 'translateY(0)';
                 }, 100 + Math.random() * 400); // Staggered animation
             },
+        windowResize: function(view) {
+            // Update layout on window resize
+            calendar.updateSize();
+        },
             themSystem: 'standard'
         });
         
@@ -1292,6 +1354,7 @@ foreach ($allEvents as $event) {
             // Ensure calendar is rendered and events are visible
             setTimeout(() => {
                 calendar.render();
+                calendar.updateSize(); // Force size update
                     
                     // Add particle effects
                     createParticles();
@@ -1299,6 +1362,13 @@ foreach ($allEvents as $event) {
             
             document.body.style.overflow = 'hidden';
         });
+    });
+    
+    // Handle resize events
+    window.addEventListener('resize', function() {
+        if (calendarOverlay.classList.contains('active')) {
+            calendar.updateSize();
+        }
     });
     
         // Enhanced close calendar overlay with animations
@@ -1404,4 +1474,33 @@ foreach ($allEvents as $event) {
         initializeCalendar();
     }
 })();
+</script>
+
+<!-- Add a script to ensure proper calendar sizing -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Create a resize observer to adjust calendar size when its container changes
+    if (typeof ResizeObserver !== 'undefined') {
+        const calendarContainer = document.getElementById('fullCalendar');
+        if (calendarContainer) {
+            const resizeObserver = new ResizeObserver(entries => {
+                // When container size changes, dispatch resize event to update calendar
+                window.dispatchEvent(new Event('resize'));
+            });
+            
+            // Start observing the calendar container
+            resizeObserver.observe(calendarContainer);
+        }
+    }
+    
+    // Add extra handling for calendar overlay size
+    const calendarOverlay = document.getElementById('calendarOverlay');
+    if (calendarOverlay) {
+        calendarOverlay.addEventListener('transitionend', function() {
+            if (calendarOverlay.classList.contains('active')) {
+                window.dispatchEvent(new Event('resize'));
+            }
+        });
+    }
+});
 </script> 

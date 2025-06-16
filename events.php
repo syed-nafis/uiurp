@@ -350,6 +350,7 @@ function isEventCreator($event) {
             transition: all 0.3s ease;
             height: 52px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            width: 100%;
         }
         
         .filter-group:hover, .filter-group:focus-within {
@@ -365,6 +366,10 @@ function isEventCreator($event) {
             padding: 0.75rem 1rem;
             transition: all 0.3s ease;
             height: 50px;
+            width: 100%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
         }
         
         .input-group-text {
@@ -385,6 +390,7 @@ function isEventCreator($event) {
         .filter-input::placeholder {
             color: var(--text-muted);
             opacity: 0.7;
+            text-overflow: ellipsis;
         }
         
         .filter-select option {
@@ -397,45 +403,53 @@ function isEventCreator($event) {
             background: var(--primary-gradient);
             border: none;
             border-radius: 12px;
-            padding: 0.75rem 1.5rem;
+            padding: 0;
             font-weight: 600;
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             overflow: hidden;
             position: relative;
             z-index: 1;
             color: white;
-            height: 52px;
+            height: 50px;
+            width: 50px;
             box-shadow: 0 4px 12px rgba(76, 201, 240, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
+            white-space: nowrap;
+            min-width: 0;
         }
 
         .create-btn {
             background: var(--secondary-gradient);
             border: none;
             border-radius: 12px;
-            padding: 0.75rem 1.5rem;
+            padding: 0;
             font-weight: 600;
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             overflow: hidden;
             position: relative;
             z-index: 1;
             color: white;
-            height: 52px;
+            height: 50px;
+            width: 50px;
             box-shadow: 0 4px 12px rgba(247, 37, 133, 0.15);
-            flex-shrink: 0;
-            width: auto;
-            min-width: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
+            white-space: nowrap;
         }
         
         .view-calendar-btn {
             background: linear-gradient(135deg, #4c9af1 0%, #4361ee 100%);
             border: none;
             margin-right: 10px;
+        }
+
+        .filter-btn i, .create-btn i {
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            font-size: 1.2rem;
         }
 
         .filter-btn::before, .create-btn::before {
@@ -468,10 +482,18 @@ function isEventCreator($event) {
 
         .filter-btn i, .create-btn i {
             transition: transform 0.3s ease;
+            flex-shrink: 0;
         }
 
         .filter-btn:hover i, .create-btn:hover i {
             transform: scale(1.2);
+        }
+
+        .btn-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-left: 5px;
         }
         
         /* Active Filters */
@@ -497,10 +519,18 @@ function isEventCreator($event) {
             margin: 0 0.5rem 0.5rem 0;
             font-size: 0.85rem;
             transition: all 0.3s ease;
+            max-width: 200px;
+            overflow: hidden;
         }
         
         .active-filter-badge:hover {
             background: rgba(76, 201, 240, 0.1);
+        }
+
+        .filter-badge-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .filter-remove {
@@ -510,6 +540,7 @@ function isEventCreator($event) {
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
         
         .filter-remove:hover {
@@ -528,14 +559,13 @@ function isEventCreator($event) {
         }
         
         @media (max-width: 576px) {
-            .create-btn {
-                padding: 0;
-                width: 52px;
-                min-width: 52px;
+            .create-btn, .filter-btn {
+                width: 44px;
+                height: 44px;
             }
             
-            .create-btn i {
-                margin-right: 0 !important;
+            .filter-btn i, .create-btn i {
+                font-size: 1rem;
             }
             
             .active-filters {
@@ -550,11 +580,32 @@ function isEventCreator($event) {
                 margin-bottom: 1rem;
             }
         }
+
+        /* Button layout for small and medium screens */
+        @media (max-width: 1199px) {
+            .buttons-wrapper {
+                justify-content: flex-end;
+            }
+        }
         
         /* Media queries for responsive filters */
         @media (max-width: 991px) {
-            .filter-btn, .create-btn {
-                margin-top: 0.5rem;
+            .buttons-wrapper {
+                display: flex;
+                width: 100%;
+                gap: 10px;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .buttons-wrapper {
+                justify-content: center;
             }
         }
 
@@ -1388,17 +1439,18 @@ function isEventCreator($event) {
                             </div>
                         </div>
                         
-                        <div class="col-lg-3 col-md-6 d-flex">
-                            <button type="submit" class="filter-btn ripple me-2 flex-grow-1">
-                                <i class="bi bi-funnel me-2"></i>Apply Filters
+                        <div class="col-lg-3 col-md-12">
+                            <div class="buttons-wrapper d-flex">
+                                <button type="submit" class="filter-btn ripple me-2" title="Apply Filters">
+                                    <i class="bi bi-funnel"></i>
                             </button>
                             <button type="button" class="filter-btn view-calendar-btn ripple me-2" title="View Calendar">
-                                <i class="bi bi-calendar-week me-2"></i>Calendar
+                                    <i class="bi bi-calendar-week"></i>
                             </button>
                             <a href="create_event.php" class="create-btn ripple" title="Create New Event">
-                                <i class="bi bi-plus-lg me-md-2"></i>
-                                <span class="d-none d-sm-inline">Create Event</span>
+                                    <i class="bi bi-plus-lg"></i>
                             </a>
+                            </div>
                         </div>
                     </div>
                     
@@ -1410,7 +1462,7 @@ function isEventCreator($event) {
                             <?php if ($searchTerm): ?>
                             <span class="active-filter-badge">
                                 <i class="bi bi-search me-1"></i>
-                                "<?= htmlspecialchars($searchTerm) ?>"
+                                <span class="filter-badge-text">"<?= htmlspecialchars($searchTerm) ?>"</span>
                                 <a href="?<?= http_build_query(array_merge($_GET, ['search' => ''])) ?>" class="filter-remove">
                                     <i class="bi bi-x"></i>
                                 </a>
@@ -1420,7 +1472,7 @@ function isEventCreator($event) {
                             <?php if ($eventType): ?>
                             <span class="active-filter-badge">
                                 <i class="bi bi-tag me-1"></i>
-                                <?= htmlspecialchars($eventType) ?>
+                                <span class="filter-badge-text"><?= htmlspecialchars($eventType) ?></span>
                                 <a href="?<?= http_build_query(array_merge($_GET, ['type' => ''])) ?>" class="filter-remove">
                                     <i class="bi bi-x"></i>
                                 </a>
@@ -1430,7 +1482,7 @@ function isEventCreator($event) {
                             <?php if ($status): ?>
                             <span class="active-filter-badge">
                                 <i class="bi bi-flag me-1"></i>
-                                <?= htmlspecialchars($status) ?>
+                                <span class="filter-badge-text"><?= htmlspecialchars($status) ?></span>
                                 <a href="?<?= http_build_query(array_merge($_GET, ['status' => ''])) ?>" class="filter-remove">
                                     <i class="bi bi-x"></i>
                                 </a>

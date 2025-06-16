@@ -29,11 +29,7 @@
                     <button id="collapseProjects" class="panel-collapse-btn" title="Toggle projects panel">
                         <i class="bi bi-chevron-left"></i>
                     </button>
-                    <div class="loading-spinner chat-spinner" id="chatGroupsLoading">
-                        <div class="spinner-border text-primary spinner-border-sm" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
+                    <div class="loading-spinner chat-spinner" id="chatGroupsLoading" aria-label="Loading projects..."></div>
                 </div>
             </div>
             <div class="groups-list" id="projectChatGroups">
@@ -67,10 +63,7 @@
                     </button>
                 </div>
                 <div id="sendingIndicator" class="sending-indicator">
-                    <span>Sending...</span>
-                    <div class="spinner-border text-primary spinner-border-sm" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
+                    <span>Sending</span>
                 </div>
                 <!-- File Preview Container -->
                 <div id="filePreviewContainer" class="file-preview-container">
@@ -98,11 +91,7 @@
                     <button id="collapseMembers" class="panel-collapse-btn" title="Toggle members panel">
                         <i class="bi bi-chevron-right"></i>
                     </button>
-                    <div class="loading-spinner chat-spinner" id="membersPanelLoading">
-                        <div class="spinner-border text-primary spinner-border-sm" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
+                    <div class="loading-spinner chat-spinner" id="membersPanelLoading" aria-label="Loading members..."></div>
                 </div>
             </div>
             
@@ -451,15 +440,36 @@
     background: rgba(var(--primary-rgb), 0.15);
 }
 
-/* Chat spinner */
+/* Chat spinner - Simplified */
 .chat-spinner {
     width: 20px;
     height: 20px;
     display: none;
+    position: relative;
 }
 
 .chat-spinner.active {
-    display: flex;
+    display: block;
+}
+
+.chat-spinner::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    top: 50%;
+    left: 50%;
+    margin-top: -4px;
+    margin-left: -4px;
+    background-color: var(--neo-primary);
+    border-radius: 50%;
+    opacity: 0.7;
+    animation: pulse-minimal 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse-minimal {
+    0%, 100% { transform: scale(0.8); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 0.9; }
 }
 
 /* Chat Container */
@@ -1224,22 +1234,39 @@
     font-size: 14px;
 }
 
-/* Sending indicator */
+/* Sending indicator - Simplified */
 .sending-indicator {
     display: none;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
     padding: 4px 0;
     color: var(--text-secondary);
     font-size: 12px;
+    letter-spacing: 0.5px;
 }
 
 .sending-indicator.active {
-    display: flex;
+    display: block;
 }
 
 .sending-indicator span {
-    margin-right: 6px;
+    position: relative;
+}
+
+.sending-indicator span::after {
+    content: "...";
+    position: absolute;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    animation: ellipsis-dot 1.2s infinite;
+    width: 0;
+}
+
+@keyframes ellipsis-dot {
+    0% { width: 0; }
+    33% { width: 0.3em; }
+    66% { width: 0.6em; }
+    100% { width: 0.9em; }
 }
 
 /* File preview styling */
@@ -4158,12 +4185,15 @@ body.chat-pinned .full-width-bg {
             const messageLoading = document.createElement('div');
             messageLoading.className = 'loading-spinner chat-spinner active text-center my-3';
             messageLoading.id = 'messageLoading';
-            messageLoading.innerHTML = `
-                <div class="spinner-border text-primary spinner-border-sm" role="status">
-                    <span class="visually-hidden">Loading messages...</span>
-                </div>
-                <div class="text-muted small mt-1">Loading messages...</div>
-            `;
+            messageLoading.setAttribute('aria-label', 'Loading messages...');
+            
+            // Add simple text indicator
+            const loadingText = document.createElement('div');
+            loadingText.className = 'text-muted small mt-2';
+            loadingText.textContent = 'Loading';
+            loadingText.style.fontSize = '11px';
+            loadingText.style.opacity = '0.7';
+            messageLoading.appendChild(loadingText);
             
             // Only add loading indicator if it's the first load
             if (isFirstLoad) {
