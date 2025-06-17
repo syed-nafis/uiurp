@@ -71,7 +71,7 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
                     <span class="nav-highlight"></span>
                 </a>
                 
-                <a href="forum_index.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'forum_index.php' ? 'active' : ''; ?>">
+                <a href="view_posts.php" class="nav-item <?= basename($_SERVER['PHP_SELF']) == 'view_posts.php' ? 'active' : ''; ?>">
                     <span class="nav-icon"><i class="bi bi-chat-square-text"></i></span>
                     <span class="nav-text">Forum</span>
                     <span class="nav-highlight"></span>

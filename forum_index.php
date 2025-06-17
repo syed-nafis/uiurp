@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . '/vendor/autoload.php'; // Updated path to Composer's autoloader
-
+session_start();
 $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
 $collection = $client->uiurp->forum_posts;
 
