@@ -39,6 +39,11 @@ session_start();
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FullCalendar styles and scripts -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    
     <style>
         :root {
             /* Core colors */
@@ -6051,552 +6056,785 @@ session_start();
             margin: 0 auto;
         }
     }
-    </style>
+</style>
 
-    <!-- Futuristic Research Events Section -->
-    <section class="events-section section-padding">
-        <!-- Futuristic background elements -->
-        <div class="events-bg-grid"></div>
-        <div class="events-orb orb-1"></div>
-        <div class="events-orb orb-2"></div>
-        <div class="events-glow-effect"></div>
-        
-        <div class="container position-relative">
-            <div class="section-header text-center mb-5" data-aos="fade-up">
-                <div class="badge-wrapper d-flex justify-content-center mb-3">
-                    <span class="neo-badge event-badge"><i class="bi bi-calendar-event me-2"></i>Upcoming Opportunities</span>
-                    </div>
-                <h2 class="futuristic-title">Research <span class="text-gradient">Events</span></h2>
-                <p class="section-subtitle mx-auto">Discover symposiums, workshops, and networking opportunities to expand your research horizons</p>
-                <div class="title-underline mx-auto"></div>
-            </div>
+<!-- Futuristic Research Events Section -->
+<section class="events-section section-padding">
+    <!-- Futuristic background elements -->
+    <div class="events-bg-grid"></div>
+    <div class="events-orb orb-1"></div>
+    <div class="events-orb orb-2"></div>
+    <div class="events-glow-effect"></div>
+    
+    <?php
+    // Include MongoDB autoloader if not already included
+    if (!class_exists('MongoDB\Client')) {
+        require __DIR__ . '/vendor/autoload.php';
+    }
+
+    // Function to connect to MongoDB and get random events
+    function getRandomEventsFromMongoDB($limit = 3) {
+        try {
+            $mongoClient = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
+            $db = $mongoClient->uiurp;
+            $collection = $db->events;
             
-            <div class="row g-4 event-timeline">
-                <!-- Event 1 -->
-                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up">
-                    <div class="neo-event-card">
-                        <div class="card-border"></div>
-                        <div class="card-glow"></div>
+            // Get all events
+            $allEvents = $collection->find([])->toArray();
+            
+            // If we have events, select random ones
+            if (count($allEvents) > 0) {
+                // Shuffle the array of events
+                shuffle($allEvents);
+                
+                // Take the first $limit events
+                $randomEvents = array_slice($allEvents, 0, $limit);
+                
+                // Convert MongoDB document to arrays and format dates
+                $formattedEvents = [];
+                foreach ($randomEvents as $event) {
+                    $eventArray = json_decode(json_encode($event), true);
+                    
+                    // Helper function to convert MongoDB date
+                    $convertDate = function($dateValue) {
+                        if (is_array($dateValue) && isset($dateValue['$date'])) {
+                            if (is_array($dateValue['$date']) && isset($dateValue['$date']['$numberLong'])) {
+                                return date('Y-m-d\TH:i:s\Z', intval($dateValue['$date']['$numberLong']) / 1000);
+                            } elseif (is_numeric($dateValue['$date'])) {
+                                return date('Y-m-d\TH:i:s\Z', $dateValue['$date'] / 1000);
+                            }
+                        }
+                        return $dateValue;
+                    };
+                    
+                    // Convert MongoDB UTCDateTime objects to readable dates
+                    if (isset($eventArray['eventDate'])) {
+                        $eventArray['eventDate'] = $convertDate($eventArray['eventDate']);
+                    }
+                    
+                    $formattedEvents[] = $eventArray;
+                }
+                
+                return $formattedEvents;
+            }
+            
+            return [];
+        } catch (Exception $e) {
+            error_log("Error fetching random events: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    // Get 3 random events
+    $randomEvents = getRandomEventsFromMongoDB(3);
+    ?>
+    
+    <div class="container position-relative">
+        <div class="section-header text-center mb-5" data-aos="fade-up">
+            <div class="badge-wrapper d-flex justify-content-center mb-3">
+                <span class="neo-badge event-badge"><i class="bi bi-calendar-event me-2"></i>Upcoming Opportunities</span>
+                </div>
+            <h2 class="futuristic-title">Research <span class="text-gradient">Events</span></h2>
+            <p class="section-subtitle mx-auto">Discover symposiums, workshops, and networking opportunities to expand your research horizons</p>
+            <div class="title-underline mx-auto"></div>
+        </div>
+        
+        <div class="row g-4 event-timeline">
+            <?php 
+            // If we have events, display them; otherwise, show default placeholder content
+            if (!empty($randomEvents)): 
+                foreach ($randomEvents as $index => $event):
+                    // Format the date for display
+                    $eventDate = new DateTime($event['eventDate']);
+                    
+                    // Determine if the event has registration or join link
+                    $hasRegistration = isset($event['registration']['required']) && $event['registration']['required'] && !empty($event['registration']['link']);
+                    $hasJoinLink = isset($event['location']['type']) && $event['location']['type'] === 'Virtual' && !empty($event['location']['joinLink']);
+            ?>
+            <!-- Event <?php echo $index + 1; ?> -->
+            <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" <?php echo $index > 0 ? 'data-aos-delay="'.(100*$index).'"' : ''; ?>>
+                <div class="neo-event-card">
+                    <div class="card-border"></div>
+                    <div class="card-glow"></div>
+                    
+                    <div class="event-date-badge">
+                        <div class="date-content">
+                            <span class="event-day"><?php echo $eventDate->format('d'); ?></span>
+                            <span class="event-month"><?php echo strtoupper($eventDate->format('M')); ?></span>
+                        </div>
+                        <div class="date-glow"></div>
+                    </div>
+                    
+                    <div class="event-content">
+                        <div class="event-tags">
+                            <span class="event-tag"><?php echo htmlspecialchars($event['eventType']); ?></span>
+                            <?php if (isset($event['status'])): ?>
+                            <span class="event-tag"><?php echo htmlspecialchars($event['status']); ?></span>
+                            <?php endif; ?>
+                        </div>
                         
-                        <div class="event-date-badge">
-                            <div class="date-content">
+                        <h4 class="event-title"><?php echo htmlspecialchars($event['title']); ?></h4>
+                        
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-clock"></i>
+                                <span><?php echo isset($event['startTime']) ? htmlspecialchars($event['startTime']) : ''; ?> - <?php echo isset($event['endTime']) ? htmlspecialchars($event['endTime']) : ''; ?></span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>
+                                    <?php if (isset($event['location']['type'])): ?>
+                                        <?php if ($event['location']['type'] === 'Virtual'): ?>
+                                            Virtual - <?= htmlspecialchars($event['location']['virtualPlatform'] ?? 'Online') ?>
+                                        <?php elseif ($event['location']['type'] === 'Physical'): ?>
+                                            <?= htmlspecialchars($event['location']['room'] ?? 'On Campus') ?>
+                                        <?php else: ?>
+                                            Hybrid - <?= htmlspecialchars($event['location']['room'] ?? 'Multiple Locations') ?>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        TBD
+                                    <?php endif; ?>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <p class="event-description"><?php echo htmlspecialchars(substr($event['description'] ?? '', 0, 120)) . (strlen($event['description'] ?? '') > 120 ? '...' : ''); ?></p>
+                        
+                        <?php if ($hasRegistration): ?>
+                        <a href="<?php echo htmlspecialchars($event['registration']['link']); ?>" target="_blank" class="neo-button small">
+                            <span class="button-content">Register Now</span>
+                            <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                            <div class="button-glow"></div>
+                        </a>
+                        <?php elseif ($hasJoinLink): ?>
+                        <a href="<?php echo htmlspecialchars($event['location']['joinLink']); ?>" target="_blank" class="neo-button small">
+                            <span class="button-content">Join Online</span>
+                            <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                            <div class="button-glow"></div>
+                        </a>
+                        <?php else: ?>
+                        <a href="events.php" class="neo-button small">
+                            <span class="button-content">View Details</span>
+                            <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                            <div class="button-glow"></div>
+                        </a>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div class="card-circuit-pattern"></div>
+                </div>
+            </div>
+            <?php 
+                endforeach;
+            else:
+                // Display placeholder content if no events are found
+            ?>
+            <!-- Event 1 (Placeholder) -->
+            <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up">
+                <div class="neo-event-card">
+                    <div class="card-border"></div>
+                    <div class="card-glow"></div>
+                    
+                    <div class="event-date-badge">
+                        <div class="date-content">
                             <span class="event-day">15</span>
                             <span class="event-month">DEC</span>
                         </div>
-                            <div class="date-glow"></div>
-                        </div>
-                        
-                        <div class="event-content">
-                            <div class="event-tags">
-                                <span class="event-tag">Conference</span>
-                                <span class="event-tag">Research</span>
-                            </div>
-                            
-                            <h4 class="event-title">Annual Research Symposium</h4>
-                            
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="bi bi-clock"></i>
-                                    <span>10:00 AM - 4:00 PM</span>
-                            </div>
-                                <div class="meta-item">
-                                    <i class="bi bi-geo-alt"></i>
-                                    <span>UIU Main Auditorium</span>
-                                </div>
-                            </div>
-                            
-                            <p class="event-description">Join us for presentations from leading researchers across multiple disciplines, networking opportunities, and research showcases.</p>
-                            
-                            <a href="#" class="neo-button small">
-                                <span class="button-content">Register Now</span>
-                                <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
-                                <div class="button-glow"></div>
-                            </a>
-                        </div>
-                        
-                        <div class="card-circuit-pattern"></div>
+                        <div class="date-glow"></div>
                     </div>
-                </div>
-                
-                <!-- Event 2 -->
-                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="neo-event-card">
-                        <div class="card-border"></div>
-                        <div class="card-glow"></div>
-                        
-                        <div class="event-date-badge">
-                            <div class="date-content">
-                            <span class="event-day">22</span>
-                            <span class="event-month">DEC</span>
-                        </div>
-                            <div class="date-glow"></div>
+                    
+                    <div class="event-content">
+                        <div class="event-tags">
+                            <span class="event-tag">Conference</span>
+                            <span class="event-tag">Research</span>
                         </div>
                         
-                        <div class="event-content">
-                            <div class="event-tags">
-                                <span class="event-tag">Workshop</span>
-                                <span class="event-tag">AI</span>
+                        <h4 class="event-title">Annual Research Symposium</h4>
+                        
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-clock"></i>
+                                <span>10:00 AM - 4:00 PM</span>
                             </div>
-                            
-                            <h4 class="event-title">AI Research Workshop</h4>
-                            
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="bi bi-clock"></i>
-                                    <span>2:00 PM - 5:00 PM</span>
+                            <div class="meta-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>UIU Main Auditorium</span>
                             </div>
-                                <div class="meta-item">
-                                    <i class="bi bi-geo-alt"></i>
-                                    <span>Virtual Event</span>
-                                </div>
-                            </div>
-                            
-                            <p class="event-description">A practical workshop on applying machine learning to research problems with hands-on training sessions and expert guidance.</p>
-                            
-                            <a href="#" class="neo-button small">
-                                <span class="button-content">Join Online</span>
-                                <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
-                                <div class="button-glow"></div>
-                            </a>
                         </div>
                         
-                        <div class="card-circuit-pattern"></div>
+                        <p class="event-description">Join us for presentations from leading researchers across multiple disciplines, networking opportunities, and research showcases.</p>
+                        
+                        <a href="#" class="neo-button small">
+                            <span class="button-content">Register Now</span>
+                            <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                            <div class="button-glow"></div>
+                        </a>
                     </div>
-                </div>
-                
-                <!-- Event 3 -->
-                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="neo-event-card">
-                        <div class="card-border"></div>
-                        <div class="card-glow"></div>
-                        
-                        <div class="event-date-badge">
-                            <div class="date-content">
-                            <span class="event-day">10</span>
-                            <span class="event-month">JAN</span>
-                        </div>
-                            <div class="date-glow"></div>
-                        </div>
-                        
-                        <div class="event-content">
-                            <div class="event-tags">
-                                <span class="event-tag">Workshop</span>
-                                <span class="event-tag">Funding</span>
-                            </div>
-                            
-                            <h4 class="event-title">Grant Writing Workshop</h4>
-                            
-                            <div class="event-meta">
-                                <div class="meta-item">
-                                    <i class="bi bi-clock"></i>
-                                    <span>9:00 AM - 1:00 PM</span>
-                            </div>
-                                <div class="meta-item">
-                                    <i class="bi bi-geo-alt"></i>
-                                    <span>Science Building, Room 305</span>
-                                </div>
-                            </div>
-                            
-                            <p class="event-description">Learn strategies for writing successful research grant proposals with feedback from experienced researchers and grant reviewers.</p>
-                            
-                            <a href="#" class="neo-button small">
-                                <span class="button-content">Register Now</span>
-                                <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
-                                <div class="button-glow"></div>
-                            </a>
-                        </div>
-                        
-                        <div class="card-circuit-pattern"></div>
-                    </div>
+                    
+                    <div class="card-circuit-pattern"></div>
                 </div>
             </div>
             
-            <div class="text-center mt-5" data-aos="fade-up">
-                <a href="events.php" class="neo-button primary calendar-button">
-                    <span class="button-content">View Full Calendar</span>
-                    <span class="button-icon"><i class="bi bi-calendar-week"></i></span>
-                    <div class="button-glow"></div>
-                </a>
+            <!-- Event 2 (Placeholder) -->
+            <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="neo-event-card">
+                    <div class="card-border"></div>
+                    <div class="card-glow"></div>
+                    
+                    <div class="event-date-badge">
+                        <div class="date-content">
+                            <span class="event-day">22</span>
+                            <span class="event-month">DEC</span>
+                        </div>
+                        <div class="date-glow"></div>
+                    </div>
+                    
+                    <div class="event-content">
+                        <div class="event-tags">
+                            <span class="event-tag">Workshop</span>
+                            <span class="event-tag">AI</span>
+                        </div>
+                        
+                        <h4 class="event-title">AI Research Workshop</h4>
+                        
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-clock"></i>
+                                <span>2:00 PM - 5:00 PM</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>Virtual Event</span>
+                            </div>
+                        </div>
+                        
+                        <p class="event-description">A practical workshop on applying machine learning to research problems with hands-on training sessions and expert guidance.</p>
+                        
+                        <a href="#" class="neo-button small">
+                            <span class="button-content">Join Online</span>
+                            <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                            <div class="button-glow"></div>
+                        </a>
+                    </div>
+                    
+                    <div class="card-circuit-pattern"></div>
+                </div>
             </div>
-    </div>
-  </section>
+            
+            <!-- Event 3 (Placeholder) -->
+            <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="neo-event-card">
+                    <div class="card-border"></div>
+                    <div class="card-glow"></div>
+                    
+                    <div class="event-date-badge">
+                        <div class="date-content">
+                            <span class="event-day">10</span>
+                            <span class="event-month">JAN</span>
+                        </div>
+                        <div class="date-glow"></div>
+                    </div>
+                    
+                    <div class="event-content">
+                        <div class="event-tags">
+                            <span class="event-tag">Workshop</span>
+                            <span class="event-tag">Funding</span>
+                        </div>
+                        
+                        <h4 class="event-title">Grant Writing Workshop</h4>
+                        
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-clock"></i>
+                                <span>9:00 AM - 1:00 PM</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>Science Building, Room 305</span>
+                            </div>
+                        </div>
+                        
+                        <p class="event-description">Learn strategies for writing successful research grant proposals with feedback from experienced researchers and grant reviewers.</p>
+                        
+                        <a href="#" class="neo-button small">
+                            <span class="button-content">Register Now</span>
+                            <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                            <div class="button-glow"></div>
+                        </a>
+                    </div>
+                    
+                    <div class="card-circuit-pattern"></div>
+                </div>
+            </div>
+            <?php endif; ?>
+        </div>
+        
+        <div class="text-center mt-5" data-aos="fade-up">
+            <!--<a href="javascript:void(0)" class="neo-button primary calendar-button view-calendar-btn me-3">
+                <span class="button-content">View Full Calendar</span>
+                <span class="button-icon"><i class="bi bi-calendar-week"></i></span>
+                <div class="button-glow"></div>
+            </a>-->
+            <a href="events.php" class="neo-button secondary">
+                <span class="button-content">Explore All Events</span>
+                <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
+                <div class="button-glow"></div>
+            </a>
+        </div>
+</div>
+</section>
 
-    <style>
-    /* Modern Futuristic Events Section Styling */
-    .events-section {
-        background: linear-gradient(135deg, #121729 0%, #1a2151 100%);
-        position: relative;
-        overflow: hidden;
-        color: #fff;
-    }
-    
-    .events-bg-grid {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: linear-gradient(to right, rgba(76, 201, 240, 0.03) 1px, transparent 1px),
-                          linear-gradient(to bottom, rgba(76, 201, 240, 0.03) 1px, transparent 1px);
-        background-size: 30px 30px;
-        z-index: 1;
-        opacity: 0.5;
-        pointer-events: none;
-    }
-    
-    .events-orb {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(60px);
-        z-index: 1;
-        pointer-events: none;
-    }
-    
-    .events-orb.orb-1 {
-        width: 400px;
-        height: 400px;
-        top: -100px;
-        left: -150px;
-        background: radial-gradient(circle, rgba(114, 9, 183, 0.2) 0%, transparent 70%);
-        animation: float-slow 12s ease-in-out infinite alternate-reverse;
-    }
-    
-    .events-orb.orb-2 {
-        width: 300px;
-        height: 300px;
-        bottom: -50px;
-        right: -100px;
-        background: radial-gradient(circle, rgba(247, 37, 133, 0.2) 0%, transparent 70%);
-        animation: float-slow 15s ease-in-out infinite alternate;
-    }
-    
-    .events-glow-effect {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 80%;
-        height: 60%;
-        background: radial-gradient(ellipse, rgba(114, 9, 183, 0.1), transparent 70%);
-        opacity: 0.6;
-        z-index: 1;
-        filter: blur(40px);
-        pointer-events: none;
-    }
-    
-    .events-timeline {
-        position: relative;
-        z-index: 2;
-    }
-    
+<style>
+/* Modern Futuristic Events Section Styling */
+.events-section {
+    background: linear-gradient(135deg, #121729 0%, #1a2151 100%);
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+}
+
+.events-bg-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, rgba(76, 201, 240, 0.03) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(76, 201, 240, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: 1;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.events-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.events-orb.orb-1 {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    left: -150px;
+    background: radial-gradient(circle, rgba(114, 9, 183, 0.2) 0%, transparent 70%);
+    animation: float-slow 12s ease-in-out infinite alternate-reverse;
+}
+
+.events-orb.orb-2 {
+    width: 300px;
+    height: 300px;
+    bottom: -50px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(247, 37, 133, 0.2) 0%, transparent 70%);
+    animation: float-slow 15s ease-in-out infinite alternate;
+}
+
+.events-glow-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 60%;
+    background: radial-gradient(ellipse, rgba(114, 9, 183, 0.1), transparent 70%);
+    opacity: 0.6;
+    z-index: 1;
+    filter: blur(40px);
+    pointer-events: none;
+}
+
+.events-timeline {
+    position: relative;
+    z-index: 2;
+}
+
+.events-timeline-line {
+    position: absolute;
+    top: 115px;
+    left: 50%;
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(to right, 
+        rgba(76, 201, 240, 0), 
+        rgba(76, 201, 240, 0.5), 
+        rgba(76, 201, 240, 0.8), 
+        rgba(76, 201, 240, 0.5), 
+        rgba(76, 201, 240, 0));
+    transform: translateX(-50%);
+    z-index: 1;
+    opacity: 0.5;
+}
+
+.event-badge {
+    background: rgba(247, 37, 133, 0.1);
+    border: 1px solid rgba(247, 37, 133, 0.2);
+}
+
+.event-badge i {
+    color: rgba(247, 37, 133, 0.8);
+}
+
+.neo-event-card {
+    position: relative;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    padding: 0;
+    height: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    transform: perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1);
+    transform-style: preserve-3d;
+}
+
+.neo-event-card:hover {
+    box-shadow: 0 15px 40px rgba(247, 37, 133, 0.2);
+    border-color: rgba(247, 37, 133, 0.3);
+    transform: translateY(-10px) scale(1.02);
+}
+
+.neo-event-card .card-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid transparent;
+    border-radius: 16px;
+    background-image: linear-gradient(to bottom right, 
+        rgba(76, 201, 240, 0), 
+        rgba(76, 201, 240, 0.1), 
+        rgba(247, 37, 133, 0.2), 
+        rgba(76, 201, 240, 0));
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.neo-event-card .card-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(247, 37, 133, 0.2), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.neo-event-card:hover .card-glow {
+    opacity: 1;
+}
+
+.event-date-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 70px;
+    height: 70px;
+    background: rgba(247, 37, 133, 0.15);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(247, 37, 133, 0.3);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.neo-event-card:hover .event-date-badge {
+    transform: scale(1.1);
+    background: rgba(247, 37, 133, 0.2);
+    box-shadow: 0 5px 15px rgba(247, 37, 133, 0.2);
+}
+
+.date-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.event-day {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+    background: linear-gradient(135deg, #ffffff, #e0e0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.event-month {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.date-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, transparent, rgba(247, 37, 133, 0.2), transparent);
+    transform: translateX(-100%);
+    z-index: -1;
+}
+
+.neo-event-card:hover .date-glow {
+    animation: shine 2s infinite;
+}
+
+.event-content {
+    padding: 1.5rem;
+    position: relative;
+    z-index: 3;
+}
+
+.event-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.event-tag {
+    background: rgba(76, 201, 240, 0.1);
+    border: 1px solid rgba(76, 201, 240, 0.2);
+    border-radius: 50px;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+}
+
+.neo-event-card:hover .event-tag {
+    background: rgba(76, 201, 240, 0.15);
+    transform: translateY(-2px);
+}
+
+.event-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #ffffff, #e0e0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.neo-event-card:hover .event-title {
+    transform: scale(1.02);
+}
+
+.event-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.meta-item i {
+    color: rgba(247, 37, 133, 0.8);
+    font-size: 0.9rem;
+}
+
+.event-description {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.card-circuit-pattern {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 120px;
+    height: 120px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTAgMTBjMCAwIDIwIDAgMjAgMjBtLTIwIDIwYzAgMCAyMCAwIDIwLTIgbTIwIDBjMCAwIDAgMjAgLTIgMjBtNDQgLTIwYzAgMCAwIDIwIC0yMCAyMG0yMCAyMGMyIDAgMCAwIC0yMCAtMjAgLTIwbS0yMCAwYzAgMCAwIC0yMCAyMCAtMjAiIHN0cm9rZT0icmdiYSgyNDcsIDM3LCAxMzMsIDAuMikiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==');
+    background-size: 100% 100%;
+    opacity: 0.2;
+    z-index: 1;
+}
+
+.calendar-button {
+    background: linear-gradient(135deg, rgba(247, 37, 133, 0.9), rgba(114, 9, 183, 0.9));
+    border-color: rgba(247, 37, 133, 0.5);
+}
+
+.calendar-button:hover {
+    background: linear-gradient(135deg, rgba(247, 37, 133, 1), rgba(114, 9, 183, 1));
+}
+
+/* Animations for staggered card appearance */
+@keyframes card-float {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Add responsive adjustments */
+@media (max-width: 991px) {
     .events-timeline-line {
-        position: absolute;
-        top: 115px;
-        left: 50%;
-        width: 80%;
-        height: 2px;
-        background: linear-gradient(to right, 
-            rgba(76, 201, 240, 0), 
-            rgba(76, 201, 240, 0.5), 
-            rgba(76, 201, 240, 0.8), 
-            rgba(76, 201, 240, 0.5), 
-            rgba(76, 201, 240, 0));
-        transform: translateX(-50%);
-        z-index: 1;
-        opacity: 0.5;
+        display: none;
     }
-    
-    .event-badge {
-        background: rgba(247, 37, 133, 0.1);
-        border: 1px solid rgba(247, 37, 133, 0.2);
-    }
-    
-    .event-badge i {
-        color: rgba(247, 37, 133, 0.8);
-    }
-    
-    .neo-event-card {
-        position: relative;
-        background: rgba(30, 41, 59, 0.6);
-        border-radius: 16px;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        overflow: hidden;
-        padding: 0;
-        height: 100%;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        transition: all 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-        transform: perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1);
-        transform-style: preserve-3d;
-    }
-    
-    .neo-event-card:hover {
-        box-shadow: 0 15px 40px rgba(247, 37, 133, 0.2);
-        border-color: rgba(247, 37, 133, 0.3);
-        transform: translateY(-10px) scale(1.02);
-    }
-    
-    .neo-event-card .card-border {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border: 2px solid transparent;
-        border-radius: 16px;
-        background-image: linear-gradient(to bottom right, 
-            rgba(76, 201, 240, 0), 
-            rgba(76, 201, 240, 0.1), 
-            rgba(247, 37, 133, 0.2), 
-            rgba(76, 201, 240, 0));
-        background-origin: border-box;
-        background-clip: content-box, border-box;
-        pointer-events: none;
-        z-index: 2;
-    }
-    
-    .neo-event-card .card-glow {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle at center, rgba(247, 37, 133, 0.2), transparent 70%);
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        z-index: 1;
-        pointer-events: none;
-    }
-    
-    .neo-event-card:hover .card-glow {
-        opacity: 1;
-    }
-    
-    .event-date-badge {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        width: 70px;
-        height: 70px;
-        background: rgba(247, 37, 133, 0.15);
-        backdrop-filter: blur(5px);
-        border: 1px solid rgba(247, 37, 133, 0.3);
-        border-radius: 12px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 3;
-        overflow: hidden;
-        transition: all 0.3s ease;
-    }
-    
-    .neo-event-card:hover .event-date-badge {
-        transform: scale(1.1);
-        background: rgba(247, 37, 133, 0.2);
-        box-shadow: 0 5px 15px rgba(247, 37, 133, 0.2);
-    }
-    
-    .date-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .event-day {
-        font-size: 1.6rem;
-        font-weight: 700;
-        line-height: 1;
-        background: linear-gradient(135deg, #ffffff, #e0e0e0);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    
-    .event-month {
-        font-size: 0.8rem;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.8);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    
-    .date-glow {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, transparent, rgba(247, 37, 133, 0.2), transparent);
-        transform: translateX(-100%);
-        z-index: -1;
-    }
-    
-    .neo-event-card:hover .date-glow {
-        animation: shine 2s infinite;
-    }
-    
-    .event-content {
-        padding: 1.5rem;
-        position: relative;
-        z-index: 3;
-    }
-    
-    .event-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 12px;
-    }
-    
-    .event-tag {
-        background: rgba(76, 201, 240, 0.1);
-        border: 1px solid rgba(76, 201, 240, 0.2);
-        border-radius: 50px;
-        padding: 4px 12px;
-        font-size: 0.7rem;
-        color: rgba(255, 255, 255, 0.9);
-        transition: all 0.3s ease;
-    }
-    
-    .neo-event-card:hover .event-tag {
-        background: rgba(76, 201, 240, 0.15);
-        transform: translateY(-2px);
-    }
-    
-    .event-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 12px;
-        background: linear-gradient(135deg, #ffffff, #e0e0e0);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        transition: all 0.3s ease;
-    }
-    
-    .neo-event-card:hover .event-title {
-        transform: scale(1.02);
-    }
-    
-    .event-meta {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-bottom: 15px;
-    }
-    
-    .meta-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.7);
-    }
-    
-    .meta-item i {
-        color: rgba(247, 37, 133, 0.8);
-        font-size: 0.9rem;
-    }
-    
-    .event-description {
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.7);
-        margin-bottom: 1.5rem;
-        line-height: 1.5;
-    }
-    
-    .card-circuit-pattern {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 120px;
-        height: 120px;
-        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTAgMTBjMCAwIDIwIDAgMjAgMjBtLTIwIDIwYzAgMCAyMCAwIDIwLTIgbTIwIDBjMCAwIDAgMjAgLTIgMjBtNDQgLTIwYzAgMCAwIDIwIC0yMCAyMG0yMCAyMGMyIDAgMCAwIC0yMCAtMjAgLTIwbS0yMCAwYzAgMCAwIC0yMCAyMCAtMjAiIHN0cm9rZT0icmdiYSgyNDcsIDM3LCAxMzMsIDAuMikiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==');
-        background-size: 100% 100%;
-        opacity: 0.2;
-        z-index: 1;
-    }
-    
-    .calendar-button {
-        background: linear-gradient(135deg, rgba(247, 37, 133, 0.9), rgba(114, 9, 183, 0.9));
-        border-color: rgba(247, 37, 133, 0.5);
-    }
-    
-    .calendar-button:hover {
-        background: linear-gradient(135deg, rgba(247, 37, 133, 1), rgba(114, 9, 183, 1));
-    }
-    
-    /* Animations for staggered card appearance */
-    @keyframes card-float {
-        0% { transform: translateY(20px); opacity: 0; }
-        100% { transform: translateY(0); opacity: 1; }
-    }
-    
-    /* Add responsive adjustments */
-    @media (max-width: 991px) {
-        .events-timeline-line {
-            display: none;
-        }
-    }
-    
+}
+
     @media (max-width: 767px) {
         .neo-event-card {
             max-width: 320px;
             margin: 0 auto;
         }
     }
-    </style>
     
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add parallax effect to event cards
-        const eventCards = document.querySelectorAll('.neo-event-card');
-        
-        eventCards.forEach(card => {
-            card.addEventListener('mousemove', function(e) {
-                const rect = this.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                // Calculate rotation values based on mouse position
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const deltaX = (x - centerX) / 15;
-                const deltaY = (y - centerY) / 15;
-                
-                // Apply 3D rotation
-                this.style.transform = `perspective(1000px) rotateX(${-deltaY}deg) rotateY(${deltaX}deg) translateY(-5px)`;
-                
-                // Move glow to follow cursor
-                const glow = this.querySelector('.card-glow');
-                if (glow) {
-                    glow.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(247, 37, 133, 0.3), transparent 60%)`;
-                    glow.style.opacity = '1';
-                }
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                // Reset transforms and effects
-                this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-                
-                const glow = this.querySelector('.card-glow');
-                if (glow) {
-                    glow.style.background = 'radial-gradient(circle at center, rgba(247, 37, 133, 0.2), transparent 70%)';
-                    glow.style.opacity = '0';
-                }
-            });
-            
-            // Add entry animation
-            const delay = Array.from(eventCards).indexOf(card) * 100;
-            card.style.animation = `card-float 0.8s ease-out ${delay}ms forwards`;
-            card.style.opacity = '0';
-        });
-    });
-    </script>
+    /* Fix for event card display issues */
+    .events-section .neo-event-card {
+        min-height: 380px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .events-section .event-content {
+        min-height: 260px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        z-index: 3;
+        padding-top: 1.8rem;
+    }
+    
+    .events-section .event-date-badge {
+        top: 15px;
+        right: 15px;
+    }
+    
+    .events-section .event-title {
+        min-height: 42px;
+        max-height: 60px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        margin-right: 60px; /* Create space for the date badge */
+    }
+    
+    .events-section .event-description {
+        flex-grow: 1;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        max-height: 90px;
+    }
+    
+    .events-section .event-meta {
+        margin-bottom: 12px;
+    }
+    
+    .events-section .meta-item {
+        display: flex;
+        align-items: flex-start;
+        overflow: hidden;
+    }
+    
+    .events-section .meta-item span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .events-section .neo-button.small {
+        margin-top: auto;
+    }
+    
+    /* Fix specific alignment issues */
+    .events-section .meta-item i {
+        flex-shrink: 0;
+        display: inline-block;
+        width: 20px;
+        margin-right: 8px;
+        text-align: center;
+    }
+    
+    /* Fix indentation in placeholders */
+    .events-section .meta-item span {
+        line-height: 1.4;
+    }
+</style>
 
-  <!-- Futuristic Research Guidance FAQ Section -->
-  <section id="faq-section" class="faq-section section-padding">
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add parallax effect to event cards
+    const eventCards = document.querySelectorAll('.neo-event-card');
+    
+    eventCards.forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Calculate rotation values based on mouse position
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const deltaX = (x - centerX) / 15;
+            const deltaY = (y - centerY) / 15;
+            
+            // Apply 3D rotation
+            this.style.transform = `perspective(1000px) rotateX(${-deltaY}deg) rotateY(${deltaX}deg) translateY(-5px)`;
+            
+            // Move glow to follow cursor
+            const glow = this.querySelector('.card-glow');
+            if (glow) {
+                glow.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(247, 37, 133, 0.3), transparent 60%)`;
+                glow.style.opacity = '1';
+            }
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            // Reset transforms and effects
+            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            
+            const glow = this.querySelector('.card-glow');
+            if (glow) {
+                glow.style.background = 'radial-gradient(circle at center, rgba(247, 37, 133, 0.2), transparent 70%)';
+                glow.style.opacity = '0';
+            }
+        });
+        
+        // Add entry animation
+        const delay = Array.from(eventCards).indexOf(card) * 100;
+        card.style.animation = `card-float 0.8s ease-out ${delay}ms forwards`;
+        card.style.opacity = '0';
+    });
+});
+</script>
+
+<!-- Futuristic Research Guidance FAQ Section -->
+<section id="faq-section" class="faq-section section-padding">
     <!-- Futuristic background elements -->
     <div class="faq-bg-particles"></div>
     <div class="faq-orb faq-orb-1"></div>
@@ -6640,39 +6878,39 @@ session_start();
             </a>
                     </div>
                     </div>
-  </section>
+</section>
 
-  <style>
-  /* Modern Futuristic FAQ Section Styling */
-  .faq-section {
-      background: linear-gradient(135deg, #1a1d2c 0%, #2a1a46 100%);
-      position: relative;
-      overflow: hidden;
-      color: #fff;
-      padding: 100px 0;
-  }
-  
-  .faq-bg-particles {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: radial-gradient(rgba(76, 201, 240, 0.1) 2px, transparent 2px);
-      background-size: 50px 50px;
-      z-index: 1;
-      opacity: 0.2;
-      pointer-events: none;
-  }
-  
-  .faq-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(70px);
-      z-index: 1;
-      pointer-events: none;
-  }
-  
+<style>
+/* Modern Futuristic FAQ Section Styling */
+.faq-section {
+    background: linear-gradient(135deg, #1a1d2c 0%, #2a1a46 100%);
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    padding: 100px 0;
+}
+
+.faq-bg-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(rgba(76, 201, 240, 0.1) 2px, transparent 2px);
+    background-size: 50px 50px;
+    z-index: 1;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+.faq-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    z-index: 1;
+    pointer-events: none;
+}
+
   .faq-orb-1 {
       width: 500px;
       height: 500px;
@@ -6683,27 +6921,27 @@ session_start();
   }
   
   .faq-orb-2 {
-      width: 400px;
-      height: 400px;
+    width: 400px;
+    height: 400px;
       bottom: -150px;
-      left: -150px;
+    left: -150px;
       background: radial-gradient(circle, rgba(247, 37, 133, 0.15) 0%, transparent 70%);
       animation: float-slow 18s ease-in-out infinite alternate-reverse;
-  }
-  
-  .faq-mesh-grid {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+}
+
+.faq-mesh-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
       background-image: linear-gradient(to right, rgba(114, 9, 183, 0.05) 1px, transparent 1px),
                         linear-gradient(to bottom, rgba(114, 9, 183, 0.05) 1px, transparent 1px);
       background-size: 35px 35px;
-      z-index: 1;
+    z-index: 1;
       opacity: 0.4;
-      pointer-events: none;
-  }
+    pointer-events: none;
+}
   
   .faq-badge {
       background: rgba(76, 201, 240, 0.1);
@@ -6719,18 +6957,18 @@ session_start();
       position: relative;
       z-index: 2;
   }
-  
-  .neo-accordion {
+
+.neo-accordion {
       position: relative;
       z-index: 2;
   }
   
   .neo-accordion .accordion-item {
-      background: rgba(30, 41, 59, 0.6);
+    background: rgba(30, 41, 59, 0.6);
       border: 1px solid rgba(76, 201, 240, 0.2);
       border-radius: 12px;
-      backdrop-filter: blur(10px);
-      overflow: hidden;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
       margin-bottom: 16px;
       transition: all 0.3s ease;
       transform: translateY(0);
@@ -6741,20 +6979,20 @@ session_start();
       transform: translateY(-5px);
       box-shadow: 0 8px 25px rgba(76, 201, 240, 0.15);
       border-color: rgba(76, 201, 240, 0.4);
-  }
-  
-  .neo-accordion .accordion-button {
+}
+
+.neo-accordion .accordion-button {
       background: rgba(30, 41, 59, 0.8);
       color: #fff;
       font-weight: 600;
       padding: 20px;
-      border: none;
+    border: none;
       position: relative;
       transition: all 0.3s ease;
       overflow: hidden;
-  }
-  
-  .neo-accordion .accordion-button:not(.collapsed) {
+}
+
+.neo-accordion .accordion-button:not(.collapsed) {
       background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(42, 26, 70, 0.9));
       color: rgba(76, 201, 240, 1);
       box-shadow: none;
@@ -6783,9 +7021,9 @@ session_start();
   
   .neo-accordion .accordion-button:not(.collapsed)::before {
       opacity: 1;
-  }
-  
-  .neo-accordion .accordion-body {
+}
+
+.neo-accordion .accordion-body {
       background: rgba(22, 28, 45, 0.6);
       color: rgba(255, 255, 255, 0.8);
       padding: 20px;
@@ -6841,12 +7079,12 @@ session_start();
   }
   
   /* Question button styling */
-  .question-button {
+.question-button {
       background: linear-gradient(135deg, rgba(76, 201, 240, 0.9), rgba(114, 9, 183, 0.9));
       border-color: rgba(76, 201, 240, 0.5);
-  }
-  
-  .question-button:hover {
+}
+
+.question-button:hover {
       background: linear-gradient(135deg, rgba(76, 201, 240, 1), rgba(114, 9, 183, 1));
   }
   
@@ -6863,7 +7101,7 @@ session_start();
   }
   
   /* Responsive styles */
-  @media (max-width: 767px) {
+@media (max-width: 767px) {
       .neo-accordion .accordion-item {
           margin-bottom: 10px;
       }
@@ -6876,12 +7114,12 @@ session_start();
       .neo-accordion .accordion-body {
           padding: 15px;
           font-size: 0.9rem;
-      }
-  }
-  </style>
-  
-  <script>
-  document.addEventListener('DOMContentLoaded', function() {
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
       // Add animation to FAQ accordion items
       const setupFaqAnimations = () => {
           const accordionItems = document.querySelectorAll('.neo-accordion .accordion-item');
@@ -7622,9 +7860,9 @@ session_start();
                 if (chartCanvas) {
                     chartCanvas.addEventListener('mousemove', (e) => {
                         const rect = chartCanvas.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
                         // Create ripple effect on hover
                         const glowEffect = document.querySelector('.chart-glow-effect');
                         if (glowEffect) {
@@ -7726,9 +7964,9 @@ session_start();
                         performSearch();
                     }
                 });
-            });
-        });
-    </script>
+    });
+});
+</script>
 
     <!-- Enhanced Keyword Highlighting Styles -->
     <style>
@@ -8246,5 +8484,8 @@ session_start();
             }, 2000);
         });
     </script>
+    
+    <!-- Include Calendar Overlay -->
+    <?php include 'calendar-overlay.php'; ?>
 </body>
 </html>

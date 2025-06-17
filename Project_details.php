@@ -866,10 +866,15 @@ function createProfileLink($name, $userId, $userType = null) {
             color: var(--primary-color);
             filter: drop-shadow(0 0 8px rgba(30, 64, 175, 0.4));
             transition: all var(--transition-speed) ease;
-            padding: var(--spacing-sm);
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: rgba(30, 64, 175, 0.1);
             border-radius: 50%;
             border: 2px solid rgba(30, 64, 175, 0.3);
+            padding: 0;
         }
         
         .timeline-right .timeline-title .timeline-icon {
@@ -1876,8 +1881,8 @@ function createProfileLink($name, $userId, $userType = null) {
         }
         
         .btn-outline-primary {
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
+            border: 2px solid #7293ff;
+            color: #7293ff;
             background: rgba(30, 64, 175, 0.1);
             backdrop-filter: blur(10px);
         }
