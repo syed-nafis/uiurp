@@ -33,6 +33,11 @@ if (!$post || $post['user_id'] !== $_SESSION['user_id']) {
     exit();
 }
 
+// Convert BSON arrays to PHP arrays
+if (isset($post['tags']) && $post['tags'] instanceof MongoDB\Model\BSONArray) {
+    $post['tags'] = $post['tags']->getArrayCopy();
+}
+
 // Get all available tags
 $tags = $tagCollection->find()->toArray();
 ?>

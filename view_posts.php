@@ -32,7 +32,8 @@ try {
     // Build query for forum_posts collection
     $queryPosts = [];
     if (!empty($tagFilter)) {
-        $queryPosts['tags'] = $tagFilter;
+        // Use $in operator to find posts that contain the specified tag
+        $queryPosts['tags'] = ['$in' => [$tagFilter]];
     }
     
     // Set up sorting
@@ -59,6 +60,28 @@ try {
     foreach ($newPosts as $post) {
         try {
             $currentTime = new UTCDateTime();
+            
+            // Convert BSONArray objects to PHP arrays
+            $tags = $post['tags'] ?? ['discussion'];
+            if ($tags instanceof MongoDB\Model\BSONArray) {
+                $tags = $tags->getArrayCopy();
+            }
+            
+            $upvotedBy = $post['upvoted_by'] ?? [];
+            if ($upvotedBy instanceof MongoDB\Model\BSONArray) {
+                $upvotedBy = $upvotedBy->getArrayCopy();
+            }
+            
+            $comments = $post['comments'] ?? [];
+            if ($comments instanceof MongoDB\Model\BSONArray) {
+                $comments = $comments->getArrayCopy();
+            }
+            
+            $attachments = $post['attachments'] ?? [];
+            if ($attachments instanceof MongoDB\Model\BSONArray) {
+                $attachments = $attachments->getArrayCopy();
+            }
+            
             $mappedPost = [
                 '_id' => $post['_id'],
                 'user_id' => $post['user_id'] ?? null,
@@ -66,13 +89,13 @@ try {
                 'user_profile_pic' => $post['user_profile_pic'] ?? 'uploads/profile_images/user_avater.png',
                 'title' => $post['title'] ?? 'Untitled Post',
                 'content' => $post['content'] ?? '',
-                'tags' => $post['tags'] ?? ['discussion'],
+                'tags' => $tags,
                 'upvotes' => $post['upvotes'] ?? 0,
-                'upvoted_by' => $post['upvoted_by'] ?? [],
-                'comments' => $post['comments'] ?? [],
+                'upvoted_by' => $upvotedBy,
+                'comments' => $comments,
                 'created_at' => $post['created_at'] ?? $currentTime,
                 'updated_at' => $post['updated_at'] ?? $post['created_at'] ?? $currentTime,
-                'attachments' => $post['attachments'] ?? []
+                'attachments' => $attachments
             ];
             $allPosts[] = $mappedPost;
         } catch (Exception $e) {
@@ -241,6 +264,115 @@ try {
         .hide-comment-form {
             display: none;
         }
+        /* New Facebook-style styles */
+        body {
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 900px;
+        }
+        .create-post-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .create-post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .create-post-input {
+            flex-grow: 1;
+            background-color: #f0f2f5;
+            border-radius: 20px;
+            padding: 8px 16px;
+            margin-left: 10px;
+            cursor: pointer;
+            color: #65676b;
+        }
+        .create-post-input:hover {
+            background-color: #e4e6e9;
+        }
+        .forum-post {
+            border-radius: 8px;
+            margin-bottom: 16px;
+            background-color: #fff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .post-header {
+            padding: 12px 16px;
+            border-bottom: none;
+        }
+        .post-content {
+            padding: 0 16px 16px;
+        }
+        .post-footer {
+            padding: 8px 16px;
+            background-color: white;
+            border-top: 1px solid #f0f0f0;
+        }
+        .filters-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .forum-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #1877f2;
+        }
+        /* Additional Facebook-style enhancements */
+        .reaction-count {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        .reaction-count i {
+            font-size: 1.1rem;
+            margin-right: 5px;
+        }
+        .comment-bubble {
+            background-color: #f0f2f5;
+            border-radius: 18px;
+        }
+        .comment {
+            margin-bottom: 12px;
+        }
+        textarea.rounded-pill {
+            padding-right: 40px;
+            padding-left: 15px;
+            height: 40px;
+            background-color: #f0f2f5;
+            border: none;
+        }
+        textarea.rounded-pill:focus {
+            background-color: #f0f2f5;
+            box-shadow: none;
+            border: none;
+        }
+        .post-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+        .post-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        /* Make the layout more responsive */
+        @media (max-width: 576px) {
+            .container {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+            .create-post-card, .forum-post, .filters-card {
+                border-radius: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -251,9 +383,23 @@ try {
             <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Forum</h1>
-            <a href="forum_index.php" class="btn btn-primary">Create New Post</a>
+        <div class="forum-title text-center mb-4">
+            Forum
+        </div>
+
+        <!-- Create Post Card -->
+        <div class="create-post-card">
+            <div class="create-post-header">
+                <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" alt="Your Avatar" class="author-avatar">
+                <a href="forum_index.php" class="create-post-input text-decoration-none">
+                    What's on your mind, <?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>?
+                </a>
+            </div>
+            <div class="d-flex justify-content-center border-top pt-3">
+                <a href="forum_index.php" class="btn btn-primary w-100">
+                    <i class="bi bi-pencil-square me-2"></i>Create New Post
+                </a>
+            </div>
         </div>
 
         <!-- Debug info -->
@@ -269,28 +415,27 @@ try {
             </div>
         <?php endif; ?>
 
-        <div class="filters row mb-4">
-            <div class="col-md-6">
-                <form method="GET" class="d-flex gap-2">
-                    <select name="sort" class="form-select" onchange="this.form.submit()">
-                        <option value="newest" <?= $sortOption == 'newest' ? 'selected' : '' ?>>Newest</option>
-                        <option value="upvotes" <?= $sortOption == 'upvotes' ? 'selected' : '' ?>>Most Upvoted</option>
-                    </select>
-                    
-                    <select name="tag" class="form-select" onchange="this.form.submit()">
-                        <option value="">All Tags</option>
-                        <?php foreach ($allTags as $tag): ?>
-                            <option value="<?= $tag['name'] ?>" <?= $tagFilter == $tag['name'] ? 'selected' : '' ?>>
-                                <?= ucfirst(str_replace('_', ' ', $tag['name'])) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    
-                    <?php if (!empty($tagFilter) || $sortOption != 'newest'): ?>
-                        <a href="view_posts.php" class="btn btn-outline-secondary">Clear Filters</a>
-                    <?php endif; ?>
-                </form>
-            </div>
+        <!-- Filters Card -->
+        <div class="filters-card">
+            <form method="GET" class="d-flex gap-2">
+                <select name="sort" class="form-select" onchange="this.form.submit()">
+                    <option value="newest" <?= $sortOption == 'newest' ? 'selected' : '' ?>>Newest</option>
+                    <option value="upvotes" <?= $sortOption == 'upvotes' ? 'selected' : '' ?>>Most Upvoted</option>
+                </select>
+                
+                <select name="tag" class="form-select" onchange="this.form.submit()">
+                    <option value="">All Tags</option>
+                    <?php foreach ($allTags as $tag): ?>
+                        <option value="<?= $tag['name'] ?>" <?= $tagFilter == $tag['name'] ? 'selected' : '' ?>>
+                            <?= ucfirst(str_replace('_', ' ', $tag['name'])) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                
+                <?php if (!empty($tagFilter) || $sortOption != 'newest'): ?>
+                    <a href="view_posts.php" class="btn btn-outline-secondary">Clear Filters</a>
+                <?php endif; ?>
+            </form>
         </div>
         
         <div id="posts-container">
@@ -355,20 +500,31 @@ try {
                         </div>
                         
                         <div class="post-content">
-                            <h3 class="post-title mb-3"><?= htmlspecialchars($post['title']) ?></h3>
+                            <h3 class="post-title mb-3">
+                                <a href="post_details.php?id=<?= $post['_id'] ?>" class="text-decoration-none text-dark">
+                                    <?= htmlspecialchars($post['title']) ?>
+                                </a>
+                            </h3>
                             
                             <div class="post-tags mb-3">
-                                <?php if (isset($post['tags']) && is_array($post['tags'])): ?>
-                                    <?php foreach ($post['tags'] as $tag): ?>
+                                <?php 
+                                // Tags are already converted in the mapping function
+                                if (!empty($post['tags'])):
+                                    foreach ($post['tags'] as $tag): 
+                                ?>
                                         <span class="post-tag tag-<?= $tag ?>">
                                             <?= ucfirst(str_replace('_', ' ', $tag)) ?>
                                         </span>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
+                                <?php 
+                                    endforeach;
+                                endif; 
+                                ?>
                             </div>
                             
                             <div class="post-text mb-3">
-                                <?= nl2br(htmlspecialchars($post['content'])) ?>
+                                <a href="post_details.php?id=<?= $post['_id'] ?>" class="text-decoration-none text-dark">
+                                    <?= nl2br(htmlspecialchars($post['content'])) ?>
+                                </a>
                             </div>
                             
                             <?php if (!empty($post['attachments'])): ?>
@@ -397,75 +553,107 @@ try {
                         </div>
                         
                         <div class="post-footer">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <button class="btn btn-sm upvote-btn <?= in_array($_SESSION['user_id'], $post['upvoted_by'] ?? []) ? 'btn-success' : 'btn-outline-success' ?>" 
+                            <!-- Reaction counts display -->
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="reaction-count">
+                                    <i class="bi bi-hand-thumbs-up-fill text-primary"></i>
+                                    <span class="upvote-count" data-post-id="<?= $post['_id'] ?>"><?= $post['upvotes'] ?? 0 ?></span>
+                                </div>
+                                <div class="ms-auto">
+                                    <span class="text-muted"><?= count($post['comments'] ?? []) ?> comments</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Divider -->
+                            <hr class="my-1">
+                            
+                            <!-- Action buttons -->
+                            <div class="d-flex justify-content-between">
+                                <?php 
+                                // All arrays are already converted in the mapping function
+                                $isUpvoted = in_array($_SESSION['user_id'], $post['upvoted_by'] ?? []);
+                                ?>
+                                <button class="btn btn-link text-decoration-none flex-fill upvote-btn <?= $isUpvoted ? 'text-primary fw-bold' : 'text-muted' ?>" 
                                         data-post-id="<?= $post['_id'] ?>">
-                                    <i class="bi bi-hand-thumbs-up me-1"></i>
-                                    <span class="upvote-count"><?= $post['upvotes'] ?? 0 ?></span>
+                                    <i class="bi bi-hand-thumbs-up me-1"></i> Like
                                 </button>
                                 
-                                <button class="btn btn-sm btn-outline-primary toggle-comments-btn" data-post-id="<?= $post['_id'] ?>">
-                                    <i class="bi bi-chat-left-text me-1"></i>
-                                    <?= count($post['comments'] ?? []) ?> Comments
+                                <button class="btn btn-link text-decoration-none flex-fill text-muted toggle-comments-btn" data-post-id="<?= $post['_id'] ?>">
+                                    <i class="bi bi-chat-left-text me-1"></i> Comment
+                                </button>
+                                
+                                <button class="btn btn-link text-decoration-none flex-fill text-muted">
+                                    <i class="bi bi-share me-1"></i> Share
                                 </button>
                             </div>
                             
                             <div class="comment-section" id="comments-<?= $post['_id'] ?>" style="display: none;">
+                                <hr class="my-2">
                                 <div class="comments-container">
                                     <?php if (!empty($post['comments'])): ?>
                                         <?php foreach ($post['comments'] as $index => $comment): ?>
                                             <div class="comment" id="comment-<?= $post['_id'] ?>-<?= $index ?>">
-                                                <div class="comment-meta">
-                                                    <div class="comment-author"><?= htmlspecialchars($comment['user_name'] ?? 'Unknown') ?></div>
-                                                    
-                                                    <?php if (isset($_SESSION['user_id']) && isset($comment['user_id']) && $_SESSION['user_id'] === $comment['user_id']): ?>
-                                                        <div class="dropdown">
-                                                            <button class="btn btn-sm text-muted" type="button" data-bs-toggle="dropdown">
-                                                                <i class="bi bi-three-dots-vertical"></i>
-                                                            </button>
-                                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                                <li><a class="dropdown-item edit-comment-btn" href="#" 
-                                                                       data-post-id="<?= $post['_id'] ?>" 
-                                                                       data-comment-index="<?= $index ?>">Edit</a></li>
-                                                                <li><a class="dropdown-item delete-comment-btn" href="#" 
-                                                                       data-post-id="<?= $post['_id'] ?>" 
-                                                                       data-comment-index="<?= $index ?>">Delete</a></li>
-                                                            </ul>
+                                                <div class="d-flex">
+                                                    <img src="<?= isset($comment['user_profile_pic']) ? $comment['user_profile_pic'] : 'uploads/profile_images/user_avater.png' ?>" 
+                                                         alt="Avatar" class="author-avatar" style="width: 32px; height: 32px;">
+                                                    <div class="flex-grow-1">
+                                                        <div class="comment-bubble p-2 bg-light rounded">
+                                                            <div class="comment-meta">
+                                                                <div class="comment-author fw-bold"><?= htmlspecialchars($comment['user_name'] ?? 'Unknown') ?></div>
+                                                                
+                                                                <?php if (isset($_SESSION['user_id']) && isset($comment['user_id']) && $_SESSION['user_id'] === $comment['user_id']): ?>
+                                                                    <div class="dropdown">
+                                                                        <button class="btn btn-sm text-muted p-0 ms-2" type="button" data-bs-toggle="dropdown">
+                                                                            <i class="bi bi-three-dots"></i>
+                                                                        </button>
+                                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                                            <li><a class="dropdown-item edit-comment-btn" href="#" 
+                                                                                data-post-id="<?= $post['_id'] ?>" 
+                                                                                data-comment-index="<?= $index ?>">Edit</a></li>
+                                                                            <li><a class="dropdown-item delete-comment-btn" href="#" 
+                                                                                data-post-id="<?= $post['_id'] ?>" 
+                                                                                data-comment-index="<?= $index ?>">Delete</a></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                            
+                                                            <div class="comment-content"><?= nl2br(htmlspecialchars($comment['text'] ?? '')) ?></div>
                                                         </div>
-                                                    <?php endif; ?>
-                                                </div>
-                                                
-                                                <div class="comment-content"><?= nl2br(htmlspecialchars($comment['text'] ?? '')) ?></div>
-                                                <div class="comment-time">
-                                                    <?php if (isset($comment['time']) && !empty($comment['time'])): ?>
-                                                        <?php
-                                                            $commentTime = null;
-                                                            if (is_object($comment['time']) && method_exists($comment['time'], 'toDateTime')) {
-                                                                $commentTime = $comment['time']->toDateTime();
-                                                            } elseif (is_string($comment['time']) || is_numeric($comment['time'])) {
-                                                                $commentTime = new DateTime('@' . (int)$comment['time']);
-                                                            }
-                                                            
-                                                            echo $commentTime ? date('M j, Y \a\t g:i a', $commentTime->getTimestamp()) : 'Unknown time';
-                                                            
-                                                            if (isset($comment['edited']) && $comment['edited']) {
-                                                                echo ' (edited)';
-                                                            }
-                                                        ?>
-                                                    <?php else: ?>
-                                                        Unknown time
-                                                    <?php endif; ?>
-                                                </div>
-                                                
-                                                <!-- Edit form (hidden by default) -->
-                                                <form class="edit-comment-form hide-comment-form mt-2" 
-                                                      id="edit-comment-form-<?= $post['_id'] ?>-<?= $index ?>">
-                                                    <textarea class="form-control mb-2" required><?= htmlspecialchars($comment['text'] ?? '') ?></textarea>
-                                                    <div class="d-flex gap-2">
-                                                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                                                        <button type="button" class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
+                                                        <div class="comment-actions small mt-1">
+                                                            <span class="text-muted comment-time">
+                                                                <?php if (isset($comment['time']) && !empty($comment['time'])): ?>
+                                                                    <?php
+                                                                        $commentTime = null;
+                                                                        if (is_object($comment['time']) && method_exists($comment['time'], 'toDateTime')) {
+                                                                            $commentTime = $comment['time']->toDateTime();
+                                                                        } elseif (is_string($comment['time']) || is_numeric($comment['time'])) {
+                                                                            $commentTime = new DateTime('@' . (int)$comment['time']);
+                                                                        }
+                                                                        
+                                                                        echo $commentTime ? date('M j, Y \a\t g:i a', $commentTime->getTimestamp()) : 'Unknown time';
+                                                                        
+                                                                        if (isset($comment['edited']) && $comment['edited']) {
+                                                                            echo ' (edited)';
+                                                                        }
+                                                                    ?>
+                                                                <?php else: ?>
+                                                                    Unknown time
+                                                                <?php endif; ?>
+                                                            </span>
+                                                        </div>
+                                                        
+                                                        <!-- Edit form (hidden by default) -->
+                                                        <form class="edit-comment-form hide-comment-form mt-2" 
+                                                            id="edit-comment-form-<?= $post['_id'] ?>-<?= $index ?>">
+                                                            <textarea class="form-control mb-2" required><?= htmlspecialchars($comment['text'] ?? '') ?></textarea>
+                                                            <div class="d-flex gap-2">
+                                                                <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                                                <button type="button" class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
+                                                            </div>
+                                                        </form>
                                                     </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         <?php endforeach; ?>
                                     <?php else: ?>
@@ -473,9 +661,17 @@ try {
                                     <?php endif; ?>
                                 </div>
                                 
-                                <form class="add-comment-form mt-3" data-post-id="<?= $post['_id'] ?>">
-                                    <textarea class="form-control mb-2" placeholder="Write a comment..." required></textarea>
-                                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                                <form class="add-comment-form mt-3 d-flex" data-post-id="<?= $post['_id'] ?>">
+                                    <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" 
+                                         alt="Your Avatar" class="author-avatar" style="width: 32px; height: 32px;">
+                                    <div class="flex-grow-1 ms-2">
+                                        <div class="position-relative">
+                                            <textarea class="form-control rounded-pill" placeholder="Write a comment..." required></textarea>
+                                            <button type="submit" class="btn btn-link position-absolute end-0 top-50 translate-middle-y">
+                                                <i class="bi bi-send-fill"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -536,10 +732,12 @@ try {
                 if (commentsSection) {
                     if (commentsSection.style.display === 'none') {
                         commentsSection.style.display = 'block';
-                        this.classList.replace('btn-outline-primary', 'btn-primary');
+                        this.classList.add('text-primary');
+                        this.classList.remove('text-muted');
                     } else {
                         commentsSection.style.display = 'none';
-                        this.classList.replace('btn-primary', 'btn-outline-primary');
+                        this.classList.add('text-muted');
+                        this.classList.remove('text-primary');
                     }
                 } else {
                     console.error(`Comments section not found for post ${postId}`);
@@ -570,15 +768,17 @@ try {
                 .then(data => {
                     if (data.success) {
                         // Update UI
-                        const countElement = button.querySelector('.upvote-count');
-                        if (countElement) {
-                            countElement.textContent = data.upvotes;
-                        }
+                        const countElements = document.querySelectorAll(`.upvote-count[data-post-id="${postId}"], .upvote-btn[data-post-id="${postId}"] .upvote-count`);
+                        countElements.forEach(el => {
+                            el.textContent = data.upvotes;
+                        });
                         
                         if (data.upvoted) {
-                            button.classList.replace('btn-outline-success', 'btn-success');
+                            button.classList.add('text-primary', 'fw-bold');
+                            button.classList.remove('text-muted');
                         } else {
-                            button.classList.replace('btn-success', 'btn-outline-success');
+                            button.classList.add('text-muted');
+                            button.classList.remove('text-primary', 'fw-bold');
                         }
                     } else {
                         throw new Error(data.message || 'Failed to update vote');
@@ -588,6 +788,27 @@ try {
                     console.error('Error:', error);
                     alert('Error updating vote: ' + error.message);
                 });
+            });
+        });
+        
+        // Auto-resize textarea for comments
+        document.querySelectorAll('.add-comment-form textarea').forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            // Focus event to expand textarea
+            textarea.addEventListener('focus', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.max(80, this.scrollHeight) + 'px';
+            });
+            
+            // Blur event to collapse textarea if empty
+            textarea.addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    this.style.height = '40px';
+                }
             });
         });
         

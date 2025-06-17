@@ -65,13 +65,18 @@ try {
         $post['upvoted_by'] = [];
     }
     
+    // Convert BSON array to PHP array if needed
+    $upvotedBy = $post['upvoted_by'];
+    if ($upvotedBy instanceof MongoDB\Model\BSONArray) {
+        $upvotedBy = $upvotedBy->getArrayCopy();
+    }
+    
     // Check if user has already upvoted
-    $upvotedIndex = array_search($userId, $post['upvoted_by']);
+    $upvotedIndex = array_search($userId, $upvotedBy);
     $alreadyUpvoted = $upvotedIndex !== false;
     
     if ($alreadyUpvoted) {
         // Remove upvote
-        $upvotedBy = $post['upvoted_by'];
         array_splice($upvotedBy, $upvotedIndex, 1);
         
         $newUpvotes = count($upvotedBy);
@@ -93,7 +98,6 @@ try {
         ]);
     } else {
         // Add upvote
-        $upvotedBy = $post['upvoted_by'];
         $upvotedBy[] = $userId;
         
         $newUpvotes = count($upvotedBy);

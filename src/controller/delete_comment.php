@@ -69,7 +69,13 @@ try {
         exit;
     }
     
-    $comment = $post['comments'][$commentIndex];
+    // Convert BSON array to PHP array if needed
+    $comments = $post['comments'];
+    if ($comments instanceof MongoDB\Model\BSONArray) {
+        $comments = $comments->getArrayCopy();
+    }
+    
+    $comment = $comments[$commentIndex];
     $userId = $_SESSION['user_id'];
     $isAdmin = isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin';
     
@@ -79,7 +85,6 @@ try {
     }
     
     // Remove the comment
-    $comments = $post['comments'];
     array_splice($comments, $commentIndex, 1);
     
     $result = $collection->updateOne(
