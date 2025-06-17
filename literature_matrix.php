@@ -119,6 +119,7 @@ $defaultTags = [
             background: white;
             border-radius: 8px;
             overflow: hidden;
+            table-layout: fixed; /* Add fixed table layout */
         }
 
         .literature-table thead {
@@ -133,18 +134,51 @@ $defaultTags = [
             top: 0;
             background: var(--notion-gray);
             z-index: 2;
-            min-width: 200px;
-            white-space: nowrap;
             padding: 12px 15px;
             border-bottom: 2px solid var(--notion-border);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Set specific widths for different columns */
+        .literature-table th:first-child,
+        .literature-table td:first-child {
+            width: 250px; /* Fixed width for filename column */
+            max-width: 250px;
         }
 
         .literature-table td {
             background: white;
-            min-width: 200px;
             padding: 12px 15px;
             border: 1px solid var(--notion-border);
             vertical-align: top;
+            word-wrap: break-word; /* Allow word wrapping */
+            overflow-wrap: break-word;
+        }
+
+        /* Add ellipsis for long filenames */
+        .literature-table td:first-child {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Show full filename on hover */
+        .literature-table td:first-child:hover {
+            white-space: normal;
+            overflow: visible;
+            position: relative;
+            z-index: 1;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Ensure other columns take up remaining space evenly */
+        .literature-table th:not(:first-child),
+        .literature-table td:not(:first-child) {
+            width: auto;
+            min-width: 200px;
         }
 
         .upload-section {
@@ -302,6 +336,84 @@ $defaultTags = [
             border-radius: 8px;
             position: relative;
         }
+
+        /* Trendy generation overlay */
+        .generation-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(30, 144, 255, 0.15); /* blue haze */
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+        .spinner-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255,255,255,0.85);
+            padding: 2rem 3rem;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(30,144,255,0.15);
+        }
+        .trendy-spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 4px solid #b3d8fd;
+            border-top: 4px solid #1e90ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        .spinner-text {
+            font-size: 1.2rem;
+            color: #1e90ff;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .generation-status-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .spinner-inline {
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 3px solid #b3d8fd;
+            border-top: 3px solid #1e90ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .spinner-inline-text {
+            font-size: 1.1rem;
+            color: #1e90ff;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+        .file-item.generating {
+            background: #e6f2ff !important;
+            box-shadow: 0 2px 8px rgba(30,144,255,0.06);
+        }
+        .spinner-inline {
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 3px solid #b3d8fd;
+            border-top: 3px solid #1e90ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+        .spinner-inline-text {
+            font-size: 1.1rem;
+            color: #1e90ff;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
 </head>
@@ -336,9 +448,10 @@ $defaultTags = [
             <div id="generateButtonContainer" class="mt-3" style="display: none;">
                 <hr class="my-3">
                 <button class="btn btn-notion" onclick="generateMatrix()" id="generateBtn">
-                    <i class="bi bi-magic"></i> Generate Matrix
+                    Generate Matrix
                 </button>
             </div>
+            <div id="generationStatusRow" class="generation-status-row mt-3"></div>
         </div>
 
         <!-- Literature Matrix Table -->
@@ -496,85 +609,73 @@ $defaultTags = [
         async function analyzeWithGemini(text, tag) {
             const MAX_RETRIES = 3;
             const RETRY_DELAY = 2000; // 2 seconds
-            const CHUNK_SIZE = 5000; // characters per chunk
+            // const CHUNK_SIZE = 5000; // characters per chunk
 
-            // Split text into chunks
-            const chunks = [];
-            for (let i = 0; i < text.length; i += CHUNK_SIZE) {
-                chunks.push(text.slice(i, i + CHUNK_SIZE));
-            }
+            // No chunking: send the entire text in one call
+            let retries = 0;
+            while (retries < MAX_RETRIES) {
+                try {
+                    const prompt = `Analyze this research paper text and extract information relevant to the category "${tag}". 
+Provide a very concise summary of the key points related to this category.
+Text: ${text}`;
 
-            let summaries = [];
-            for (let chunk of chunks) {
-                let retries = 0;
-                while (retries < MAX_RETRIES) {
-                    try {
-                        const prompt = `Analyze this part of a research paper text and extract information relevant to the category "${tag}". 
-                                      Provide a very concise summary of the key points related to this category.
-                                      Text: ${chunk}`;
-
-                        const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
+                    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            contents: [{
+                                parts: [{
+                                    text: prompt
+                                }]
+                            }],
+                            generationConfig: {
+                                temperature: 0.4,
+                                topK: 32,
+                                topP: 0.8,
+                                maxOutputTokens: 512,
                             },
-                            body: JSON.stringify({
-                                contents: [{
-                                    parts: [{
-                                        text: prompt
-                                    }]
-                                }],
-                                generationConfig: {
-                                    temperature: 0.4,
-                                    topK: 32,
-                                    topP: 0.8,
-                                    maxOutputTokens: 512,
+                            safetySettings: [
+                                {
+                                    category: "HARM_CATEGORY_HARASSMENT",
+                                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
                                 },
-                                safetySettings: [
-                                    {
-                                        category: "HARM_CATEGORY_HARASSMENT",
-                                        threshold: "BLOCK_MEDIUM_AND_ABOVE"
-                                    },
-                                    {
-                                        category: "HARM_CATEGORY_HATE_SPEECH",
-                                        threshold: "BLOCK_MEDIUM_AND_ABOVE"
-                                    },
-                                    {
-                                        category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                                        threshold: "BLOCK_MEDIUM_AND_ABOVE"
-                                    },
-                                    {
-                                        category: "HARM_CATEGORY_DANGEROUS_CONTENT",
-                                        threshold: "BLOCK_MEDIUM_AND_ABOVE"
-                                    }
-                                ]
-                            })
-                        });
+                                {
+                                    category: "HARM_CATEGORY_HATE_SPEECH",
+                                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                                },
+                                {
+                                    category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                                },
+                                {
+                                    category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                                    threshold: "BLOCK_MEDIUM_AND_ABOVE"
+                                }
+                            ]
+                        })
+                    });
 
-                        if (response.status === 429) {
-                            throw new Error('Rate limit exceeded');
-                        }
-
-                        const data = await response.json();
-                        if (data.candidates && data.candidates[0].content.parts[0].text) {
-                            summaries.push(data.candidates[0].content.parts[0].text);
-                            break; // Success, move to next chunk
-                        }
-                        throw new Error('Analysis failed');
-                    } catch (error) {
-                        retries++;
-                        if (retries === MAX_RETRIES) {
-                            console.error('Gemini API Error:', error);
-                            return "Analysis failed after multiple retries";
-                        }
-                        // Wait before retrying
-                        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+                    if (response.status === 429) {
+                        throw new Error('Rate limit exceeded');
                     }
+
+                    const data = await response.json();
+                    if (data.candidates && data.candidates[0].content.parts[0].text) {
+                        return data.candidates[0].content.parts[0].text;
+                    }
+                    throw new Error('Analysis failed');
+                } catch (error) {
+                    retries++;
+                    if (retries === MAX_RETRIES) {
+                        console.error('Gemini API Error:', error);
+                        return "Analysis failed after multiple retries";
+                    }
+                    // Wait before retrying
+                    await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
                 }
             }
-
-            // Combine summaries
-            return summaries.join('\n\n');
         }
 
         // Handle file upload
@@ -653,44 +754,40 @@ $defaultTags = [
         async function generateMatrix() {
             const generateBtn = document.getElementById('generateBtn');
             generateBtn.disabled = true;
-            generateBtn.innerHTML = '<div class="loading-spinner"></div> Generating...';
+            generateBtn.textContent = 'Generating...';
 
-            // Create progress element
-            const progressDiv = document.createElement('div');
-            progressDiv.className = 'analysis-progress';
-            progressDiv.innerHTML = `
-                <div>Analyzing documents...</div>
-                <div class="progress-bar">
-                    <div class="progress-bar-fill" style="width: 0%"></div>
-                </div>
-                <div class="progress-text">0%</div>
-            `;
-            document.body.appendChild(progressDiv);
+            // Find files that need generation (missing at least one selected tag)
+            const filesToProcess = uploadedFiles.filter(file => {
+                return Array.from(selectedTags).some(tag => !file.data || !file.data[tag]);
+            });
+
+            // Mark files as generating
+            filesToProcess.forEach(file => file.isGenerating = true);
+            updateFileList();
 
             try {
-                let totalOperations = uploadedFiles.length * selectedTags.size;
-                let completedOperations = 0;
-
-                for (const file of uploadedFiles) {
+                let totalTags = selectedTags.size;
+                for (const file of filesToProcess) {
                     const text = pdfContents.get(file.name);
                     if (!text) continue;
 
                     for (const tag of selectedTags) {
+                        if (file.data && file.data[tag]) {
+                            continue; // Skip already generated tags
+                        }
                         const analysis = await analyzeWithGemini(text, tag);
+                        if (!file.data) file.data = {};
                         file.data[tag] = analysis;
                         file.lastEditedBy = {
                             userId: USER_ID,
                             name: USER_NAME,
                             timestamp: new Date().toISOString()
                         };
-
-                        completedOperations++;
-                        const progress = (completedOperations / totalOperations) * 100;
-                        progressDiv.querySelector('.progress-bar-fill').style.width = `${progress}%`;
-                        progressDiv.querySelector('.progress-text').textContent = `${Math.round(progress)}%`;
                     }
+                    // Mark file as done
+                    file.isGenerating = false;
+                    updateFileList();
                 }
-
                 updateTable();
                 saveToDatabase();
             } catch (error) {
@@ -698,8 +795,10 @@ $defaultTags = [
                 alert('Error generating matrix. Please try again.');
             } finally {
                 generateBtn.disabled = false;
-                generateBtn.innerHTML = '<i class="bi bi-magic"></i> Generate Matrix';
-                progressDiv.remove();
+                generateBtn.textContent = 'Generate Matrix';
+                // Remove all generating flags
+                uploadedFiles.forEach(file => file.isGenerating = false);
+                updateFileList();
             }
         }
 
@@ -747,7 +846,15 @@ $defaultTags = [
                 uploadedFiles.forEach(file => {
                     const fileItem = document.createElement('div');
                     fileItem.className = 'file-item';
+                    if (file.isGenerating) fileItem.classList.add('generating');
                     
+                    // Spinner for generating files
+                    if (file.isGenerating) {
+                        const spinner = document.createElement('div');
+                        spinner.className = 'spinner-inline';
+                        fileItem.appendChild(spinner);
+                    }
+
                     const fileName = document.createElement('span');
                     fileName.textContent = file.name;
                     
