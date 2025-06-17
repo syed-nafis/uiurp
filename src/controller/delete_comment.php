@@ -13,13 +13,18 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     exit;
 }
 
-// Get POST data (json)
+// Get JSON data
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
 // Validate input
 if (!isset($data['postId']) || empty($data['postId'])) {
     echo json_encode(['success' => false, 'message' => 'Post ID is required']);
+    exit;
+}
+
+if (!isset($data['commentIndex']) && $data['commentIndex'] !== 0) {
+    echo json_encode(['success' => false, 'message' => 'Comment index is required']);
     exit;
 }
 
@@ -57,64 +62,45 @@ try {
         $collection = $forumPostsCollection;
     }
     
-    // Get current user ID
-    $userId = $_SESSION['user_id'];
-    
-    // Initialize arrays if they don't exist
-    if (!isset($post['upvoted_by'])) {
-        $post['upvoted_by'] = [];
+    // Verify the user owns the comment or is an admin
+    $commentIndex = (int) $data['commentIndex'];
+    if (!isset($post['comments'][$commentIndex])) {
+        echo json_encode(['success' => false, 'message' => 'Comment not found']);
+        exit;
     }
     
-    // Check if user has already upvoted
-    $upvotedIndex = array_search($userId, $post['upvoted_by']);
-    $alreadyUpvoted = $upvotedIndex !== false;
+    $comment = $post['comments'][$commentIndex];
+    $userId = $_SESSION['user_id'];
+    $isAdmin = isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin';
     
-    if ($alreadyUpvoted) {
-        // Remove upvote
-        $upvotedBy = $post['upvoted_by'];
-        array_splice($upvotedBy, $upvotedIndex, 1);
-        
-        $newUpvotes = count($upvotedBy);
-        
-        $collection->updateOne(
-            ['_id' => $postId],
-            [
-                '$set' => [
-                    'upvotes' => $newUpvotes,
-                    'upvoted_by' => $upvotedBy
-                ]
-            ]
-        );
-        
+    if (!$isAdmin && $comment['user_id'] !== $userId) {
+        echo json_encode(['success' => false, 'message' => 'You can only delete your own comments']);
+        exit;
+    }
+    
+    // Remove the comment
+    $comments = $post['comments'];
+    array_splice($comments, $commentIndex, 1);
+    
+    $result = $collection->updateOne(
+        ['_id' => $postId],
+        ['$set' => ['comments' => $comments]]
+    );
+    
+    if ($result->getModifiedCount() > 0) {
         echo json_encode([
             'success' => true,
-            'upvoted' => false,
-            'upvotes' => $newUpvotes
+            'message' => 'Comment deleted successfully'
         ]);
     } else {
-        // Add upvote
-        $upvotedBy = $post['upvoted_by'];
-        $upvotedBy[] = $userId;
-        
-        $newUpvotes = count($upvotedBy);
-        
-        $collection->updateOne(
-            ['_id' => $postId],
-            [
-                '$set' => [
-                    'upvotes' => $newUpvotes,
-                    'upvoted_by' => $upvotedBy
-                ]
-            ]
-        );
-        
         echo json_encode([
-            'success' => true,
-            'upvoted' => true,
-            'upvotes' => $newUpvotes
+            'success' => false,
+            'message' => 'Failed to delete comment'
         ]);
     }
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
-}
-?>
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage()
+    ]);
+} 

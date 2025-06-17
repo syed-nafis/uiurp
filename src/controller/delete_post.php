@@ -13,7 +13,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     exit;
 }
 
-// Get POST data (json)
+// Get JSON data
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
@@ -57,64 +57,42 @@ try {
         $collection = $forumPostsCollection;
     }
     
-    // Get current user ID
+    // Verify the user owns the post or is an admin
     $userId = $_SESSION['user_id'];
+    $isAdmin = isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin';
     
-    // Initialize arrays if they don't exist
-    if (!isset($post['upvoted_by'])) {
-        $post['upvoted_by'] = [];
+    if (!$isAdmin && (!isset($post['user_id']) || $post['user_id'] !== $userId)) {
+        echo json_encode(['success' => false, 'message' => 'You can only delete your own posts']);
+        exit;
     }
     
-    // Check if user has already upvoted
-    $upvotedIndex = array_search($userId, $post['upvoted_by']);
-    $alreadyUpvoted = $upvotedIndex !== false;
+    // Delete any attachments if they exist
+    if (isset($post['attachments']) && !empty($post['attachments'])) {
+        foreach ($post['attachments'] as $attachment) {
+            $filePath = $attachment['file_path'] ?? '';
+            if (!empty($filePath) && file_exists($_SERVER['DOCUMENT_ROOT'] . '/' . $filePath)) {
+                unlink($_SERVER['DOCUMENT_ROOT'] . '/' . $filePath);
+            }
+        }
+    }
     
-    if ($alreadyUpvoted) {
-        // Remove upvote
-        $upvotedBy = $post['upvoted_by'];
-        array_splice($upvotedBy, $upvotedIndex, 1);
-        
-        $newUpvotes = count($upvotedBy);
-        
-        $collection->updateOne(
-            ['_id' => $postId],
-            [
-                '$set' => [
-                    'upvotes' => $newUpvotes,
-                    'upvoted_by' => $upvotedBy
-                ]
-            ]
-        );
-        
+    // Delete the post
+    $result = $collection->deleteOne(['_id' => $postId]);
+    
+    if ($result->getDeletedCount() > 0) {
         echo json_encode([
             'success' => true,
-            'upvoted' => false,
-            'upvotes' => $newUpvotes
+            'message' => 'Post deleted successfully'
         ]);
     } else {
-        // Add upvote
-        $upvotedBy = $post['upvoted_by'];
-        $upvotedBy[] = $userId;
-        
-        $newUpvotes = count($upvotedBy);
-        
-        $collection->updateOne(
-            ['_id' => $postId],
-            [
-                '$set' => [
-                    'upvotes' => $newUpvotes,
-                    'upvoted_by' => $upvotedBy
-                ]
-            ]
-        );
-        
         echo json_encode([
-            'success' => true,
-            'upvoted' => true,
-            'upvotes' => $newUpvotes
+            'success' => false,
+            'message' => 'Failed to delete post'
         ]);
     }
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
-}
-?>
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage()
+    ]);
+} 
