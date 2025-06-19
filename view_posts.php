@@ -7,11 +7,13 @@ require __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/src/model/db_connect.php';
 
 // Import MongoDB classes
-use MongoDB\BSON\UTCDateTime;
-use MongoDB\BSON\ObjectId;
-use MongoDB\Client;
-use MongoDB\Collection;
-use MongoDB\Driver\Exception\ConnectionException;
+require_once __DIR__ . '/vendor/autoload.php';
+
+use \MongoDB\BSON\UTCDateTime;
+use \MongoDB\BSON\ObjectId;
+use \MongoDB\Client;
+use \MongoDB\Collection;
+use \MongoDB\Driver\Exception\ConnectionException;
 
 session_start();
 
@@ -59,10 +61,10 @@ try {
     // Map posts to ensure consistent structure
     $allPosts = [];
     foreach ($newPosts as $post) {
-        try {
-            $currentTime = new \MongoDB\BSON\UTCDateTime();
-            
-            // Convert BSONArray objects to PHP arrays
+                    try {
+                $currentTime = new \MongoDB\BSON\UTCDateTime((int)(microtime(true) * 1000));
+                
+                // Convert BSONArray objects to PHP arrays
             $tags = $post['tags'] ?? ['discussion'];
             if ($tags instanceof MongoDB\Model\BSONArray) {
                 $tags = $tags->getArrayCopy();
@@ -148,557 +150,613 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forum Posts</title>
+    <title>Forum - UIU Research Portal</title>
+    
+    <!-- Core styles -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+    <!-- Animation libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <!-- Custom styles -->
     <link rel="stylesheet" href="assets/styles/home.css">
+    <link rel="stylesheet" href="assets/styles/theme.css">
     <link rel="stylesheet" href="assets/styles/forum_style.css">
+    <!-- Performance optimization styles -->
+    <link rel="stylesheet" href="assets/styles/performance.css">
+    
+    <!-- Prevent Theme Flash Script - Must run immediately -->
+    <script>
+    (function() {
+        // Get saved theme immediately to prevent flash
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+    })();
+    </script>
+    
+    <!-- Performance optimization script - Load early for immediate optimizations -->
+    <script src="assets/js/performance-optimizer.js" defer></script>
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        .forum-post {
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        /* Modern UI Styles */
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --light-color: #f8fafc;
+            --dark-color: #0f172a;
+            --success-color: #06b6d4;
+            --warning-color: #f59e0b;
+            --modern-blue: #0ea5e9;
+            --modern-purple: #8b5cf6;
+            --modern-teal: #14b8a6;
+            --modern-gray: #6b7280;
+            --card-bg: rgba(15, 23, 42, 0.6);
+            --glass-bg: rgba(22, 28, 45, 0.7);
+            --border-glow: rgba(37, 99, 235, 0.5);
+            --surface-1: rgba(30, 41, 59, 0.6);
+            --surface-2: rgba(15, 23, 42, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
         }
-        .post-header {
-            padding: 1rem;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .post-content {
-            padding: 1.25rem;
-        }
-        .post-footer {
-            padding: 0.75rem 1rem;
-            background-color: #f9f9f9;
-            border-top: 1px solid #f0f0f0;
-        }
-        .post-author {
-            display: flex;
-            align-items: center;
-        }
-        .author-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            margin-right: 10px;
-            object-fit: cover;
-        }
-        .post-tag {
-            display: inline-block;
-            padding: 0.2rem 0.5rem;
-            margin-right: 0.5rem;
-            border-radius: 2rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #fff;
-        }
-        .tag-member_recruitment { background-color: #28a745; }
-        .tag-bug_fixes { background-color: #dc3545; }
-        .tag-discussion { background-color: #007bff; }
-        .tag-tutorial { background-color: #17a2b8; }
-        .tag-announcement { background-color: #ffc107; color: #212529; }
-        .tag-question { background-color: #6f42c1; }
-        .tag-resource { background-color: #fd7e14; }
-        
-        .comment-section {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #f0f0f0;
-        }
-        .comment {
-            margin-bottom: 1rem;
-            padding: 0.75rem;
-            background-color: #f9f9f9;
-            border-radius: 4px;
-        }
-        .comment-author {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        .comment-content {
-            margin-bottom: 0.5rem;
-        }
-        .comment-time {
-            font-size: 0.75rem;
-            color: #6c757d;
-        }
-        .attachments {
-            margin-top: 1rem;
-        }
-        .attachment-item {
-            display: inline-block;
-            margin-right: 1rem;
-            margin-bottom: 1rem;
-        }
-        .attachment-img {
-            max-width: 150px;
-            max-height: 150px;
-            border-radius: 4px;
-            border: 1px solid #eee;
-        }
-        .attachment-file {
-            padding: 0.5rem;
-            border: 1px solid #eee;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-        }
-        .attachment-file i {
-            margin-right: 0.5rem;
-        }
-        .post-actions {
-            display: flex;
-            gap: 10px;
-        }
-        .dropdown-menu .dropdown-item {
-            cursor: pointer;
-        }
-        .post-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .comment-meta {
-            display: flex;
-            justify-content: space-between;
-        }
-        .hide-comment-form {
-            display: none;
-        }
-        /* New Facebook-style styles */
+
         body {
-            background-color: #f0f2f5;
+            background: linear-gradient(135deg, #0a0d1a 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
         }
-        .container {
-            max-width: 900px;
+
+        /* Background Effects */
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
         }
-        .create-post-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            padding: 16px;
-            margin-bottom: 20px;
+
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: grid-pulse 4s ease-in-out infinite;
         }
-        .create-post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.4;
+            animation: float-orb 15s ease-in-out infinite;
+            box-shadow: 0 0 50px currentColor;
         }
-        .create-post-input {
-            flex-grow: 1;
-            background-color: #f0f2f5;
-            border-radius: 20px;
-            padding: 8px 16px;
-            margin-left: 10px;
-            cursor: pointer;
-            color: #65676b;
+
+        .orb-1 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, rgba(37, 99, 235, 0.1) 50%, transparent 70%);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
         }
-        .create-post-input:hover {
-            background-color: #e4e6e9;
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, rgba(14, 165, 233, 0.08) 50%, transparent 70%);
+            top: 60%;
+            right: 10%;
+            animation-delay: 7s;
         }
-        .forum-post {
-            border-radius: 8px;
-            margin-bottom: 16px;
-            background-color: #fff;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, rgba(6, 182, 212, 0.1) 50%, transparent 70%);
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 14s;
         }
-        .post-header {
-            padding: 12px 16px;
-            border-bottom: none;
+
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            25% { transform: translate(30px, -20px) scale(1.05) rotate(90deg); }
+            50% { transform: translate(-20px, 30px) scale(0.95) rotate(180deg); }
+            75% { transform: translate(25px, 15px) scale(1.02) rotate(270deg); }
         }
-        .post-content {
-            padding: 0 16px 16px;
+
+        @keyframes grid-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
         }
-        .post-footer {
-            padding: 8px 16px;
-            background-color: white;
-            border-top: 1px solid #f0f0f0;
+
+        /* Forum Specific Styles */
+        .forum-container {
+            position: relative;
+            z-index: 1;
+            padding: 2rem 0;
         }
-        .filters-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            padding: 16px;
-            margin-bottom: 20px;
-        }
+
         .forum-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #1877f2;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--modern-blue), var(--modern-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        /* Additional Facebook-style enhancements */
-        .reaction-count {
-            display: flex;
-            align-items: center;
-            font-size: 0.9rem;
+
+        .create-post-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .reaction-count i {
-            font-size: 1.1rem;
-            margin-right: 5px;
+
+        .create-post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
         }
-        .comment-bubble {
-            background-color: #f0f2f5;
-            border-radius: 18px;
+
+        .filters-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
         }
+
+        .forum-post {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .forum-post:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .post-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .post-content {
+            padding: 1.5rem;
+        }
+
+        .post-footer {
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .post-tag {
+            background: var(--modern-blue);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .post-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+
+        .comment-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
         .comment {
-            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
         }
-        textarea.rounded-pill {
-            padding-right: 40px;
-            padding-left: 15px;
-            height: 40px;
-            background-color: #f0f2f5;
+
+        /* Form Controls */
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            border-radius: 0.5rem;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--modern-blue);
+            color: var(--text-primary);
+            box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.25);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--modern-blue), var(--modern-purple));
             border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
-        textarea.rounded-pill:focus {
-            background-color: #f0f2f5;
-            box-shadow: none;
-            border: none;
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
         }
-        .post-text {
-            font-size: 1.1rem;
-            line-height: 1.5;
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
         }
-        .post-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-        /* Make the layout more responsive */
-        @media (max-width: 576px) {
-            .container {
-                padding-left: 8px;
-                padding-right: 8px;
-            }
-            .create-post-card, .forum-post, .filters-card {
-                border-radius: 0;
-            }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
     <?php include 'src/includes/navbar.php'; ?>
 
-    <div class="container mt-4">
-        <?php if (isset($error)): ?>
-            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-        <?php endif; ?>
+    <!-- Background Effects -->
+    <div class="background-effects">
+        <div class="cyber-grid"></div>
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+    </div>
 
-        <div class="forum-title text-center mb-4">
-            Forum
-        </div>
+    <div class="forum-container">
+        <div class="container">
+            <?php if (isset($error)): ?>
+                <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+            <?php endif; ?>
 
-        <!-- Create Post Card -->
-        <div class="create-post-card">
-            <div class="create-post-header">
-                <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" alt="Your Avatar" class="author-avatar">
-                <a href="forum_index.php" class="create-post-input text-decoration-none">
-                    What's on your mind, <?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>?
-                </a>
+            <h1 class="forum-title" data-aos="fade-down">
+                Research Forum
+            </h1>
+
+            <!-- Create Post Card -->
+            <div class="create-post-card" data-aos="fade-up">
+                <div class="create-post-header d-flex align-items-center">
+                    <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" alt="Your Avatar" class="author-avatar" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 15px;">
+                    <a href="forum_index.php" class="create-post-input text-decoration-none flex-grow-1 p-3 rounded-pill">
+                        What's on your mind, <?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>?
+                    </a>
+                </div>
+                <div class="d-flex justify-content-center border-top pt-3 mt-3">
+                    <a href="forum_index.php" class="btn btn-primary w-100">
+                        <i class="bi bi-pencil-square me-2"></i>Create New Post
+                    </a>
+                </div>
             </div>
-            <div class="d-flex justify-content-center border-top pt-3">
-                <a href="forum_index.php" class="btn btn-primary w-100">
-                    <i class="bi bi-pencil-square me-2"></i>Create New Post
-                </a>
-            </div>
-        </div>
 
-        <!-- Debug info -->
-        <?php if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin'): ?>
-            <div class="alert alert-info">
-                <h5>Debug Information:</h5>
-                <ul>
-                    <li>Total posts: <?= count($allPosts) ?></li>
-                    <li>Sort option: <?= htmlspecialchars($sortOption) ?></li>
-                    <li>Tag filter: <?= htmlspecialchars($tagFilter) ?></li>
-                    <li>Current user ID: <?= htmlspecialchars($_SESSION['user_id']) ?></li>
-                </ul>
+            <!-- Filters Card -->
+            <div class="filters-card" data-aos="fade-up" data-aos-delay="100">
+                <form method="GET" class="d-flex gap-2">
+                    <select name="sort" class="form-select" onchange="this.form.submit()">
+                        <option value="newest" <?= $sortOption == 'newest' ? 'selected' : '' ?>>Newest</option>
+                        <option value="upvotes" <?= $sortOption == 'upvotes' ? 'selected' : '' ?>>Most Upvoted</option>
+                    </select>
+                    
+                    <select name="tag" class="form-select" onchange="this.form.submit()">
+                        <option value="">All Tags</option>
+                        <?php foreach ($allTags as $tag): ?>
+                            <option value="<?= $tag['name'] ?>" <?= $tagFilter == $tag['name'] ? 'selected' : '' ?>>
+                                <?= ucfirst(str_replace('_', ' ', $tag['name'])) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    
+                    <?php if (!empty($tagFilter) || $sortOption != 'newest'): ?>
+                        <a href="view_posts.php" class="btn btn-outline-secondary">Clear Filters</a>
+                    <?php endif; ?>
+                </form>
             </div>
-        <?php endif; ?>
-
-        <!-- Filters Card -->
-        <div class="filters-card">
-            <form method="GET" class="d-flex gap-2">
-                <select name="sort" class="form-select" onchange="this.form.submit()">
-                    <option value="newest" <?= $sortOption == 'newest' ? 'selected' : '' ?>>Newest</option>
-                    <option value="upvotes" <?= $sortOption == 'upvotes' ? 'selected' : '' ?>>Most Upvoted</option>
-                </select>
-                
-                <select name="tag" class="form-select" onchange="this.form.submit()">
-                    <option value="">All Tags</option>
-                    <?php foreach ($allTags as $tag): ?>
-                        <option value="<?= $tag['name'] ?>" <?= $tagFilter == $tag['name'] ? 'selected' : '' ?>>
-                            <?= ucfirst(str_replace('_', ' ', $tag['name'])) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                
-                <?php if (!empty($tagFilter) || $sortOption != 'newest'): ?>
-                    <a href="view_posts.php" class="btn btn-outline-secondary">Clear Filters</a>
-                <?php endif; ?>
-            </form>
-        </div>
-        
-        <div id="posts-container">
-            <?php if (empty($allPosts)): ?>
-                <div class="alert alert-info">No posts found. Be the first to create a post!</div>
-            <?php else: ?>
-                <?php foreach ($allPosts as $post): ?>
-                    <div class="forum-post" id="post-<?= $post['_id'] ?>">
-                        <div class="post-header">
-                            <div class="post-meta">
-                                <div class="post-author">
-                                    <img src="<?= $post['user_profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" alt="Avatar" class="author-avatar">
-                                    <div>
-                                        <div class="fw-bold"><?= htmlspecialchars($post['user_name'] ?? 'Unknown User') ?></div>
-                                        <div class="text-muted small">
-                                            <?php if (isset($post['created_at']) && !empty($post['created_at'])): ?>
-                                                <?php
-                                                    $dateTime = null;
-                                                    if (is_object($post['created_at']) && method_exists($post['created_at'], 'toDateTime')) {
-                                                        $dateTime = $post['created_at']->toDateTime();
-                                                        $dateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
-                                                    } elseif (is_string($post['created_at']) || is_numeric($post['created_at'])) {
-                                                        $dateTime = new DateTime('@' . (int)$post['created_at']);
-                                                        $dateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
-                                                    }
-                                                    
-                                                    echo $dateTime ? $dateTime->format('M j, Y \a\t g:i a') : 'Unknown date';
-                                                    
-                                                    // Check if updated
-                                                    if (isset($post['updated_at']) && !empty($post['updated_at'])) {
-                                                        $updateDateTime = null;
-                                                        if (is_object($post['updated_at']) && method_exists($post['updated_at'], 'toDateTime')) {
-                                                            $updateDateTime = $post['updated_at']->toDateTime();
-                                                            $updateDateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
-                                                        } elseif (is_string($post['updated_at']) || is_numeric($post['updated_at'])) {
-                                                            $updateDateTime = new DateTime('@' . (int)$post['updated_at']);
-                                                            $updateDateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
+            
+            <div id="posts-container">
+                <?php if (empty($allPosts)): ?>
+                    <div class="alert alert-info fade-in" data-aos="fade-up">No posts found. Be the first to create a post!</div>
+                <?php else: ?>
+                    <?php foreach ($allPosts as $index => $post): ?>
+                        <div class="forum-post fade-in" id="post-<?= $post['_id'] ?>" data-aos="fade-up" data-aos-delay="<?= $index * 50 ?>">
+                            <div class="post-header">
+                                <div class="post-meta">
+                                    <div class="post-author">
+                                        <img src="<?= $post['user_profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" alt="Avatar" class="author-avatar">
+                                        <div>
+                                            <div class="fw-bold"><?= htmlspecialchars($post['user_name'] ?? 'Unknown User') ?></div>
+                                            <div class="text-muted small">
+                                                <?php if (isset($post['created_at']) && !empty($post['created_at'])): ?>
+                                                    <?php
+                                                        $dateTime = null;
+                                                        if (is_object($post['created_at']) && method_exists($post['created_at'], 'toDateTime')) {
+                                                            $dateTime = $post['created_at']->toDateTime();
+                                                            $dateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
+                                                        } elseif (is_string($post['created_at']) || is_numeric($post['created_at'])) {
+                                                            $dateTime = new DateTime('@' . (int)$post['created_at']);
+                                                            $dateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
                                                         }
                                                         
-                                                        if ($dateTime && $updateDateTime && $updateDateTime->getTimestamp() > $dateTime->getTimestamp()) {
-                                                            echo ' (edited)';
+                                                        echo $dateTime ? $dateTime->format('M j, Y \a\t g:i a') : 'Unknown date';
+                                                        
+                                                        // Check if updated
+                                                        if (isset($post['updated_at']) && !empty($post['updated_at'])) {
+                                                            $updateDateTime = null;
+                                                            if (is_object($post['updated_at']) && method_exists($post['updated_at'], 'toDateTime')) {
+                                                                $updateDateTime = $post['updated_at']->toDateTime();
+                                                                $updateDateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
+                                                            } elseif (is_string($post['updated_at']) || is_numeric($post['updated_at'])) {
+                                                                $updateDateTime = new DateTime('@' . (int)$post['updated_at']);
+                                                                $updateDateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
+                                                            }
+                                                            
+                                                            if ($dateTime && $updateDateTime && $updateDateTime->getTimestamp() > $dateTime->getTimestamp()) {
+                                                                echo ' (edited)';
+                                                            }
                                                         }
-                                                    }
-                                                ?>
-                                            <?php else: ?>
-                                                Unknown date
-                                            <?php endif; ?>
+                                                    ?>
+                                                <?php else: ?>
+                                                    Unknown date
+                                                <?php endif; ?>
+                                            </div>
                                         </div>
                                     </div>
+                                    
+                                    <?php if (isset($_SESSION['user_id']) && isset($post['user_id']) && $_SESSION['user_id'] === $post['user_id']): ?>
+                                        <div class="post-actions">
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
+                                                    <i class="bi bi-three-dots"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item edit-post-btn" href="edit_post.php?id=<?= $post['_id'] ?>">Edit</a></li>
+                                                    <li><a class="dropdown-item delete-post-btn" href="#" data-post-id="<?= $post['_id'] ?>">Delete</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            
+                            <div class="post-content">
+                                <h3 class="post-title mb-3">
+                                    <a href="post_details.php?id=<?= $post['_id'] ?>" class="text-decoration-none text-dark">
+                                        <?= htmlspecialchars($post['title']) ?>
+                                    </a>
+                                </h3>
+                                
+                                <div class="post-tags mb-3">
+                                    <?php 
+                                    // Tags are already converted in the mapping function
+                                    if (!empty($post['tags'])):
+                                        foreach ($post['tags'] as $tag): 
+                                    ?>
+                                            <span class="post-tag tag-<?= $tag ?>">
+                                                <?= ucfirst(str_replace('_', ' ', $tag)) ?>
+                                            </span>
+                                    <?php 
+                                        endforeach;
+                                    endif; 
+                                    ?>
                                 </div>
                                 
-                                <?php if (isset($_SESSION['user_id']) && isset($post['user_id']) && $_SESSION['user_id'] === $post['user_id']): ?>
-                                    <div class="post-actions">
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
-                                                <i class="bi bi-three-dots"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item edit-post-btn" href="edit_post.php?id=<?= $post['_id'] ?>">Edit</a></li>
-                                                <li><a class="dropdown-item delete-post-btn" href="#" data-post-id="<?= $post['_id'] ?>">Delete</a></li>
-                                            </ul>
-                                        </div>
+                                <div class="post-text mb-3">
+                                    <a href="post_details.php?id=<?= $post['_id'] ?>" class="text-decoration-none text-dark">
+                                        <?= nl2br(htmlspecialchars($post['content'])) ?>
+                                    </a>
+                                </div>
+                                
+                                <?php if (!empty($post['attachments'])): ?>
+                                    <div class="attachments">
+                                        <?php foreach ($post['attachments'] as $attachment): ?>
+                                            <?php 
+                                            $isImage = strpos($attachment['file_type'], 'image/') === 0;
+                                            $fileExt = pathinfo($attachment['original_name'], PATHINFO_EXTENSION);
+                                            ?>
+                                            
+                                            <div class="attachment-item">
+                                                <a href="<?= $attachment['file_path'] ?>" target="_blank" class="text-decoration-none">
+                                                    <?php if ($isImage): ?>
+                                                        <img src="<?= $attachment['file_path'] ?>" alt="Attachment" class="attachment-img">
+                                                    <?php else: ?>
+                                                        <div class="attachment-file">
+                                                            <i class="bi bi-file-earmark"></i>
+                                                            <span><?= htmlspecialchars($attachment['original_name']) ?></span>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </a>
+                                            </div>
+                                        <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
                             </div>
-                        </div>
-                        
-                        <div class="post-content">
-                            <h3 class="post-title mb-3">
-                                <a href="post_details.php?id=<?= $post['_id'] ?>" class="text-decoration-none text-dark">
-                                    <?= htmlspecialchars($post['title']) ?>
-                                </a>
-                            </h3>
                             
-                            <div class="post-tags mb-3">
-                                <?php 
-                                // Tags are already converted in the mapping function
-                                if (!empty($post['tags'])):
-                                    foreach ($post['tags'] as $tag): 
-                                ?>
-                                        <span class="post-tag tag-<?= $tag ?>">
-                                            <?= ucfirst(str_replace('_', ' ', $tag)) ?>
-                                        </span>
-                                <?php 
-                                    endforeach;
-                                endif; 
-                                ?>
-                            </div>
-                            
-                            <div class="post-text mb-3">
-                                <a href="post_details.php?id=<?= $post['_id'] ?>" class="text-decoration-none text-dark">
-                                    <?= nl2br(htmlspecialchars($post['content'])) ?>
-                                </a>
-                            </div>
-                            
-                            <?php if (!empty($post['attachments'])): ?>
-                                <div class="attachments">
-                                    <?php foreach ($post['attachments'] as $attachment): ?>
-                                        <?php 
-                                        $isImage = strpos($attachment['file_type'], 'image/') === 0;
-                                        $fileExt = pathinfo($attachment['original_name'], PATHINFO_EXTENSION);
-                                        ?>
-                                        
-                                        <div class="attachment-item">
-                                            <a href="<?= $attachment['file_path'] ?>" target="_blank" class="text-decoration-none">
-                                                <?php if ($isImage): ?>
-                                                    <img src="<?= $attachment['file_path'] ?>" alt="Attachment" class="attachment-img">
-                                                <?php else: ?>
-                                                    <div class="attachment-file">
-                                                        <i class="bi bi-file-earmark"></i>
-                                                        <span><?= htmlspecialchars($attachment['original_name']) ?></span>
-                                                    </div>
-                                                <?php endif; ?>
-                                            </a>
-                                        </div>
-                                    <?php endforeach; ?>
+                            <div class="post-footer">
+                                <!-- Reaction counts display -->
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="reaction-count">
+                                        <i class="bi bi-hand-thumbs-up-fill text-primary"></i>
+                                        <span class="upvote-count" data-post-id="<?= $post['_id'] ?>"><?= $post['upvotes'] ?? 0 ?></span>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <span class="text-muted"><?= count($post['comments'] ?? []) ?> comments</span>
+                                    </div>
                                 </div>
-                            <?php endif; ?>
-                        </div>
-                        
-                        <div class="post-footer">
-                            <!-- Reaction counts display -->
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="reaction-count">
-                                    <i class="bi bi-hand-thumbs-up-fill text-primary"></i>
-                                    <span class="upvote-count" data-post-id="<?= $post['_id'] ?>"><?= $post['upvotes'] ?? 0 ?></span>
-                                </div>
-                                <div class="ms-auto">
-                                    <span class="text-muted"><?= count($post['comments'] ?? []) ?> comments</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Divider -->
-                            <hr class="my-1">
-                            
-                            <!-- Action buttons -->
-                            <div class="d-flex justify-content-between">
-                                <?php 
-                                // All arrays are already converted in the mapping function
-                                $isUpvoted = in_array($_SESSION['user_id'], $post['upvoted_by'] ?? []);
-                                ?>
-                                <button class="btn btn-link text-decoration-none flex-fill upvote-btn <?= $isUpvoted ? 'text-primary fw-bold' : 'text-muted' ?>" 
-                                        data-post-id="<?= $post['_id'] ?>">
-                                    <i class="bi bi-hand-thumbs-up me-1"></i> Like
-                                </button>
                                 
-                                <button class="btn btn-link text-decoration-none flex-fill text-muted toggle-comments-btn" data-post-id="<?= $post['_id'] ?>">
-                                    <i class="bi bi-chat-left-text me-1"></i> Comment
-                                </button>
+                                <!-- Divider -->
+                                <hr class="my-1">
                                 
-                                <button class="btn btn-link text-decoration-none flex-fill text-muted share-btn" 
-                                        data-post-url="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/post_details.php?id=" . $post['_id'] ?>">
-                                    <i class="bi bi-share me-1"></i> Share
-                                </button>
-                            </div>
-                            
-                            <div class="comment-section" id="comments-<?= $post['_id'] ?>" style="display: none;">
-                                <hr class="my-2">
-                                <div class="comments-container">
-                                    <?php if (!empty($post['comments'])): ?>
-                                        <?php foreach ($post['comments'] as $index => $comment): ?>
-                                            <div class="comment" id="comment-<?= $post['_id'] ?>-<?= $index ?>">
-                                                <div class="d-flex">
-                                                    <img src="<?= isset($comment['user_profile_pic']) ? $comment['user_profile_pic'] : 'uploads/profile_images/user_avater.png' ?>" 
-                                                         alt="Avatar" class="author-avatar" style="width: 32px; height: 32px;">
-                                                    <div class="flex-grow-1">
-                                                        <div class="comment-bubble p-2 bg-light rounded">
-                                                            <div class="comment-meta">
-                                                                <div class="comment-author fw-bold"><?= htmlspecialchars($comment['user_name'] ?? 'Unknown') ?></div>
+                                <!-- Action buttons -->
+                                <div class="d-flex justify-content-between">
+                                    <?php 
+                                    // All arrays are already converted in the mapping function
+                                    $isUpvoted = in_array($_SESSION['user_id'], $post['upvoted_by'] ?? []);
+                                    ?>
+                                    <button class="btn btn-link text-decoration-none flex-fill upvote-btn <?= $isUpvoted ? 'text-primary fw-bold' : 'text-muted' ?>" 
+                                            data-post-id="<?= $post['_id'] ?>">
+                                        <i class="bi bi-hand-thumbs-up me-1"></i> Like
+                                    </button>
+                                    
+                                    <button class="btn btn-link text-decoration-none flex-fill text-muted toggle-comments-btn" data-post-id="<?= $post['_id'] ?>">
+                                        <i class="bi bi-chat-left-text me-1"></i> Comment
+                                    </button>
+                                    
+                                    <button class="btn btn-link text-decoration-none flex-fill text-muted share-btn" 
+                                            data-post-url="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/post_details.php?id=" . $post['_id'] ?>">
+                                        <i class="bi bi-share me-1"></i> Share
+                                    </button>
+                                </div>
+                                
+                                <div class="comment-section" id="comments-<?= $post['_id'] ?>" style="display: none;">
+                                    <hr class="my-2">
+                                    <div class="comments-container">
+                                        <?php if (!empty($post['comments'])): ?>
+                                            <?php foreach ($post['comments'] as $index => $comment): ?>
+                                                <div class="comment" id="comment-<?= $post['_id'] ?>-<?= $index ?>">
+                                                    <div class="d-flex">
+                                                        <img src="<?= isset($comment['user_profile_pic']) ? $comment['user_profile_pic'] : 'uploads/profile_images/user_avater.png' ?>" 
+                                                             alt="Avatar" class="author-avatar" style="width: 32px; height: 32px;">
+                                                        <div class="flex-grow-1">
+                                                            <div class="comment-bubble p-2 bg-light rounded">
+                                                                <div class="comment-meta">
+                                                                    <div class="comment-author fw-bold"><?= htmlspecialchars($comment['user_name'] ?? 'Unknown') ?></div>
+                                                                    
+                                                                    <?php if (isset($_SESSION['user_id']) && isset($comment['user_id']) && $_SESSION['user_id'] === $comment['user_id']): ?>
+                                                                        <div class="dropdown">
+                                                                            <button class="btn btn-sm text-muted p-0 ms-2" type="button" data-bs-toggle="dropdown">
+                                                                                <i class="bi bi-three-dots"></i>
+                                                                            </button>
+                                                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                                                <li><a class="dropdown-item edit-comment-btn" href="#" 
+                                                                                    data-post-id="<?= $post['_id'] ?>" 
+                                                                                    data-comment-index="<?= $index ?>">Edit</a></li>
+                                                                                <li><a class="dropdown-item delete-comment-btn" href="#" 
+                                                                                    data-post-id="<?= $post['_id'] ?>" 
+                                                                                    data-comment-index="<?= $index ?>">Delete</a></li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    <?php endif; ?>
+                                                                </div>
                                                                 
-                                                                <?php if (isset($_SESSION['user_id']) && isset($comment['user_id']) && $_SESSION['user_id'] === $comment['user_id']): ?>
-                                                                    <div class="dropdown">
-                                                                        <button class="btn btn-sm text-muted p-0 ms-2" type="button" data-bs-toggle="dropdown">
-                                                                            <i class="bi bi-three-dots"></i>
-                                                                        </button>
-                                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                                            <li><a class="dropdown-item edit-comment-btn" href="#" 
-                                                                                data-post-id="<?= $post['_id'] ?>" 
-                                                                                data-comment-index="<?= $index ?>">Edit</a></li>
-                                                                            <li><a class="dropdown-item delete-comment-btn" href="#" 
-                                                                                data-post-id="<?= $post['_id'] ?>" 
-                                                                                data-comment-index="<?= $index ?>">Delete</a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                <?php endif; ?>
+                                                                <div class="comment-content"><?= nl2br(htmlspecialchars($comment['text'] ?? '')) ?></div>
+                                                            </div>
+                                                            <div class="comment-actions small mt-1">
+                                                                <span class="text-muted comment-time">
+                                                                    <?php if (isset($comment['time']) && !empty($comment['time'])): ?>
+                                                                        <?php
+                                                                            $commentTime = null;
+                                                                            if (is_object($comment['time']) && method_exists($comment['time'], 'toDateTime')) {
+                                                                                $commentTime = $comment['time']->toDateTime();
+                                                                            } elseif (is_string($comment['time']) || is_numeric($comment['time'])) {
+                                                                                $commentTime = new DateTime('@' . (int)$comment['time']);
+                                                                            }
+                                                                            
+                                                                            echo $commentTime ? date('M j, Y \a\t g:i a', $commentTime->getTimestamp()) : 'Unknown time';
+                                                                            
+                                                                            if (isset($comment['edited']) && $comment['edited']) {
+                                                                                echo ' (edited)';
+                                                                            }
+                                                                        ?>
+                                                                    <?php else: ?>
+                                                                        Unknown time
+                                                                    <?php endif; ?>
+                                                                </span>
                                                             </div>
                                                             
-                                                            <div class="comment-content"><?= nl2br(htmlspecialchars($comment['text'] ?? '')) ?></div>
+                                                            <!-- Edit form (hidden by default) -->
+                                                            <form class="edit-comment-form hide-comment-form mt-2" 
+                                                                id="edit-comment-form-<?= $post['_id'] ?>-<?= $index ?>">
+                                                                <textarea class="form-control mb-2" required><?= htmlspecialchars($comment['text'] ?? '') ?></textarea>
+                                                                <div class="d-flex gap-2">
+                                                                    <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                                                    <button type="button" class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
+                                                                </div>
+                                                            </form>
                                                         </div>
-                                                        <div class="comment-actions small mt-1">
-                                                            <span class="text-muted comment-time">
-                                                                <?php if (isset($comment['time']) && !empty($comment['time'])): ?>
-                                                                    <?php
-                                                                        $commentTime = null;
-                                                                        if (is_object($comment['time']) && method_exists($comment['time'], 'toDateTime')) {
-                                                                            $commentTime = $comment['time']->toDateTime();
-                                                                        } elseif (is_string($comment['time']) || is_numeric($comment['time'])) {
-                                                                            $commentTime = new DateTime('@' . (int)$comment['time']);
-                                                                        }
-                                                                        
-                                                                        echo $commentTime ? date('M j, Y \a\t g:i a', $commentTime->getTimestamp()) : 'Unknown time';
-                                                                        
-                                                                        if (isset($comment['edited']) && $comment['edited']) {
-                                                                            echo ' (edited)';
-                                                                        }
-                                                                    ?>
-                                                                <?php else: ?>
-                                                                    Unknown time
-                                                                <?php endif; ?>
-                                                            </span>
-                                                        </div>
-                                                        
-                                                        <!-- Edit form (hidden by default) -->
-                                                        <form class="edit-comment-form hide-comment-form mt-2" 
-                                                            id="edit-comment-form-<?= $post['_id'] ?>-<?= $index ?>">
-                                                            <textarea class="form-control mb-2" required><?= htmlspecialchars($comment['text'] ?? '') ?></textarea>
-                                                            <div class="d-flex gap-2">
-                                                                <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                                                                <button type="button" class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
-                                                            </div>
-                                                        </form>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <p class="text-muted">No comments yet. Be the first to comment!</p>
-                                    <?php endif; ?>
-                                </div>
-                                
-                                <form class="add-comment-form mt-3 d-flex" data-post-id="<?= $post['_id'] ?>">
-                                    <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" 
-                                         alt="Your Avatar" class="author-avatar" style="width: 32px; height: 32px;">
-                                    <div class="flex-grow-1 ms-2">
-                                        <div class="position-relative">
-                                            <textarea class="form-control rounded-pill" placeholder="Write a comment..." required></textarea>
-                                            <button type="submit" class="btn btn-link position-absolute end-0 top-50 translate-middle-y">
-                                                <i class="bi bi-send-fill"></i>
-                                            </button>
-                                        </div>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <p class="text-muted">No comments yet. Be the first to comment!</p>
+                                        <?php endif; ?>
                                     </div>
-                                </form>
+                                    
+                                    <form class="add-comment-form mt-3 d-flex" data-post-id="<?= $post['_id'] ?>">
+                                        <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" 
+                                             alt="Your Avatar" class="author-avatar" style="width: 32px; height: 32px;">
+                                        <div class="flex-grow-1 ms-2">
+                                            <div class="position-relative">
+                                                <textarea class="form-control rounded-pill" placeholder="Write a comment..." required></textarea>
+                                                <button type="submit" class="btn btn-link position-absolute end-0 top-50 translate-middle-y">
+                                                    <i class="bi bi-send-fill"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 
     <!-- Confirmation Modal -->
     <div class="modal fade" id="confirmationModal" tabindex="-1">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirmation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-content" style="background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);">
+                <div class="modal-header border-bottom border-light border-opacity-10">
+                    <h5 class="modal-title text-light">Confirmation</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body text-light">
                     <p id="confirmation-message">Are you sure you want to delete this?</p>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer border-top border-light border-opacity-10">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger" id="confirm-delete-btn">Delete</button>
                 </div>
@@ -706,9 +764,17 @@ try {
         </div>
     </div>
 
+    <?php include 'src/includes/footer.php'; ?>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+        
         // Debug flag - set to true to see console messages
         const DEBUG = true;
         
@@ -1116,7 +1182,6 @@ try {
                 }
             });
         });
-    });
     </script>
 </body>
 </html>

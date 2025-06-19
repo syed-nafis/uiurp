@@ -11,6 +11,8 @@ use MongoDB\BSON\UTCDateTime;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Client;
 use MongoDB\Collection;
+use MongoDB\Driver\Exception\ConnectionException;
+use MongoDB\Driver\Exception\ConnectionTimeoutException;
 
 session_start();
 
@@ -34,7 +36,7 @@ try {
     // Try to convert the ID to ObjectId
     $postId = null;
     try {
-        $postId = new ObjectId($_GET['id']);
+        $postId = new \MongoDB\BSON\ObjectId($_GET['id']);
     } catch (Exception $e) {
         // If the ID is not a valid ObjectId, keep it as is
         $postId = $_GET['id'];
@@ -83,323 +85,505 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($post['title']) ?> - Forum Post</title>
+    <title><?= htmlspecialchars($post['title']) ?> - Research Forum</title>
+    
+    <!-- Core styles -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+    <!-- Animation libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <!-- Custom styles -->
     <link rel="stylesheet" href="assets/styles/home.css">
+    <link rel="stylesheet" href="assets/styles/theme.css">
     <link rel="stylesheet" href="assets/styles/forum_style.css">
-    <style>
-        body {
-            background-color: #f0f2f5;
+    <!-- Performance optimization styles -->
+    <link rel="stylesheet" href="assets/styles/performance.css">
+    
+    <!-- Prevent Theme Flash Script - Must run immediately -->
+    <script>
+    (function() {
+        // Get saved theme immediately to prevent flash
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
         }
+    })();
+    </script>
+    
+    <!-- Performance optimization script - Load early for immediate optimizations -->
+    <script src="assets/js/performance-optimizer.js" defer></script>
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Modern UI Styles */
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --light-color: #f8fafc;
+            --dark-color: #0f172a;
+            --success-color: #06b6d4;
+            --warning-color: #f59e0b;
+            --modern-blue: #0ea5e9;
+            --modern-purple: #8b5cf6;
+            --modern-teal: #14b8a6;
+            --modern-gray: #6b7280;
+            --card-bg: rgba(15, 23, 42, 0.6);
+            --glass-bg: rgba(22, 28, 45, 0.7);
+            --border-glow: rgba(37, 99, 235, 0.5);
+            --surface-1: rgba(30, 41, 59, 0.6);
+            --surface-2: rgba(15, 23, 42, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0d1a 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Background Effects */
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: grid-pulse 4s ease-in-out infinite;
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.4;
+            animation: float-orb 15s ease-in-out infinite;
+            box-shadow: 0 0 50px currentColor;
+        }
+
+        .orb-1 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, rgba(37, 99, 235, 0.1) 50%, transparent 70%);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, rgba(14, 165, 233, 0.08) 50%, transparent 70%);
+            top: 60%;
+            right: 10%;
+            animation-delay: 7s;
+        }
+
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, rgba(6, 182, 212, 0.1) 50%, transparent 70%);
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 14s;
+        }
+
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            25% { transform: translate(30px, -20px) scale(1.05) rotate(90deg); }
+            50% { transform: translate(-20px, 30px) scale(0.95) rotate(180deg); }
+            75% { transform: translate(25px, 15px) scale(1.02) rotate(270deg); }
+        }
+
+        @keyframes grid-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Post Details Specific Styles */
         .container {
             max-width: 900px;
+            position: relative;
+            z-index: 1;
         }
+
         .post-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .post-header {
-            padding: 16px;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .post-content {
-            padding: 20px 16px;
+            padding: 2rem 1.5rem;
         }
+
         .post-footer {
-            padding: 12px 16px;
-            border-top: 1px solid #f0f0f0;
+            padding: 1rem 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .author-avatar {
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            margin-right: 12px;
-            object-fit: cover;
-        }
-        .post-tag {
-            display: inline-block;
-            padding: 0.2rem 0.5rem;
-            margin-right: 0.5rem;
-            border-radius: 2rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #fff;
-        }
-        .tag-member_recruitment { background-color: #28a745; }
-        .tag-bug_fixes { background-color: #dc3545; }
-        .tag-discussion { background-color: #007bff; }
-        .tag-tutorial { background-color: #17a2b8; }
-        .tag-announcement { background-color: #ffc107; color: #212529; }
-        .tag-question { background-color: #6f42c1; }
-        .tag-resource { background-color: #fd7e14; }
-        
-        .comment-section {
-            margin-top: 20px;
-        }
-        .comment {
-            margin-bottom: 16px;
-            padding: 12px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-        }
-        .comment-bubble {
-            background-color: #f0f2f5;
-            border-radius: 18px;
-            padding: 12px;
-        }
-        .share-link {
-            padding: 8px 12px;
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-        .attachments {
-            margin-top: 20px;
-        }
-        .attachment-item {
-            display: inline-block;
             margin-right: 1rem;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .post-tag {
+            background: var(--modern-blue);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .post-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+
+        .comment-section {
+            margin-top: 2rem;
+            background: var(--surface-1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .comment {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            padding: 1rem;
             margin-bottom: 1rem;
+            transition: transform 0.3s ease;
         }
+
+        .comment:hover {
+            transform: translateY(-2px);
+        }
+
+        .comment-bubble {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+
+        .share-link {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .share-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--modern-blue);
+        }
+
+        .attachments {
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .attachment-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .attachment-item:hover {
+            transform: translateY(-2px);
+        }
+
         .attachment-img {
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 4px;
-            border: 1px solid #eee;
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .attachment-file {
-            padding: 0.5rem;
-            border: 1px solid #eee;
-            border-radius: 4px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
             display: flex;
             align-items: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .attachment-file:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--modern-blue);
+        }
+
+        /* Form Controls */
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            border-radius: 0.5rem;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--modern-blue);
+            color: var(--text-primary);
+            box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.25);
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
     <?php include 'src/includes/navbar.php'; ?>
 
-    <div class="container mt-4">
+    <!-- Background Effects -->
+    <div class="background-effects">
+        <div class="cyber-grid"></div>
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+    </div>
+
+    <div class="container mt-5">
         <?php if (isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger">
+            <div class="alert alert-danger fade-in">
                 <?= htmlspecialchars($_SESSION['error']) ?>
                 <?php unset($_SESSION['error']); ?>
             </div>
         <?php endif; ?>
 
-        <div class="post-card">
+        <div class="post-card fade-in" data-aos="fade-up">
             <div class="post-header">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="d-flex">
                         <img src="<?= $post['user_profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" 
                              alt="Avatar" class="author-avatar">
                         <div>
-                            <div class="fw-bold"><?= htmlspecialchars($post['user_name'] ?? 'Unknown User') ?></div>
-                            <div class="text-muted small">
-                                <?php if (isset($post['created_at']) && !empty($post['created_at'])): ?>
-                                    <?php
-                                        $dateTime = null;
-                                        if (is_object($post['created_at']) && method_exists($post['created_at'], 'toDateTime')) {
-                                            $dateTime = $post['created_at']->toDateTime();
-                                        } elseif (is_string($post['created_at']) || is_numeric($post['created_at'])) {
-                                            $dateTime = new DateTime('@' . (int)$post['created_at']);
-                                        }
-                                        
-                                        echo $dateTime ? date('M j, Y \a\t g:i a', $dateTime->getTimestamp()) : 'Unknown date';
-                                        
-                                        if (isset($post['updated_at']) && !empty($post['updated_at'])) {
-                                            $updateDateTime = null;
-                                            if (is_object($post['updated_at']) && method_exists($post['updated_at'], 'toDateTime')) {
-                                                $updateDateTime = $post['updated_at']->toDateTime();
-                                            } elseif (is_string($post['updated_at']) || is_numeric($post['updated_at'])) {
-                                                $updateDateTime = new DateTime('@' . (int)$post['updated_at']);
-                                            }
-                                            
-                                            if ($dateTime && $updateDateTime && $updateDateTime->getTimestamp() > $dateTime->getTimestamp()) {
-                                                echo ' (edited)';
-                                            }
-                                        }
-                                    ?>
-                                <?php else: ?>
-                                    Unknown date
-                                <?php endif; ?>
-                            </div>
+                            <h5 class="mb-1"><?= htmlspecialchars($post['user_name'] ?? 'Unknown User') ?></h5>
+                            <p class="text-muted mb-0">
+                                <?php
+                                    $dateTime = null;
+                                    if (is_object($post['created_at']) && method_exists($post['created_at'], 'toDateTime')) {
+                                        $dateTime = $post['created_at']->toDateTime();
+                                        $dateTime->setTimezone(new DateTimeZone('Asia/Dhaka'));
+                                    } elseif (is_string($post['created_at']) || is_numeric($post['created_at'])) {
+                                        $dateTime = new DateTime('@' . (int)$post['created_at']);
+                                        $dateTime->setTimezone(new DateTimeZone('Asia/Dhaka'));
+                                    }
+                                    echo $dateTime ? $dateTime->format('F j, Y \a\t g:i a') : 'Unknown date';
+                                    
+                                    if (isset($post['updated_at']) && $post['updated_at'] != $post['created_at']) {
+                                        echo ' (edited)';
+                                    }
+                                ?>
+                            </p>
                         </div>
                     </div>
-                    
-                    <?php if (isset($_SESSION['user_id']) && isset($post['user_id']) && $_SESSION['user_id'] === $post['user_id']): ?>
+                    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']): ?>
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-three-dots"></i>
+                            <button class="btn btn-link text-muted" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-three-dots-vertical"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="edit_post.php?id=<?= $post['_id'] ?>">Edit</a></li>
-                                <li><a class="dropdown-item delete-post-btn" href="#" data-post-id="<?= $post['_id'] ?>">Delete</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="edit_post.php?id=<?= $post['_id'] ?>">
+                                        <i class="bi bi-pencil me-2"></i> Edit
+                                    </a>
+                                </li>
+                                <li>
+                                    <form action="src/controller/delete_post.php" method="POST" class="d-inline">
+                                        <input type="hidden" name="post_id" value="<?= $post['_id'] ?>">
+                                        <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to delete this post?')">
+                                            <i class="bi bi-trash me-2"></i> Delete
+                                        </button>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     <?php endif; ?>
                 </div>
             </div>
-            
+
             <div class="post-content">
-                <h1 class="h3 mb-3"><?= htmlspecialchars($post['title']) ?></h1>
-                
-                <div class="post-tags mb-3">
+                <h2 class="mb-4"><?= htmlspecialchars($post['title']) ?></h2>
+                <div class="mb-3">
                     <?php foreach ($post['tags'] as $tag): ?>
-                        <span class="post-tag tag-<?= $tag ?>">
-                            <?= ucfirst(str_replace('_', ' ', $tag)) ?>
-                        </span>
+                        <span class="post-tag"><?= htmlspecialchars($tag) ?></span>
                     <?php endforeach; ?>
                 </div>
-                
-                <div class="post-text mb-4">
+                <div class="content-text">
                     <?= nl2br(htmlspecialchars($post['content'])) ?>
                 </div>
-                
+
                 <?php if (!empty($post['attachments'])): ?>
                     <div class="attachments">
                         <?php foreach ($post['attachments'] as $attachment): ?>
-                            <?php 
-                            $isImage = strpos($attachment['file_type'], 'image/') === 0;
+                            <?php
+                                $fileExtension = strtolower(pathinfo($attachment['filename'], PATHINFO_EXTENSION));
+                                $isImage = in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']);
                             ?>
                             <div class="attachment-item">
-                                <a href="<?= $attachment['file_path'] ?>" target="_blank" class="text-decoration-none">
-                                    <?php if ($isImage): ?>
-                                        <img src="<?= $attachment['file_path'] ?>" alt="Attachment" class="attachment-img">
-                                    <?php else: ?>
-                                        <div class="attachment-file">
-                                            <i class="bi bi-file-earmark me-2"></i>
-                                            <span><?= htmlspecialchars($attachment['original_name']) ?></span>
-                                        </div>
-                                    <?php endif; ?>
-                                </a>
+                                <?php if ($isImage): ?>
+                                    <a href="<?= htmlspecialchars($attachment['path']) ?>" target="_blank">
+                                        <img src="<?= htmlspecialchars($attachment['path']) ?>" alt="Attachment" class="attachment-img">
+                                    </a>
+                                <?php else: ?>
+                                    <a href="<?= htmlspecialchars($attachment['path']) ?>" class="attachment-file" download>
+                                        <i class="bi bi-file-earmark me-2"></i>
+                                        <?= htmlspecialchars($attachment['filename']) ?>
+                                    </a>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
-                
-                <!-- Share Link -->
-                <div class="mt-4">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="text-muted">Share this post:</span>
-                        <div class="share-link flex-grow-1">
-                            <span id="share-url"><?= 'http://' . $_SERVER['HTTP_HOST'] . '/post_details.php?id=' . $post['_id'] ?></span>
-                        </div>
-                        <button class="btn btn-outline-primary btn-sm" onclick="copyShareLink()">
-                            <i class="bi bi-clipboard"></i> Copy
+            </div>
+
+            <div class="post-footer">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-link text-decoration-none text-muted vote-btn" data-post-id="<?= $post['_id'] ?>" data-vote-type="upvote">
+                            <i class="bi bi-hand-thumbs-up<?= in_array($_SESSION['user_id'], $post['upvoted_by'] ?? []) ? '-fill' : '' ?>"></i>
+                            <span class="upvote-count"><?= count($post['upvoted_by'] ?? []) ?></span>
+                        </button>
+                        <button class="btn btn-link text-decoration-none text-muted toggle-comments-btn" data-post-id="<?= $post['_id'] ?>">
+                            <i class="bi bi-chat-left-text"></i>
+                            <span class="comment-count"><?= count($post['comments'] ?? []) ?></span>
+                        </button>
+                        <button class="btn btn-link text-decoration-none text-muted share-btn" 
+                                data-post-url="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>">
+                            <i class="bi bi-share"></i> Share
                         </button>
                     </div>
-                </div>
-            </div>
-            
-            <div class="post-footer">
-                <!-- Reaction counts display -->
-                <div class="d-flex align-items-center mb-2">
-                    <div class="reaction-count">
-                        <i class="bi bi-hand-thumbs-up-fill text-primary"></i>
-                        <span class="upvote-count" data-post-id="<?= $post['_id'] ?>"><?= $post['upvotes'] ?? 0 ?></span>
-                    </div>
-                    <div class="ms-auto">
-                        <span class="text-muted"><?= count($post['comments'] ?? []) ?> comments</span>
-                    </div>
-                </div>
-                
-                <hr class="my-2">
-                
-                <!-- Action buttons -->
-                <div class="d-flex justify-content-between">
-                    <?php 
-                    $isUpvoted = in_array($_SESSION['user_id'], $post['upvoted_by'] ?? []);
-                    ?>
-                    <button class="btn btn-link text-decoration-none flex-fill upvote-btn <?= $isUpvoted ? 'text-primary fw-bold' : 'text-muted' ?>" 
-                            data-post-id="<?= $post['_id'] ?>">
-                        <i class="bi bi-hand-thumbs-up me-1"></i> Like
-                    </button>
-                    
-                    <button class="btn btn-link text-decoration-none flex-fill text-muted" id="comment-focus-btn">
-                        <i class="bi bi-chat-left-text me-1"></i> Comment
-                    </button>
-                    
-                    <button class="btn btn-link text-decoration-none flex-fill text-muted" onclick="copyShareLink()">
-                        <i class="bi bi-share me-1"></i> Share
-                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Comments Section -->
-        <div class="comment-section">
-            <h3 class="h5 mb-4">Comments</h3>
+        <div class="comment-section fade-in" data-aos="fade-up" data-aos-delay="100">
+            <h3 class="mb-4">Comments</h3>
             
-            <div class="comments-container mb-4">
+            <!-- Add Comment Form -->
+            <form action="src/controller/add_comment.php" method="POST" class="mb-4">
+                <input type="hidden" name="post_id" value="<?= $post['_id'] ?>">
+                <div class="form-group">
+                    <textarea name="content" class="form-control mb-3" rows="3" placeholder="Write a comment..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Post Comment</button>
+            </form>
+
+            <!-- Comments List -->
+            <div class="comments-list">
                 <?php if (!empty($post['comments'])): ?>
-                    <?php foreach ($post['comments'] as $index => $comment): ?>
-                        <div class="comment" id="comment-<?= $post['_id'] ?>-<?= $index ?>">
-                            <div class="d-flex">
-                                <img src="<?= isset($comment['user_profile_pic']) ? $comment['user_profile_pic'] : 'uploads/profile_images/user_avater.png' ?>" 
+                    <?php foreach (array_reverse($post['comments']) as $comment): ?>
+                        <div class="comment fade-in" data-aos="fade-up" data-aos-delay="150">
+                            <div class="d-flex mb-2">
+                                <img src="<?= $comment['user_profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" 
                                      alt="Avatar" class="author-avatar" style="width: 32px; height: 32px;">
-                                <div class="flex-grow-1">
-                                    <div class="comment-bubble">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div class="comment-author fw-bold"><?= htmlspecialchars($comment['user_name'] ?? 'Unknown') ?></div>
-                                            
-                                            <?php if (isset($_SESSION['user_id']) && isset($comment['user_id']) && $_SESSION['user_id'] === $comment['user_id']): ?>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm text-muted p-0 ms-2" type="button" data-bs-toggle="dropdown">
-                                                        <i class="bi bi-three-dots"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item edit-comment-btn" href="#" 
-                                                            data-post-id="<?= $post['_id'] ?>" 
-                                                            data-comment-index="<?= $index ?>">Edit</a></li>
-                                                        <li><a class="dropdown-item delete-comment-btn" href="#" 
-                                                            data-post-id="<?= $post['_id'] ?>" 
-                                                            data-comment-index="<?= $index ?>">Delete</a></li>
-                                                    </ul>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
-                                        
-                                        <div class="comment-content"><?= nl2br(htmlspecialchars($comment['text'] ?? '')) ?></div>
-                                    </div>
-                                    
-                                    <div class="comment-actions small mt-1">
-                                        <span class="text-muted comment-time">
-                                            <?php if (isset($comment['time']) && !empty($comment['time'])): ?>
-                                                <?php
-                                                    $commentTime = null;
-                                                    if (is_object($comment['time']) && method_exists($comment['time'], 'toDateTime')) {
-                                                        $commentTime = $comment['time']->toDateTime();
-                                                    } elseif (is_string($comment['time']) || is_numeric($comment['time'])) {
-                                                        $commentTime = new DateTime('@' . (int)$comment['time']);
-                                                    }
-                                                    
-                                                    echo $commentTime ? date('M j, Y \a\t g:i a', $commentTime->getTimestamp()) : 'Unknown time';
-                                                    
-                                                    if (isset($comment['edited']) && $comment['edited']) {
-                                                        echo ' (edited)';
-                                                    }
-                                                ?>
-                                            <?php else: ?>
-                                                Unknown time
-                                            <?php endif; ?>
-                                        </span>
-                                    </div>
-                                    
-                                    <!-- Edit form (hidden by default) -->
-                                    <form class="edit-comment-form hide-comment-form mt-2" 
-                                        id="edit-comment-form-<?= $post['_id'] ?>-<?= $index ?>">
-                                        <textarea class="form-control mb-2" required><?= htmlspecialchars($comment['text'] ?? '') ?></textarea>
-                                        <div class="d-flex gap-2">
-                                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                                            <button type="button" class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
-                                        </div>
-                                    </form>
+                                <div class="ms-2">
+                                    <h6 class="mb-0"><?= htmlspecialchars($comment['user_name'] ?? 'Unknown User') ?></h6>
+                                    <small class="text-muted">
+                                        <?php
+                                            $commentDateTime = null;
+                                            if (is_object($comment['created_at']) && method_exists($comment['created_at'], 'toDateTime')) {
+                                                $commentDateTime = $comment['created_at']->toDateTime();
+                                                $commentDateTime->setTimezone(new DateTimeZone('Asia/Dhaka'));
+                                            } elseif (is_string($comment['created_at']) || is_numeric($comment['created_at'])) {
+                                                $commentDateTime = new DateTime('@' . (int)$comment['created_at']);
+                                                $commentDateTime->setTimezone(new DateTimeZone('Asia/Dhaka'));
+                                            }
+                                            echo $commentDateTime ? $commentDateTime->format('F j, Y \a\t g:i a') : 'Unknown date';
+                                        ?>
+                                    </small>
                                 </div>
+                                <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']): ?>
+                                    <div class="dropdown ms-auto">
+                                        <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <button class="dropdown-item edit-comment-btn" 
+                                                        data-comment-id="<?= $comment['_id'] ?>"
+                                                        data-comment-content="<?= htmlspecialchars($comment['content']) ?>">
+                                                    <i class="bi bi-pencil me-2"></i> Edit
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <form action="src/controller/delete_comment.php" method="POST" class="d-inline">
+                                                    <input type="hidden" name="post_id" value="<?= $post['_id'] ?>">
+                                                    <input type="hidden" name="comment_id" value="<?= $comment['_id'] ?>">
+                                                    <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to delete this comment?')">
+                                                        <i class="bi bi-trash me-2"></i> Delete
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="comment-bubble">
+                                <?= nl2br(htmlspecialchars($comment['content'])) ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -407,382 +591,141 @@ try {
                     <p class="text-muted">No comments yet. Be the first to comment!</p>
                 <?php endif; ?>
             </div>
-            
-            <!-- Add Comment Form -->
-            <form class="add-comment-form" data-post-id="<?= $post['_id'] ?>">
-                <div class="d-flex gap-2">
-                    <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" 
-                         alt="Your Avatar" class="author-avatar" style="width: 32px; height: 32px;">
-                    <div class="flex-grow-1">
-                        <textarea class="form-control mb-2" placeholder="Write a comment..." required id="comment-input"></textarea>
-                        <button type="submit" class="btn btn-primary">Post Comment</button>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
-    <div class="modal fade" id="confirmationModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirmation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p id="confirmation-message">Are you sure you want to delete this?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirm-delete-btn">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const DEBUG = true;
-        
-        function debug(message) {
-            if (DEBUG) {
-                console.log(message);
-            }
-        }
-        
-        // Initialize Bootstrap components
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true
         });
-        
-        const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
-        let deleteTarget = null;
-        let deleteType = '';
-        
-        // Handle upvotes
-        document.querySelectorAll('.upvote-btn').forEach(btn => {
-            debug('Initializing upvote for button: ' + btn.getAttribute('data-post-id'));
+
+        // Handle share button clicks
+        document.querySelectorAll('.share-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const postUrl = this.getAttribute('data-post-url');
+                try {
+                    await navigator.clipboard.writeText(postUrl);
+                    
+                    // Show success tooltip
+                    const tooltip = document.createElement('div');
+                    tooltip.textContent = 'Link copied!';
+                    tooltip.style.cssText = `
+                        position: fixed;
+                        background: var(--glass-bg);
+                        color: var(--text-primary);
+                        padding: 8px 16px;
+                        border-radius: 4px;
+                        z-index: 1000;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        bottom: 20px;
+                        backdrop-filter: blur(10px);
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                        animation: fadeInUp 0.3s ease-out;
+                    `;
+                    document.body.appendChild(tooltip);
+                    
+                    setTimeout(() => {
+                        tooltip.style.animation = 'fadeOutDown 0.3s ease-out';
+                        setTimeout(() => tooltip.remove(), 300);
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                }
+            });
+        });
+
+        // Handle comment editing
+        document.querySelectorAll('.edit-comment-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                const postId = this.getAttribute('data-post-id');
-                const button = this;
+                const commentId = this.getAttribute('data-comment-id');
+                const content = this.getAttribute('data-comment-content');
+                const commentBubble = this.closest('.comment').querySelector('.comment-bubble');
                 
-                fetch('src/controller/update_votes.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ postId: postId })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        // Update UI
-                        const countElements = document.querySelectorAll(`.upvote-count[data-post-id="${postId}"]`);
-                        countElements.forEach(el => {
-                            el.textContent = data.upvotes;
+                const textarea = document.createElement('textarea');
+                textarea.className = 'form-control mb-2';
+                textarea.value = content;
+                
+                const saveBtn = document.createElement('button');
+                saveBtn.className = 'btn btn-primary btn-sm me-2';
+                saveBtn.textContent = 'Save';
+                
+                const cancelBtn = document.createElement('button');
+                cancelBtn.className = 'btn btn-secondary btn-sm';
+                cancelBtn.textContent = 'Cancel';
+                
+                const buttonsDiv = document.createElement('div');
+                buttonsDiv.appendChild(saveBtn);
+                buttonsDiv.appendChild(cancelBtn);
+                
+                const originalContent = commentBubble.innerHTML;
+                commentBubble.innerHTML = '';
+                commentBubble.appendChild(textarea);
+                commentBubble.appendChild(buttonsDiv);
+                
+                saveBtn.addEventListener('click', async () => {
+                    const formData = new FormData();
+                    formData.append('comment_id', commentId);
+                    formData.append('post_id', '<?= $post['_id'] ?>');
+                    formData.append('content', textarea.value);
+                    
+                    try {
+                        const response = await fetch('src/controller/edit_comment.php', {
+                            method: 'POST',
+                            body: formData
                         });
                         
-                        if (data.upvoted) {
-                            button.classList.add('text-primary', 'fw-bold');
-                            button.classList.remove('text-muted');
+                        if (response.ok) {
+                            commentBubble.innerHTML = textarea.value.replace(/\n/g, '<br>');
+                            this.setAttribute('data-comment-content', textarea.value);
                         } else {
-                            button.classList.add('text-muted');
-                            button.classList.remove('text-primary', 'fw-bold');
+                            throw new Error('Failed to update comment');
                         }
-                    } else {
-                        throw new Error(data.message || 'Failed to update vote');
+                    } catch (error) {
+                        console.error('Error:', error);
+                        commentBubble.innerHTML = originalContent;
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error updating vote: ' + error.message);
+                });
+                
+                cancelBtn.addEventListener('click', () => {
+                    commentBubble.innerHTML = originalContent;
                 });
             });
         });
-        
-        // Handle delete post button
-        document.querySelectorAll('.delete-post-btn').forEach(btn => {
-            debug('Initializing delete button for post: ' + btn.getAttribute('data-post-id'));
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                deleteTarget = this.getAttribute('data-post-id');
-                deleteType = 'post';
-                
-                document.getElementById('confirmation-message').textContent = 
-                    'Are you sure you want to delete this post? This action cannot be undone.';
-                confirmationModal.show();
-            });
-        });
-        
-        // Handle delete comment button
-        document.querySelectorAll('.delete-comment-btn').forEach(btn => {
-            debug('Initializing delete button for comment');
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                deleteTarget = {
-                    postId: this.getAttribute('data-post-id'),
-                    commentIndex: this.getAttribute('data-comment-index')
-                };
-                deleteType = 'comment';
-                
-                document.getElementById('confirmation-message').textContent = 
-                    'Are you sure you want to delete this comment? This action cannot be undone.';
-                confirmationModal.show();
-            });
-        });
-        
-        // Handle confirm delete button
-        document.getElementById('confirm-delete-btn').addEventListener('click', function() {
-            if (!deleteTarget || !deleteType) {
-                console.error('Delete target or type not set');
-                return;
-            }
-            
-            let url = deleteType === 'post' ? 'src/controller/delete_post.php' : 'src/controller/delete_comment.php';
-            let data = deleteType === 'post' ? { postId: deleteTarget } : deleteTarget;
-            
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    if (deleteType === 'post') {
-                        window.location.href = 'view_posts.php';
-                    } else {
-                        const commentElement = document.getElementById(
-                            `comment-${deleteTarget.postId}-${deleteTarget.commentIndex}`
-                        );
-                        if (commentElement) {
-                            commentElement.remove();
-                        }
-                        confirmationModal.hide();
-                    }
-                } else {
-                    throw new Error(data.message || 'Failed to delete');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error: ' + error.message);
-            });
-        });
-        
-        // Handle edit comment
-        document.querySelectorAll('.edit-comment-btn').forEach(btn => {
-            debug('Initializing edit button for comment');
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                
+
+        // Handle voting
+        document.querySelectorAll('.vote-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
                 const postId = this.getAttribute('data-post-id');
-                const commentIndex = this.getAttribute('data-comment-index');
-                const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
-                const editForm = document.getElementById(`edit-comment-form-${postId}-${commentIndex}`);
+                const voteType = this.getAttribute('data-vote-type');
+                const icon = this.querySelector('i');
+                const countSpan = this.querySelector('.upvote-count');
                 
-                if (commentElement && editForm) {
-                    const contentElement = commentElement.querySelector('.comment-content');
-                    if (contentElement) {
-                        contentElement.style.display = 'none';
+                try {
+                    const response = await fetch('src/controller/update_votes.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `post_id=${postId}&vote_type=${voteType}`
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        icon.className = `bi bi-hand-thumbs-up${data.hasVoted ? '-fill' : ''}`;
+                        countSpan.textContent = data.voteCount;
                     }
-                    editForm.classList.remove('hide-comment-form');
-                }
-            });
-        });
-        
-        // Handle cancel edit button
-        document.querySelectorAll('.cancel-edit-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const form = this.closest('.edit-comment-form');
-                const commentElement = form.closest('.comment');
-                
-                if (commentElement) {
-                    form.classList.add('hide-comment-form');
-                    const contentElement = commentElement.querySelector('.comment-content');
-                    if (contentElement) {
-                        contentElement.style.display = 'block';
-                    }
-                }
-            });
-        });
-        
-        // Handle edit comment form submission
-        document.querySelectorAll('.edit-comment-form').forEach(form => {
-            debug('Initializing edit form for comment');
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const formId = this.id;
-                const matches = formId.match(/edit-comment-form-([a-f0-9]+)-(\d+)/);
-                if (!matches) {
-                    console.error('Invalid form ID format');
-                    return;
-                }
-                
-                const [_, postId, commentIndex] = matches;
-                const textarea = this.querySelector('textarea');
-                const submitButton = this.querySelector('button[type="submit"]');
-                
-                if (!textarea || !submitButton) {
-                    console.error('Required form elements not found');
-                    return;
-                }
-                
-                const newText = textarea.value.trim();
-                if (!newText) {
-                    alert('Please enter a comment');
-                    return;
-                }
-                
-                // Disable form while submitting
-                textarea.disabled = true;
-                submitButton.disabled = true;
-                
-                fetch('src/controller/edit_comment.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        postId: postId,
-                        commentIndex: parseInt(commentIndex),
-                        text: newText
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        // Update the UI
-                        const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
-                        if (commentElement) {
-                            const contentElement = commentElement.querySelector('.comment-content');
-                            if (contentElement) {
-                                contentElement.textContent = newText;
-                                contentElement.style.display = 'block';
-                            }
-                            this.classList.add('hide-comment-form');
-                            
-                            // Add "edited" text if not already there
-                            const timeElement = commentElement.querySelector('.comment-time');
-                            if (timeElement && !timeElement.textContent.includes('(edited)')) {
-                                timeElement.textContent += ' (edited)';
-                            }
-                        }
-                    } else {
-                        throw new Error(data.message || 'Failed to update comment');
-                    }
-                })
-                .catch(error => {
+                } catch (error) {
                     console.error('Error:', error);
-                    alert('Error updating comment: ' + error.message);
-                })
-                .finally(() => {
-                    // Re-enable form
-                    textarea.disabled = false;
-                    submitButton.disabled = false;
-                });
-            });
-        });
-        
-        // Handle add comment form
-        document.querySelector('.add-comment-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const postId = this.getAttribute('data-post-id');
-            const textarea = this.querySelector('textarea');
-            const submitButton = this.querySelector('button[type="submit"]');
-            
-            if (!textarea || !submitButton) {
-                console.error('Required form elements not found');
-                return;
-            }
-            
-            const commentText = textarea.value.trim();
-            if (!commentText) {
-                alert('Please enter a comment');
-                return;
-            }
-            
-            // Disable form while submitting
-            textarea.disabled = true;
-            submitButton.disabled = true;
-            
-            fetch('src/controller/add_comment.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ 
-                    postId: postId,
-                    comment: commentText
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
                 }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // Reload the page to show the new comment
-                    location.reload();
-                } else {
-                    throw new Error(data.message || 'Failed to add comment');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error adding comment: ' + error.message);
-            })
-            .finally(() => {
-                // Re-enable form
-                textarea.disabled = false;
-                submitButton.disabled = false;
             });
         });
-        
-        // Handle comment focus button
-        document.getElementById('comment-focus-btn').addEventListener('click', function() {
-            document.getElementById('comment-input').focus();
-        });
-        
-        // Handle share link copying
-        window.copyShareLink = function() {
-            const shareUrl = document.getElementById('share-url').textContent;
-            navigator.clipboard.writeText(shareUrl).then(() => {
-                alert('Link copied to clipboard!');
-            }).catch(err => {
-                console.error('Failed to copy link:', err);
-                alert('Failed to copy link. Please try selecting and copying manually.');
-            });
-        };
-        
-        debug('All event listeners initialized');
-    });
     </script>
 </body>
 </html> 
