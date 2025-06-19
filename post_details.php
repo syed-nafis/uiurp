@@ -349,7 +349,7 @@ try {
             box-shadow: 0 4px 12px var(--border-glow);
             color: white !important;
         }
-
+        
         .comment-section {
             margin-top: 2rem;
             background: var(--surface-1);
@@ -631,24 +631,24 @@ try {
                         <div>
                             <h5 class="mb-1"><?= htmlspecialchars($post['user_name'] ?? 'Unknown User') ?></h5>
                             <p class="text-muted mb-0">
-                                <?php
-                                    $dateTime = null;
-                                    if (is_object($post['created_at']) && method_exists($post['created_at'], 'toDateTime')) {
-                                        $dateTime = $post['created_at']->toDateTime();
+                                    <?php
+                                        $dateTime = null;
+                                        if (is_object($post['created_at']) && method_exists($post['created_at'], 'toDateTime')) {
+                                            $dateTime = $post['created_at']->toDateTime();
                                         $dateTime->setTimezone(new DateTimeZone('Asia/Dhaka'));
-                                    } elseif (is_string($post['created_at']) || is_numeric($post['created_at'])) {
-                                        $dateTime = new DateTime('@' . (int)$post['created_at']);
+                                        } elseif (is_string($post['created_at']) || is_numeric($post['created_at'])) {
+                                            $dateTime = new DateTime('@' . (int)$post['created_at']);
                                         $dateTime->setTimezone(new DateTimeZone('Asia/Dhaka'));
                                     }
                                     echo $dateTime ? $dateTime->format('F j, Y \a\t g:i a') : 'Unknown date';
                                     
                                     if (isset($post['updated_at']) && $post['updated_at'] != $post['created_at']) {
-                                        echo ' (edited)';
-                                    }
-                                ?>
+                                                echo ' (edited)';
+                                        }
+                                    ?>
                             </p>
+                            </div>
                         </div>
-                    </div>
                     <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']): ?>
                         <div class="dropdown">
                             <button class="btn btn-link text-muted" type="button" data-bs-toggle="dropdown">
@@ -673,7 +673,7 @@ try {
                     <?php endif; ?>
                 </div>
             </div>
-
+            
             <div class="post-content">
                 <h2 class="mb-4"><?= htmlspecialchars($post['title']) ?></h2>
                 <div class="mb-3">
@@ -684,46 +684,71 @@ try {
                 <div class="content-text">
                     <?= nl2br(htmlspecialchars($post['content'])) ?>
                 </div>
-
+                
                 <?php if (!empty($post['attachments'])): ?>
                     <div class="attachments">
                         <?php foreach ($post['attachments'] as $attachment): ?>
-                            <?php
-                                $fileExtension = strtolower(pathinfo($attachment['filename'], PATHINFO_EXTENSION));
+                            <?php 
+                                // Skip invalid attachments
+                                if (empty($attachment) || !is_array($attachment)) {
+                                    continue;
+                                }
+
+                                // Set default values for missing fields
+                                $filename = isset($attachment['filename']) ? (string)$attachment['filename'] : '';
+                                $path = isset($attachment['path']) ? (string)$attachment['path'] : '';
+                                
+                                // Skip if both filename and path are empty
+                                if (empty($filename) && empty($path)) {
+                                    continue;
+                                }
+
+                                // If filename is empty but path exists, use the basename of path as filename
+                                if (empty($filename) && !empty($path)) {
+                                    $filename = basename($path);
+                                }
+
+                                // Determine if file is an image
+                                $fileExtension = !empty($filename) ? strtolower(pathinfo($filename, PATHINFO_EXTENSION)) : '';
                                 $isImage = in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']);
+
+                                // Ensure path starts with uploads/ if it's a relative path
+                                if (!empty($path) && !str_starts_with($path, '/') && !str_starts_with($path, 'http')) {
+                                    $path = 'uploads/' . ltrim($path, '/');
+                                }
                             ?>
                             <div class="attachment-item">
-                                <?php if ($isImage): ?>
-                                    <a href="<?= htmlspecialchars($attachment['path']) ?>" target="_blank">
-                                        <img src="<?= htmlspecialchars($attachment['path']) ?>" alt="Attachment" class="attachment-img">
+                                <?php if ($isImage && !empty($path)): ?>
+                                    <a href="<?= htmlspecialchars($path) ?>" target="_blank" class="d-block">
+                                        <img src="<?= htmlspecialchars($path) ?>" alt="<?= htmlspecialchars($filename) ?>" class="attachment-img">
                                     </a>
-                                <?php else: ?>
-                                    <a href="<?= htmlspecialchars($attachment['path']) ?>" class="attachment-file" download>
-                                        <i class="bi bi-file-earmark me-2"></i>
-                                        <?= htmlspecialchars($attachment['filename']) ?>
-                                    </a>
+                                <?php elseif (!empty($path)): ?>
+                                    <a href="<?= htmlspecialchars($path) ?>" class="attachment-file" download="<?= htmlspecialchars($filename) ?>">
+                                            <i class="bi bi-file-earmark me-2"></i>
+                                        <?= htmlspecialchars($filename) ?>
+                                </a>
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
             </div>
-
+            
             <div class="post-footer">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex gap-3">
                         <button class="btn btn-link text-decoration-none text-muted vote-btn" data-post-id="<?= $post['_id'] ?>" data-vote-type="upvote">
                             <i class="bi bi-hand-thumbs-up<?= in_array($_SESSION['user_id'], $post['upvoted_by'] ?? []) ? '-fill' : '' ?>"></i>
                             <span class="upvote-count"><?= count($post['upvoted_by'] ?? []) ?></span>
-                        </button>
+                    </button>
                         <button class="btn btn-link text-decoration-none text-muted toggle-comments-btn" data-post-id="<?= $post['_id'] ?>">
                             <i class="bi bi-chat-left-text"></i>
                             <span class="comment-count"><?= count($post['comments'] ?? []) ?></span>
-                        </button>
+                    </button>
                         <button class="btn btn-link text-decoration-none text-muted share-btn" 
                                 data-post-url="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>">
                             <i class="bi bi-share"></i> Share
-                        </button>
+                    </button>
                     </div>
                 </div>
             </div>
@@ -738,7 +763,7 @@ try {
                 <input type="hidden" name="post_id" value="<?= $post['_id'] ?>">
                 <div class="form-group">
                     <textarea name="content" class="form-control mb-3" rows="3" placeholder="Write a comment..." required></textarea>
-                </div>
+                                                </div>
                 <button type="submit" class="btn btn-primary">Post Comment</button>
             </form>
 
@@ -753,7 +778,7 @@ try {
                                 <div class="ms-2">
                                     <h6 class="mb-0"><?= htmlspecialchars($comment['user_name'] ?? 'Unknown User') ?></h6>
                                     <small class="text-muted">
-                                        <?php
+                                                <?php
                                             $commentDateTime = null;
                                             if (is_object($comment['created_at']) && method_exists($comment['created_at'], 'toDateTime')) {
                                                 $commentDateTime = $comment['created_at']->toDateTime();
@@ -765,7 +790,7 @@ try {
                                             echo $commentDateTime ? $commentDateTime->format('F j, Y \a\t g:i a') : 'Unknown date';
                                         ?>
                                     </small>
-                                </div>
+                                    </div>
                                 <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']): ?>
                                     <div class="dropdown ms-auto">
                                         <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
@@ -786,10 +811,10 @@ try {
                                                     <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to delete this comment?')">
                                                         <i class="bi bi-trash me-2"></i> Delete
                                                     </button>
-                                                </form>
+                                    </form>
                                             </li>
                                         </ul>
-                                    </div>
+                                </div>
                                 <?php endif; ?>
                             </div>
                             <div class="comment-bubble">
@@ -850,7 +875,7 @@ try {
                 }
             });
         });
-
+        
         // Handle comment editing
         document.querySelectorAll('.edit-comment-btn').forEach(btn => {
             btn.addEventListener('click', function() {
@@ -887,18 +912,18 @@ try {
                     
                     try {
                         const response = await fetch('src/controller/edit_comment.php', {
-                            method: 'POST',
+                method: 'POST',
                             body: formData
                         });
                         
                         if (response.ok) {
                             commentBubble.innerHTML = textarea.value.replace(/\n/g, '<br>');
                             this.setAttribute('data-comment-content', textarea.value);
-                        } else {
+                    } else {
                             throw new Error('Failed to update comment');
                         }
                     } catch (error) {
-                        console.error('Error:', error);
+                console.error('Error:', error);
                         commentBubble.innerHTML = originalContent;
                     }
                 });
@@ -908,7 +933,7 @@ try {
                 });
             });
         });
-
+        
         // Handle voting
         document.querySelectorAll('.vote-btn').forEach(btn => {
             btn.addEventListener('click', async function() {
@@ -919,8 +944,8 @@ try {
                 
                 try {
                     const response = await fetch('src/controller/update_votes.php', {
-                        method: 'POST',
-                        headers: {
+                    method: 'POST',
+                    headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
                         body: `post_id=${postId}&vote_type=${voteType}`
@@ -932,10 +957,10 @@ try {
                         countSpan.textContent = data.voteCount;
                     }
                 } catch (error) {
-                    console.error('Error:', error);
+                console.error('Error:', error);
                 }
             });
-        });
+    });
     </script>
 </body>
 </html> 

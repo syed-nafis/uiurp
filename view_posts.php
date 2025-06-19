@@ -61,10 +61,10 @@ try {
     // Map posts to ensure consistent structure
     $allPosts = [];
     foreach ($newPosts as $post) {
-                    try {
+        try {
                 $currentTime = new \MongoDB\BSON\UTCDateTime((int)(microtime(true) * 1000));
-                
-                // Convert BSONArray objects to PHP arrays
+            
+            // Convert BSONArray objects to PHP arrays
             $tags = $post['tags'] ?? ['discussion'];
             if ($tags instanceof MongoDB\Model\BSONArray) {
                 $tags = $tags->getArrayCopy();
@@ -580,7 +580,7 @@ try {
         [data-theme="light"] .post-tag.tag-bug_fixes {
             background: #dc3545 !important;
         }
-
+        
         .comment-section {
             background: var(--surface-1);
             border-radius: 0.5rem;
@@ -1061,293 +1061,293 @@ try {
 
     <div class="forum-container">
         <div class="container">
-            <?php if (isset($error)): ?>
-                <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-            <?php endif; ?>
+        <?php if (isset($error)): ?>
+            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+        <?php endif; ?>
 
             <h1 class="forum-title" data-aos="fade-down">
                 Research Forum
             </h1>
 
-            <!-- Create Post Card -->
+        <!-- Create Post Card -->
             <div class="create-post-card" data-aos="fade-up">
                 <div class="create-post-header d-flex align-items-center">
                     <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" alt="Your Avatar" class="author-avatar" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 15px;">
                     <a href="forum_index.php" class="create-post-input text-decoration-none flex-grow-1 p-3 rounded-pill">
-                        What's on your mind, <?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>?
-                    </a>
-                </div>
+                    What's on your mind, <?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>?
+                </a>
+            </div>
                 <div class="d-flex justify-content-center border-top pt-3 mt-3">
-                    <a href="forum_index.php" class="btn btn-primary w-100">
-                        <i class="bi bi-pencil-square me-2"></i>Create New Post
-                    </a>
-                </div>
+                <a href="forum_index.php" class="btn btn-primary w-100">
+                    <i class="bi bi-pencil-square me-2"></i>Create New Post
+                </a>
             </div>
+        </div>
 
-            <!-- Filters Card -->
+        <!-- Filters Card -->
             <div class="filters-card" data-aos="fade-up" data-aos-delay="100">
-                <form method="GET" class="d-flex gap-2">
-                    <select name="sort" class="form-select" onchange="this.form.submit()">
-                        <option value="newest" <?= $sortOption == 'newest' ? 'selected' : '' ?>>Newest</option>
-                        <option value="upvotes" <?= $sortOption == 'upvotes' ? 'selected' : '' ?>>Most Upvoted</option>
-                    </select>
-                    
-                    <select name="tag" class="form-select" onchange="this.form.submit()">
-                        <option value="">All Tags</option>
-                        <?php foreach ($allTags as $tag): ?>
-                            <option value="<?= $tag['name'] ?>" <?= $tagFilter == $tag['name'] ? 'selected' : '' ?>>
-                                <?= ucfirst(str_replace('_', ' ', $tag['name'])) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    
-                    <?php if (!empty($tagFilter) || $sortOption != 'newest'): ?>
-                        <a href="view_posts.php" class="btn btn-outline-secondary">Clear Filters</a>
-                    <?php endif; ?>
-                </form>
-            </div>
-            
-            <div id="posts-container">
-                <?php if (empty($allPosts)): ?>
+            <form method="GET" class="d-flex gap-2">
+                <select name="sort" class="form-select" onchange="this.form.submit()">
+                    <option value="newest" <?= $sortOption == 'newest' ? 'selected' : '' ?>>Newest</option>
+                    <option value="upvotes" <?= $sortOption == 'upvotes' ? 'selected' : '' ?>>Most Upvoted</option>
+                </select>
+                
+                <select name="tag" class="form-select" onchange="this.form.submit()">
+                    <option value="">All Tags</option>
+                    <?php foreach ($allTags as $tag): ?>
+                        <option value="<?= $tag['name'] ?>" <?= $tagFilter == $tag['name'] ? 'selected' : '' ?>>
+                            <?= ucfirst(str_replace('_', ' ', $tag['name'])) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                
+                <?php if (!empty($tagFilter) || $sortOption != 'newest'): ?>
+                    <a href="view_posts.php" class="btn btn-outline-secondary">Clear Filters</a>
+                <?php endif; ?>
+            </form>
+        </div>
+        
+        <div id="posts-container">
+            <?php if (empty($allPosts)): ?>
                     <div class="alert alert-info fade-in" data-aos="fade-up">No posts found. Be the first to create a post!</div>
-                <?php else: ?>
+            <?php else: ?>
                     <?php foreach ($allPosts as $index => $post): ?>
                         <div class="forum-post fade-in" id="post-<?= $post['_id'] ?>" data-aos="fade-up" data-aos-delay="<?= $index * 50 ?>">
-                            <div class="post-header">
-                                <div class="post-meta">
-                                    <div class="post-author">
-                                        <img src="<?= $post['user_profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" alt="Avatar" class="author-avatar">
-                                        <div>
-                                            <div class="fw-bold"><?= htmlspecialchars($post['user_name'] ?? 'Unknown User') ?></div>
-                                            <div class="text-muted small">
-                                                <?php if (isset($post['created_at']) && !empty($post['created_at'])): ?>
-                                                    <?php
-                                                        $dateTime = null;
-                                                        if (is_object($post['created_at']) && method_exists($post['created_at'], 'toDateTime')) {
-                                                            $dateTime = $post['created_at']->toDateTime();
+                        <div class="post-header">
+                            <div class="post-meta">
+                                <div class="post-author">
+                                    <img src="<?= $post['user_profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" alt="Avatar" class="author-avatar">
+                                    <div>
+                                        <div class="fw-bold"><?= htmlspecialchars($post['user_name'] ?? 'Unknown User') ?></div>
+                                        <div class="text-muted small">
+                                            <?php if (isset($post['created_at']) && !empty($post['created_at'])): ?>
+                                                <?php
+                                                    $dateTime = null;
+                                                    if (is_object($post['created_at']) && method_exists($post['created_at'], 'toDateTime')) {
+                                                        $dateTime = $post['created_at']->toDateTime();
                                                             $dateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
-                                                        } elseif (is_string($post['created_at']) || is_numeric($post['created_at'])) {
-                                                            $dateTime = new DateTime('@' . (int)$post['created_at']);
+                                                    } elseif (is_string($post['created_at']) || is_numeric($post['created_at'])) {
+                                                        $dateTime = new DateTime('@' . (int)$post['created_at']);
                                                             $dateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
-                                                        }
-                                                        
+                                                    }
+                                                    
                                                         echo $dateTime ? $dateTime->format('M j, Y \a\t g:i a') : 'Unknown date';
-                                                        
-                                                        // Check if updated
-                                                        if (isset($post['updated_at']) && !empty($post['updated_at'])) {
-                                                            $updateDateTime = null;
-                                                            if (is_object($post['updated_at']) && method_exists($post['updated_at'], 'toDateTime')) {
-                                                                $updateDateTime = $post['updated_at']->toDateTime();
+                                                    
+                                                    // Check if updated
+                                                    if (isset($post['updated_at']) && !empty($post['updated_at'])) {
+                                                        $updateDateTime = null;
+                                                        if (is_object($post['updated_at']) && method_exists($post['updated_at'], 'toDateTime')) {
+                                                            $updateDateTime = $post['updated_at']->toDateTime();
                                                                 $updateDateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
-                                                            } elseif (is_string($post['updated_at']) || is_numeric($post['updated_at'])) {
-                                                                $updateDateTime = new DateTime('@' . (int)$post['updated_at']);
+                                                        } elseif (is_string($post['updated_at']) || is_numeric($post['updated_at'])) {
+                                                            $updateDateTime = new DateTime('@' . (int)$post['updated_at']);
                                                                 $updateDateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
-                                                            }
-                                                            
-                                                            if ($dateTime && $updateDateTime && $updateDateTime->getTimestamp() > $dateTime->getTimestamp()) {
-                                                                echo ' (edited)';
-                                                            }
                                                         }
-                                                    ?>
-                                                <?php else: ?>
-                                                    Unknown date
-                                                <?php endif; ?>
-                                            </div>
+                                                        
+                                                        if ($dateTime && $updateDateTime && $updateDateTime->getTimestamp() > $dateTime->getTimestamp()) {
+                                                            echo ' (edited)';
+                                                        }
+                                                    }
+                                                ?>
+                                            <?php else: ?>
+                                                Unknown date
+                                            <?php endif; ?>
                                         </div>
                                     </div>
-                                    
-                                    <?php if (isset($_SESSION['user_id']) && isset($post['user_id']) && $_SESSION['user_id'] === $post['user_id']): ?>
-                                        <div class="post-actions">
-                                            <div class="dropdown">
-                                                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
-                                                    <i class="bi bi-three-dots"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a class="dropdown-item edit-post-btn" href="edit_post.php?id=<?= $post['_id'] ?>">Edit</a></li>
-                                                    <li><a class="dropdown-item delete-post-btn" href="#" data-post-id="<?= $post['_id'] ?>">Delete</a></li>
-                                                </ul>
-                                            </div>
+                                </div>
+                                
+                                <?php if (isset($_SESSION['user_id']) && isset($post['user_id']) && $_SESSION['user_id'] === $post['user_id']): ?>
+                                    <div class="post-actions">
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
+                                                <i class="bi bi-three-dots"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><a class="dropdown-item edit-post-btn" href="edit_post.php?id=<?= $post['_id'] ?>">Edit</a></li>
+                                                <li><a class="dropdown-item delete-post-btn" href="#" data-post-id="<?= $post['_id'] ?>">Delete</a></li>
+                                            </ul>
                                         </div>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                            
-                            <div class="post-content">
-                                <h3 class="post-title mb-3">
-                                    <?= htmlspecialchars($post['title']) ?>
-                                </h3>
-                                
-                                <div class="post-tags mb-3">
-                                    <?php 
-                                    // Tags are already converted in the mapping function
-                                    if (!empty($post['tags'])):
-                                        foreach ($post['tags'] as $tag): 
-                                    ?>
-                                            <span class="post-tag tag-<?= $tag ?>">
-                                                <?= ucfirst(str_replace('_', ' ', $tag)) ?>
-                                            </span>
-                                    <?php 
-                                        endforeach;
-                                    endif; 
-                                    ?>
-                                </div>
-                                
-                                <div class="post-text mb-3">
-                                    <?= nl2br(htmlspecialchars($post['content'])) ?>
-                                </div>
-                                
-                                <?php if (!empty($post['attachments'])): ?>
-                                    <div class="attachments">
-                                        <?php foreach ($post['attachments'] as $attachment): ?>
-                                            <?php 
-                                            $isImage = strpos($attachment['file_type'], 'image/') === 0;
-                                            $fileExt = pathinfo($attachment['original_name'], PATHINFO_EXTENSION);
-                                            ?>
-                                            
-                                            <div class="attachment-item">
-                                                <a href="<?= $attachment['file_path'] ?>" target="_blank" class="text-decoration-none">
-                                                    <?php if ($isImage): ?>
-                                                        <img src="<?= $attachment['file_path'] ?>" alt="Attachment" class="attachment-img">
-                                                    <?php else: ?>
-                                                        <div class="attachment-file">
-                                                            <i class="bi bi-file-earmark"></i>
-                                                            <span><?= htmlspecialchars($attachment['original_name']) ?></span>
-                                                        </div>
-                                                    <?php endif; ?>
-                                                </a>
-                                            </div>
-                                        <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
                             </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <h3 class="post-title mb-3">
+                                    <?= htmlspecialchars($post['title']) ?>
+                            </h3>
                             
-                            <div class="post-footer">
-                                <!-- Reaction counts display -->
-                                <div class="d-flex align-items-center mb-2">
-                                    <div class="reaction-count">
-                                        <i class="bi bi-hand-thumbs-up-fill text-primary"></i>
-                                        <span class="upvote-count" data-post-id="<?= $post['_id'] ?>"><?= $post['upvotes'] ?? 0 ?></span>
-                                    </div>
-                                    <div class="ms-auto">
-                                        <span class="text-muted"><?= count($post['comments'] ?? []) ?> comments</span>
-                                    </div>
-                                </div>
-                                
-                                <!-- Divider -->
-                                <hr class="my-1">
-                                
-                                <!-- Action buttons -->
-                                <div class="d-flex justify-content-between">
-                                    <?php 
-                                    // All arrays are already converted in the mapping function
-                                    $isUpvoted = in_array($_SESSION['user_id'], $post['upvoted_by'] ?? []);
-                                    ?>
-                                    <button class="btn btn-link text-decoration-none flex-fill upvote-btn <?= $isUpvoted ? 'text-primary fw-bold' : 'text-muted' ?>" 
-                                            data-post-id="<?= $post['_id'] ?>">
-                                        <i class="bi bi-hand-thumbs-up me-1"></i> Like
-                                    </button>
-                                    
-                                    <button class="btn btn-link text-decoration-none flex-fill text-muted toggle-comments-btn" data-post-id="<?= $post['_id'] ?>">
-                                        <i class="bi bi-chat-left-text me-1"></i> Comment
-                                    </button>
-                                    
-                                    <button class="btn btn-link text-decoration-none flex-fill text-muted share-btn" 
-                                            data-post-url="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/post_details.php?id=" . $post['_id'] ?>">
-                                        <i class="bi bi-share me-1"></i> Share
-                                    </button>
-                                </div>
-                                
-                                <div class="comment-section" id="comments-<?= $post['_id'] ?>" style="display: none;">
-                                    <hr class="my-2">
-                                    <div class="comments-container">
-                                        <?php if (!empty($post['comments'])): ?>
-                                            <?php foreach ($post['comments'] as $index => $comment): ?>
-                                                <div class="comment" id="comment-<?= $post['_id'] ?>-<?= $index ?>">
-                                                    <div class="d-flex">
-                                                        <img src="<?= isset($comment['user_profile_pic']) ? $comment['user_profile_pic'] : 'uploads/profile_images/user_avater.png' ?>" 
-                                                             alt="Avatar" class="author-avatar" style="width: 32px; height: 32px;">
-                                                        <div class="flex-grow-1">
-                                                            <div class="comment-bubble p-2 bg-light rounded">
-                                                                <div class="comment-meta">
-                                                                    <div class="comment-author fw-bold"><?= htmlspecialchars($comment['user_name'] ?? 'Unknown') ?></div>
-                                                                    
-                                                                    <?php if (isset($_SESSION['user_id']) && isset($comment['user_id']) && $_SESSION['user_id'] === $comment['user_id']): ?>
-                                                                        <div class="dropdown">
-                                                                            <button class="btn btn-sm text-muted p-0 ms-2" type="button" data-bs-toggle="dropdown">
-                                                                                <i class="bi bi-three-dots"></i>
-                                                                            </button>
-                                                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                                                <li><a class="dropdown-item edit-comment-btn" href="#" 
-                                                                                    data-post-id="<?= $post['_id'] ?>" 
-                                                                                    data-comment-index="<?= $index ?>">Edit</a></li>
-                                                                                <li><a class="dropdown-item delete-comment-btn" href="#" 
-                                                                                    data-post-id="<?= $post['_id'] ?>" 
-                                                                                    data-comment-index="<?= $index ?>">Delete</a></li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    <?php endif; ?>
-                                                                </div>
-                                                                
-                                                                <div class="comment-content"><?= nl2br(htmlspecialchars($comment['text'] ?? '')) ?></div>
-                                                            </div>
-                                                            <div class="comment-actions small mt-1">
-                                                                <span class="text-muted comment-time">
-                                                                    <?php if (isset($comment['time']) && !empty($comment['time'])): ?>
-                                                                        <?php
-                                                                            $commentTime = null;
-                                                                            if (is_object($comment['time']) && method_exists($comment['time'], 'toDateTime')) {
-                                                                                $commentTime = $comment['time']->toDateTime();
-                                                                            } elseif (is_string($comment['time']) || is_numeric($comment['time'])) {
-                                                                                $commentTime = new DateTime('@' . (int)$comment['time']);
-                                                                            }
-                                                                            
-                                                                            echo $commentTime ? date('M j, Y \a\t g:i a', $commentTime->getTimestamp()) : 'Unknown time';
-                                                                            
-                                                                            if (isset($comment['edited']) && $comment['edited']) {
-                                                                                echo ' (edited)';
-                                                                            }
-                                                                        ?>
-                                                                    <?php else: ?>
-                                                                        Unknown time
-                                                                    <?php endif; ?>
-                                                                </span>
-                                                            </div>
-                                                            
-                                                            <!-- Edit form (hidden by default) -->
-                                                            <form class="edit-comment-form hide-comment-form mt-2" 
-                                                                id="edit-comment-form-<?= $post['_id'] ?>-<?= $index ?>">
-                                                                <textarea class="form-control mb-2" required><?= htmlspecialchars($comment['text'] ?? '') ?></textarea>
-                                                                <div class="d-flex gap-2">
-                                                                    <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                                                                    <button type="button" class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
+                            <div class="post-tags mb-3">
+                                <?php 
+                                // Tags are already converted in the mapping function
+                                if (!empty($post['tags'])):
+                                    foreach ($post['tags'] as $tag): 
+                                ?>
+                                        <span class="post-tag tag-<?= $tag ?>">
+                                            <?= ucfirst(str_replace('_', ' ', $tag)) ?>
+                                        </span>
+                                <?php 
+                                    endforeach;
+                                endif; 
+                                ?>
+                            </div>
+                            
+                            <div class="post-text mb-3">
+                                    <?= nl2br(htmlspecialchars($post['content'])) ?>
+                            </div>
+                            
+                            <?php if (!empty($post['attachments'])): ?>
+                                <div class="attachments">
+                                    <?php foreach ($post['attachments'] as $attachment): ?>
+                                        <?php 
+                                        $isImage = strpos($attachment['file_type'], 'image/') === 0;
+                                        $fileExt = pathinfo($attachment['original_name'], PATHINFO_EXTENSION);
+                                        ?>
+                                        
+                                        <div class="attachment-item">
+                                            <a href="<?= $attachment['file_path'] ?>" target="_blank" class="text-decoration-none">
+                                                <?php if ($isImage): ?>
+                                                    <img src="<?= $attachment['file_path'] ?>" alt="Attachment" class="attachment-img">
+                                                <?php else: ?>
+                                                    <div class="attachment-file">
+                                                        <i class="bi bi-file-earmark"></i>
+                                                        <span><?= htmlspecialchars($attachment['original_name']) ?></span>
                                                     </div>
-                                                </div>
-                                            <?php endforeach; ?>
-                                        <?php else: ?>
-                                            <p class="text-muted">No comments yet. Be the first to comment!</p>
-                                        <?php endif; ?>
-                                    </div>
-                                    
-                                    <form class="add-comment-form mt-3 d-flex" data-post-id="<?= $post['_id'] ?>">
-                                        <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" 
-                                             alt="Your Avatar" class="author-avatar" style="width: 32px; height: 32px;">
-                                        <div class="flex-grow-1 ms-2">
-                                            <div class="position-relative">
-                                                <textarea class="form-control rounded-pill" placeholder="Write a comment..." required></textarea>
-                                                <button type="submit" class="btn btn-link position-absolute end-0 top-50 translate-middle-y">
-                                                    <i class="bi bi-send-fill"></i>
-                                                </button>
-                                            </div>
+                                                <?php endif; ?>
+                                            </a>
                                         </div>
-                                    </form>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        
+                        <div class="post-footer">
+                            <!-- Reaction counts display -->
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="reaction-count">
+                                    <i class="bi bi-hand-thumbs-up-fill text-primary"></i>
+                                    <span class="upvote-count" data-post-id="<?= $post['_id'] ?>"><?= $post['upvotes'] ?? 0 ?></span>
+                                </div>
+                                <div class="ms-auto">
+                                    <span class="text-muted"><?= count($post['comments'] ?? []) ?> comments</span>
                                 </div>
                             </div>
+                            
+                            <!-- Divider -->
+                            <hr class="my-1">
+                            
+                            <!-- Action buttons -->
+                            <div class="d-flex justify-content-between">
+                                <?php 
+                                // All arrays are already converted in the mapping function
+                                $isUpvoted = in_array($_SESSION['user_id'], $post['upvoted_by'] ?? []);
+                                ?>
+                                <button class="btn btn-link text-decoration-none flex-fill upvote-btn <?= $isUpvoted ? 'text-primary fw-bold' : 'text-muted' ?>" 
+                                        data-post-id="<?= $post['_id'] ?>">
+                                    <i class="bi bi-hand-thumbs-up me-1"></i> Like
+                                </button>
+                                
+                                <button class="btn btn-link text-decoration-none flex-fill text-muted toggle-comments-btn" data-post-id="<?= $post['_id'] ?>">
+                                    <i class="bi bi-chat-left-text me-1"></i> Comment
+                                </button>
+                                
+                                    <button class="btn btn-link text-decoration-none flex-fill text-muted share-btn" 
+                                            data-post-url="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/post_details.php?id=" . $post['_id'] ?>">
+                                    <i class="bi bi-share me-1"></i> Share
+                                </button>
+                            </div>
+                            
+                            <div class="comment-section" id="comments-<?= $post['_id'] ?>" style="display: none;">
+                                <hr class="my-2">
+                                <div class="comments-container">
+                                    <?php if (!empty($post['comments'])): ?>
+                                        <?php foreach ($post['comments'] as $index => $comment): ?>
+                                            <div class="comment" id="comment-<?= $post['_id'] ?>-<?= $index ?>">
+                                                <div class="d-flex">
+                                                    <img src="<?= isset($comment['user_profile_pic']) ? $comment['user_profile_pic'] : 'uploads/profile_images/user_avater.png' ?>" 
+                                                         alt="Avatar" class="author-avatar" style="width: 32px; height: 32px;">
+                                                    <div class="flex-grow-1">
+                                                        <div class="comment-bubble p-2 bg-light rounded">
+                                                            <div class="comment-meta">
+                                                                <div class="comment-author fw-bold"><?= htmlspecialchars($comment['user_name'] ?? 'Unknown') ?></div>
+                                                                
+                                                                <?php if (isset($_SESSION['user_id']) && isset($comment['user_id']) && $_SESSION['user_id'] === $comment['user_id']): ?>
+                                                                    <div class="dropdown">
+                                                                        <button class="btn btn-sm text-muted p-0 ms-2" type="button" data-bs-toggle="dropdown">
+                                                                            <i class="bi bi-three-dots"></i>
+                                                                        </button>
+                                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                                            <li><a class="dropdown-item edit-comment-btn" href="#" 
+                                                                                data-post-id="<?= $post['_id'] ?>" 
+                                                                                data-comment-index="<?= $index ?>">Edit</a></li>
+                                                                            <li><a class="dropdown-item delete-comment-btn" href="#" 
+                                                                                data-post-id="<?= $post['_id'] ?>" 
+                                                                                data-comment-index="<?= $index ?>">Delete</a></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                            
+                                                            <div class="comment-content"><?= nl2br(htmlspecialchars($comment['text'] ?? '')) ?></div>
+                                                        </div>
+                                                        <div class="comment-actions small mt-1">
+                                                            <span class="text-muted comment-time">
+                                                                <?php if (isset($comment['time']) && !empty($comment['time'])): ?>
+                                                                    <?php
+                                                                        $commentTime = null;
+                                                                        if (is_object($comment['time']) && method_exists($comment['time'], 'toDateTime')) {
+                                                                            $commentTime = $comment['time']->toDateTime();
+                                                                        } elseif (is_string($comment['time']) || is_numeric($comment['time'])) {
+                                                                            $commentTime = new DateTime('@' . (int)$comment['time']);
+                                                                        }
+                                                                        
+                                                                        echo $commentTime ? date('M j, Y \a\t g:i a', $commentTime->getTimestamp()) : 'Unknown time';
+                                                                        
+                                                                        if (isset($comment['edited']) && $comment['edited']) {
+                                                                            echo ' (edited)';
+                                                                        }
+                                                                    ?>
+                                                                <?php else: ?>
+                                                                    Unknown time
+                                                                <?php endif; ?>
+                                                            </span>
+                                                        </div>
+                                                        
+                                                        <!-- Edit form (hidden by default) -->
+                                                        <form class="edit-comment-form hide-comment-form mt-2" 
+                                                            id="edit-comment-form-<?= $post['_id'] ?>-<?= $index ?>">
+                                                            <textarea class="form-control mb-2" required><?= htmlspecialchars($comment['text'] ?? '') ?></textarea>
+                                                            <div class="d-flex gap-2">
+                                                                <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                                                <button type="button" class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <p class="text-muted">No comments yet. Be the first to comment!</p>
+                                    <?php endif; ?>
+                                </div>
+                                
+                                <form class="add-comment-form mt-3 d-flex" data-post-id="<?= $post['_id'] ?>">
+                                    <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" 
+                                         alt="Your Avatar" class="author-avatar" style="width: 32px; height: 32px;">
+                                    <div class="flex-grow-1 ms-2">
+                                        <div class="position-relative">
+                                            <textarea class="form-control rounded-pill" placeholder="Write a comment..." required></textarea>
+                                            <button type="submit" class="btn btn-link position-absolute end-0 top-50 translate-middle-y">
+                                                <i class="bi bi-send-fill"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
             </div>
         </div>
     </div>
@@ -1864,7 +1864,7 @@ try {
                     alert('Failed to copy link. Please try again.');
                 }
             });
-        });
+    });
     </script>
 </body>
 </html>
