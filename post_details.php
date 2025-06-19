@@ -120,35 +120,60 @@ try {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Modern UI Styles */
+        /* Modern UI Styles with Theme Support */
         :root {
             --primary-color: #2563eb;
             --secondary-color: #1e40af;
             --accent-color: #3b82f6;
-            --light-color: #f8fafc;
-            --dark-color: #0f172a;
             --success-color: #06b6d4;
             --warning-color: #f59e0b;
             --modern-blue: #0ea5e9;
             --modern-purple: #8b5cf6;
             --modern-teal: #14b8a6;
             --modern-gray: #6b7280;
+            
+            /* Dark Theme Variables (Default) */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --bg-gradient: linear-gradient(135deg, #0a0d1a 0%, #1a1a2e 50%, #16213e 100%);
             --card-bg: rgba(15, 23, 42, 0.6);
             --glass-bg: rgba(22, 28, 45, 0.7);
-            --border-glow: rgba(37, 99, 235, 0.5);
             --surface-1: rgba(30, 41, 59, 0.6);
             --surface-2: rgba(15, 23, 42, 0.8);
+            --border-color: rgba(37, 99, 235, 0.1);
+            --border-glow: rgba(37, 99, 235, 0.5);
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.7);
             --text-muted: rgba(255, 255, 255, 0.5);
+            --text-link: #4cc9f0;
+        }
+
+        /* Light Theme Variables */
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(248, 250, 252, 0.9);
+            --surface-1: rgba(248, 250, 252, 0.8);
+            --surface-2: rgba(241, 245, 249, 0.9);
+            --border-color: rgba(67, 97, 238, 0.15);
+            --border-glow: rgba(67, 97, 238, 0.3);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --text-link: #2563eb;
         }
 
         body {
-            background: linear-gradient(135deg, #0a0d1a 0%, #1a1a2e 50%, #16213e 100%);
+            background: var(--bg-gradient);
             font-family: 'Inter', 'Segoe UI', sans-serif;
             color: var(--text-primary);
             min-height: 100vh;
             position: relative;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         /* Background Effects */
@@ -174,6 +199,15 @@ try {
             background-size: 50px 50px;
             z-index: -1;
             animation: grid-pulse 4s ease-in-out infinite;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Light theme grid */
+        [data-theme="light"] .cyber-grid {
+            background-image: 
+                linear-gradient(to right, rgba(67, 97, 238, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(67, 97, 238, 0.03) 1px, transparent 1px);
+            opacity: 0.6;
         }
 
         .floating-orb {
@@ -183,6 +217,7 @@ try {
             opacity: 0.4;
             animation: float-orb 15s ease-in-out infinite;
             box-shadow: 0 0 50px currentColor;
+            transition: opacity 0.3s ease;
         }
 
         .orb-1 {
@@ -212,6 +247,23 @@ try {
             animation-delay: 14s;
         }
 
+        /* Light theme orb adjustments */
+        [data-theme="light"] .floating-orb {
+            opacity: 0.2;
+        }
+
+        [data-theme="light"] .orb-1 {
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.15) 0%, rgba(67, 97, 238, 0.05) 50%, transparent 70%);
+        }
+
+        [data-theme="light"] .orb-2 {
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, rgba(14, 165, 233, 0.04) 50%, transparent 70%);
+        }
+
+        [data-theme="light"] .orb-3 {
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 50%, transparent 70%);
+        }
+
         @keyframes float-orb {
             0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
             25% { transform: translate(30px, -20px) scale(1.05) rotate(90deg); }
@@ -234,27 +286,37 @@ try {
         .post-card {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
             border-radius: 1rem;
             margin-bottom: 2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
         }
 
         .post-header {
             padding: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--border-color);
+            background: transparent;
+            transition: border-color 0.3s ease, background 0.3s ease;
         }
 
         .post-content {
             padding: 2rem 1.5rem;
+            background: transparent;
+            transition: background 0.3s ease;
         }
 
         .post-footer {
             padding: 1rem 1.5rem;
-            background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--surface-1);
+            border-top: 1px solid var(--border-color);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Light theme specific adjustments */
+        [data-theme="light"] .post-card {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
         }
 
         .author-avatar {
@@ -263,12 +325,13 @@ try {
             border-radius: 50%;
             margin-right: 1rem;
             object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--border-color);
+            transition: border-color 0.3s ease;
         }
 
         .post-tag {
-            background: var(--modern-blue);
-            color: white;
+            background: var(--modern-blue) !important;
+            color: white !important;
             padding: 0.3rem 1rem;
             border-radius: 2rem;
             font-size: 0.8rem;
@@ -277,11 +340,14 @@ try {
             margin-bottom: 0.5rem;
             display: inline-block;
             transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
         }
 
         .post-tag:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            box-shadow: 0 4px 12px var(--border-glow);
+            color: white !important;
         }
 
         .comment-section {
@@ -290,14 +356,16 @@ try {
             border-radius: 1rem;
             padding: 1.5rem;
             backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .comment {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--surface-2);
             border-radius: 0.5rem;
             padding: 1rem;
             margin-bottom: 1rem;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, background 0.3s ease;
         }
 
         .comment:hover {
@@ -305,14 +373,16 @@ try {
         }
 
         .comment-bubble {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--surface-1);
             border-radius: 1rem;
             padding: 1rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
         .share-link {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--surface-1);
+            border: 1px solid var(--border-color);
             color: var(--text-primary);
             border-radius: 0.5rem;
             padding: 0.75rem 1rem;
@@ -321,8 +391,9 @@ try {
         }
 
         .share-link:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--surface-2);
             border-color: var(--modern-blue);
+            color: var(--text-primary);
         }
 
         .attachments {
@@ -333,14 +404,15 @@ try {
         }
 
         .attachment-item {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--surface-1);
             border-radius: 0.5rem;
             overflow: hidden;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, background 0.3s ease;
         }
 
         .attachment-item:hover {
             transform: translateY(-2px);
+            background: var(--surface-2);
         }
 
         .attachment-img {
@@ -348,12 +420,13 @@ try {
             height: 200px;
             object-fit: cover;
             border-radius: 0.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+            transition: border-color 0.3s ease;
         }
 
         .attachment-file {
             padding: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
             border-radius: 0.5rem;
             display: flex;
             align-items: center;
@@ -363,23 +436,160 @@ try {
         }
 
         .attachment-file:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--surface-2);
             border-color: var(--modern-blue);
+            color: var(--text-link);
         }
 
         /* Form Controls */
         .form-control {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--surface-1);
+            border: 1px solid var(--border-color);
             color: var(--text-primary);
             border-radius: 0.5rem;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .form-control:focus {
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--surface-2);
             border-color: var(--modern-blue);
             color: var(--text-primary);
-            box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.25);
+            box-shadow: 0 0 0 0.2rem var(--border-glow);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        /* Button styling */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--modern-blue), var(--modern-purple));
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--border-glow);
+            color: white;
+        }
+
+        .btn-link {
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .btn-link:hover {
+            color: var(--text-primary);
+        }
+
+        /* Text and content styling */
+        .content-text {
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: color 0.3s ease;
+        }
+
+        /* Bootstrap overrides for consistent theming */
+        .text-dark {
+            color: var(--text-primary) !important;
+            transition: color 0.3s ease;
+        }
+
+        .text-muted {
+            color: var(--text-muted) !important;
+            transition: color 0.3s ease;
+        }
+
+        .text-secondary {
+            color: var(--text-secondary) !important;
+            transition: color 0.3s ease;
+        }
+
+        /* Dropdown styling */
+        .dropdown-menu {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item {
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--surface-1);
+            color: var(--text-primary);
+        }
+
+        .dropdown-item.text-danger {
+            color: #dc3545 !important;
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545 !important;
+        }
+
+        /* Alert styling */
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-color: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .alert-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-color: rgba(220, 53, 69, 0.2);
+            color: #721c24;
+        }
+
+        /* Vote button styling */
+        .vote-btn {
+            color: var(--text-muted) !important;
+            transition: color 0.3s ease;
+        }
+
+        .vote-btn:hover {
+            color: var(--text-link) !important;
+        }
+
+        .vote-btn.bi-hand-thumbs-up-fill {
+            color: var(--modern-blue) !important;
+        }
+
+        /* Comment author and meta styling */
+        .comment .fw-bold {
+            color: var(--text-primary) !important;
+        }
+
+        .comment .small {
+            color: var(--text-muted) !important;
+        }
+
+        /* Ensure proper theme inheritance */
+        * {
+            color: inherit;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+
+        p {
+            color: var(--text-primary);
+            transition: color 0.3s ease;
         }
 
         /* Animations */

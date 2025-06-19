@@ -185,35 +185,60 @@ try {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Modern UI Styles */
+        /* Modern UI Styles with Theme Support */
         :root {
             --primary-color: #2563eb;
             --secondary-color: #1e40af;
             --accent-color: #3b82f6;
-            --light-color: #f8fafc;
-            --dark-color: #0f172a;
             --success-color: #06b6d4;
             --warning-color: #f59e0b;
             --modern-blue: #0ea5e9;
             --modern-purple: #8b5cf6;
             --modern-teal: #14b8a6;
             --modern-gray: #6b7280;
+            
+            /* Dark Theme Variables (Default) */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --bg-gradient: linear-gradient(135deg, #0a0d1a 0%, #1a1a2e 50%, #16213e 100%);
             --card-bg: rgba(15, 23, 42, 0.6);
             --glass-bg: rgba(22, 28, 45, 0.7);
-            --border-glow: rgba(37, 99, 235, 0.5);
             --surface-1: rgba(30, 41, 59, 0.6);
             --surface-2: rgba(15, 23, 42, 0.8);
+            --border-color: rgba(37, 99, 235, 0.1);
+            --border-glow: rgba(37, 99, 235, 0.5);
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.7);
             --text-muted: rgba(255, 255, 255, 0.5);
+            --text-link: #4cc9f0;
+        }
+
+        /* Light Theme Variables */
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(248, 250, 252, 0.9);
+            --surface-1: rgba(248, 250, 252, 0.8);
+            --surface-2: rgba(241, 245, 249, 0.9);
+            --border-color: rgba(67, 97, 238, 0.15);
+            --border-glow: rgba(67, 97, 238, 0.3);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --text-link: #2563eb;
         }
 
         body {
-            background: linear-gradient(135deg, #0a0d1a 0%, #1a1a2e 50%, #16213e 100%);
+            background: var(--bg-gradient);
             font-family: 'Inter', 'Segoe UI', sans-serif;
             color: var(--text-primary);
             min-height: 100vh;
             position: relative;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         /* Background Effects */
@@ -239,6 +264,15 @@ try {
             background-size: 50px 50px;
             z-index: -1;
             animation: grid-pulse 4s ease-in-out infinite;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Light theme grid */
+        [data-theme="light"] .cyber-grid {
+            background-image: 
+                linear-gradient(to right, rgba(67, 97, 238, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(67, 97, 238, 0.03) 1px, transparent 1px);
+            opacity: 0.6;
         }
 
         .floating-orb {
@@ -248,6 +282,7 @@ try {
             opacity: 0.4;
             animation: float-orb 15s ease-in-out infinite;
             box-shadow: 0 0 50px currentColor;
+            transition: opacity 0.3s ease;
         }
 
         .orb-1 {
@@ -275,6 +310,23 @@ try {
             bottom: 20%;
             left: 20%;
             animation-delay: 14s;
+        }
+
+        /* Light theme orb adjustments */
+        [data-theme="light"] .floating-orb {
+            opacity: 0.2;
+        }
+
+        [data-theme="light"] .orb-1 {
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.15) 0%, rgba(67, 97, 238, 0.05) 50%, transparent 70%);
+        }
+
+        [data-theme="light"] .orb-2 {
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, rgba(14, 165, 233, 0.04) 50%, transparent 70%);
+        }
+
+        [data-theme="light"] .orb-3 {
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 50%, transparent 70%);
         }
 
         @keyframes float-orb {
@@ -311,61 +363,135 @@ try {
         .create-post-card {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
             border-radius: 1rem;
             padding: 1.5rem;
             margin-bottom: 2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
         }
 
         .create-post-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
 
         .filters-card {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
             border-radius: 1rem;
             padding: 1.5rem;
             margin-bottom: 2rem;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .forum-post {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
             border-radius: 1rem;
             margin-bottom: 1.5rem;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .forum-post *:not(.post-tag):not(.btn):not(.badge):not(.alert):not(.dropdown-menu):not(.dropdown-item) {
+            background-color: transparent !important;
+        }
+
+        /* Ensure no white backgrounds override our theme */
+        .forum-post .post-header,
+        .forum-post .post-content {
+            background-color: transparent !important;
+        }
+
+        /* Override any Bootstrap card styles */
+        .card,
+        .card-body,
+        .card-header {
+            background-color: transparent !important;
+        }
+
+        /* Ensure comment bubbles don't have white backgrounds */
+        .comment-bubble {
+            background-color: var(--surface-1) !important;
+        }
+
+        /* Override any potential white backgrounds */
+        .bg-white {
+            background-color: transparent !important;
+        }
+
+        [data-theme="light"] .bg-white {
+            background-color: var(--bg-primary) !important;
         }
 
         .forum-post:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .forum-post::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(76, 201, 240, 0.02), 
+                rgba(114, 9, 183, 0.02));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 1rem;
+            pointer-events: none;
+        }
+
+        .forum-post:hover::before {
+            opacity: 1;
+        }
+
+        /* Light theme specific adjustments */
+        [data-theme="light"] .create-post-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .forum-post:hover {
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .forum-post::before {
+            background: linear-gradient(135deg, 
+                rgba(67, 97, 238, 0.03), 
+                rgba(139, 92, 246, 0.03));
         }
 
         .post-header {
             padding: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--border-color);
+            background: transparent;
+            transition: border-color 0.3s ease, background 0.3s ease;
         }
 
         .post-content {
             padding: 1.5rem;
+            background: transparent;
+            transition: background 0.3s ease;
         }
 
         .post-footer {
             padding: 1rem 1.5rem;
-            background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--surface-1);
+            border-top: 1px solid var(--border-color);
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .post-tag {
-            background: var(--modern-blue);
-            color: white;
+            background: var(--modern-blue) !important;
+            color: white !important;
             padding: 0.3rem 1rem;
             border-radius: 2rem;
             font-size: 0.8rem;
@@ -374,40 +500,139 @@ try {
             margin-bottom: 0.5rem;
             display: inline-block;
             transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
         }
 
         .post-tag:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            box-shadow: 0 4px 12px var(--border-glow);
+            color: white !important;
+        }
+
+        /* Specific tag color variations */
+        .post-tag.tag-discussion {
+            background: var(--modern-blue) !important;
+        }
+
+        .post-tag.tag-announcement {
+            background: var(--warning-color) !important;
+        }
+
+        .post-tag.tag-question {
+            background: var(--modern-purple) !important;
+        }
+
+        .post-tag.tag-tutorial {
+            background: var(--modern-teal) !important;
+        }
+
+        .post-tag.tag-resource {
+            background: var(--success-color) !important;
+        }
+
+        .post-tag.tag-member_recruitment {
+            background: #28a745 !important;
+        }
+
+        .post-tag.tag-bug_fixes {
+            background: #dc3545 !important;
+        }
+
+        /* Post tags container styling */
+        .post-tags {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* Ensure tags maintain their styling in both themes */
+        [data-theme="light"] .post-tag {
+            background: var(--modern-blue) !important;
+            color: white !important;
+        }
+
+        [data-theme="light"] .post-tag.tag-discussion {
+            background: var(--modern-blue) !important;
+        }
+
+        [data-theme="light"] .post-tag.tag-announcement {
+            background: var(--warning-color) !important;
+        }
+
+        [data-theme="light"] .post-tag.tag-question {
+            background: var(--modern-purple) !important;
+        }
+
+        [data-theme="light"] .post-tag.tag-tutorial {
+            background: var(--modern-teal) !important;
+        }
+
+        [data-theme="light"] .post-tag.tag-resource {
+            background: var(--success-color) !important;
+        }
+
+        [data-theme="light"] .post-tag.tag-member_recruitment {
+            background: #28a745 !important;
+        }
+
+        [data-theme="light"] .post-tag.tag-bug_fixes {
+            background: #dc3545 !important;
         }
 
         .comment-section {
-            background: rgba(0, 0, 0, 0.2);
+            background: var(--surface-1);
             border-radius: 0.5rem;
             padding: 1rem;
             margin-top: 1rem;
+            transition: background 0.3s ease;
         }
 
         .comment {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--surface-2);
             border-radius: 0.5rem;
             padding: 1rem;
             margin-bottom: 1rem;
+            transition: background 0.3s ease;
         }
 
         /* Form Controls */
         .form-control {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--surface-1);
+            border: 1px solid var(--border-color);
             color: var(--text-primary);
             border-radius: 0.5rem;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .form-control:focus {
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--surface-2);
             border-color: var(--modern-blue);
             color: var(--text-primary);
-            box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.25);
+            box-shadow: 0 0 0 0.2rem var(--border-glow);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        .form-select {
+            background: var(--surface-1);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 0.5rem;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-select:focus {
+            background: var(--surface-2);
+            border-color: var(--modern-blue);
+            color: var(--text-primary);
+            box-shadow: 0 0 0 0.2rem var(--border-glow);
+            outline: none;
         }
 
         /* Buttons */
@@ -423,7 +648,393 @@ try {
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            box-shadow: 0 4px 12px var(--border-glow);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--surface-1);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-2);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-secondary:hover {
+            background: var(--surface-1);
+            color: var(--text-primary);
+            border-color: var(--modern-blue);
+        }
+
+        .btn-link {
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .btn-link:hover {
+            color: var(--text-primary);
+        }
+
+        /* Light theme text and link adjustments */
+        [data-theme="light"] .text-dark {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        [data-theme="light"] .text-decoration-none {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .text-decoration-none:hover {
+            color: var(--text-link);
+        }
+
+        [data-theme="light"] .alert-info {
+            background-color: var(--surface-1);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .alert-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-color: rgba(220, 53, 69, 0.2);
+            color: #721c24;
+        }
+
+        /* Modal adjustments for light theme */
+        [data-theme="light"] .modal-content {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        [data-theme="light"] .modal-header {
+            border-bottom-color: var(--border-color);
+        }
+
+        [data-theme="light"] .modal-footer {
+            border-top-color: var(--border-color);
+        }
+
+        [data-theme="light"] .modal-title {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .modal-body {
+            color: var(--text-primary);
+        }
+
+        /* Create post input styling */
+        .create-post-input {
+            background: var(--surface-1);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 2rem;
+            padding: 1rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .create-post-input:hover {
+            background: var(--surface-2);
+            border-color: var(--modern-blue);
+            color: var(--text-secondary);
+        }
+
+        /* Author avatar styling */
+        .author-avatar {
+            border: 2px solid var(--border-color);
+            transition: border-color 0.3s ease;
+        }
+
+        /* Post meta and author styling */
+        .post-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        /* Attachment styling improvements */
+        .attachments {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .attachment-item {
+            background: var(--surface-1);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .attachment-item:hover {
+            transform: translateY(-2px);
+            background: var(--surface-2);
+        }
+
+        .attachment-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+
+        .attachment-file {
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .attachment-file:hover {
+            color: var(--text-link);
+        }
+
+        .attachment-file i {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        /* Post-specific element styling for theme support */
+        .post-title {
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+
+        .post-title:hover {
+            color: var(--text-link);
+        }
+
+        .post-text {
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+
+        .fw-bold {
+            color: var(--text-primary) !important;
+            transition: color 0.3s ease;
+        }
+
+        .small {
+            color: var(--text-muted) !important;
+            transition: color 0.3s ease;
+        }
+
+        /* Post footer button styling */
+        .post-footer .btn-link {
+            color: var(--text-muted);
+            border: none !important;
+            transition: all 0.3s ease;
+        }
+
+        .post-footer .btn-link:hover {
+            color: var(--text-link);
+            background: var(--surface-2);
+        }
+
+        .post-footer .btn-link.text-primary {
+            color: var(--modern-blue) !important;
+        }
+
+        .post-footer .btn-link.text-primary:hover {
+            color: var(--modern-blue) !important;
+        }
+
+        /* Reaction and comment count styling */
+        .reaction-count {
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        .upvote-count {
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        /* Comment bubble styling */
+        .comment-bubble {
+            background: var(--surface-1);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .comment-author {
+            color: var(--text-primary) !important;
+            transition: color 0.3s ease;
+        }
+
+        .comment-content {
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+
+        .comment-time {
+            color: var(--text-muted) !important;
+            transition: color 0.3s ease;
+        }
+
+        /* Dropdown menu styling */
+        .dropdown-menu {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item {
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--surface-1);
+            color: var(--text-primary);
+        }
+
+        .dropdown-item.text-danger {
+            color: #dc3545 !important;
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545 !important;
+        }
+
+        /* Light theme specific overrides */
+        [data-theme="light"] .bg-light {
+            background-color: var(--surface-1) !important;
+        }
+
+        [data-theme="light"] .text-primary {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .post-footer .btn-link.text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        [data-theme="light"] .post-footer .btn-link.text-primary {
+            color: var(--modern-blue) !important;
+        }
+
+        [data-theme="light"] .post-footer .btn-link.fw-bold {
+            color: var(--modern-blue) !important;
+        }
+
+        /* Bootstrap override for consistent theming */
+        .text-dark {
+            color: var(--text-primary) !important;
+            transition: color 0.3s ease;
+        }
+
+        .text-muted {
+            color: var(--text-muted) !important;
+            transition: color 0.3s ease;
+        }
+
+        .text-secondary {
+            color: var(--text-secondary) !important;
+            transition: color 0.3s ease;
+        }
+
+        /* Specific styling for user names and meta info */
+        .post-meta .fw-bold {
+            color: var(--text-primary) !important;
+        }
+
+        .post-meta .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        .post-meta .small {
+            color: var(--text-muted) !important;
+        }
+
+        /* Header info styling */
+        .header-name {
+            color: var(--text-primary) !important;
+        }
+
+        .header-email {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Comment meta styling */
+        .comment-meta .fw-bold {
+            color: var(--text-primary) !important;
+        }
+
+        .comment-meta .comment-author {
+            color: var(--text-primary) !important;
+        }
+
+        /* Action button text colors */
+        .upvote-btn {
+            color: var(--text-muted) !important;
+            transition: color 0.3s ease;
+        }
+
+        .upvote-btn:hover {
+            color: var(--text-link) !important;
+        }
+
+        .upvote-btn.text-primary {
+            color: var(--modern-blue) !important;
+        }
+
+        .upvote-btn.fw-bold {
+            color: var(--modern-blue) !important;
+        }
+
+        .toggle-comments-btn {
+            color: var(--text-muted) !important;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-comments-btn:hover {
+            color: var(--text-link) !important;
+        }
+
+        .toggle-comments-btn.text-primary {
+            color: var(--modern-blue) !important;
+        }
+
+        .share-btn {
+            color: var(--text-muted) !important;
+            transition: color 0.3s ease;
+        }
+
+        .share-btn:hover {
+            color: var(--text-link) !important;
         }
 
         /* Animations */
@@ -563,9 +1174,7 @@ try {
                             
                             <div class="post-content">
                                 <h3 class="post-title mb-3">
-                                    <a href="post_details.php?id=<?= $post['_id'] ?>" class="text-decoration-none text-dark">
-                                        <?= htmlspecialchars($post['title']) ?>
-                                    </a>
+                                    <?= htmlspecialchars($post['title']) ?>
                                 </h3>
                                 
                                 <div class="post-tags mb-3">
@@ -584,9 +1193,7 @@ try {
                                 </div>
                                 
                                 <div class="post-text mb-3">
-                                    <a href="post_details.php?id=<?= $post['_id'] ?>" class="text-decoration-none text-dark">
-                                        <?= nl2br(htmlspecialchars($post['content'])) ?>
-                                    </a>
+                                    <?= nl2br(htmlspecialchars($post['content'])) ?>
                                 </div>
                                 
                                 <?php if (!empty($post['attachments'])): ?>
@@ -748,15 +1355,15 @@ try {
     <!-- Confirmation Modal -->
     <div class="modal fade" id="confirmationModal" tabindex="-1">
         <div class="modal-dialog">
-            <div class="modal-content" style="background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);">
-                <div class="modal-header border-bottom border-light border-opacity-10">
-                    <h5 class="modal-title text-light">Confirmation</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <div class="modal-content" style="background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color);">
+                <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
+                    <h5 class="modal-title" style="color: var(--text-primary);">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter: var(--text-primary) === '#ffffff' ? invert(1) : invert(0);"></button>
                 </div>
-                <div class="modal-body text-light">
+                <div class="modal-body" style="color: var(--text-primary);">
                     <p id="confirmation-message">Are you sure you want to delete this?</p>
                 </div>
-                <div class="modal-footer border-top border-light border-opacity-10">
+                <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger" id="confirm-delete-btn">Delete</button>
                 </div>
@@ -1153,6 +1760,82 @@ try {
         });
         
         debug('All event listeners initialized');
+        
+        // Make entire posts clickable
+        document.querySelectorAll('.forum-post').forEach(post => {
+            const postId = post.id.replace('post-', '');
+            
+            post.addEventListener('click', function(e) {
+                // Don't navigate if clicking on interactive elements
+                const interactiveElements = [
+                    'button', 'a', 'input', 'textarea', 'select', 
+                    '.btn', '.dropdown-toggle', '.dropdown-item',
+                    '.upvote-btn', '.toggle-comments-btn', '.share-btn',
+                    '.edit-post-btn', '.delete-post-btn', '.edit-comment-btn', '.delete-comment-btn'
+                ];
+                
+                // Check if the clicked element or its parents are interactive
+                let isInteractive = false;
+                for (let selector of interactiveElements) {
+                    if (e.target.matches(selector) || e.target.closest(selector)) {
+                        isInteractive = true;
+                        break;
+                    }
+                }
+                
+                // Also check if we're in a form or comment section that's being edited
+                if (e.target.closest('.add-comment-form') || 
+                    e.target.closest('.edit-comment-form') || 
+                    e.target.closest('.comment-section')) {
+                    isInteractive = true;
+                }
+                
+                // Navigate to post details if not clicking on interactive elements
+                if (!isInteractive) {
+                    window.location.href = `post_details.php?id=${postId}`;
+                }
+            });
+            
+            // Add visual feedback for clickability
+            post.addEventListener('mouseenter', function(e) {
+                // Don't show pointer cursor on interactive elements
+                if (!e.target.matches('button, a, input, textarea, select, .btn')) {
+                    this.style.cursor = 'pointer';
+                }
+            });
+        });
+        
+        // Theme handling - Listen for theme changes from navbar
+        document.addEventListener('themeChanged', function(e) {
+            debug('Theme changed to: ' + e.detail.theme);
+            
+            // Update modal close button filter for theme
+            const closeButton = document.querySelector('.modal .btn-close');
+            if (closeButton) {
+                if (e.detail.theme === 'light') {
+                    closeButton.style.filter = 'invert(0)';
+                } else {
+                    closeButton.style.filter = 'invert(1)';
+                }
+            }
+            
+            // Force repaint for smooth transitions
+            document.body.style.transform = 'translateZ(0)';
+            setTimeout(() => {
+                document.body.style.transform = '';
+            }, 50);
+        });
+        
+        // Initialize theme on page load
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        const closeButton = document.querySelector('.modal .btn-close');
+        if (closeButton) {
+            if (currentTheme === 'light') {
+                closeButton.style.filter = 'invert(0)';
+            } else {
+                closeButton.style.filter = 'invert(1)';
+            }
+        }
         
         // Handle share button clicks
         document.querySelectorAll('.share-btn').forEach(btn => {
