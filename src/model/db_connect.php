@@ -16,7 +16,7 @@ function connectToDatabase() {
         ini_set('display_errors', 1);
         
         // MongoDB connection URI
-        $uri = "mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/";
+        $uri = "mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/?retryWrites=true&w=majority&connectTimeoutMS=30000&socketTimeoutMS=30000";
         
         // Create a new client and connect
         $client = new Client($uri);

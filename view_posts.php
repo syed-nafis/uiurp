@@ -11,6 +11,7 @@ use MongoDB\BSON\UTCDateTime;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Client;
 use MongoDB\Collection;
+use MongoDB\Driver\Exception\ConnectionException;
 
 session_start();
 
@@ -59,7 +60,7 @@ try {
     $allPosts = [];
     foreach ($newPosts as $post) {
         try {
-            $currentTime = new UTCDateTime();
+            $currentTime = new \MongoDB\BSON\UTCDateTime();
             
             // Convert BSONArray objects to PHP arrays
             $tags = $post['tags'] ?? ['discussion'];
@@ -456,19 +457,23 @@ try {
                                                     $dateTime = null;
                                                     if (is_object($post['created_at']) && method_exists($post['created_at'], 'toDateTime')) {
                                                         $dateTime = $post['created_at']->toDateTime();
+                                                        $dateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
                                                     } elseif (is_string($post['created_at']) || is_numeric($post['created_at'])) {
                                                         $dateTime = new DateTime('@' . (int)$post['created_at']);
+                                                        $dateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
                                                     }
                                                     
-                                                    echo $dateTime ? date('M j, Y \a\t g:i a', $dateTime->getTimestamp()) : 'Unknown date';
+                                                    echo $dateTime ? $dateTime->format('M j, Y \a\t g:i a') : 'Unknown date';
                                                     
                                                     // Check if updated
                                                     if (isset($post['updated_at']) && !empty($post['updated_at'])) {
                                                         $updateDateTime = null;
                                                         if (is_object($post['updated_at']) && method_exists($post['updated_at'], 'toDateTime')) {
                                                             $updateDateTime = $post['updated_at']->toDateTime();
+                                                            $updateDateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
                                                         } elseif (is_string($post['updated_at']) || is_numeric($post['updated_at'])) {
                                                             $updateDateTime = new DateTime('@' . (int)$post['updated_at']);
+                                                            $updateDateTime->setTimezone(new DateTimeZone('Asia/Dhaka')); // Set to Bangladesh timezone
                                                         }
                                                         
                                                         if ($dateTime && $updateDateTime && $updateDateTime->getTimestamp() > $dateTime->getTimestamp()) {
@@ -582,7 +587,8 @@ try {
                                     <i class="bi bi-chat-left-text me-1"></i> Comment
                                 </button>
                                 
-                                <button class="btn btn-link text-decoration-none flex-fill text-muted">
+                                <button class="btn btn-link text-decoration-none flex-fill text-muted share-btn" 
+                                        data-post-url="<?= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/post_details.php?id=" . $post['_id'] ?>">
                                     <i class="bi bi-share me-1"></i> Share
                                 </button>
                             </div>
@@ -1081,6 +1087,35 @@ try {
         });
         
         debug('All event listeners initialized');
+        
+        // Handle share button clicks
+        document.querySelectorAll('.share-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const postUrl = this.getAttribute('data-post-url');
+                try {
+                    await navigator.clipboard.writeText(postUrl);
+                    // Show a temporary tooltip
+                    const tooltip = document.createElement('div');
+                    tooltip.textContent = 'Link copied!';
+                    tooltip.style.cssText = `
+                        position: fixed;
+                        background: rgba(0,0,0,0.8);
+                        color: white;
+                        padding: 8px 16px;
+                        border-radius: 4px;
+                        z-index: 1000;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                    `;
+                    document.body.appendChild(tooltip);
+                    setTimeout(() => tooltip.remove(), 2000);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                    alert('Failed to copy link. Please try again.');
+                }
+            });
+        });
     });
     </script>
 </body>
