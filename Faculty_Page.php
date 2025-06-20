@@ -19,7 +19,14 @@ session_start();
         <div class="overlay">
             <h1>Our Faculty</h1>
             <p>At the Head of the Class<br>UIU faculty are renowned leaders in their fields, extraordinary teachers, and dedicated mentors.</p>
+            <!-- Search Bar -->
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-6">
+                    <input type="text" id="facultySearch" class="form-control form-control-lg" placeholder="Search by faculty name...">
+                </div>
+            </div>
         </div>
+    
     </div>
 
     <!-- Faculty List -->

@@ -5532,3 +5532,1100 @@
 2025-06-03 20:26:34 - Found 0 projects
 2025-06-04 19:54:51 - fetch_all_user_projects.php - User ID: 6656d4b4f7e5b8c9a0a1b2cb
 2025-06-04 19:54:51 - fetch_all_user_projects.php - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2cb"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2cb"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2cb"}]}
+2025-06-06 21:00:59 - SESSION: Array
+(
+)
+
+2025-06-06 21:00:59 - UserId extracted: , isLoggedIn: false
+2025-06-06 21:00:59 - Not logged in, showing public projects
+2025-06-06 21:01:00 - Found 18 projects
+2025-06-09 20:45:38 - fetch_all_user_projects.php - User ID: 6656d4b4f7e5b8c9a0a1b2cb
+2025-06-09 20:45:38 - fetch_all_user_projects.php - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2cb"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2cb"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2cb"}]}
+2025-06-09 20:46:19 - fetch_all_user_projects.php - User ID: 6656d4b4f7e5b8c9a0a1b2cb
+2025-06-09 20:46:19 - fetch_all_user_projects.php - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2cb"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2cb"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2cb"}]}
+2025-06-10 12:27:58 - fetch_all_user_projects.php - User ID: 6656d4b4f7e5b8c9a0a1b2c9
+2025-06-10 12:27:58 - fetch_all_user_projects.php - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2c9"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2c9"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2c9"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2c9"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2c9"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2c9"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2c9"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2c9"}]}
+2025-06-10 12:28:30 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Imran Hasan
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => imran.bba@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Imran Hasan
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => imran.bba@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Business Administration
+                            [program_code] => 021
+                            [admission_year] => 24
+                            [admission_trimester] => 1
+                            [serial_number] => 0030
+                        )
+
+                    [student_id] => 0212410030
+                    [department] => Business Administration
+                    [faculty] => School of Business & Economics
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1705276800000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1831507200000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 1st Year, Spring Trimester
+                    [cgpa] => 
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => Bachelor of Business Administration
+                            [institution_name] => United International University
+                            [major_field_of_study] => Finance
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1705276800000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Financial Markets
+                            [1] => Investment Analysis
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => Financial Modeling
+                            [1] => Excel
+                            [2] => Bloomberg Terminal (Basic)
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1705017600000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1740009600000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2c9
+)
+
+2025-06-10 12:28:30 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2c9, isLoggedIn: true
+2025-06-10 12:28:30 - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2c9"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2c9"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2c9"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2c9"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2c9"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2c9"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2c9"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2c9"}]}
+2025-06-10 12:28:30 - Found 4 projects
+2025-06-10 12:29:34 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Imran Hasan
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => imran.bba@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Imran Hasan
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => imran.bba@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Business Administration
+                            [program_code] => 021
+                            [admission_year] => 24
+                            [admission_trimester] => 1
+                            [serial_number] => 0030
+                        )
+
+                    [student_id] => 0212410030
+                    [department] => Business Administration
+                    [faculty] => School of Business & Economics
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1705276800000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1831507200000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 1st Year, Spring Trimester
+                    [cgpa] => 
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => Bachelor of Business Administration
+                            [institution_name] => United International University
+                            [major_field_of_study] => Finance
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1705276800000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Financial Markets
+                            [1] => Investment Analysis
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => Financial Modeling
+                            [1] => Excel
+                            [2] => Bloomberg Terminal (Basic)
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1705017600000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1740009600000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2c9
+)
+
+2025-06-10 12:29:34 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2c9, isLoggedIn: true
+2025-06-10 12:29:34 - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2c9"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2c9"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2c9"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2c9"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2c9"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2c9"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2c9"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2c9"}]}
+2025-06-10 12:29:35 - Found 4 projects
+2025-06-10 12:30:15 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Tanvir Hossain
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => tanvir.bsds@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2cb
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Tanvir Hossain
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => tanvir.bsds@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Science in Data Science
+                            [program_code] => 031
+                            [admission_year] => 24
+                            [admission_trimester] => 1
+                            [serial_number] => 0007
+                        )
+
+                    [student_id] => 0312410007
+                    [department] => Data Science
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1705276800000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1831507200000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 1st Year, Spring Trimester
+                    [cgpa] => 
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Data Science
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1705276800000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Machine Learning Operations (MLOps)
+                            [1] => Cloud Computing for Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => Docker
+                            [1] => Kubernetes (Basic)
+                            [2] => AWS Sagemaker (Learning)
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1704931200000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1737331200000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2cb
+)
+
+2025-06-10 12:30:15 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2cb, isLoggedIn: true
+2025-06-10 12:30:15 - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2cb"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2cb"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2cb"}]}
+2025-06-10 12:30:18 - Found 1 projects
+2025-06-10 12:50:59 - fetch_all_user_projects.php - User ID: 6656d4b4f7e5b8c9a0a1b2cb
+2025-06-10 12:50:59 - fetch_all_user_projects.php - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2cb"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2cb"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2cb"}]}
+2025-06-10 17:51:03 - fetch_all_user_projects.php - User ID: 6656d4b4f7e5b8c9a0a1b2cb
+2025-06-10 17:51:03 - fetch_all_user_projects.php - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2cb"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2cb"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2cb"}]}
+2025-06-10 17:52:20 - fetch_all_user_projects.php - User ID: 6656d4b4f7e5b8c9a0a1b2cb
+2025-06-10 17:52:20 - fetch_all_user_projects.php - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2cb"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2cb"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2cb"}]}
+2025-06-10 17:52:22 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Tanvir Hossain
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => tanvir.bsds@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2cb
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Tanvir Hossain
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => tanvir.bsds@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Science in Data Science
+                            [program_code] => 031
+                            [admission_year] => 24
+                            [admission_trimester] => 1
+                            [serial_number] => 0007
+                        )
+
+                    [student_id] => 0312410007
+                    [department] => Data Science
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1705276800000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1831507200000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 1st Year, Spring Trimester
+                    [cgpa] => 
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Data Science
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1705276800000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Machine Learning Operations (MLOps)
+                            [1] => Cloud Computing for Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => Docker
+                            [1] => Kubernetes (Basic)
+                            [2] => AWS Sagemaker (Learning)
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1704931200000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1737331200000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2cb
+)
+
+2025-06-10 17:52:22 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2cb, isLoggedIn: true
+2025-06-10 17:52:22 - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2cb"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2cb"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2cb"}]}
+2025-06-10 17:52:24 - Found 1 projects
+2025-06-10 17:52:40 - fetch_all_user_projects.php - User ID: 6656d4b4f7e5b8c9a0a1b2cb
+2025-06-10 17:52:40 - fetch_all_user_projects.php - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2cb"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2cb"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2cb"}]}
+2025-06-10 18:03:44 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Tanvir Hossain
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => tanvir.bsds@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2cb
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Tanvir Hossain
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => tanvir.bsds@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Science in Data Science
+                            [program_code] => 031
+                            [admission_year] => 24
+                            [admission_trimester] => 1
+                            [serial_number] => 0007
+                        )
+
+                    [student_id] => 0312410007
+                    [department] => Data Science
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1705276800000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1831507200000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 1st Year, Spring Trimester
+                    [cgpa] => 
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Data Science
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1705276800000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Machine Learning Operations (MLOps)
+                            [1] => Cloud Computing for Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => Docker
+                            [1] => Kubernetes (Basic)
+                            [2] => AWS Sagemaker (Learning)
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1704931200000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1737331200000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2cb
+)
+
+2025-06-10 18:03:44 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2cb, isLoggedIn: true
+2025-06-10 18:03:45 - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2cb"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2cb"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2cb"}]}
+2025-06-10 18:03:45 - Found 1 projects
+2025-06-10 18:05:31 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 67e1a19debb89e49e04ddf2a
+                )
+
+            [name] => Mr. Iftekharul Abedeen
+            [email] => iftekharul@cse.uiu.ac.bd
+            [phone] => +8801877425176
+            [bio] => Mr. Iftekharul Abedeen is a Lecturer in the Department of CSE at UIU. His research focuses on Human-Computer Interaction, Human Factors & Ergonomics, Biomedical Engineering, Reinforcement Learning, Computer Vision, and Machine Learning.
+            [job_title] => Lecturer
+            [office_number] => Room: 636
+            [profile_image] => https://i.imgur.com/x6bTGxb.jpg
+            [interested_fields_of_research] => Array
+                (
+                    [0] => Human-Computer Interaction
+                    [1] => Human Factors & Ergonomics
+                    [2] => Biomedical Engineering
+                    [3] => Reinforcement Learning
+                    [4] => Computer Vision
+                    [5] => Machine Learning
+                )
+
+            [education] => Array
+                (
+                )
+
+            [experience] => Array
+                (
+                    [0] => Array
+                        (
+                            [position] => Lecturer
+                            [department] => Department of Computer Science and Engineering
+                            [institution] => United International University
+                            [period] => Present
+                        )
+
+                )
+
+            [projects] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => Decoding Code Quality: A Software Metric Analysis of Open-Source JavaScript Projects
+                            [description] => An analysis of software quality metrics in open-source JavaScript projects.
+                            [authors] => Array
+                                (
+                                    [0] => Suzad Mohammad
+                                    [1] => Iftekharul Abedeen
+                                    [2] => Abdullah Al Jobair
+                                )
+
+                            [publication] => 19th International Conference on Evaluation of Novel Approaches to Software Engineering (ENASE 2024)
+                            [year] => 2024
+                            [citations] => 0
+                            [link] => https://www.nature.com/articles/s41597-023-02432-4
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => Decoding Code Quality: A Software Metric Analysis of Open-Source JavaScript Projects
+                            [description] => An analysis of software quality metrics in open-source JavaScript projects.
+                            [authors] => Array
+                                (
+                                    [0] => Suzad Mohammad
+                                    [1] => Iftekharul Abedeen
+                                    [2] => Abdullah Al Jobair
+                                )
+
+                            [publication] => 19th International Conference on Evaluation of Novel Approaches to Software Engineering (ENASE 2024)
+                            [year] => 2024
+                            [citations] => 0
+                            [link] => https://www.scitepress.org/Documents/2024/126188/
+                        )
+
+                )
+
+            [prerequisites] => Array
+                (
+                    [0] => Fundamentals of Computer Science
+                    [1] => Mathematics for Machine Learning
+                    [2] => Probability and Statistics
+                    [3] => Deep Learning Basics
+                    [4] => Computer Vision Algorithms
+                    [5] => Reinforcement Learning Principles
+                    [6] => Human Factors and Ergonomics
+                    [7] => Biomedical Signal Processing
+                )
+
+            [resources_to_learn_prerequisites] => Array
+                (
+                    [0] => Array
+                        (
+                            [link] => https://cs50.harvard.edu/
+                            [topic] => Introduction to Computer Science
+                        )
+
+                    [1] => Array
+                        (
+                            [link] => https://mml-book.github.io/
+                            [topic] => Mathematics for Machine Learning
+                        )
+
+                    [2] => Array
+                        (
+                            [link] => https://www.coursera.org/specializations/deep-learning
+                            [topic] => Deep Learning Specialization
+                        )
+
+                    [3] => Array
+                        (
+                            [link] => http://incompleteideas.net/book/the-book-2nd.html
+                            [topic] => Reinforcement Learning: An Introduction
+                        )
+
+                    [4] => Array
+                        (
+                            [link] => http://szeliski.org/Book/
+                            [topic] => Computer Vision: Algorithms and Applications
+                        )
+
+                    [5] => Array
+                        (
+                            [link] => https://www.hfes.org/
+                            [topic] => Introduction to Human Factors and Ergonomics
+                        )
+
+                )
+
+            [username] => iabedeen
+        )
+
+    [username] => Mr. Iftekharul Abedeen
+    [profile_pic] => https://i.imgur.com/x6bTGxb.jpg
+    [email] => iftekharul@cse.uiu.ac.bd
+    [user_id] => 67e1a19debb89e49e04ddf2a
+)
+
+2025-06-10 18:05:31 - UserId extracted: 67e1a19debb89e49e04ddf2a, isLoggedIn: true
+2025-06-10 18:05:31 - Filter: {"$or":[{"createdBy":"67e1a19debb89e49e04ddf2a"},{"createdBy.$oid":"67e1a19debb89e49e04ddf2a"},{"members":{"$elemMatch":{"userId":"67e1a19debb89e49e04ddf2a"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1a19debb89e49e04ddf2a"}}},{"members.userId":"67e1a19debb89e49e04ddf2a"},{"members.userId.$oid":"67e1a19debb89e49e04ddf2a"},{"supervisor.userId.$oid":"67e1a19debb89e49e04ddf2a"},{"supervisor.userId":"67e1a19debb89e49e04ddf2a"}]}
+2025-06-10 18:05:31 - Found 0 projects
+2025-06-10 18:05:55 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Tanvir Hossain
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => tanvir.bsds@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2cb
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Tanvir Hossain
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => tanvir.bsds@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Science in Data Science
+                            [program_code] => 031
+                            [admission_year] => 24
+                            [admission_trimester] => 1
+                            [serial_number] => 0007
+                        )
+
+                    [student_id] => 0312410007
+                    [department] => Data Science
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1705276800000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1831507200000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 1st Year, Spring Trimester
+                    [cgpa] => 
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Data Science
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1705276800000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Machine Learning Operations (MLOps)
+                            [1] => Cloud Computing for Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => Docker
+                            [1] => Kubernetes (Basic)
+                            [2] => AWS Sagemaker (Learning)
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1704931200000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1737331200000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2cb
+)
+
+2025-06-10 18:05:55 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2cb, isLoggedIn: true
+2025-06-10 18:05:55 - Filter: {"$or":[{"createdBy":"6656d4b4f7e5b8c9a0a1b2cb"},{"createdBy.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"members":{"$elemMatch":{"userId":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members":{"$elemMatch":{"userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}},{"members.userId":"6656d4b4f7e5b8c9a0a1b2cb"},{"members.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId.$oid":"6656d4b4f7e5b8c9a0a1b2cb"},{"supervisor.userId":"6656d4b4f7e5b8c9a0a1b2cb"}]}
+2025-06-10 18:05:55 - Found 1 projects
+2025-06-19 16:28:25 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => faculty
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 67e1ad43ebb89e49e04ddf38
+                )
+
+            [name] => Dr. Riasat Azim
+            [email] => kabir@cse.uiu.ac.bd
+            [phone] => +8801842055364
+            [bio] => Dr. Riasat Azim is an Assistant Professor in the Department of Computer Science and Engineering at UIU. His areas of expertise include Machine Learning, Bioinformatics, Advanced Database Systems, Big Data, and Optical Character Recognition (OCR). He has contributed significantly to computational biology and deep learning research.
+            [job_title] => Assistant Professor, Dept of CSE
+            [office_number] => Room- 337 A (3rd floor)
+            [profile_image] => https://i.imgur.com/1YBXErU.jpg
+            [interested_fields_of_research] => Array
+                (
+                    [0] => Machine Learning
+                    [1] => Bioinformatics
+                    [2] => Advanced Database Systems
+                    [3] => Big Data
+                    [4] => Optical Character Recognition (OCR)
+                )
+
+            [projects] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => CoDNet: Controlled Diffusion Network for Structure Based Drug Design
+                            [description] => Research on a deep learning model for drug design using computational biology and bioinformatics methods, published in Bioinformatics Advances.
+                            [link] => https://doi.org/10.1093/bioadv/vbaf031
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => A Patient-Specific Functional Module and Path Identification Technique from RNA-seq Data
+                            [description] => Developing techniques for identifying functional modules and paths in RNA-seq data, published in Computers in Biology and Medicine, 2023.
+                            [link] => https://www.sciencedirect.com/science/article/abs/pii/S0010482523003360
+                        )
+
+                    [2] => Array
+                        (
+                            [title] => Deep Multi-Modal Approach for Protein Function Prediction and Classification
+                            [description] => A deep learning approach for protein function prediction and classification, presented at the 6th International Conference on Electrical Engineering and Information & Communication Technology, 2024.
+                            [link] => https://ieeexplore.ieee.org/document/10534473
+                        )
+
+                    [3] => Array
+                        (
+                            [title] => ENRNN-AU-Net: A Hybrid Deep Learning Model to Classify and Segment Histopathology Images of Breast Cancer
+                            [description] => A hybrid deep learning model for classifying and segmenting histopathology images of breast cancer, presented at the Advances in Computing, Communication, Electrical, and Smart Systems (iCACCESS) conference.
+                            [link] => https://ieeexplore.ieee.org/document/10499623
+                        )
+
+                )
+
+            [prerequisites] => Array
+                (
+                    [0] => Machine Learning
+                    [1] => Bioinformatics
+                    [2] => Advanced Database Systems
+                    [3] => Big Data
+                    [4] => OCR
+                )
+
+            [resources_to_learn_prerequisites] => Array
+                (
+                    [0] => Array
+                        (
+                            [topic] => Machine Learning
+                            [link] => https://www.coursera.org/learn/machine-learning
+                        )
+
+                    [1] => Array
+                        (
+                            [topic] => Bioinformatics
+                            [link] => https://www.coursera.org/learn/bioinformatics
+                        )
+
+                    [2] => Array
+                        (
+                            [topic] => Advanced Database Systems
+                            [link] => https://www.coursera.org/learn/advanced-database-systems
+                        )
+
+                    [3] => Array
+                        (
+                            [topic] => Big Data
+                            [link] => https://www.edx.org/course/big-data
+                        )
+
+                    [4] => Array
+                        (
+                            [topic] => Optical Character Recognition (OCR)
+                            [link] => https://www.udemy.com/course/ocr-in-python/
+                        )
+
+                )
+
+            [username] => razim
+        )
+
+    [username] => Dr. Riasat Azim
+    [profile_pic] => https://i.imgur.com/1YBXErU.jpg
+    [email] => kabir@cse.uiu.ac.bd
+    [user_id] => 67e1ad43ebb89e49e04ddf38
+)
+
+2025-06-19 16:28:25 - UserId extracted: 67e1ad43ebb89e49e04ddf38, isLoggedIn: true
+2025-06-19 16:28:25 - Filter: {"$or":[{"createdBy":"67e1ad43ebb89e49e04ddf38"},{"createdBy.$oid":"67e1ad43ebb89e49e04ddf38"},{"members":{"$elemMatch":{"userId":"67e1ad43ebb89e49e04ddf38"}}},{"members":{"$elemMatch":{"userId.$oid":"67e1ad43ebb89e49e04ddf38"}}},{"members.userId":"67e1ad43ebb89e49e04ddf38"},{"members.userId.$oid":"67e1ad43ebb89e49e04ddf38"},{"supervisor.userId.$oid":"67e1ad43ebb89e49e04ddf38"},{"supervisor.userId":"67e1ad43ebb89e49e04ddf38"}]}
+2025-06-19 16:28:26 - Found 0 projects
