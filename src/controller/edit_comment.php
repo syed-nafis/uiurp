@@ -2,6 +2,8 @@
 require_once '../../vendor/autoload.php';
 require_once '../model/db_connect.php';
 
+// Import MongoDB classes
+use MongoDB\BSON\UTCDateTime;
 use MongoDB\BSON\ObjectId;
 
 // Start session
@@ -13,13 +15,23 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     exit;
 }
 
-// Get POST data (json)
+// Get JSON data
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
 // Validate input
 if (!isset($data['postId']) || empty($data['postId'])) {
     echo json_encode(['success' => false, 'message' => 'Post ID is required']);
+    exit;
+}
+
+if (!isset($data['commentIndex']) && $data['commentIndex'] !== 0) {
+    echo json_encode(['success' => false, 'message' => 'Comment index is required']);
+    exit;
+}
+
+if (!isset($data['text']) || trim($data['text']) === '') {
+    echo json_encode(['success' => false, 'message' => 'Comment text is required']);
     exit;
 }
 
@@ -57,68 +69,46 @@ try {
         $collection = $forumPostsCollection;
     }
     
-    // Get current user ID
+    // Verify the user owns the comment or is an admin
+    $commentIndex = (int) $data['commentIndex'];
+    if (!isset($post['comments'][$commentIndex])) {
+        echo json_encode(['success' => false, 'message' => 'Comment not found']);
+        exit;
+    }
+    
+    $comment = $post['comments'][$commentIndex];
     $userId = $_SESSION['user_id'];
+    $isAdmin = isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin';
     
-    // Initialize arrays if they don't exist
-    if (!isset($post['upvoted_by'])) {
-        $post['upvoted_by'] = [];
+    if (!$isAdmin && (!isset($comment['user_id']) || $comment['user_id'] !== $userId)) {
+        echo json_encode(['success' => false, 'message' => 'You can only edit your own comments']);
+        exit;
     }
     
-    // Convert BSON array to PHP array if needed
-    $upvotedBy = $post['upvoted_by'];
-    if ($upvotedBy instanceof MongoDB\Model\BSONArray) {
-        $upvotedBy = $upvotedBy->getArrayCopy();
-    }
+    // Update the comment
+    $comments = $post['comments'];
+    $comments[$commentIndex]['text'] = $data['text'];
+    $comments[$commentIndex]['edited'] = true;
     
-    // Check if user has already upvoted
-    $upvotedIndex = array_search($userId, $upvotedBy);
-    $alreadyUpvoted = $upvotedIndex !== false;
+    $result = $collection->updateOne(
+        ['_id' => $postId],
+        ['$set' => ['comments' => $comments]]
+    );
     
-    if ($alreadyUpvoted) {
-        // Remove upvote
-        array_splice($upvotedBy, $upvotedIndex, 1);
-        
-        $newUpvotes = count($upvotedBy);
-        
-        $collection->updateOne(
-            ['_id' => $postId],
-            [
-                '$set' => [
-                    'upvotes' => $newUpvotes,
-                    'upvoted_by' => $upvotedBy
-                ]
-            ]
-        );
-        
+    if ($result->getModifiedCount() > 0) {
         echo json_encode([
             'success' => true,
-            'upvoted' => false,
-            'upvotes' => $newUpvotes
+            'message' => 'Comment updated successfully'
         ]);
     } else {
-        // Add upvote
-        $upvotedBy[] = $userId;
-        
-        $newUpvotes = count($upvotedBy);
-        
-        $collection->updateOne(
-            ['_id' => $postId],
-            [
-                '$set' => [
-                    'upvotes' => $newUpvotes,
-                    'upvoted_by' => $upvotedBy
-                ]
-            ]
-        );
-        
         echo json_encode([
-            'success' => true,
-            'upvoted' => true,
-            'upvotes' => $newUpvotes
+            'success' => false,
+            'message' => 'No changes were made or failed to update comment'
         ]);
     }
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
-}
-?>
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage()
+    ]);
+} 

@@ -4,32 +4,41 @@ require_once __DIR__ . '/src/model/db_connect.php';
 
 session_start();
 
-// Redirect to login if not logged in
+// Redirect if not logged in
 if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     header('Location: login.php');
     exit();
 }
 
-// Get available tags
-$client = connectToDatabase();
-$db = $client->uiurp;
-$tagCollection = $db->forum_tags;
-
-// If tags collection doesn't exist, create it with default tags
-$tagCount = $tagCollection->countDocuments();
-if ($tagCount === 0) {
-    $defaultTags = [
-        ['name' => 'member_recruitment', 'color' => '#28a745'],
-        ['name' => 'bug_fixes', 'color' => '#dc3545'],
-        ['name' => 'discussion', 'color' => '#007bff'],
-        ['name' => 'tutorial', 'color' => '#17a2b8'],
-        ['name' => 'announcement', 'color' => '#ffc107'],
-        ['name' => 'question', 'color' => '#6f42c1'],
-        ['name' => 'resource', 'color' => '#fd7e14']
-    ];
-    $tagCollection->insertMany($defaultTags);
+// Check if post ID is provided
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    header('Location: view_posts.php');
+    exit();
 }
 
+$postId = $_GET['id'];
+
+// Get database connection
+$client = connectToDatabase();
+$db = $client->uiurp;
+$collection = $db->forum_posts;
+$tagCollection = $db->forum_tags;
+
+// Get the post
+$post = $collection->findOne(['_id' => new MongoDB\BSON\ObjectId($postId)]);
+
+// Check if post exists and belongs to the current user
+if (!$post || $post['user_id'] !== $_SESSION['user_id']) {
+    header('Location: view_posts.php');
+    exit();
+}
+
+// Convert BSON arrays to PHP arrays
+if (isset($post['tags']) && $post['tags'] instanceof MongoDB\Model\BSONArray) {
+    $post['tags'] = $post['tags']->getArrayCopy();
+}
+
+// Get all available tags
 $tags = $tagCollection->find()->toArray();
 ?>
 <!DOCTYPE html>
@@ -37,7 +46,7 @@ $tags = $tagCollection->find()->toArray();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Forum Post</title>
+    <title>Edit Post</title>
     
     <!-- Core styles -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -228,15 +237,13 @@ $tags = $tagCollection->find()->toArray();
             50% { opacity: 0.6; }
         }
 
-                 /* Main Container */
-         .container {
-             position: relative;
-             z-index: 1;
-             margin-top: 90px;
-             padding-bottom: 20px;
-             height: calc(100vh - 90px);
-             overflow-y: auto;
-         }
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            margin-top: 90px;
+            padding-bottom: 20px;
+        }
 
         /* Card styling */
         .card {
@@ -257,11 +264,11 @@ $tags = $tagCollection->find()->toArray();
             transition: background 0.3s ease, border-color 0.3s ease;
         }
 
-                 .card-body {
-             background: transparent;
-             padding: 1.5rem;
-             transition: background 0.3s ease;
-         }
+        .card-body {
+            background: transparent;
+            padding: 1.5rem;
+            transition: background 0.3s ease;
+        }
 
         /* Light theme card adjustments */
         [data-theme="light"] .card {
@@ -308,43 +315,43 @@ $tags = $tagCollection->find()->toArray();
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-                 .tag-checkbox:checked + .tag-label {
-             background: currentColor !important;
-             color: white !important;
-             transform: translateY(-2px);
-             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-             border-color: currentColor !important;
-         }
+        .tag-checkbox:checked + .tag-label {
+            background: currentColor !important;
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            border-color: currentColor !important;
+        }
 
-         /* Ensure specific tag colors are preserved when selected */
-         .tag-checkbox:checked + .tag-label[style*="#28a745"] {
-             background: #28a745 !important;
-         }
-         
-         .tag-checkbox:checked + .tag-label[style*="#dc3545"] {
-             background: #dc3545 !important;
-         }
-         
-         .tag-checkbox:checked + .tag-label[style*="#007bff"] {
-             background: #007bff !important;
-         }
-         
-         .tag-checkbox:checked + .tag-label[style*="#17a2b8"] {
-             background: #17a2b8 !important;
-         }
-         
-         .tag-checkbox:checked + .tag-label[style*="#ffc107"] {
-             background: #ffc107 !important;
-             color: #212529 !important; /* Dark text for yellow background */
-         }
-         
-         .tag-checkbox:checked + .tag-label[style*="#6f42c1"] {
-             background: #6f42c1 !important;
-         }
-         
-         .tag-checkbox:checked + .tag-label[style*="#fd7e14"] {
-             background: #fd7e14 !important;
-         }
+        /* Ensure specific tag colors are preserved when selected */
+        .tag-checkbox:checked + .tag-label[style*="#28a745"] {
+            background: #28a745 !important;
+        }
+        
+        .tag-checkbox:checked + .tag-label[style*="#dc3545"] {
+            background: #dc3545 !important;
+        }
+        
+        .tag-checkbox:checked + .tag-label[style*="#007bff"] {
+            background: #007bff !important;
+        }
+        
+        .tag-checkbox:checked + .tag-label[style*="#17a2b8"] {
+            background: #17a2b8 !important;
+        }
+        
+        .tag-checkbox:checked + .tag-label[style*="#ffc107"] {
+            background: #ffc107 !important;
+            color: #212529 !important; /* Dark text for yellow background */
+        }
+        
+        .tag-checkbox:checked + .tag-label[style*="#6f42c1"] {
+            background: #6f42c1 !important;
+        }
+        
+        .tag-checkbox:checked + .tag-label[style*="#fd7e14"] {
+            background: #fd7e14 !important;
+        }
 
         .tags-container {
             display: flex;
@@ -352,10 +359,10 @@ $tags = $tagCollection->find()->toArray();
             gap: 0.5rem;
         }
 
-                 /* Form styling */
-         .form-section {
-             margin-bottom: 1.5rem;
-         }
+        /* Form styling */
+        .form-section {
+            margin-bottom: 1.5rem;
+        }
 
         .form-label {
             color: var(--text-primary);
@@ -384,70 +391,70 @@ $tags = $tagCollection->find()->toArray();
             transform: translateY(-1px);
         }
 
-                 .form-control::placeholder {
-             color: var(--text-muted);
-             transition: color 0.3s ease;
-         }
+        .form-control::placeholder {
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
 
-         /* Custom file input styling */
-         .form-control[type="file"] {
-             position: relative;
-             background: var(--surface-1);
-             border: 2px dashed var(--border-color);
-             color: var(--text-secondary);
-             padding: 1.5rem;
-             text-align: center;
-             cursor: pointer;
-             transition: all 0.3s ease;
-         }
+        /* Custom file input styling */
+        .form-control[type="file"] {
+            position: relative;
+            background: var(--surface-1);
+            border: 2px dashed var(--border-color);
+            color: var(--text-secondary);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-         .form-control[type="file"]:hover {
-             border-color: var(--modern-blue);
-             background: var(--surface-2);
-             transform: translateY(-1px);
-         }
+        .form-control[type="file"]:hover {
+            border-color: var(--modern-blue);
+            background: var(--surface-2);
+            transform: translateY(-1px);
+        }
 
-         .form-control[type="file"]:focus {
-             border-color: var(--modern-blue);
-             background: var(--surface-2);
-             box-shadow: 0 0 0 0.2rem var(--border-glow);
-         }
+        .form-control[type="file"]:focus {
+            border-color: var(--modern-blue);
+            background: var(--surface-2);
+            box-shadow: 0 0 0 0.2rem var(--border-glow);
+        }
 
-         /* Style the file input button */
-         .form-control[type="file"]::file-selector-button {
-             background: linear-gradient(135deg, var(--modern-blue), var(--modern-purple));
-             color: white;
-             border: none;
-             border-radius: 0.5rem;
-             padding: 0.5rem 1rem;
-             margin-right: 1rem;
-             cursor: pointer;
-             font-weight: 500;
-             transition: all 0.3s ease;
-         }
+        /* Style the file input button */
+        .form-control[type="file"]::file-selector-button {
+            background: linear-gradient(135deg, var(--modern-blue), var(--modern-purple));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
 
-         .form-control[type="file"]::file-selector-button:hover {
-             transform: translateY(-1px);
-             box-shadow: 0 4px 12px var(--border-glow);
-         }
+        .form-control[type="file"]::file-selector-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--border-glow);
+        }
 
-         /* Firefox file input styling */
-         .form-control[type="file"]::-moz-file-upload-button {
-             background: linear-gradient(135deg, var(--modern-blue), var(--modern-purple));
-             color: white;
-             border: none;
-             border-radius: 0.5rem;
-             padding: 0.5rem 1rem;
-             margin-right: 1rem;
-             cursor: pointer;
-             font-weight: 500;
-             transition: all 0.3s ease;
-         }
+        /* Firefox file input styling */
+        .form-control[type="file"]::-moz-file-upload-button {
+            background: linear-gradient(135deg, var(--modern-blue), var(--modern-purple));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
 
-         .form-control[type="file"]::-moz-file-upload-button:hover {
-             transform: translateY(-1px);
-             box-shadow: 0 4px 12px var(--border-glow);
-         }
+        .form-control[type="file"]::-moz-file-upload-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--border-glow);
+        }
 
         /* Button styling */
         .btn-primary {
@@ -486,15 +493,182 @@ $tags = $tagCollection->find()->toArray();
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-                 /* Preview container styling */
-         #preview-container {
-             margin-top: 1rem;
-             display: grid;
-             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-             gap: 0.75rem;
-             max-height: 150px;
-             overflow-y: auto;
-         }
+        /* Current attachments styling */
+        .current-attachments {
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            background: var(--surface-1);
+            min-height: 120px;
+        }
+
+        .current-attachments:empty::before {
+            content: "No current attachments";
+            color: var(--text-muted);
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100px;
+        }
+
+        /* Custom scrollbar for attachments */
+        .current-attachments::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .current-attachments::-webkit-scrollbar-track {
+            background: var(--surface-2);
+            border-radius: 4px;
+        }
+
+        .current-attachments::-webkit-scrollbar-thumb {
+            background: var(--modern-blue);
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .current-attachments::-webkit-scrollbar-thumb:hover {
+            background: var(--modern-purple);
+        }
+
+        /* Firefox scrollbar */
+        .current-attachments {
+            scrollbar-width: thin;
+            scrollbar-color: var(--modern-blue) var(--surface-2);
+        }
+
+        .attachment-item {
+            position: relative;
+            background: var(--card-bg);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            width: 140px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .attachment-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: var(--modern-blue);
+        }
+
+        .attachment-content {
+            position: relative;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface-2);
+        }
+
+        .attachment-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .attachment-item .remove-attachment {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(220, 53, 69, 0.5);
+            z-index: 15;
+            border: 2px solid white;
+            line-height: 1;
+        }
+
+        .attachment-item .remove-attachment:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.7);
+            background: linear-gradient(135deg, #e74c3c, #dc3545);
+        }
+
+        [data-theme="light"] .attachment-item .remove-attachment {
+            border: 2px solid var(--bg-primary);
+            box-shadow: 0 2px 10px rgba(220, 53, 69, 0.3);
+        }
+
+        [data-theme="light"] .attachment-item .remove-attachment:hover {
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.5);
+        }
+
+        .file-name {
+            font-size: 0.75rem;
+            padding: 0.5rem;
+            color: var(--text-secondary);
+            background: var(--surface-1);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
+            transition: color 0.3s ease;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .file-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100px;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+            background: var(--surface-2);
+        }
+
+        .file-icon svg {
+            margin-bottom: 0.25rem;
+        }
+
+        .file-icon .file-type {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+
+        /* Light theme adjustments */
+        [data-theme="light"] .attachment-item {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="light"] .attachment-item:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Preview container styling */
+        #preview-container {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
 
         .preview-item {
             position: relative;
@@ -510,22 +684,22 @@ $tags = $tagCollection->find()->toArray();
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
-                 .preview-item img {
-             width: 100%;
-             height: 80px;
-             object-fit: cover;
-             border-radius: 0.5rem;
-         }
+        .preview-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
 
         .preview-item .remove-file {
             position: absolute;
-            top: -8px;
-            right: -8px;
+            top: 4px;
+            right: 4px;
             background: linear-gradient(135deg, #dc3545, #c82333);
             color: white;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -533,34 +707,26 @@ $tags = $tagCollection->find()->toArray();
             font-size: 0.9rem;
             font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+            box-shadow: 0 2px 10px rgba(220, 53, 69, 0.5);
+            z-index: 15;
+            border: 2px solid white;
+            line-height: 1;
         }
 
         .preview-item .remove-file:hover {
             transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.5);
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.7);
+            background: linear-gradient(135deg, #e74c3c, #dc3545);
         }
 
-        .file-name {
-            font-size: 0.8rem;
-            padding: 0.5rem;
-            color: var(--text-secondary);
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            text-align: center;
-            transition: color 0.3s ease;
+        [data-theme="light"] .preview-item .remove-file {
+            border: 2px solid var(--bg-primary);
+            box-shadow: 0 2px 10px rgba(220, 53, 69, 0.3);
         }
 
-                 .file-icon {
-             display: flex;
-             align-items: center;
-             justify-content: center;
-             height: 60px;
-             color: var(--text-muted);
-             transition: color 0.3s ease;
-         }
+        [data-theme="light"] .preview-item .remove-file:hover {
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.5);
+        }
 
         /* Animations */
         .fade-in {
@@ -609,18 +775,20 @@ $tags = $tagCollection->find()->toArray();
             <div class="col-md-8 offset-md-2">
                 <div class="card fade-in" data-aos="fade-up">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Create New Post</h5>
+                        <h5 class="mb-0">Edit Post</h5>
                     </div>
                     <div class="card-body">
-                        <form id="post-form" enctype="multipart/form-data">
+                        <form id="edit-post-form" enctype="multipart/form-data">
+                            <input type="hidden" id="postId" name="postId" value="<?= $postId ?>">
+                            
                             <div class="form-section" data-aos="fade-up" data-aos-delay="100">
                                 <label for="title" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="title" name="title" required>
+                                <input type="text" class="form-control" id="title" name="title" value="<?= htmlspecialchars($post['title']) ?>" required>
                             </div>
                             
                             <div class="form-section" data-aos="fade-up" data-aos-delay="200">
                                 <label for="content" class="form-label">Content</label>
-                                <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
+                                <textarea class="form-control" id="content" name="content" rows="4" required><?= htmlspecialchars($post['content']) ?></textarea>
                             </div>
                             
                             <div class="form-section" data-aos="fade-up" data-aos-delay="300">
@@ -631,7 +799,8 @@ $tags = $tagCollection->find()->toArray();
                                                class="tag-checkbox" 
                                                id="tag-<?= $tag['name'] ?>" 
                                                name="tags[]" 
-                                               value="<?= $tag['name'] ?>">
+                                               value="<?= $tag['name'] ?>"
+                                               <?= in_array($tag['name'], $post['tags']) ? 'checked' : '' ?>>
                                         <label class="tag-label" 
                                                for="tag-<?= $tag['name'] ?>" 
                                                style="color: <?= $tag['color'] ?>; border-color: <?= $tag['color'] ?>;">
@@ -641,15 +810,42 @@ $tags = $tagCollection->find()->toArray();
                                 </div>
                             </div>
                             
-                            <div class="form-section" data-aos="fade-up" data-aos-delay="400">
-                                <label for="attachments" class="form-label">Attachments (optional)</label>
-                                <input type="file" class="form-control" id="attachments" name="attachments[]" multiple>
+                            <?php if (!empty($post['attachments'])): ?>
+                                <div class="form-section" data-aos="fade-up" data-aos-delay="400">
+                                    <label class="form-label">Current Attachments</label>
+                                    <div class="current-attachments">
+                                        <?php foreach ($post['attachments'] as $index => $attachment): ?>
+                                            <?php $isImage = strpos($attachment['file_type'], 'image/') === 0; ?>
+                                            <div class="attachment-item" data-index="<?= $index ?>">
+                                                <div class="attachment-content">
+                                                    <?php if ($isImage): ?>
+                                                        <img src="<?= $attachment['file_path'] ?>" alt="Attachment">
+                                                    <?php else: ?>
+                                                        <div class="file-icon">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">
+                                                                <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+                                                            </svg>
+                                                            <div class="file-type"><?= strtoupper(pathinfo($attachment['original_name'], PATHINFO_EXTENSION)) ?></div>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div class="file-name"><?= htmlspecialchars($attachment['original_name']) ?></div>
+                                                <div class="remove-attachment">×</div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <div class="form-section" data-aos="fade-up" data-aos-delay="500">
+                                <label for="attachments" class="form-label">Add New Attachments (optional)</label>
+                                <input type="file" class="form-control" id="attachments" name="files[]" multiple>
                                 <div id="preview-container" class="mt-2"></div>
                             </div>
                             
-                            <div class="d-flex justify-content-between" data-aos="fade-up" data-aos-delay="500">
+                            <div class="d-flex justify-content-between" data-aos="fade-up" data-aos-delay="600">
                                 <a href="view_posts.php" class="btn btn-secondary">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Post</button>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
                             </div>
                         </form>
                     </div>
@@ -669,21 +865,20 @@ $tags = $tagCollection->find()->toArray();
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('post-form');
+            const form = document.getElementById('edit-post-form');
             const fileInput = document.getElementById('attachments');
             const previewContainer = document.getElementById('preview-container');
             const maxFileSize = 5 * 1024 * 1024; // 5MB
             let files = [];
-
+            let deleteAttachments = [];
+            
             // Handle file input change
             fileInput.addEventListener('change', function(e) {
                 const selectedFiles = Array.from(e.target.files);
                 
-                // Clear preview if user selects new files
-                if (selectedFiles.length > 0) {
-                    previewContainer.innerHTML = '';
-                    files = [];
-                }
+                // Clear preview
+                previewContainer.innerHTML = '';
+                files = [];
                 
                 selectedFiles.forEach(file => {
                     // Check file size
@@ -725,7 +920,21 @@ $tags = $tagCollection->find()->toArray();
                     previewContainer.appendChild(previewItem);
                 });
             });
-
+            
+            // Handle remove attachment button click
+            document.querySelectorAll('.remove-attachment').forEach(button => {
+                button.addEventListener('click', function() {
+                    const attachmentItem = this.closest('.attachment-item');
+                    const index = parseInt(attachmentItem.getAttribute('data-index'));
+                    
+                    // Add to delete list
+                    deleteAttachments.push(index);
+                    
+                    // Hide from UI
+                    attachmentItem.remove();
+                });
+            });
+            
             // Handle form submission
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -739,6 +948,7 @@ $tags = $tagCollection->find()->toArray();
                 
                 // Create FormData object
                 const formData = new FormData();
+                formData.append('postId', document.getElementById('postId').value);
                 formData.append('title', document.getElementById('title').value);
                 formData.append('content', document.getElementById('content').value);
                 
@@ -747,13 +957,20 @@ $tags = $tagCollection->find()->toArray();
                     formData.append('tags[]', tag.value);
                 });
                 
-                // Add files
+                // Add files to be deleted
+                if (deleteAttachments.length > 0) {
+                    deleteAttachments.forEach(index => {
+                        formData.append('delete_attachments[]', index);
+                    });
+                }
+                
+                // Add new files
                 files.forEach(file => {
                     formData.append('files[]', file);
                 });
                 
                 // Submit form data
-                fetch('src/controller/submit_post.php', {
+                fetch('src/controller/edit_post.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -767,7 +984,7 @@ $tags = $tagCollection->find()->toArray();
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred while submitting your post');
+                    alert('An error occurred while updating your post');
                 });
             });
             
@@ -784,4 +1001,4 @@ $tags = $tagCollection->find()->toArray();
         });
     </script>
 </body>
-</html>
+</html> 
