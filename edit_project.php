@@ -7,6 +7,17 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Project | UIU Research Portal</title>
+    
+    <!-- Prevent Theme Flash Script - Must run immediately -->
+    <script>
+    (function() {
+        // Get saved theme immediately to prevent flash
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+    })();
+    </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
@@ -50,6 +61,600 @@ session_start();
             
             /* Transitions */
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* ===== LIGHT MODE STYLES ===== */
+        [data-theme="light"] {
+            /* Light mode color variables */
+            --primary: #2563eb;
+            --secondary: #8b5cf6;
+            --accent: #0ea5e9;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --surface-light: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --border-light: #cbd5e1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            
+            /* Glass morphism for light mode */
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(148, 163, 184, 0.2);
+            
+            /* Gradients for light mode */
+            --gradient-primary: linear-gradient(135deg, #2563eb, #8b5cf6);
+            --gradient-surface: linear-gradient(135deg, #ffffff, #f8fafc);
+            
+            /* Shadows for light mode */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+            color: var(--text-primary);
+        }
+
+        /* Background effects in light mode */
+        [data-theme="light"] .floating-orb {
+            opacity: 0.2;
+        }
+
+        [data-theme="light"] .orb-1 {
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(37, 99, 235, 0.05) 50%, transparent 70%);
+        }
+
+        [data-theme="light"] .orb-2 {
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, rgba(14, 165, 233, 0.04) 50%, transparent 70%);
+        }
+
+        [data-theme="light"] .orb-3 {
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, rgba(6, 182, 212, 0.05) 50%, transparent 70%);
+        }
+
+        [data-theme="light"] .cyber-grid {
+            background-image: 
+                linear-gradient(to right, rgba(37, 99, 235, 0.08) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(37, 99, 235, 0.08) 1px, transparent 1px);
+        }
+
+        /* Header container in light mode */
+        [data-theme="light"] .header-container {
+            background: linear-gradient(135deg, 
+                rgba(248, 250, 252, 0.95) 0%, 
+                rgba(241, 245, 249, 0.9) 50%,
+                rgba(37, 99, 235, 0.1) 100%);
+        }
+
+        [data-theme="light"] .header-container::before {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="circuit" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M0,10 L10,10 L10,0 L20,0 M10,10 L10,20 M10,15 L20,15" stroke="rgba(37,99,235,0.08)" stroke-width="0.5" fill="none"/></pattern></defs><rect width="100" height="100" fill="url(%23circuit)"/></svg>');
+            opacity: 0.8;
+        }
+
+        [data-theme="light"] .header-container::after {
+            background: radial-gradient(ellipse 80% 100% at 50% 0%, 
+                rgba(37, 99, 235, 0.15) 0%, 
+                rgba(14, 165, 233, 0.1) 30%,
+                rgba(6, 182, 212, 0.05) 60%,
+                transparent 100%);
+        }
+
+        [data-theme="light"] .hero-title {
+            background: linear-gradient(135deg, #0f172a 0%, #2563eb 70%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+        }
+
+        [data-theme="light"] .text-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #2563eb 70%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        [data-theme="light"] .header-container p {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Cards in light mode */
+        [data-theme="light"] .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .card:hover {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        [data-theme="light"] .card-header {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(139, 92, 246, 0.05));
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .card-header i {
+            color: var(--primary);
+        }
+
+        /* Form elements in light mode */
+        [data-theme="light"] .form-label {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .form-control,
+        [data-theme="light"] .form-select {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .form-control:focus,
+        [data-theme="light"] .form-select:focus {
+            background: var(--surface);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.15);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+        }
+
+        [data-theme="light"] .form-select:hover {
+            border-color: var(--primary);
+            background-color: var(--surface-light);
+        }
+
+        [data-theme="light"] .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.15);
+            background-color: var(--surface);
+        }
+
+        [data-theme="light"] .form-select option {
+            background-color: var(--surface);
+            color: var(--text-primary);
+            padding: 0.5rem;
+        }
+
+        [data-theme="light"] .form-select option:hover,
+        [data-theme="light"] .form-select option:focus {
+            background-color: var(--surface-light);
+        }
+
+        [data-theme="light"] .form-select option:checked {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* File input in light mode */
+        [data-theme="light"] .form-control[type="file"] {
+            background: var(--surface);
+            border: 2px dashed var(--border);
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .form-control[type="file"]:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        [data-theme="light"] .form-control[type="file"]:focus {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        [data-theme="light"] .form-control[type="file"]::file-selector-button {
+            background: linear-gradient(135deg, var(--primary), rgba(139, 92, 246, 0.8));
+            color: white;
+            border: none;
+        }
+
+        [data-theme="light"] .form-control[type="file"]::file-selector-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        [data-theme="light"] .file-upload-btn {
+            background: var(--surface);
+            border: 2px dashed var(--border);
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .file-upload-btn:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+            color: var(--text-primary);
+        }
+
+        /* Buttons in light mode */
+        [data-theme="light"] .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        [data-theme="light"] .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+            color: white;
+        }
+
+        [data-theme="light"] .btn-outline-primary {
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        [data-theme="light"] .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        [data-theme="light"] .btn-outline-secondary {
+            border: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            background: transparent;
+        }
+
+        [data-theme="light"] .btn-outline-secondary:hover {
+            background: var(--surface-light);
+            color: var(--text-primary);
+            border-color: var(--border-light);
+        }
+
+        [data-theme="light"] .btn-outline-danger {
+            border: 1px solid var(--error);
+            color: var(--error);
+            background: transparent;
+        }
+
+        [data-theme="light"] .btn-outline-danger:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        /* Keywords and badges in light mode */
+        [data-theme="light"] .keyword-badge {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+
+        [data-theme="light"] .keyword-badge:hover {
+            background: rgba(37, 99, 235, 0.15);
+            border-color: var(--primary);
+        }
+
+        /* Member rows in light mode */
+        [data-theme="light"] .member-row {
+            background: rgba(241, 245, 249, 0.8);
+            border: 1px solid var(--border);
+        }
+
+        [data-theme="light"] .member-row:hover {
+            border-color: var(--primary);
+            background: rgba(241, 245, 249, 1);
+        }
+
+        /* Timeline styles in light mode */
+        [data-theme="light"] .timeline-item {
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            color: var(--text-primary);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .timeline-item:hover {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .timeline-date {
+            color: var(--primary) !important;
+        }
+
+        [data-theme="light"] .timeline-date i {
+            color: var(--primary) !important;
+        }
+
+        [data-theme="light"] .timeline-item h6 {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .timeline-item p {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .timeline-controls .btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .timeline-controls .btn:hover {
+            background: var(--surface-light);
+            border-color: var(--primary);
+        }
+
+        [data-theme="light"] .timeline-controls .btn-outline-primary:hover {
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        [data-theme="light"] .timeline-controls .btn-outline-danger:hover {
+            color: var(--error);
+            background: rgba(239, 68, 68, 0.05);
+            border-color: var(--error);
+        }
+
+        /* Status badges in light mode */
+        [data-theme="light"] .status-completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        [data-theme="light"] .status-in-progress {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        [data-theme="light"] .status-planned {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--secondary);
+            border-color: rgba(139, 92, 246, 0.2);
+        }
+
+        [data-theme="light"] .status-delayed {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Timeline Edit Modal in light mode */
+        [data-theme="light"] #timelineEditModal .modal-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] #timelineEditModal .modal-footer {
+            background: var(--surface-light);
+        }
+
+        [data-theme="light"] #timelineEditModal .form-control,
+        [data-theme="light"] #timelineEditModal .form-select {
+            background: var(--surface) !important;
+            border-color: var(--border) !important;
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] #timelineEditModal .form-control:focus,
+        [data-theme="light"] #timelineEditModal .form-select:focus {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.1) !important;
+        }
+
+        [data-theme="light"] #timelineEditModal select[multiple] {
+            background: var(--surface) !important;
+        }
+
+        [data-theme="light"] #timelineEditModal select[multiple] option {
+            background: var(--surface) !important;
+            border-color: var(--border);
+        }
+
+        [data-theme="light"] #timelineEditModal select[multiple] option:hover {
+            background: rgba(37, 99, 235, 0.05) !important;
+        }
+
+        [data-theme="light"] #timelineEditModal select[multiple] option:checked {
+            background: var(--primary) !important;
+            color: white !important;
+        }
+
+        /* Dropdown styling in light mode */
+        [data-theme="light"] .supervisor-dropdown,
+        [data-theme="light"] .student-dropdown {
+            background: var(--surface);
+            border-color: var(--border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .supervisor-option,
+        [data-theme="light"] .student-option {
+            color: var(--text-primary);
+            border-bottom-color: var(--border);
+        }
+
+        [data-theme="light"] .supervisor-option:hover,
+        [data-theme="light"] .supervisor-option.highlighted,
+        [data-theme="light"] .student-option:hover,
+        [data-theme="light"] .student-option.highlighted {
+            background: rgba(37, 99, 235, 0.08);
+            color: var(--primary);
+        }
+
+        [data-theme="light"] .supervisor-option .faculty-info,
+        [data-theme="light"] .student-option .student-info {
+            color: var(--text-muted);
+        }
+
+        [data-theme="light"] .supervisor-no-results,
+        [data-theme="light"] .student-no-results {
+            color: var(--text-muted);
+        }
+
+        /* Search input styling in light mode */
+        [data-theme="light"] #supervisor {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m11.742 10.344-6.979-6.979a2.21 2.21 0 1 1 3.121-3.121l6.979 6.979a2.21 2.21 0 0 1-3.121 3.121z'/%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6.5 6.5 10 10'/%3e%3c/svg%3e") !important;
+        }
+
+        [data-theme="light"] .member-name.student-search {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m11.742 10.344-6.979-6.979a2.21 2.21 0 1 1 3.121-3.121l6.979 6.979a2.21 2.21 0 0 1-3.121 3.121z'/%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6.5 6.5 10 10'/%3e%3c/svg%3e") !important;
+        }
+
+        /* References container in light mode */
+        [data-theme="light"] #references-container {
+            background: rgba(241, 245, 249, 0.8);
+            border: 1px solid var(--border);
+        }
+
+        [data-theme="light"] .reference-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        [data-theme="light"] .reference-item:hover {
+            border-color: var(--primary);
+            background: var(--surface-light);
+        }
+
+        /* Toast notifications in light mode */
+        [data-theme="light"] .toast {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .toast-header {
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        [data-theme="light"] .toast-title {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .toast-body {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .toast-close {
+            color: var(--text-muted);
+        }
+
+        /* Footer in light mode */
+        [data-theme="light"] footer {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-light) 100%);
+            border-top: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] footer::before {
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.3), transparent);
+        }
+
+        /* Alert styling in light mode */
+        [data-theme="light"] .alert {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .alert-warning {
+            background: rgba(245, 158, 11, 0.05);
+            border-color: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        [data-theme="light"] .alert-danger {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        [data-theme="light"] .alert-success {
+            background: rgba(16, 185, 129, 0.05);
+            border-color: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        [data-theme="light"] .alert-info {
+            background: rgba(14, 165, 233, 0.05);
+            border-color: rgba(14, 165, 233, 0.2);
+            color: var(--accent);
+        }
+
+        /* Spinner in light mode */
+        [data-theme="light"] .spinner-overlay {
+            background: rgba(248, 250, 252, 0.8);
+        }
+
+        [data-theme="light"] .spinner {
+            border: 3px solid rgba(37, 99, 235, 0.2);
+            border-top: 3px solid var(--primary);
+        }
+
+        /* Misc elements in light mode */
+        [data-theme="light"] .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        [data-theme="light"] .text-secondary {
+            color: var(--text-secondary) !important;
+        }
+
+        [data-theme="light"] .text-primary {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="light"] .bg-light {
+            background-color: var(--surface) !important;
+        }
+
+        [data-theme="light"] .border {
+            border-color: var(--border) !important;
+        }
+
+        [data-theme="light"] .border-primary {
+            border-color: var(--primary) !important;
+        }
+
+        [data-theme="light"] hr {
+            border-color: var(--border);
+            opacity: 0.3;
+        }
+
+        [data-theme="light"] code {
+            background: rgba(241, 245, 249, 0.8);
+            color: var(--accent);
+        }
+
+        [data-theme="light"] pre {
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        [data-theme="light"] blockquote {
+            border-left: 4px solid var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] mark {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--text-primary);
         }
         
         body {
@@ -573,8 +1178,8 @@ session_start();
             font-size: 0.8rem;
         }
         
-        /* Member rows and timeline items */
-        .member-row, .timeline-item-form {
+        /* Member rows */
+        .member-row {
             background: rgba(51, 65, 85, 0.3);
             border: 1px solid var(--border);
             border-radius: var(--border-radius);
@@ -583,9 +1188,485 @@ session_start();
             transition: var(--transition);
         }
         
-        .member-row:hover, .timeline-item-form:hover {
+        .member-row:hover {
             border-color: var(--primary);
             background: rgba(51, 65, 85, 0.5);
+        }
+        
+        /* Timeline styles - Enhanced for Dark/Light Mode */
+        .timeline-item {
+            background: var(--glass-bg);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary);
+            border: 2px solid var(--glass-border);
+            color: var(--text-primary);
+            transition: var(--transition);
+            cursor: grab;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0.3;
+        }
+        
+        .timeline-item.grabbing {
+            cursor: grabbing;
+            transform: scale(1.02);
+        }
+        
+        .timeline-item:hover {
+            border-color: var(--primary);
+            background: var(--surface-light);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+            border-left-color: var(--accent);
+        }
+        
+        .timeline-item.completed {
+            border-left-color: var(--success);
+        }
+        
+        .timeline-item.completed:hover {
+            border-left-color: var(--success);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+        }
+        
+        .timeline-item.in-progress {
+            border-left-color: var(--primary);
+        }
+        
+        .timeline-item.planned {
+            border-left-color: var(--secondary);
+        }
+        
+        .timeline-item.planned:hover {
+            border-left-color: var(--secondary);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+        }
+        
+        .timeline-item.delayed {
+            border-left-color: var(--error);
+        }
+        
+        .timeline-item.delayed:hover {
+            border-left-color: var(--error);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.15);
+        }
+        
+        .timeline-date {
+            color: var(--primary) !important;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .timeline-date i {
+            margin-right: 0.75rem;
+            color: var(--primary) !important;
+            font-size: 1.1rem;
+        }
+        
+        .timeline-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .timeline-item h6 {
+            color: var(--text-primary) !important;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        
+        .timeline-item p {
+            color: var(--text-secondary) !important;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+        
+        /* Light mode adjustments for timeline */
+        [data-theme="light"] .timeline-item {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="light"] .timeline-item:hover {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Timeline action buttons */
+        .timeline-controls .btn {
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border);
+            background: rgba(51, 65, 85, 0.6);
+            color: var(--text-secondary);
+            transition: var(--transition);
+            font-size: 0.8rem;
+        }
+        
+        .timeline-controls .btn:hover {
+            transform: translateY(-1px);
+            background: rgba(51, 65, 85, 0.8);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .timeline-controls .btn-outline-primary:hover {
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+        }
+        
+        .timeline-controls .btn-outline-danger:hover {
+            color: var(--error);
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--error);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border-radius: 1rem;
+            margin-left: 0.5rem;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status-completed {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        
+        .status-in-progress {
+            background: rgba(37, 99, 235, 0.2);
+            color: var(--primary);
+            border-color: rgba(37, 99, 235, 0.3);
+        }
+        
+        .status-planned {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--secondary);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+        
+        .status-delayed {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        
+        /* Assignment information styling */
+        .assignment-info {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .assignment-info .bi {
+            margin-right: 0.25rem;
+            opacity: 0.7;
+        }
+        
+        .assignment-info span {
+            display: inline-block;
+            margin-right: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .assignment-info strong {
+            color: var(--primary);
+        }
+        
+        /* Timeline Edit Modal Styling - Minimal Modern Design */
+        #timelineEditModal .modal-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(15px);
+            border-radius: var(--border-radius);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            color: var(--text-primary);
+            max-height: 90vh; /* Prevent modals from being taller than the viewport */
+            overflow-y: auto;
+        }
+        
+        #timelineEditModal .modal-header {
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0.8rem 1.25rem;
+            background: var(--surface);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            position: relative;
+        }
+        
+        #timelineEditModal .modal-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            border-radius: var(--border-radius) 0 0 0;
+        }
+        
+        #timelineEditModal .modal-footer {
+            border-top: 1px solid var(--glass-border);
+            padding: 0.75rem 1.25rem;
+            background: var(--surface);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+        }
+        
+        #timelineEditModal .modal-body {
+            padding: 1rem 1.25rem;
+        }
+        
+        #timelineEditModal .modal-title {
+            color: var(--primary) !important;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        #timelineEditModal .modal-header p {
+            color: var(--text-secondary) !important;
+            margin: 0;
+            font-size: 0.8rem;
+        }
+        
+        #timelineEditModal .modal-header i {
+            color: var(--primary) !important;
+        }
+        
+        #timelineEditModal .btn-close {
+            opacity: 0.7;
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+        
+        #timelineEditModal .btn-close:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        /* Form Layouts - Compact */
+        #timelineEditModal .row {
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Form Labels - Compact */
+        #timelineEditModal .form-label {
+            color: var(--text-primary) !important;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        
+        #timelineEditModal .form-label i {
+            color: var(--primary) !important;
+            font-size: 0.9rem;
+            margin-right: 0.35rem;
+        }
+        
+        /* Form Controls - Compact */
+        #timelineEditModal .form-control,
+        #timelineEditModal .form-select {
+            background: var(--surface) !important;
+            border: 1px solid var(--border) !important;
+            color: var(--text-primary) !important;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            font-size: 0.9rem;
+            padding: 0.5rem 0.75rem;
+        }
+        
+        #timelineEditModal .form-control:focus,
+        #timelineEditModal .form-select:focus {
+            background: var(--surface) !important;
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.1) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        #timelineEditModal .form-control::placeholder {
+            color: var(--text-muted) !important;
+            opacity: 0.7;
+        }
+        
+        /* Section Headers in Modal - More Minimal */
+        #timelineEditModal .section-header h6 {
+            color: var(--primary) !important;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            letter-spacing: 0.3px;
+        }
+        
+        #timelineEditModal .section-header h6 i {
+            color: var(--primary) !important;
+            margin-right: 0.4rem;
+            font-size: 1rem;
+        }
+        
+        /* More compact form text */
+        #timelineEditModal .form-text {
+            font-size: 0.75rem;
+            color: var(--text-muted) !important;
+            margin-top: 0.25rem;
+        }
+        
+        #timelineEditModal .form-text i {
+            color: var(--text-muted) !important;
+            font-size: 0.7rem;
+        }
+        
+        #timelineEditModal .invalid-feedback {
+            color: var(--error) !important;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+        
+        /* Multi-select styling - Compact */
+        #timelineEditModal select[multiple] {
+            background: var(--surface) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: var(--border-radius);
+            padding: 0.4rem;
+            color: var(--text-primary) !important;
+            max-height: 120px;
+        }
+        
+        #timelineEditModal select[multiple] option {
+            background: var(--surface) !important;
+            color: var(--text-primary) !important;
+            padding: 0.4rem 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 2px;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+        }
+        
+        #timelineEditModal select[multiple] option:hover {
+            background: var(--surface-light) !important;
+        }
+        
+        #timelineEditModal select[multiple] option:checked {
+            background: var(--primary) !important;
+            color: white !important;
+        }
+        
+        /* Button styling - Compact */
+        #timelineEditModal .d-flex .btn {
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.4rem 0.9rem;
+            font-size: 0.85rem;
+        }
+        
+        #timelineEditModal .btn-primary {
+            background: var(--primary);
+            border: none;
+            color: white !important;
+        }
+        
+        #timelineEditModal .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            background: var(--gradient-primary);
+        }
+        
+        #timelineEditModal .btn-outline-secondary {
+            border: 1px solid var(--border-light);
+            color: var(--text-secondary) !important;
+            background: transparent;
+        }
+        
+        #timelineEditModal .btn-outline-secondary:hover {
+            background: var(--surface-light);
+            border-color: var(--border);
+            color: var(--text-primary) !important;
+        }
+        
+        /* Light mode specific adjustments */
+        [data-theme="light"] #timelineEditModal .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+        
+        [data-theme="light"] #timelineEditModal .modal-header {
+            background: var(--surface);
+        }
+        
+        [data-theme="light"] #timelineEditModal .modal-footer {
+            background: var(--surface-light);
+        }
+        
+        [data-theme="light"] #timelineEditModal .form-control,
+        [data-theme="light"] #timelineEditModal .form-select {
+            background: white !important;
+            border-color: var(--border) !important;
+        }
+        
+        [data-theme="light"] #timelineEditModal .form-control:focus,
+        [data-theme="light"] #timelineEditModal .form-select:focus {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.1) !important;
+        }
+        
+        [data-theme="light"] #timelineEditModal select[multiple] {
+            background: white !important;
+        }
+        
+        [data-theme="light"] #timelineEditModal select[multiple] option {
+            background: white !important;
+        }
+        
+        [data-theme="light"] #timelineEditModal select[multiple] option:hover {
+            background: rgba(37, 99, 235, 0.05) !important;
+        }
+        
+        /* Responsive modal */
+        @media (max-width: 768px) {
+            #timelineEditModal .modal-dialog {
+                margin: 0.5rem;
+                max-width: calc(100vw - 1rem);
+            }
+            
+            #timelineEditModal .modal-body {
+                padding: 0.75rem 1rem;
+            }
         }
         
         /* References container */
@@ -720,7 +1801,7 @@ session_start();
         
         /* Input group styling */
         .input-group .form-control {
-            background: rgba(51, 65, 85, 0.6);
+            background: rgba(78, 94, 116, 0);
             border-color: var(--border);
             color: var(--text-primary);
         }
@@ -997,12 +2078,73 @@ session_start();
             color: var(--text-primary);
         }
         
-        /* File input styling */
-        input[type="file"] {
+        /* Custom file input styling - Modern dashed border style */
+        .form-control[type="file"] {
+            position: relative;
+            background: var(--surface);
+            border: 2px dashed var(--border);
+            color: var(--text-secondary);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+        }
+
+        .form-control[type="file"]:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-control[type="file"]:focus {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+        }
+
+        /* Style the file input button */
+        .form-control[type="file"]::file-selector-button {
+            background: linear-gradient(135deg, var(--primary), rgba(139, 92, 246, 0.8));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .form-control[type="file"]::file-selector-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        /* Firefox file input styling */
+        .form-control[type="file"]::-moz-file-upload-button {
+            background: linear-gradient(135deg, var(--primary), rgba(139, 92, 246, 0.8));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .form-control[type="file"]::-moz-file-upload-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+        
+        /* File input styling for non-form-control inputs */
+        input[type="file"]:not(.form-control) {
             color: var(--text-primary);
         }
         
-        input[type="file"]::-webkit-file-upload-button {
+        input[type="file"]:not(.form-control)::-webkit-file-upload-button {
             background: var(--primary);
             color: white;
             border: none;
@@ -1411,6 +2553,23 @@ session_start();
         /* Light mode styles for student search */
         [data-theme="light"] .member-name.student-search {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m11.742 10.344-6.979-6.979a2.21 2.21 0 1 1 3.121-3.121l6.979 6.979a2.21 2.21 0 0 1-3.121 3.121z'/%3e%3cpath fill='none' stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6.5 6.5 10 10'/%3e%3c/svg%3e") !important;
+        }
+
+        /* Light theme file input styling */
+        [data-theme="light"] .form-control[type="file"] {
+            background: var(--surface);
+            border: 2px dashed var(--border);
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .form-control[type="file"]:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        [data-theme="light"] .form-control[type="file"]:focus {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
         }
 
         /* Student dropdown styling */
@@ -1871,6 +3030,16 @@ session_start();
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <div class="mb-3">
+                            <label for="estimatedCompletionDate" class="form-label">Estimated Completion Date</label>
+                            <input type="date" class="form-control" id="estimatedCompletionDate" name="estimatedCompletionDate" value="${formatMongoDate(project.estimatedCompletionDate)}">
+                            <small class="text-muted">Expected date when the project will be completed</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
                             <label for="privacy" class="form-label">Privacy Setting</label>
                             <select class="form-select" id="privacy" name="privacy" required>
                                 <option value="0" ${(project.privacy === 0 || project.privacy === '0' || project.privacy === undefined) ? 'selected' : ''}>Public - Visible to everyone</option>
@@ -2306,12 +3475,34 @@ session_start();
             });
             
             // Initialize timeline items
-            window.timelineItems = project.timeline || [];
+            window.timelineItems = [];
             const timelineContainer = document.getElementById('timelineContainer');
             const addTimelineItemBtn = document.getElementById('addTimelineItem');
             
-            // Populate existing timeline items
-            if (window.timelineItems.length > 0) {
+            // Parse existing timeline items from the project
+            if (project.timeline && project.timeline.length > 0) {
+                window.timelineItems = project.timeline.map(item => {
+                    // Handle MongoDB date format
+                    let date = item.date;
+                    if (item.date && item.date.$date) {
+                        date = new Date(item.date.$date).toISOString().split('T')[0];
+                    } else if (typeof item.date === 'string' && item.date.includes('T')) {
+                        date = new Date(item.date).toISOString().split('T')[0];
+                    } else if (item.date) {
+                        date = item.date;
+                    } else {
+                        date = new Date().toISOString().split('T')[0];
+                    }
+                    
+                    return {
+                        title: item.title || '',
+                        description: item.description || '',
+                        date: date,
+                        status: item.status || 'Planned',
+                        assignedBy: item.assignedBy || '',
+                        assignedTo: Array.isArray(item.assignedTo) ? item.assignedTo : (item.assignedTo ? [item.assignedTo] : [])
+                    };
+                });
                 updateTimelineDisplay();
             }
             
@@ -2426,6 +3617,60 @@ session_start();
                     day: 'numeric'
                 });
                 
+                // Generate assignment display text
+                let assignmentInfo = '';
+                
+                // Ensure backward compatibility - handle various assignment field formats
+                let assignedByName = '';
+                
+                if (item.assignedBy) {
+                    // Handle new format (object with id and name)
+                    if (typeof item.assignedBy === 'object' && item.assignedBy !== null) {
+                        assignedByName = item.assignedBy.name || '';
+                    } 
+                    // Handle legacy format (string)
+                    else {
+                        const assignedBy = item.assignedBy;
+                        const assignedByMember = findMemberById(assignedBy);
+                        assignedByName = assignedByMember ? assignedByMember.name : assignedBy;
+                    }
+                }
+                
+                let assignedToNames = [];
+                
+                if (item.assignedTo) {
+                    if (Array.isArray(item.assignedTo)) {
+                        // Map to names, handling both new and legacy formats
+                        assignedToNames = item.assignedTo.map(assignee => {
+                            // Handle new format (object with id and name)
+                            if (typeof assignee === 'object' && assignee !== null) {
+                                return assignee.name || 'Unknown';
+                            }
+                            // Handle legacy format (string ID or name)
+                            const member = findMemberById(assignee);
+                            return member ? member.name : assignee;
+                        });
+                    } else {
+                        // Handle single assignee case (backward compatibility)
+                        const member = findMemberById(item.assignedTo);
+                        assignedToNames = [member ? member.name : item.assignedTo];
+                    }
+                }
+                
+                if (assignedByName || assignedToNames.length > 0) {
+                    assignmentInfo = '<div class="assignment-info mt-2">';
+                    
+                    if (assignedByName) {
+                        assignmentInfo += `<span class="text-muted small me-3"><i class="bi bi-person-plus"></i> Assigned by: <strong>${assignedByName}</strong></span>`;
+                    }
+                    
+                    if (assignedToNames.length > 0) {
+                        assignmentInfo += `<span class="text-muted small"><i class="bi bi-person-check"></i> Assigned to: <strong>${assignedToNames.join(', ')}</strong></span>`;
+                    }
+                    
+                    assignmentInfo += '</div>';
+                }
+
                 timelineItem.innerHTML = `
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <div class="timeline-date">
@@ -2443,7 +3688,8 @@ session_start();
                         </div>
                     </div>
                     <h6 class="mb-2">${item.title || ''}</h6>
-                    <p class="mb-0 small text-muted">${item.description || ''}</p>
+                    <p class="mb-2 small text-muted">${item.description || ''}</p>
+                    ${assignmentInfo}
                 `;
                 
                 timelineContainer.appendChild(timelineItem);
@@ -2471,8 +3717,10 @@ session_start();
             const newItem = item || {
                 title: '',
                 description: '',
-                date: { $date: now.toISOString() },
-                status: 'Planned'
+                date: formattedDate,
+                status: 'Planned',
+                assignedBy: null,
+                assignedTo: []
             };
             
             // Add to the array
@@ -2509,37 +3757,101 @@ session_start();
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="${modalId}Label">Edit Timeline Item</h5>
+                                <h5 class="modal-title" id="${modalId}Label">
+                                    <i class="bi bi-calendar-event"></i> Edit Timeline Item
+                                </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <form id="timelineEditForm">
-                                    <div class="mb-3">
-                                        <label for="timelineTitle" class="form-label">Title</label>
-                                        <input type="text" class="form-control" id="timelineTitle" required>
+                                    <!-- Basic Information -->
+                                    <div class="section-header">
+                                        <h6><i class="bi bi-info-circle"></i> Basic Information</h6>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="timelineDescription" class="form-label">Description</label>
-                                        <textarea class="form-control" id="timelineDescription" rows="3"></textarea>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="mb-2">
+                                                <label for="timelineTitle" class="form-label">
+                                                    <i class="bi bi-type"></i>Title *
+                                                </label>
+                                                <input type="text" class="form-control" id="timelineTitle" 
+                                                       placeholder="Enter milestone title..." required>
+                                                <div class="invalid-feedback">Title required</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-2">
+                                                <label for="timelineDate" class="form-label">
+                                                    <i class="bi bi-calendar3"></i>Date *
+                                                </label>
+                                                <input type="date" class="form-control" id="timelineDate" required>
+                                                <div class="invalid-feedback">Date required</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="timelineDate" class="form-label">Date</label>
-                                        <input type="date" class="form-control" id="timelineDate" required>
+
+                                    <div class="mb-2">
+                                        <label for="timelineDescription" class="form-label">
+                                            <i class="bi bi-text-paragraph"></i>Description
+                                        </label>
+                                        <textarea class="form-control" id="timelineDescription" rows="2" 
+                                                  placeholder="Describe what needs to be accomplished..."></textarea>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="timelineStatus" class="form-label">Status</label>
+
+                                    <!-- Status -->
+                                    <div class="section-header">
+                                        <h6><i class="bi bi-flag"></i> Status</h6>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="timelineStatus" class="form-label">
+                                            <i class="bi bi-speedometer2"></i>Current Status
+                                        </label>
                                         <select class="form-select" id="timelineStatus">
-                                            <option value="Planned">Planned</option>
-                                            <option value="In Progress">In Progress</option>
-                                            <option value="Completed">Completed</option>
-                                            <option value="Delayed">Delayed</option>
+                                            <option value="Planned">📋 Planned</option>
+                                            <option value="In Progress">⚡ In Progress</option>
+                                            <option value="Completed">✅ Completed</option>
+                                            <option value="Delayed">⚠️ Delayed</option>
                                         </select>
+                                    </div>
+
+                                    <!-- Assignment -->
+                                    <div class="section-header">
+                                        <h6><i class="bi bi-people"></i> Assignment</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-2">
+                                                <label for="timelineAssignedBy" class="form-label">
+                                                    <i class="bi bi-person-plus"></i>Assigned By
+                                                </label>
+                                                <select class="form-select" id="timelineAssignedBy">
+                                                    <option value="">Select member</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-2">
+                                                <label for="timelineAssignedTo" class="form-label">
+                                                    <i class="bi bi-person-check"></i>Assigned To
+                                                </label>
+                                                <select class="form-select" id="timelineAssignedTo" multiple size="3">
+                                                    <option value="">Select members</option>
+                                                </select>
+                                                <div class="form-text">
+                                                    <i class="bi bi-info-circle"></i> Hold Ctrl/Cmd to select multiple
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary" id="saveTimelineChanges">Save Changes</button>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    <i class="bi bi-x"></i> Cancel
+                                </button>
+                                <button type="button" class="btn btn-primary" id="saveTimelineChanges">
+                                    <i class="bi bi-check"></i> Save
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -2553,6 +3865,56 @@ session_start();
             document.getElementById('timelineDescription').value = item.description || '';
             document.getElementById('timelineDate').value = formatMongoDate(item.date) || new Date().toISOString().split('T')[0];
             document.getElementById('timelineStatus').value = item.status || 'Planned';
+            
+            // Populate assignment dropdowns with project members
+            populateAssignmentDropdowns();
+            
+            // Auto-select current user in "Assigned By" if no assignment exists
+            const assignedBySelect = document.getElementById('timelineAssignedBy');
+            const assignedToSelect = document.getElementById('timelineAssignedTo');
+            
+            // Set assignment values - if no assignedBy exists, try to auto-select current user
+            let assignedByValue = '';
+            
+            // Handle new format (object with id and name)
+            if (item.assignedBy && typeof item.assignedBy === 'object' && item.assignedBy.id) {
+                assignedByValue = item.assignedBy.id;
+            } 
+            // Handle legacy format (string ID or name)
+            else if (item.assignedBy) {
+                assignedByValue = item.assignedBy;
+            }
+            
+            if (!assignedByValue) {
+                // Try to find current user in the dropdown options
+                const currentUserOption = Array.from(assignedBySelect.options).find(option => 
+                    option.value && option.value !== ''
+                );
+                if (currentUserOption) {
+                    assignedByValue = currentUserOption.value;
+                }
+            }
+            document.getElementById('timelineAssignedBy').value = assignedByValue;
+            
+            // Handle multiple assignees for "Assigned To" (with backward compatibility)
+            let assignedToArray = [];
+            
+            // Handle new format (array of objects with id and name)
+            if (item.assignedTo && Array.isArray(item.assignedTo)) {
+                // Extract IDs from objects if in new format
+                assignedToArray = item.assignedTo.map(assignee => 
+                    (assignee && typeof assignee === 'object' && assignee.id) ? assignee.id : assignee
+                );
+            } 
+            // Handle legacy format
+            else if (item.assignedTo) {
+                assignedToArray = Array.isArray(item.assignedTo) ? item.assignedTo : [item.assignedTo];
+            }
+            
+            // Select the appropriate options in the dropdown
+            Array.from(assignedToSelect.options).forEach(option => {
+                option.selected = assignedToArray.includes(option.value);
+            });
             
             // Initialize and show the modal
             const modalInstance = new bootstrap.Modal(modal);
@@ -2570,6 +3932,30 @@ session_start();
                 const description = document.getElementById('timelineDescription').value.trim();
                 const date = document.getElementById('timelineDate').value;
                 const status = document.getElementById('timelineStatus').value;
+                const assignedByValue = document.getElementById('timelineAssignedBy').value;
+                
+                // Get assignedBy information (both ID and name)
+                let assignedBy = null;
+                if (assignedByValue) {
+                    const selectedOption = document.getElementById('timelineAssignedBy').options[
+                        document.getElementById('timelineAssignedBy').selectedIndex
+                    ];
+                    assignedBy = {
+                        id: assignedByValue,
+                        name: selectedOption.text.replace(/ \(.*\)$/, ''), // Remove role from text
+                        type: selectedOption.text.toLowerCase().includes('supervisor') ? 'faculty' : 'student'
+                    };
+                }
+                
+                // Get multiple selected values for "Assigned To" with both ID and name
+                const assignedToSelect = document.getElementById('timelineAssignedTo');
+                const assignedTo = Array.from(assignedToSelect.selectedOptions)
+                    .filter(option => option.value !== '')
+                    .map(option => ({
+                        id: option.value,
+                        name: option.text.replace(/ \(.*\)$/, ''), // Remove role from text
+                        type: 'student' // Assuming assignedTo are only students
+                    }));
                 
                 if (!title || !date) {
                     // Show validation error
@@ -2578,15 +3964,14 @@ session_start();
                     return;
                 }
                 
-                // Create a JavaScript Date object from the date string
-                const dateObj = new Date(date);
-                
                 // Update timelineItems array
                 window.timelineItems[index] = {
                     title,
                     description,
-                    date: { $date: dateObj.toISOString() },
-                    status
+                    date,
+                    status,
+                    assignedBy,
+                    assignedTo
                 };
                 
                 // Update the UI
@@ -2602,6 +3987,115 @@ session_start();
                 window.timelineItems.splice(index, 1);
                 updateTimelineDisplay();
             }
+        }
+        
+        function populateAssignmentDropdowns() {
+            const assignedBySelect = document.getElementById('timelineAssignedBy');
+            const assignedToSelect = document.getElementById('timelineAssignedTo');
+            
+            if (!assignedBySelect || !assignedToSelect) return;
+            
+            // Clear existing options (except the first default option)
+            assignedBySelect.innerHTML = '<option value="">Select member (optional)</option>';
+            assignedToSelect.innerHTML = '<option value="">Select members (optional)</option>';
+            
+            // Get current project members
+            const members = getMembersData();
+            
+            // Add all team members to "Assigned By" dropdown, but only students to "Assigned To"
+            members.forEach(member => {
+                if (member.name && member.name.trim()) {
+                    // Use student ID if available, otherwise use member name
+                    const optionValue = (member.userId && member.userId.$oid) ? member.userId.$oid : member.name;
+                    const optionText = `${member.name}${member.role ? ' (' + member.role + ')' : ''}`;
+                    
+                    // Add all members to "Assigned By" dropdown
+                    const assignedByOption = new Option(optionText, optionValue);
+                    assignedBySelect.add(assignedByOption);
+                    
+                    // Check if the member is a student (not supervisor/faculty) for "Assigned To"
+                    const isStudent = !member.role || 
+                                     (member.role.toLowerCase() !== 'supervisor' && 
+                                      member.role.toLowerCase() !== 'faculty' &&
+                                      member.role.toLowerCase() !== 'creator/supervisor');
+                    
+                    // Only add students to "Assigned To" dropdown
+                    if (isStudent) {
+                        const assignedToOption = new Option(optionText, optionValue);
+                        assignedToSelect.add(assignedToOption);
+                    }
+                }
+            });
+            
+            // Add supervisor to "Assigned By" dropdown
+            const supervisorSelect = document.getElementById('supervisor');
+            const supervisorIdInput = document.getElementById('supervisorId');
+            
+            if (supervisorSelect && supervisorSelect.value && supervisorSelect.value.trim()) {
+                const supervisorValue = supervisorIdInput && supervisorIdInput.value ? supervisorIdInput.value : supervisorSelect.value;
+                const supervisorText = `${supervisorSelect.value} (Supervisor)`;
+                
+                const supervisorByOption = new Option(supervisorText, supervisorValue);
+                assignedBySelect.add(supervisorByOption);
+            }
+        }
+        
+        // Helper function to get current project members
+        function getMembersData() {
+            const members = [];
+            
+            // Get members from the form
+            document.querySelectorAll('.member-row').forEach(row => {
+                const name = row.querySelector('.member-name').value.trim();
+                if (name) {
+                    const role = row.querySelector('.member-role').value.trim();
+                    const userId = row.querySelector('.member-userid').value.trim();
+                    
+                    members.push({
+                        name: name,
+                        role: role || 'Team Member',
+                        userId: userId ? { $oid: userId } : null
+                    });
+                }
+            });
+            
+            return members;
+        }
+        
+        // Helper function to find member by ID or name
+        function findMemberById(id) {
+            if (!id) return null;
+            
+            // Check current project members
+            const members = getMembersData();
+            
+            // First try to find by user ID
+            let member = members.find(m => 
+                (m.userId && m.userId.$oid === id) || 
+                (m.userId && typeof m.userId === 'string' && m.userId === id)
+            );
+            
+            // If not found by ID, try by name
+            if (!member) {
+                member = members.find(m => m.name === id);
+            }
+            
+            // Check supervisor
+            if (!member) {
+                const supervisorSelect = document.getElementById('supervisor');
+                const supervisorIdInput = document.getElementById('supervisorId');
+                
+                if (supervisorSelect && supervisorSelect.value) {
+                    const supervisorId = supervisorIdInput && supervisorIdInput.value ? supervisorIdInput.value : supervisorSelect.value;
+                    const supervisorName = supervisorSelect.value;
+                    
+                    if (supervisorId === id || supervisorName === id) {
+                        return { name: supervisorName, role: 'Supervisor' };
+                    }
+                }
+            }
+            
+            return member || { name: id, role: 'Unknown' };
         }
         
         function displayFilePreview(file, container) {
@@ -2810,6 +4304,7 @@ session_start();
             // Get dates
             const createdDate = document.getElementById('createdAt').value;
             const updatedDate = document.getElementById('updatedAt').value || new Date().toISOString().split('T')[0];
+            const estimatedCompletionDate = document.getElementById('estimatedCompletionDate').value;
             
             // Get links
             const githubUrl = document.getElementById('github').value.trim();
@@ -2877,6 +4372,7 @@ session_start();
             // Add dates
             formData.append('created_date', createdDate);
             formData.append('updated_date', updatedDate);
+            formData.append('estimatedCompletionDate', estimatedCompletionDate);
             
             // Add links
             formData.append('github_url', githubUrl);
@@ -3466,6 +4962,26 @@ session_start();
         } else {
             initializeDropdowns();
         }
+
+        // Listen for theme changes from navbar toggle
+        document.addEventListener('themeChanged', function(e) {
+            const newTheme = e.detail.theme;
+            console.log('Theme changed to:', newTheme);
+            
+            // Re-trigger any theme-dependent animations or effects
+            const particles = document.getElementById('particles-js');
+            if (particles && window.pJSDom && window.pJSDom[0]) {
+                // Update particles colors based on theme
+                const pJS = window.pJSDom[0].pJS;
+                if (newTheme === 'light') {
+                    pJS.particles.color.value = ["#2563eb", "#8b5cf6", "#0ea5e9", "#14b8a6", "#f59e0b"];
+                    pJS.particles.line_linked.color = "#2563eb";
+                } else {
+                    pJS.particles.color.value = ["#2563eb", "#8b5cf6", "#0ea5e9", "#14b8a6", "#f59e0b"];
+                    pJS.particles.line_linked.color = "#2563eb";
+                }
+            }
+        });
     });
     </script>
 </body>

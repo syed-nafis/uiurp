@@ -1,5 +1,6 @@
 <?php
 require_once 'db_connect.php';
+require_once 'send_system_chat_message_helper.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 // Import MongoDB BSON types
@@ -235,10 +236,56 @@ try {
     logDebug("Insert result: " . print_r($result, true));
     
     if ($result->getInsertedCount() === 1) {
+        $projectId = (string) $result->getInsertedId();
+        
+        // Send welcome messages to project chat
+        try {
+            $projectTitle = $_POST['title'];
+            $creatorName = $username;
+            
+            logDebug("Sending welcome messages for project: $projectId");
+            
+            $welcomeResults = [];
+            
+            // Send different welcome messages for supervisor and team members
+            if ($supervisor) {
+                $supervisorName = $supervisor['name'];
+                $supervisorWelcomeMessage = "🎓 Welcome $supervisorName as the supervisor of \"$projectTitle\"! Your guidance and expertise will be invaluable to the team's success. Thank you for leading this research journey! 👨‍🏫";
+                $supervisorResult = sendSystemChatMessage($projectId, $supervisorWelcomeMessage);
+                $welcomeResults[] = $supervisorResult['success'] ? 'Supervisor welcome message sent' : 'Supervisor welcome failed: ' . $supervisorResult['message'];
+                logDebug("Supervisor welcome result: " . print_r($supervisorResult, true));
+            }
+            
+            // Send welcome messages for each team member
+            if (!empty($members)) {
+                foreach ($members as $member) {
+                    if (isset($member['name'])) {
+                        $memberName = $member['name'];
+                        $memberRole = $member['role'] ?? 'Team Member';
+                        $memberWelcomeMessage = "🎉 Welcome $memberName to \"$projectTitle\"! As a $memberRole, you're now part of an exciting research journey. Let's collaborate, innovate, and create something amazing together! 🚀";
+                        $memberResult = sendSystemChatMessage($projectId, $memberWelcomeMessage);
+                        $welcomeResults[] = $memberResult['success'] ? "Team member ($memberName) welcome message sent" : "Member welcome failed for $memberName: " . $memberResult['message'];
+                        logDebug("Member welcome result for $memberName: " . print_r($memberResult, true));
+                    }
+                }
+            }
+            
+            // Send a general project creation message
+            $generalWelcomeMessage = "🎉 Welcome to \"$projectTitle\"! This project has been created by $creatorName. Use this chat to collaborate, share ideas, and track progress. Let's build something amazing together! 🚀";
+            $generalResult = sendSystemChatMessage($projectId, $generalWelcomeMessage);
+            $welcomeResults[] = $generalResult['success'] ? 'General creation message sent' : 'General welcome failed: ' . $generalResult['message'];
+            logDebug("General welcome result: " . print_r($generalResult, true));
+            
+            logDebug("Welcome messages result: " . print_r($welcomeResults, true));
+            
+        } catch (Exception $e) {
+            logDebug("Error sending welcome messages for project $projectId: " . $e->getMessage());
+        }
+        
         $response = [
             'success' => true,
             'message' => 'Project created successfully',
-            'projectId' => (string) $result->getInsertedId()
+            'projectId' => $projectId
         ];
         logDebug("SUCCESS: " . print_r($response, true));
         echo json_encode($response);

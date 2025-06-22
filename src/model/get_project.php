@@ -46,6 +46,7 @@ try {
                 'institution' => 1,
                 'createdAt' => 1,
                 'updatedAt' => 1,
+                'estimatedCompletionDate' => 1,
                 'privacy' => 1,
                 'members' => 1,
                 'timeline' => 1,
@@ -91,6 +92,12 @@ try {
             if (isset($project['updatedAt']) && is_object($project['updatedAt'])) {
                 if (method_exists($project['updatedAt'], 'toDateTime')) {
                     $project['updatedAt'] = ['$date' => $project['updatedAt']->toDateTime()->format('c')];
+                }
+            }
+            
+            if (isset($project['estimatedCompletionDate']) && is_object($project['estimatedCompletionDate'])) {
+                if (method_exists($project['estimatedCompletionDate'], 'toDateTime')) {
+                    $project['estimatedCompletionDate'] = ['$date' => $project['estimatedCompletionDate']->toDateTime()->format('c')];
                 }
             }
             

@@ -1,5 +1,6 @@
 <?php
 require_once 'db_connect.php';
+require_once 'send_system_chat_message_helper.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 // Import MongoDB BSON types
@@ -116,7 +117,24 @@ $timeline = [];
 if (!empty($_POST['timeline'])) {
     $timelineData = json_decode($_POST['timeline'], true);
     if (is_array($timelineData)) {
-        $timeline = $timelineData;
+        // Ensure each timeline item has the required fields
+        foreach ($timelineData as $item) {
+            $timelineItem = [
+                'title' => isset($item['title']) ? $item['title'] : '',
+                'description' => isset($item['description']) ? $item['description'] : '',
+                'date' => isset($item['date']) ? $item['date'] : '',
+                'status' => isset($item['status']) ? $item['status'] : 'Planned',
+                'assignedBy' => isset($item['assignedBy']) ? $item['assignedBy'] : '',
+                'assignedTo' => isset($item['assignedTo']) ? $item['assignedTo'] : []
+            ];
+            
+            // Ensure assignedTo is always an array
+            if (!is_array($timelineItem['assignedTo'])) {
+                $timelineItem['assignedTo'] = $timelineItem['assignedTo'] ? [$timelineItem['assignedTo']] : [];
+            }
+            
+            $timeline[] = $timelineItem;
+        }
     }
 }
 
@@ -299,6 +317,15 @@ if (!empty($_POST['links'])) {
     }
 }
 
+// Process estimated completion date
+$estimatedCompletionDate = null;
+if (isset($_POST['estimatedCompletionDate']) && !empty($_POST['estimatedCompletionDate'])) {
+    $estimatedTime = strtotime($_POST['estimatedCompletionDate']);
+    if ($estimatedTime) {
+        $estimatedCompletionDate = new UTCDateTime($estimatedTime * 1000);
+    }
+}
+
 // Create project document
 $project = [
     'title' => $_POST['title'],
@@ -310,6 +337,7 @@ $project = [
     'institution' => $_POST['institution'] ?? 'United International University',
     'createdAt' => $createdDate,
     'updatedAt' => $updatedDate,
+    'estimatedCompletionDate' => $estimatedCompletionDate,
     'privacy' => (int) ($_POST['privacy'] ?? 0),
     'members' => $members,
     'timeline' => $timeline,
@@ -333,10 +361,25 @@ try {
     $result = $collection->insertOne($project);
     
     if ($result->getInsertedCount() === 1) {
+        $projectId = (string) $result->getInsertedId();
+        
+        // Send welcome message to the project chat
+        try {
+            $projectTitle = $_POST['title'];
+            $creatorName = $username;
+            
+            $welcomeResult = sendProjectWelcomeMessage($projectId, $projectTitle, $creatorName);
+            if (!$welcomeResult['success']) {
+                error_log("Failed to send welcome message for project $projectId: " . $welcomeResult['message']);
+            }
+        } catch (Exception $e) {
+            error_log("Error sending welcome message for project $projectId: " . $e->getMessage());
+        }
+        
         echo json_encode([
             'success' => true,
             'message' => 'Project created successfully',
-            'projectId' => (string) $result->getInsertedId()
+            'projectId' => $projectId
         ]);
     } else {
         echo json_encode([

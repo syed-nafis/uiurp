@@ -488,6 +488,19 @@ if (!file_exists($profileImage)) {
             border: 1px solid var(--glass-border);
         }
 
+        [data-theme="light"] .empty-state i {
+            color: var(--accent-blue);
+            filter: drop-shadow(0 0 15px rgba(37, 99, 235, 0.3));
+        }
+
+        [data-theme="light"] .empty-state h4 {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .empty-state::before {
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.08), transparent);
+        }
+
         /* Light mode skills tags */
         [data-theme="light"] .skills-tag {
             background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1));
@@ -1146,13 +1159,31 @@ if (!file_exists($profileImage)) {
             border-radius: 20px;
             margin: 2rem 0;
             animation: fadeInUp 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .empty-state::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .empty-state:hover::before {
+            left: 100%;
         }
 
         .empty-state i {
-            color: var(--text-secondary);
+            color: var(--accent-blue);
             font-size: 4rem;
             margin-bottom: 1.5rem;
             animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.3));
         }
 
         @keyframes float {
@@ -1161,13 +1192,19 @@ if (!file_exists($profileImage)) {
         }
 
         .empty-state h4 {
-            color: var(--text-secondary);
+            color: var(--text-primary);
             margin-bottom: 1rem;
+            font-weight: 600;
+            font-size: 1.5rem;
         }
 
         .empty-state p {
             color: var(--text-secondary);
             margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
         }
 
         .empty-state .btn {
@@ -1179,12 +1216,40 @@ if (!file_exists($profileImage)) {
             font-weight: 600;
             transition: all 0.3s ease;
             margin: 0 0.5rem;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .empty-state .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .empty-state .btn:hover::before {
+            left: 100%;
         }
 
         .empty-state .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
             color: white;
+            text-decoration: none;
+        }
+
+        .empty-state .btn i {
+            font-size: 1rem;
+            line-height: 1;
         }
 
         /* Buttons Styling */
@@ -1310,6 +1375,37 @@ if (!file_exists($profileImage)) {
             
             .section-card .card-body {
                 padding: 1.5rem;
+            }
+            
+            .empty-state {
+                padding: 3rem 1.5rem;
+                margin: 1.5rem 0;
+            }
+            
+            .empty-state i {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+            }
+            
+            .empty-state h4 {
+                font-size: 1.25rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .empty-state p {
+                font-size: 0.9rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .empty-state .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                margin: 0.25rem;
+                gap: 6px;
+            }
+            
+            .empty-state .btn i {
+                font-size: 0.9rem;
             }
         }
         

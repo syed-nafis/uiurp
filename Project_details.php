@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+// Define a constant to indicate this is the Project_details.php file
+// This is used by included files like timeline_editor_overlay.php
+define('INCLUDED_IN_PROJECT_DETAILS', true);
+
 // Include MongoDB connection
 require __DIR__ . '/vendor/autoload.php';
 
@@ -621,195 +625,560 @@ function createProfileLink($name, $userId, $userType = null) {
             padding: 0 2px;
         }
         
-        /* Enhanced timeline styling with more polish */
+        /* Modern Timeline Redesign - Polished UI/UX */
+        
+        /* Timeline Empty State */
+        .timeline-empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-3xl) var(--spacing-xl);
+            text-align: center;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(30, 41, 59, 0.2) 100%);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .empty-state-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--spacing-lg);
+            box-shadow: 0 8px 32px rgba(30, 64, 175, 0.3);
+        }
+        
+        .empty-state-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .timeline-empty-state h4 {
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+            font-weight: 600;
+        }
+        
+        .timeline-empty-state p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        
+        /* Enhanced Progress Header */
+        .timeline-progress-header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: var(--spacing-xl);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--card-shadow);
+            margin-bottom: var(--spacing-xl);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .timeline-progress-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+        
+        .progress-stats {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xl);
+        }
+        
+        .progress-circle {
+            position: relative;
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+            filter: drop-shadow(0 0 8px rgba(30, 64, 175, 0.3));
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .progress-bar-circle {
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: progress-glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes progress-glow {
+            0% { filter: drop-shadow(0 0 5px rgba(30, 64, 175, 0.3)); }
+            100% { filter: drop-shadow(0 0 15px rgba(30, 64, 175, 0.6)); }
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+        
+        .progress-number {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1;
+            white-space: nowrap;
+        }
+        
+        .progress-details {
+            flex: 1;
+        }
+        
+        .progress-details h4 {
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+        
+        .progress-details p {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar-modern {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .progress-bar-modern::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progress-shimmer 2s infinite;
+        }
+        
+        @keyframes progress-shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Modern Timeline Grid */
+        .timeline-grid {
+            display: grid;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-lg) 0;
+        }
+        
+        /* Timeline Milestone Cards - Optimized and Compact */
+        .timeline-milestone {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--card-shadow);
+            padding: var(--spacing-md);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: flex-start;
+            will-change: transform;
+        }
+        
+        .timeline-milestone::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: height 0.2s ease;
+        }
+        
+        .timeline-milestone:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .timeline-milestone:hover::before {
+            height: 4px;
+        }
+        
+        /* Status-based styling */
+        .timeline-milestone.completed::before {
+            background: linear-gradient(90deg, var(--success-color), #10b981);
+        }
+        
+        .timeline-milestone.in-progress::before {
+            background: linear-gradient(90deg, var(--warning-color), #f59e0b);
+        }
+        
+        .timeline-milestone.delayed::before {
+            background: linear-gradient(90deg, var(--danger-color), #ef4444);
+        }
+        
+        .timeline-milestone.pending::before {
+            background: linear-gradient(90deg, var(--text-muted), #6b7280);
+        }
+        
+        /* Milestone Icon - Left Side */
+        .milestone-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .milestone-icon::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .timeline-milestone:hover .milestone-icon {
+            transform: scale(1.02);
+        }
+        
+        .timeline-milestone:hover .milestone-icon::after {
+            opacity: 0.3;
+        }
+        
+        .milestone-status {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--border-radius);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+        
+        .completed .milestone-status {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.2), rgba(16, 185, 129, 0.1));
+            color: var(--success-color);
+            border-color: rgba(5, 150, 105, 0.3);
+            }
+        
+        .in-progress .milestone-status {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(245, 158, 11, 0.1));
+            color: var(--warning-color);
+            border-color: rgba(217, 119, 6, 0.3);
+            }
+        
+        .delayed .milestone-status {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.2), rgba(239, 68, 68, 0.1));
+            color: var(--danger-color);
+            border-color: rgba(220, 38, 38, 0.3);
+            }
+        
+        .pending .milestone-status {
+            background: linear-gradient(135deg, rgba(107, 114, 128, 0.2), rgba(156, 163, 175, 0.1));
+            color: var(--text-muted);
+            border-color: rgba(107, 114, 128, 0.3);
+        }
+        
+        /* Milestone Content - Right Side */
+        .milestone-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .milestone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-sm);
+            gap: var(--spacing-sm);
+        }
+        
+        .milestone-title-section {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .milestone-title {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 var(--spacing-xs) 0;
+            line-height: 1.3;
+            word-wrap: break-word;
+            }
+        
+        .milestone-description {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: var(--spacing-sm);
+            font-size: 0.9rem;
+        }
+        
+        .milestone-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .milestone-date,
+        .milestone-duration {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            padding: 4px var(--spacing-xs);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            white-space: nowrap;
+        }
+        
+        .milestone-date i,
+        .milestone-duration i {
+            color: var(--primary-color);
+            font-size: 0.75rem;
+        }
+        
+        /* Timeline Assignments - Clear Labels */
+        .timeline-assignments {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+            margin-top: var(--spacing-xs);
+        }
+        
+        .assignment-row {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .assignment-label {
+            font-weight: 600;
+            min-width: 80px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.7rem;
+        }
+        
+        .assignment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px var(--spacing-xs);
+            border-radius: var(--border-radius);
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: transform 0.1s ease;
+            white-space: nowrap;
+        }
+        
+        .assignment-badge:hover {
+            transform: translateY(-1px);
+        }
+        
+        .assigned-by-badge {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.15), rgba(30, 64, 175, 0.1));
+            color: #78a9ff; /* Lightened color for better visibility */
+            border: 1px solid rgba(30, 64, 175, 0.2);
+        }
+        
+        .assigned-to-badge {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(5, 150, 105, 0.1));
+            color: #6ee7b7; /* Lightened color for better visibility */
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+        
+        .assignment-badge i {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+        
+        /* Milestone Connector (decorative element) */
+        .milestone-connector {
+            position: absolute;
+            bottom: -var(--spacing-lg);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: var(--spacing-lg);
+            background: linear-gradient(to bottom, var(--primary-color), transparent);
+            opacity: 0.5;
+        }
+        
+        .timeline-milestone:last-child .milestone-connector {
+            display: none;
+        }
+        
+        /* Timeline Summary */
+        .timeline-summary {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: var(--spacing-lg);
+            padding: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .summary-item i {
+            color: var(--primary-color);
+        }
+        
+        /* Legacy Timeline Container - For backwards compatibility */
         .timeline-container {
             position: relative;
             max-width: 100%;
             margin: 0;
-            padding: var(--spacing-2xl) var(--spacing-md) var(--spacing-2xl) var(--spacing-2xl); /* Added right padding */
-            overflow: visible; /* Restore overflow visible for scroll functionality */
-            min-height: 200px;
+            padding: var(--spacing-lg);
         }
         
-        /* Timeline central line with enhanced gradient and progress indicator - moved to left */
-        .timeline-container::before {
-            content: '';
-            position: absolute;
-            width: 6px;
-            background: linear-gradient(to bottom, 
-                var(--primary-color) 0%, 
-                var(--accent-color) 30%,
-                var(--secondary-color) 70%,
-                var(--success-color) 100%);
-            top: 0;
-            bottom: 0;
-            left: var(--spacing-lg);
-            margin-left: 0;
-            opacity: 1;
-            box-shadow: 
-                0 0 20px rgba(76, 201, 240, 0.8),
-                0 0 40px rgba(76, 201, 240, 0.4),
-                inset 0 0 5px rgba(255, 255, 255, 0.3);
-            animation: timeline-glow 4s ease infinite;
-            background-size: 100% 200%;
-            border-radius: 3px;
-            z-index: 1;
-        }
-        
-        /* Add a progress line that fills as user scrolls - moved to left */
-        .timeline-progress {
-            position: absolute;
-            width: 6px;
-            background: linear-gradient(to bottom, 
-                rgba(76, 201, 240, 0.9) 0%,
-                rgba(14, 165, 233, 0.9) 50%,
-                rgba(124, 58, 237, 0.9) 100%);
-            top: 0;
-            left: var(--spacing-lg);
-            margin-left: 0;
-            border-radius: 3px;
-            z-index: 2;
-            height: 0%;
-            transition: height 0.3s ease;
-            box-shadow: 0 0 30px rgba(76, 201, 240, 1);
-        }
-        
-        .timeline-container::after {
-            content: '';
-            display: block;
-            clear: both;
-            height: 0;
-        }
-        
-        @keyframes timeline-glow {
-            0% {
-                box-shadow: 0 0 15px rgba(76, 201, 240, 0.6), 0 0 30px rgba(76, 201, 240, 0.2);
+        /* Responsive Design for Timeline */
+        @media (max-width: 768px) {
+            .timeline-progress-header {
+                padding: var(--spacing-md);
             }
-            50% {
-                box-shadow: 0 0 25px rgba(76, 201, 240, 0.9), 0 0 50px rgba(76, 201, 240, 0.4);
+            
+            .progress-stats {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                text-align: center;
             }
-            100% {
-                box-shadow: 0 0 15px rgba(76, 201, 240, 0.6), 0 0 30px rgba(76, 201, 240, 0.2);
+            
+            .progress-circle {
+                align-self: center;
+            }
+            
+            .timeline-grid {
+                gap: var(--spacing-md);
+                padding: var(--spacing-md) 0;
+            }
+            
+            .timeline-milestone {
+                padding: var(--spacing-md);
+            }
+            
+            .milestone-header {
+                flex-direction: column;
+                gap: var(--spacing-sm);
+                align-items: flex-start;
+            }
+            
+            .milestone-meta {
+                flex-direction: column;
+                gap: var(--spacing-xs);
+            }
+            
+            .timeline-summary {
+                flex-direction: column;
+                gap: var(--spacing-sm);
+                padding: var(--spacing-md);
+            }
+            
+            .summary-item {
+                justify-content: center;
             }
         }
         
-        /* Animate gradient background of timeline */
-        @keyframes gradient-flow {
-            0% {
-                background-position: 0% 0%;
-                opacity: 0.8;
-            }
-            25% {
-                opacity: 1;
-            }
-            50% {
-                background-position: 100% 100%;
-                opacity: 1;
-            }
-            75% {
-                opacity: 0.9;
-            }
-            100% {
-                background-position: 0% 0%;
-                opacity: 0.8;
-            }
+        /* Enhanced hover effects and interactions - Performance Optimized */
+        .timeline-milestone.timeline-highlighted {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.2);
+            border-color: rgba(30, 64, 175, 0.3);
         }
         
-        /* Timeline item entry animations - all from right since they're all on right side */
-        .timeline-left,
-        .timeline-right {
-            animation: slide-from-right 0.8s cubic-bezier(0.19, 1, 0.22, 1) both;
-            animation-play-state: paused;
+        .timeline-milestone.timeline-highlighted::before {
+            height: 4px;
         }
         
-        .timeline-item.aos-animate {
-            animation-play-state: running;
+        /* Performance optimizations */
+        .timeline-milestone {
+            contain: layout style;
         }
         
-        @keyframes slide-from-right {
-            from {
-                opacity: 0;
-                transform: translateX(80px) scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0) scale(1);
-            }
-        }
-        
-        .timeline-item {
-            padding: var(--spacing-md) var(--spacing-lg);
-            position: relative;
-            width: calc(100% - var(--spacing-md)); /* Reduced spacing to match the reduced gap */
-            box-sizing: border-box;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-bottom: calc(var(--spacing-md) * 1.5);
-        }
-        
-        .timeline-item:hover {
-            transform: scale(1.03) translateY(-5px);
-            z-index: 2;
-        }
-        
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            width: 28px;
-            height: 28px;
-            background: #ffffff;
-            border: 4px solid;
-            border-color: var(--primary-color);
-            border-radius: 50%;
-            top: 20px;
-            z-index: 1;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            transition: all var(--transition-speed) ease;
-        }
-        
-        .timeline-left::after {
-            border-color: var(--primary-color);
-            right: -14px;
-        }
-        
-        .timeline-right::after {
-            border-color: var(--secondary-color);
-            left: -14px;
-        }
-        
-        .timeline-item:hover::after {
-            transform: scale(1.3);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            background: radial-gradient(circle at center, white 60%, rgba(var(--primary-color-rgb, 13, 110, 253), 0.2) 100%);
-        }
-        
-        .timeline-left:hover::after {
-            background-color: rgba(var(--primary-color-rgb, 13, 110, 253), 0.1);
-        }
-        
-        .timeline-right:hover::after {
-            background-color: rgba(var(--secondary-color-rgb, 102, 16, 242), 0.1);
-        }
-        
-        /* Timeline connector lines */
-        .timeline-left::before,
-        .timeline-right::before {
-            content: '';
-            position: absolute;
-            top: var(--spacing-lg);
-            width: var(--spacing-lg);
-            height: 2px;
-            z-index: 5;
-            transform: translateY(6px);
-        }
-        
-        .timeline-left::before {
-            right: -24px;
-            background: linear-gradient(to right, var(--primary-color), transparent);
-        }
-        
-        .timeline-right::before {
-            left: -24px;
-            background: linear-gradient(to left, var(--secondary-color), transparent);
+        .milestone-icon {
+            contain: layout;
         }
         
         .timeline-content {
@@ -1885,13 +2254,117 @@ function createProfileLink($name, $userId, $userType = null) {
             color: #7293ff;
             background: rgba(30, 64, 175, 0.1);
             backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            border-radius: 8px;
         }
         
         .btn-outline-primary:hover {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(135deg, var(--primary-color), #2563eb);
             color: var(--text-primary);
             border-color: transparent;
-            box-shadow: var(--glow-primary);
+            box-shadow: 0 0 20px rgba(30, 64, 175, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-outline-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-outline-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-outline-primary:disabled:hover {
+            transform: none;
+            box-shadow: none;
+            background: rgba(30, 64, 175, 0.1);
+            color: #7293ff;
+            border-color: #7293ff;
+        }
+
+        .btn-outline-primary i {
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .btn-outline-danger {
+            border: 2px solid #ff4757;
+            color: #ff4757;
+            background: rgba(220, 38, 38, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            border-radius: 8px;
+        }
+        
+        .btn-outline-danger:hover {
+            background: linear-gradient(135deg, var(--danger-color), #ef4444);
+            color: var(--text-primary);
+            border-color: transparent;
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-danger::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-outline-danger:hover::before {
+            left: 100%;
+        }
+
+        .btn-outline-danger:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-outline-danger:disabled:hover {
+            transform: none;
+            box-shadow: none;
+            background: rgba(220, 38, 38, 0.1);
+            color: #ff4757;
+            border-color: #ff4757;
+        }
+
+        .btn-outline-danger i {
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-outline-danger:hover i {
+            transform: scale(1.1) rotate(-5deg);
         }
         
         /* Timeline edit button styles */
@@ -1932,6 +2405,1003 @@ function createProfileLink($name, $userId, $userType = null) {
         
         #editTimelineBtn:hover i {
             transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Timeline Edit Overlay Styles - Enhanced for Dark/Light Mode */
+        .timeline-edit-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999; /* Lower than timeline modal (10050) to ensure modal stays on top */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .timeline-overlay-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .timeline-overlay-content {
+            position: relative;
+            background: var(--card-bg);
+            border: 1px solid rgba(76, 201, 240, 0.2);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow-hover);
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            animation: slideInUp 0.3s ease-out;
+        }
+
+        .timeline-overlay-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(76, 201, 240, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timeline-overlay-header h3 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .timeline-overlay-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+
+        .timeline-overlay-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            transform: rotate(90deg);
+        }
+
+        .timeline-overlay-body {
+            padding: 1.5rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .timeline-overlay-footer {
+            padding: 1.5rem 2rem;
+            border-top: 2px solid var(--glass-border);
+            background: var(--surface);
+            border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+        }
+        
+        .timeline-overlay-footer .text-muted {
+            color: var(--text-muted) !important;
+        }
+        
+        .timeline-overlay-footer .text-muted i {
+            color: var(--accent) !important;
+        }
+        
+        .timeline-overlay-footer .btn {
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            border: 2px solid transparent;
+        }
+        
+        .timeline-overlay-footer .btn-primary {
+            background: var(--gradient-primary);
+            border: 2px solid var(--primary);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+        
+        .timeline-overlay-footer .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+            border-color: var(--accent);
+        }
+        
+        .timeline-overlay-footer .btn-primary i {
+            color: white !important;
+        }
+        
+        .timeline-overlay-footer .btn-outline-secondary {
+            border: 2px solid var(--border-light);
+            color: var(--text-secondary) !important;
+            background: transparent;
+        }
+        
+        .timeline-overlay-footer .btn-outline-secondary:hover {
+            background: var(--surface-light);
+            border-color: var(--primary);
+            color: var(--text-primary) !important;
+            transform: translateY(-1px);
+        }
+        
+        .timeline-overlay-footer .btn-outline-secondary i {
+            color: inherit !important;
+        }
+        
+        /* Light mode footer overrides */
+        [data-theme="light"] .timeline-overlay-footer {
+            background: rgba(248, 250, 252, 0.8);
+        }
+        
+        [data-theme="light"] .timeline-overlay-footer .btn-primary {
+            color: white !important;
+        }
+        
+        [data-theme="light"] .timeline-overlay-footer .btn-primary i {
+            color: white !important;
+        }
+
+        .timeline-items-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-edit-item {
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .timeline-edit-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+        }
+
+        .timeline-edit-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-edit-item-title {
+            font-weight: 700;
+            color: var(--text-primary) !important;
+            margin: 0;
+            flex: 1;
+            font-size: 1.1rem;
+        }
+
+        .timeline-edit-item-controls {
+            display: flex;
+            gap: 0.75rem;
+            margin-left: 1rem;
+        }
+
+        .timeline-edit-item-date {
+            color: var(--text-secondary) !important;
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .timeline-edit-item-description {
+            color: var(--text-muted) !important;
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .timeline-edit-item-assignment {
+            font-size: 0.85rem;
+            color: var(--text-secondary) !important;
+            font-weight: 500;
+        }
+        
+        /* Light mode timeline edit items */
+        [data-theme="light"] .timeline-edit-item {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="light"] .timeline-edit-item:hover {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-badge-overlay {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-planned { background: rgba(107, 114, 128, 0.3); color: #9ca3af; }
+        .status-in-progress { background: rgba(59, 130, 246, 0.3); color: #60a5fa; }
+        .status-completed { background: rgba(16, 185, 129, 0.3); color: #34d399; }
+        .status-delayed { background: rgba(239, 68, 68, 0.3); color: #f87171; }
+
+        /* Timeline Item Edit Modal Styles - Enhanced for Dark/Light Mode */
+        #timelineItemEditModal {
+            z-index: 10050 !important; /* Higher than timeline overlay (9999) and other modals */
+        }
+
+        #timelineItemEditModal .modal-backdrop {
+            z-index: 10049 !important; /* Just below the modal */
+        }
+
+        #timelineItemEditModal .modal-content {
+            background: var(--glass-bg);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            color: var(--text-primary);
+        }
+
+        #timelineItemEditModal .modal-header {
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #timelineItemEditModal .modal-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.9), rgba(124, 58, 237, 0.9));
+            z-index: -1;
+        }
+
+        #timelineItemEditModal .modal-footer {
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 1.5rem 2rem;
+            background: var(--card-bg);
+            border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+        }
+        
+        /* Enhanced Modal Footer Styling for Dark/Light Mode */
+        #timelineItemEditModal .modal-footer.bg-light {
+            background: var(--card-bg) !important;
+            border-top: 1px solid rgba(148, 163, 184, 0.1) !important;
+        }
+        
+        #timelineItemEditModal .modal-footer.border-top-0 {
+            border-top: 1px solid rgba(148, 163, 184, 0.1) !important;
+        }
+        
+        #timelineItemEditModal .modal-footer.p-4 {
+            padding: 1.5rem 2rem !important;
+        }
+        
+        #timelineItemEditModal .modal-footer .text-muted.small {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        #timelineItemEditModal .modal-footer .d-flex.gap-3 {
+            gap: 1rem !important;
+        }
+        
+        #timelineItemEditModal .modal-footer .d-flex.w-100 {
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        #timelineItemEditModal .modal-title {
+            color: white !important;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        #timelineItemEditModal .modal-header p {
+            color: rgba(255, 255, 255, 0.85) !important;
+            margin: 0;
+        }
+        
+        #timelineItemEditModal .modal-header i {
+            color: white !important;
+        }
+        
+        /* Light mode header text overrides */
+        [data-theme="light"] #timelineItemEditModal .modal-title {
+            color: white !important;
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .modal-header p {
+            color: rgba(255, 255, 255, 0.85) !important;
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .modal-header i {
+            color: white !important;
+        }
+        
+        #timelineItemEditModal .btn-close {
+            filter: invert(1);
+            opacity: 0.8;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #timelineItemEditModal .btn-close span {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        #timelineItemEditModal .btn-close:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        #timelineItemEditModal .btn-close:hover span {
+            color: white;
+        }
+        
+        /* Form Labels */
+        #timelineItemEditModal .form-label {
+            color: var(--text-primary) !important;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        #timelineItemEditModal .form-label i {
+            color: var(--primary-color) !important;
+        }
+
+        #timelineItemEditModal .form-control,
+        #timelineItemEditModal .form-select {
+            background: var(--card-bg) !important;
+            border: 2px solid rgba(148, 163, 184, 0.1) !important;
+            color: var(--text-primary) !important;
+            border-radius: var(--border-radius);
+            transition: var(--transition-speed) var(--transition-ease);
+            font-size: 0.95rem;
+        }
+
+        #timelineItemEditModal .form-control:focus,
+        #timelineItemEditModal .form-select:focus {
+            background: var(--card-bg) !important;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 0.25rem rgba(30, 64, 175, 0.15) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        #timelineItemEditModal .form-control::placeholder {
+            color: var(--text-muted) !important;
+            opacity: 0.7;
+        }
+        
+        #timelineItemEditModal .form-control-lg {
+            padding: 0.875rem 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        #timelineItemEditModal .form-select-lg {
+            padding: 0.875rem 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        /* Section Headers in Modal */
+        #timelineItemEditModal .section-header h6 {
+            color: var(--primary-color) !important;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        #timelineItemEditModal .section-header h6::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        #timelineItemEditModal .section-header h6 i {
+            color: var(--primary-color) !important;
+            margin-right: 0.5rem;
+        }
+        
+        /* Enhanced form styling */
+        #timelineItemEditModal .form-text {
+            font-size: 0.85rem;
+            color: var(--text-muted) !important;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+        
+        #timelineItemEditModal .form-text i {
+            color: var(--text-muted) !important;
+        }
+        
+        #timelineItemEditModal .invalid-feedback {
+            color: var(--error) !important;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            font-weight: 500;
+        }
+        
+        /* Multi-select styling */
+        #timelineItemEditModal select[multiple] {
+            background: var(--card-bg) !important;
+            border: 2px solid rgba(148, 163, 184, 0.1) !important;
+            border-radius: var(--border-radius);
+            padding: 0.75rem;
+            color: var(--text-primary) !important;
+        }
+        
+        #timelineItemEditModal select[multiple] option {
+            background: var(--card-bg) !important;
+            color: var(--text-primary) !important;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        #timelineItemEditModal select[multiple] option:hover {
+            background: var(--glass-bg) !important;
+            border-color: var(--primary-color);
+        }
+        
+        #timelineItemEditModal select[multiple] option:checked {
+            background: var(--primary-color) !important;
+            color: white !important;
+            border-color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        /* Light mode multi-select checked options */
+        [data-theme="light"] #timelineItemEditModal select[multiple] option:checked {
+            color: white !important;
+        }
+        
+        /* Button enhancements */
+        #timelineItemEditModal .d-flex .btn {
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition-speed) var(--transition-ease);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            border: 2px solid transparent;
+        }
+        
+        #timelineItemEditModal .btn.px-4 {
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+        }
+        
+        #timelineItemEditModal .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: 2px solid var(--primary-color);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #timelineItemEditModal .btn-primary.glow-effect {
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3), 0 0 20px rgba(30, 64, 175, 0.2);
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+        
+        #timelineItemEditModal .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4);
+            border-color: var(--accent-color);
+        }
+        
+        #timelineItemEditModal .btn-primary.glow-effect:hover {
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.5), 0 0 30px rgba(30, 64, 175, 0.3);
+            animation: none;
+        }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3), 0 0 20px rgba(30, 64, 175, 0.2); }
+            100% { box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4), 0 0 25px rgba(30, 64, 175, 0.3); }
+        }
+        
+        #timelineItemEditModal .btn-primary i {
+            color: white !important;
+        }
+        
+        /* Light mode primary button */
+        [data-theme="light"] #timelineItemEditModal .btn-primary {
+            color: white !important;
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .btn-primary i {
+            color: white !important;
+        }
+        
+        #timelineItemEditModal .btn-outline-secondary {
+            border: 2px solid rgba(148, 163, 184, 0.3);
+            color: var(--text-secondary) !important;
+            background: transparent;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        #timelineItemEditModal .btn-outline-secondary.px-4 {
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
+        }
+        
+        #timelineItemEditModal .btn-outline-secondary:hover {
+            background: var(--glass-bg);
+            border-color: var(--primary-color);
+            color: var(--text-primary) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(148, 163, 184, 0.2);
+        }
+        
+        #timelineItemEditModal .btn-outline-secondary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        #timelineItemEditModal .btn-outline-secondary:hover::before {
+            left: 100%;
+        }
+        
+        #timelineItemEditModal .btn-outline-secondary i {
+            color: inherit !important;
+        }
+        
+        /* Footer styling */
+        #timelineItemEditModal .modal-footer .text-muted {
+            color: var(--text-muted) !important;
+        }
+        
+        #timelineItemEditModal .modal-footer .text-muted i {
+            color: var(--accent-color) !important;
+        }
+        
+        /* Light mode specific adjustments */
+        [data-theme="light"] #timelineItemEditModal .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .modal-footer {
+            background: rgba(248, 250, 252, 0.8);
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .modal-footer.bg-light {
+            background: rgba(248, 250, 252, 0.8) !important;
+            border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        /* Light mode button styling */
+        [data-theme="light"] #timelineItemEditModal .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-color: var(--primary-color);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.2);
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .btn-primary.glow-effect {
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.25), 0 0 20px rgba(30, 64, 175, 0.15);
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .btn-primary:hover {
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.3);
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .btn-primary.glow-effect:hover {
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4), 0 0 30px rgba(30, 64, 175, 0.25);
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .btn-outline-secondary {
+            border: 2px solid rgba(0, 0, 0, 0.15);
+            color: var(--text-secondary) !important;
+            background: rgba(255, 255, 255, 0.6);
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .btn-outline-secondary:hover {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .form-control,
+        [data-theme="light"] #timelineItemEditModal .form-select {
+            background: white !important;
+            border-color: rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .form-control:focus,
+        [data-theme="light"] #timelineItemEditModal .form-select:focus {
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 0.25rem rgba(30, 64, 175, 0.1) !important;
+        }
+        
+        [data-theme="light"] #timelineItemEditModal select[multiple] {
+            background: white !important;
+        }
+        
+        [data-theme="light"] #timelineItemEditModal select[multiple] option {
+            background: white !important;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="light"] #timelineItemEditModal select[multiple] option:hover {
+            background: rgba(30, 64, 175, 0.05) !important;
+        }
+        
+        /* Light mode form select options */
+        [data-theme="light"] #timelineItemEditModal .form-select option {
+            background: white !important;
+            color: var(--text-primary) !important;
+        }
+        
+        [data-theme="light"] #timelineItemEditModal .form-select option:checked {
+            background: var(--primary-color) !important;
+            color: white !important;
+        }
+        
+        /* Responsive modal */
+        @media (max-width: 768px) {
+            #timelineItemEditModal .modal-dialog {
+                margin: 1rem;
+                max-width: calc(100vw - 2rem);
+            }
+            
+            #timelineItemEditModal .modal-header,
+            #timelineItemEditModal .modal-footer {
+                padding: 1rem;
+            }
+            
+            #timelineItemEditModal .modal-body {
+                padding: 1.5rem 1rem;
+            }
+            
+            #timelineItemEditModal .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            #timelineItemEditModal .d-flex.gap-3 {
+                width: 100%;
+            }
+            
+            #timelineItemEditModal .d-flex.gap-3 .btn {
+                flex: 1;
+            }
+        }
+            color: var(--text-primary);
+        }
+
+        #timelineItemEditModal .btn-close {
+            filter: invert(1) brightness(0.8);
+        }
+        
+        /* Enhanced Timeline Edit Container Styles - Dark/Light Mode */
+        .timeline-edit-container {
+            background: var(--glass-bg);
+            border-radius: var(--border-radius-lg);
+            padding: 2.5rem;
+            max-width: 900px;
+            width: 95%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            color: var(--text-primary);
+        }
+        
+        .timeline-edit-container .timeline-item {
+            background: var(--glass-bg);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary);
+            border: 2px solid var(--glass-border);
+            color: var(--text-primary);
+            transition: var(--transition);
+            cursor: grab;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .timeline-edit-container .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0.3;
+        }
+        
+        .timeline-edit-container .timeline-item.grabbing {
+            cursor: grabbing;
+            transform: scale(1.02);
+        }
+        
+        .timeline-edit-container .timeline-item:hover {
+            border-color: var(--primary);
+            background: var(--surface-light);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+            border-left-color: var(--accent);
+        }
+        
+        .timeline-edit-container .timeline-item.completed {
+            border-left-color: var(--success);
+        }
+        
+        .timeline-edit-container .timeline-item.completed:hover {
+            border-left-color: var(--success);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+        }
+        
+        .timeline-edit-container .timeline-item.in-progress {
+            border-left-color: var(--primary);
+        }
+        
+        .timeline-edit-container .timeline-item.planned {
+            border-left-color: var(--secondary);
+        }
+        
+        .timeline-edit-container .timeline-item.planned:hover {
+            border-left-color: var(--secondary);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+        }
+        
+        .timeline-edit-container .timeline-item.delayed {
+            border-left-color: var(--error);
+        }
+        
+        .timeline-edit-container .timeline-item.delayed:hover {
+            border-left-color: var(--error);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.15);
+        }
+        
+        .timeline-edit-container .timeline-date {
+            color: var(--primary) !important;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .timeline-edit-container .timeline-date i {
+            margin-right: 0.75rem;
+            color: var(--primary) !important;
+            font-size: 1.1rem;
+        }
+        
+        .timeline-edit-container .timeline-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .timeline-edit-container .timeline-item h6 {
+            color: var(--text-primary) !important;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        
+        .timeline-edit-container .timeline-item p {
+            color: var(--text-secondary) !important;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+        
+        /* Enhanced Timeline action buttons */
+        .timeline-edit-container .timeline-controls .btn {
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: rgba(51, 65, 85, 0.6);
+            color: var(--text-secondary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.8rem;
+        }
+        
+        .timeline-edit-container .timeline-controls .btn:hover {
+            transform: translateY(-1px);
+            background: rgba(51, 65, 85, 0.8);
+            border-color: var(--primary-color);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .timeline-edit-container .timeline-controls .btn-outline-primary:hover {
+            color: var(--primary-color);
+            background: rgba(30, 64, 175, 0.1);
+        }
+        
+        .timeline-edit-container .timeline-controls .btn-outline-danger:hover {
+            color: var(--danger-color);
+            background: rgba(220, 38, 38, 0.1);
+            border-color: var(--danger-color);
+        }
+        
+        /* Timeline section highlight effect for updates */
+        @keyframes highlight-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+        
+        .highlight-update {
+            animation: highlight-pulse 1.5s ease-out;
+        }
+        
+        .timeline-edit-container .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            border-radius: 1rem;
+            margin-left: 0.5rem;
+            position: relative;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .timeline-edit-container .status-completed {
+            background: rgba(5, 150, 105, 0.2);
+            color: var(--success-color);
+            border-color: rgba(5, 150, 105, 0.3);
+        }
+        
+        .timeline-edit-container .status-in-progress {
+            background: rgba(30, 64, 175, 0.2);
+            color: var(--primary-color);
+            border-color: rgba(30, 64, 175, 0.3);
+        }
+        
+        .timeline-edit-container .status-planned {
+            background: rgba(124, 58, 237, 0.2);
+            color: var(--secondary-color);
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+        
+        .timeline-edit-container .status-delayed {
+            background: rgba(220, 38, 38, 0.2);
+            color: var(--danger-color);
+            border-color: rgba(220, 38, 38, 0.3);
+        }
+        
+        /* Enhanced Assignment information styling */
+        .timeline-edit-container .assignment-info {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 2px solid var(--glass-border);
+        }
+        
+        .timeline-edit-container .assignment-info .bi {
+            margin-right: 0.5rem;
+            opacity: 0.8;
+            color: var(--primary) !important;
+        }
+        
+        .timeline-edit-container .assignment-info span {
+            display: inline-block;
+            margin-right: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted) !important;
+            font-weight: 500;
+        }
+        
+        .timeline-edit-container .assignment-info strong {
+            color: var(--primary) !important;
+            font-weight: 700;
+        }
+        
+        /* Light mode adjustments for timeline container */
+        [data-theme="light"] .timeline-edit-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        [data-theme="light"] .timeline-edit-container .timeline-item {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="light"] .timeline-edit-container .timeline-item:hover {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Ensure modal backdrop doesn't interfere with timeline overlay */
+        .modal-backdrop.show {
+            opacity: 0.3;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .toast-container {
@@ -3268,6 +4738,38 @@ function createProfileLink($name, $userId, $userType = null) {
             color: var(--text-muted);
         }
 
+        /* Light theme styles for inline assignment layout */
+        [data-theme="light"] .timeline-assignments-bottom {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="light"] .assignment-label {
+            color: #666;
+        }
+        
+        [data-theme="light"] .assigned-by-badge {
+            background-color: rgba(30, 64, 175, 0.1);
+            color: #2563eb; /* Adjusted for light theme but still visible */
+            border: 1px solid rgba(30, 64, 175, 0.2);
+        }
+        
+        [data-theme="light"] .assigned-to-badge {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981; /* Adjusted for light theme but still visible */
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        /* Light theme progress circle */
+        [data-theme="light"] .progress-number {
+            color: var(--primary-color);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Light theme assigned by name */
+        [data-theme="light"] .assigned-by-name {
+            color: #666;
+        }
+
         [data-theme="light"] .timeline-line {
             background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
         }
@@ -3276,12 +4778,6 @@ function createProfileLink($name, $userId, $userType = null) {
             background: var(--card-bg);
             border: 2px solid var(--primary-color);
             color: var(--primary-color);
-        }
-
-        [data-theme="light"] .media-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            color: var(--text-primary);
         }
 
         [data-theme="light"] .media-card:hover {
@@ -3429,6 +4925,18 @@ function createProfileLink($name, $userId, $userType = null) {
             color: #92400e;
         }
 
+        [data-theme="light"] .btn-outline-primary {
+            color: var(--primary-color) !important;
+            border-color: rgba(30, 64, 175, 0.4);
+            background: rgba(30, 64, 175, 0.05);
+        }
+
+        [data-theme="light"] .btn-outline-primary:hover {
+            background: rgba(30, 64, 175, 0.1);
+            border-color: rgba(30, 64, 175, 0.6);
+            color: var(--primary-color) !important;
+        }
+
         [data-theme="light"] .btn-primary {
             background: var(--primary-color);
             border-color: var(--primary-color);
@@ -3438,6 +4946,18 @@ function createProfileLink($name, $userId, $userType = null) {
         [data-theme="light"] .btn-primary:hover {
             background: var(--primary-dark);
             border-color: var(--primary-dark);
+        }
+
+        [data-theme="light"] .btn-outline-danger {
+            color: #dc2626 !important;
+            border-color: rgba(220, 38, 38, 0.4);
+            background: rgba(220, 38, 38, 0.05);
+        }
+
+        [data-theme="light"] .btn-outline-danger:hover {
+            background: rgba(220, 38, 38, 0.1);
+            border-color: rgba(220, 38, 38, 0.6);
+            color: #dc2626 !important;
         }
 
         [data-theme="light"] .text-link {
@@ -3538,6 +5058,19 @@ function createProfileLink($name, $userId, $userType = null) {
 
         [data-theme="light"] .timeline-marker-label:hover {
             border-color: rgba(30, 64, 175, 0.3);
+        }
+        
+        /* Timeline assignment styling in light mode */
+        [data-theme="light"] .timeline-assignment {
+            border-left-color: rgba(30, 64, 175, 0.3);
+        }
+        
+        [data-theme="light"] .timeline-assignment .text-primary {
+            color: #1e40af !important;
+        }
+        
+        [data-theme="light"] .timeline-assignment .text-success {
+            color: #059669 !important;
         }
 
         /* Team member card text fixes */
@@ -4029,7 +5562,7 @@ function createProfileLink($name, $userId, $userType = null) {
         
         /* Supervisor link styling */
         .supervisor-link {
-            color: var(--primary-color) !important;
+            color: var(--text-muted) !important;
             text-decoration: none;
             font-weight: 500;
             position: relative;
@@ -4040,22 +5573,16 @@ function createProfileLink($name, $userId, $userType = null) {
         }
         
         .supervisor-link:hover {
-            color: var(--primary-dark) !important;
+            color: var(--text-muted) !important;
             text-decoration: none;
             background: linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, rgba(30, 64, 175, 0.15) 100%);
             box-shadow: 0 2px 8px rgba(30, 64, 175, 0.2);
             transform: translateY(-1px);
         }
         
-        .supervisor-link::before {
-            content: '👨‍🏫';
-            margin-right: 4px;
-            font-size: 0.9em;
-        }
-        
         /* Member link styling for consistency */
         .member-link {
-            color: var(--accent-color) !important;
+            color: #00bcf7 !important;
             text-decoration: none;
             font-weight: 500;
             position: relative;
@@ -4066,17 +5593,10 @@ function createProfileLink($name, $userId, $userType = null) {
         }
         
         .member-link:hover {
-            color: #0369a1 !important;
+            color: #00bcf7  !important;
             text-decoration: none;
-            background: linear-gradient(135deg, rgba(2, 132, 199, 0.1) 0%, rgba(2, 132, 199, 0.15) 100%);
             box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
             transform: translateY(-1px);
-        }
-        
-        .member-link::before {
-            content: '👨‍🎓';
-            margin-right: 4px;
-            font-size: 0.9em;
         }
     </style>
     
@@ -4084,12 +5604,70 @@ function createProfileLink($name, $userId, $userType = null) {
 <body>
     <?php include 'src/includes/navbar.php'; ?>
     
+    <?php 
+    // Initialize variables for project permissions
+    $canEditProject = false;
+    $projectId = isset($_GET['id']) ? $_GET['id'] : null;
+    
+    // Check if user is logged in and can edit this project
+    if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['user_id']) && $projectId) {
+        $currentUserId = $_SESSION['user_id'];
+        
+        // Try to get the project from database to check permissions
+        try {
+            $projectsCollection = $db->projectsV2;
+            $project = $projectsCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($projectId)]);
+            
+            if ($project) {
+                // Check if user is project creator
+                if (isset($project['createdBy'])) {
+                    if (is_array($project['createdBy']) && isset($project['createdBy']['$oid']) && $project['createdBy']['$oid'] === $currentUserId) {
+                        $canEditProject = true;
+                    } elseif (is_string($project['createdBy']) && $project['createdBy'] === $currentUserId) {
+                        $canEditProject = true;
+                    }
+                }
+                
+                // Check if user is supervisor
+                if (!$canEditProject && isset($project['supervisor'])) {
+                    if (isset($project['supervisor']['userId']['$oid']) && $project['supervisor']['userId']['$oid'] === $currentUserId) {
+                        $canEditProject = true;
+                    } elseif (isset($project['supervisor']['userId']) && $project['supervisor']['userId'] === $currentUserId) {
+                        $canEditProject = true;
+                    }
+                }
+                
+                // Check if user is team member
+                if (!$canEditProject && isset($project['members']) && is_array($project['members'])) {
+                    foreach ($project['members'] as $member) {
+                        if (isset($member['userId']['$oid']) && $member['userId']['$oid'] === $currentUserId) {
+                            $canEditProject = true;
+                            break;
+                        } elseif (isset($member['userId']) && $member['userId'] === $currentUserId) {
+                            $canEditProject = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            // If there's an error, default to no editing permissions
+            error_log("Error checking project permissions: " . $e->getMessage());
+            $canEditProject = false;
+        }
+    }
+    ?>
+    
     <!-- Inject PHP session data into JavaScript -->
     <script>
         <?php if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['user_id'])): ?>
         var currentUserId = "<?php echo $_SESSION['user_id']; ?>";
+        var currentUserName = "<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ''; ?>";
+        var currentUserType = "<?php echo isset($_SESSION['user_type']) ? $_SESSION['user_type'] : ''; ?>";
         <?php else: ?>
         var currentUserId = null;
+        var currentUserName = null;
+        var currentUserType = null;
         <?php endif; ?>
     </script>
 
@@ -4148,9 +5726,11 @@ function createProfileLink($name, $userId, $userType = null) {
                     <div id="project-timeline" class="mb-5" data-aos="fade-up" data-aos-delay="400">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3 class="section-title mb-0">Project Timeline</h3>
-                            <button id="editTimelineBtn" class="btn btn-outline-primary btn-sm" style="display: none;" title="Edit Timeline">
-                                <i class="bi bi-pencil-square me-1"></i>Edit Timeline
-                            </button>
+                            <?php if ($canEditProject && $projectId): ?>
+                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#timelineEditorModal" data-project-id="<?php echo htmlspecialchars($projectId); ?>">
+                                    <i class="bi bi-pencil me-1"></i> Edit Timeline
+                                </button>
+                            <?php endif; ?>
                         </div>
                         <div class="timeline-container" id="timeline-container">
                             <!-- Timeline items will be loaded here -->
@@ -4243,6 +5823,23 @@ function createProfileLink($name, $userId, $userType = null) {
             </div>
         </div>
     </div>
+
+    <!-- Timeline Editor Overlay -->
+    <?php include 'timeline_editor_overlay.php'; ?>
+
+    <!-- Add the refreshProjectTimeline function in the JavaScript section -->
+    <script>
+        /**
+         * Refresh the project timeline display after edits
+         */
+        function refreshProjectTimeline() {
+            // Reload the project data and update the timeline display
+            fetchProjectData(currentProjectId);
+        }
+    </script>
+
+</body>
+</html>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -4718,17 +6315,65 @@ function createProfileLink($name, $userId, $userType = null) {
                     );
                 }
                 
-                // Also check if user is the supervisor
-                if (!isAuthorized && project.supervisor && project.supervisor.userId) {
-                    isAuthorized = (project.supervisor.userId.$oid === currentUser) || 
-                                  (project.supervisor.userId === currentUser);
+                // Enhanced supervisor authorization check - comprehensive patterns
+                if (!isAuthorized && project.supervisor) {
+                    // Check various supervisor data formats
+                    
+                    // Format 1: supervisor.userId with ObjectId
+                    if (project.supervisor.userId && project.supervisor.userId.$oid) {
+                        isAuthorized = (project.supervisor.userId.$oid === currentUser);
+                    }
+                    
+                    // Format 2: supervisor.userId as string
+                    if (!isAuthorized && project.supervisor.userId) {
+                        isAuthorized = (project.supervisor.userId === currentUser);
+                    }
+                    
+                    // Format 3: Direct supervisor field (for simple projects)
+                    if (!isAuthorized && typeof project.supervisor === 'string') {
+                        isAuthorized = (project.supervisor === currentUser);
+                    }
+                    
+                    // Format 4: supervisor.$oid (direct ObjectId)
+                    if (!isAuthorized && project.supervisor.$oid) {
+                        isAuthorized = (project.supervisor.$oid === currentUser);
+                    }
+                    
+                    // Format 5: Name-based matching for faculty users
+                    if (!isAuthorized && currentUserType === 'faculty' && currentUserName && project.supervisor.name) {
+                        isAuthorized = (project.supervisor.name === currentUserName);
+                    }
+                    
+                    // Debug logging for troubleshooting
+                    console.log('Supervisor check debug:', {
+                        currentUser: currentUser,
+                        currentUserName: currentUserName,
+                        currentUserType: currentUserType,
+                        supervisor: project.supervisor,
+                        isAuthorized: isAuthorized
+                    });
+                }
+                
+                // Check if user is the project creator
+                if (!isAuthorized && project.createdBy) {
+                    if (typeof project.createdBy === 'object' && project.createdBy.$oid) {
+                        isAuthorized = (project.createdBy.$oid === currentUser);
+                    } else if (typeof project.createdBy === 'string') {
+                        isAuthorized = (project.createdBy === currentUser);
+                    }
                 }
             }
             
-            // Only show edit button if user is a team member or supervisor
+            // Only show edit and leave buttons if user is a team member or supervisor
             const editBtn = isAuthorized ? `
                 <button id="editProjectBtn" class="btn btn-outline-primary ms-2" data-project-id="${project._id.$oid}">
                     <i class="bi bi-pencil-square"></i>Edit Project
+                </button>
+            ` : '';
+
+            const leaveBtn = isAuthorized ? `
+                <button id="leaveProjectBtn" class="btn btn-outline-danger ms-2" data-project-id="${project._id.$oid}" data-project-name="${project.title}" title="Leave this project and group chat">
+                    <i class="bi bi-box-arrow-left"></i>Leave Project
                 </button>
             ` : '';
             
@@ -4738,6 +6383,7 @@ function createProfileLink($name, $userId, $userType = null) {
                         <h1 class="float-animation display-4">${project.title}</h1>
                         <div class="mb-3 d-flex align-items-center mt-3">
                             ${editBtn}
+                            ${leaveBtn}
                         </div>
                     </div>
                 </div>
@@ -4766,6 +6412,10 @@ function createProfileLink($name, $userId, $userType = null) {
                             <div><strong>Last Updated:</strong> ${formatDate(project.updatedAt)}</div>
                         </div>
                         <div class="meta-item">
+                            <i class="bi bi-calendar-event"></i>
+                            <div><strong>Estimated Completion:</strong> ${project.estimatedCompletionDate ? formatDate(project.estimatedCompletionDate) : 'Not specified'}</div>
+                        </div>
+                        <div class="meta-item">
                             <i class="bi bi-eye"></i>
                             <div><strong>Views:</strong> ${project.stats?.views || '0'}</div>
                         </div>
@@ -4784,6 +6434,81 @@ function createProfileLink($name, $userId, $userType = null) {
                 // Add ripple effect to the button
                 editButton.addEventListener('mousedown', createRipple);
             }
+
+            // Add event listener for the leave button
+            const leaveButton = document.getElementById('leaveProjectBtn');
+            if (leaveButton) {
+                leaveButton.addEventListener('click', function() {
+                    const projectId = this.getAttribute('data-project-id');
+                    const projectName = this.getAttribute('data-project-name');
+                    
+                    // Show confirmation dialog
+                    const confirmMessage = `Are you sure you want to leave "${projectName}"?\n\nThis will:\n• Remove you from the project team\n• Remove you from the group chat\n• You will lose access to all project discussions\n\nThis action cannot be undone.`;
+                    
+                    if (!confirm(confirmMessage)) {
+                        return;
+                    }
+                    
+                    // Disable the button to prevent multiple clicks
+                    this.disabled = true;
+                    const originalContent = this.innerHTML;
+                    this.innerHTML = '<i class="bi bi-hourglass-split"></i>Leaving...';
+                    
+                    // Send leave request to server
+                    const formData = new FormData();
+                    formData.append('projectId', projectId);
+                    
+                    fetch('src/model/leave_project.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Show success message
+                            if (typeof showToast === 'function') {
+                                showToast('success', 'Left Project', data.message || 'You have successfully left the project.');
+                            } else {
+                                alert('You have successfully left the project.');
+                            }
+                            
+                            // Redirect to projects page after a short delay
+                            setTimeout(() => {
+                                window.location.href = 'Research_page.php';
+                            }, 1500);
+                            
+                        } else {
+                            // Show error message
+                            if (typeof showToast === 'function') {
+                                showToast('error', 'Failed to Leave', data.message || 'Failed to leave the project. Please try again.');
+                            } else {
+                                alert(data.message || 'Failed to leave the project. Please try again.');
+                            }
+                            
+                            // Re-enable the button
+                            this.disabled = false;
+                            this.innerHTML = originalContent;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error leaving project:', error);
+                        
+                        // Show error message
+                        if (typeof showToast === 'function') {
+                            showToast('error', 'Error', 'An error occurred while trying to leave the project. Please try again.');
+                        } else {
+                            alert('An error occurred while trying to leave the project. Please try again.');
+                        }
+                        
+                        // Re-enable the button
+                        this.disabled = false;
+                        this.innerHTML = originalContent;
+                    });
+                });
+                
+                // Add ripple effect to the button
+                leaveButton.addEventListener('mousedown', createRipple);
+            }
             
             // Show/hide timeline edit button based on authorization
             const timelineEditBtn = document.getElementById('editTimelineBtn');
@@ -4791,8 +6516,8 @@ function createProfileLink($name, $userId, $userType = null) {
                 if (isAuthorized) {
                     timelineEditBtn.style.display = 'inline-block';
                     timelineEditBtn.addEventListener('click', function() {
-                        // Redirect to edit_project.php with project ID and scroll to timeline section
-                        window.location.href = `edit_project.php?id=${project._id.$oid}#timeline-section`;
+                        // Open timeline edit overlay instead of redirecting
+                        openTimelineEditOverlay(project);
                     });
                     
                     // Add ripple effect to the timeline edit button
@@ -5164,29 +6889,28 @@ function createProfileLink($name, $userId, $userType = null) {
             const timelineEl = document.getElementById('timeline-container');
             
             if (!project.timeline || project.timeline.length === 0) {
-                document.getElementById('project-timeline').style.display = 'none';
+                // Show a polished empty state instead of hiding
+                timelineEl.innerHTML = `
+                    <div class="timeline-empty-state">
+                        <div class="empty-state-icon">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+                        <h4>No Timeline Available</h4>
+                        <p>This project doesn't have a timeline yet. Check back later for updates!</p>
+                    </div>
+                `;
                 return;
             }
             
-            let timelineHTML = '';
-            
             // Sort timeline items by date
             const sortedTimeline = [...project.timeline].sort((a, b) => {
-                // Convert dates to comparable values, defaulting to 0 for invalid dates
                 let dateA, dateB;
-                
                 try {
                     dateA = a.date ? new Date(typeof a.date === 'object' && a.date.$date ? a.date.$date : a.date).getTime() : 0;
-                } catch (e) {
-                    dateA = 0;
-                }
-                
+                } catch (e) { dateA = 0; }
                 try {
                     dateB = b.date ? new Date(typeof b.date === 'object' && b.date.$date ? b.date.$date : b.date).getTime() : 0;
-                } catch (e) {
-                    dateB = 0;
-                }
-                
+                } catch (e) { dateB = 0; }
                 return dateA - dateB;
             });
             
@@ -5196,30 +6920,60 @@ function createProfileLink($name, $userId, $userType = null) {
             const totalItems = sortedTimeline.length;
             const progressPercentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
             
-            // Add progress indicator
-            timelineHTML += `
-                <div class="timeline-progress" id="timeline-progress"></div>
-                <div class="timeline-progress-indicator" id="progress-indicator">
-                    <i class="bi bi-graph-up me-2"></i>
-                    <span id="progress-text">${progressPercentage}% Complete</span>
-                    <span class="ms-2 text-muted">(${completedItems}/${totalItems})</span>
+            // Create the modern timeline HTML
+            let timelineHTML = `
+                <!-- Enhanced Progress Header -->
+                <div class="timeline-progress-header">
+                    <div class="progress-stats">
+                        <div class="progress-circle" data-progress="${progressPercentage}">
+                            <svg class="progress-ring" width="60" height="60">
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"/>
+                                <circle cx="30" cy="30" r="25" fill="none" stroke="var(--primary-color)" stroke-width="3" 
+                                        stroke-dasharray="157" stroke-dashoffset="${157 - (progressPercentage * 157 / 100)}" 
+                                        stroke-linecap="round" class="progress-bar-circle"/>
+                            </svg>
+                            <div class="progress-text">
+                                <span class="progress-number">${progressPercentage}%</span>
                 </div>
+                        </div>
+                        <div class="progress-details">
+                            <h4>Project Progress</h4>
+                            <p>${completedItems} of ${totalItems} milestones completed</p>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-modern" style="width: ${progressPercentage}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Grid -->
+                <div class="timeline-grid">
             `;
             
-            // Display timeline items
+            // Display timeline items in a modern grid format
             sortedTimeline.forEach((item, index) => {
                 const date = formatDate(item.date);
-                const status = getStatusBadge(item.status);
                 const delay = 100 * (index + 1);
                 
                 // Determine status for styling
                 let statusClass = 'pending';
+                let statusIcon = 'bi-clock';
+                let statusText = 'Pending';
+                
                 if (item.status) {
                     const statusLower = item.status.toLowerCase();
                     if (statusLower.includes('completed') || statusLower.includes('done') || statusLower.includes('finished')) {
                         statusClass = 'completed';
+                        statusIcon = 'bi-check-circle-fill';
+                        statusText = 'Completed';
                     } else if (statusLower.includes('progress') || statusLower.includes('active') || statusLower.includes('ongoing')) {
                         statusClass = 'in-progress';
+                        statusIcon = 'bi-play-circle-fill';
+                        statusText = 'In Progress';
+                    } else if (statusLower.includes('delayed') || statusLower.includes('overdue')) {
+                        statusClass = 'delayed';
+                        statusIcon = 'bi-exclamation-triangle-fill';
+                        statusText = 'Delayed';
                     }
                 }
                 
@@ -5238,68 +6992,172 @@ function createProfileLink($name, $userId, $userType = null) {
                 if (titleLower.includes('implementation') || titleLower.includes('deploy')) icon = 'bi-gear';
                 if (titleLower.includes('documentation') || titleLower.includes('document')) icon = 'bi-file-text';
                 
-                // Add enhanced description if available
                 const description = item.description || 'No description available';
-                const truncatedDescription = description.length > 150 ? 
-                    description.substring(0, 150) + '...' : description;
                 
-                // Add duration if available
-                let durationInfo = '';
-                if (item.duration) {
-                    durationInfo = `<div class="timeline-duration mt-2">
-                        <i class="bi bi-stopwatch me-1"></i>
-                        <span class="text-muted">${item.duration}</span>
-                    </div>`;
+                // Build assigned by name for below title
+                let assignedByNameForTitle = '';
+                if (item.assignedBy) {
+                    // Handle both new and legacy format
+                    if (typeof item.assignedBy === 'object' && item.assignedBy !== null) {
+                        const name = item.assignedBy.name || 'Unknown';
+                        const userId = item.assignedBy.id;
+                        const userType = 'faculty'; // Set explicit faculty type for assignedBy
+                        
+                        // Create a unique placeholder for this assigned by name
+                        const placeholderClass = `assigned-by-placeholder-${index}`;
+                        
+                        // Initialize with just the name, will be replaced with link via createProfileLink
+                        assignedByNameForTitle = `<div class="assigned-by-name ${placeholderClass}">by ${name}</div>`;
+                        
+                        // Attempt to create a profile link asynchronously
+                        if (name && (name !== 'Unknown')) {
+                            // Use the async createProfileLink function to fetch faculty profile
+                            createProfileLink(name, userId, userType).then(linkedName => {
+                                // Update all instances of this placeholder with the linked name
+                                document.querySelectorAll(`.${placeholderClass}`).forEach(el => {
+                                    el.innerHTML = `by ${linkedName}`;
+                                });
+                            }).catch(error => {
+                                console.log('Failed to create faculty profile link:', error);
+                            });
+                        }
+                    } else {
+                        // Legacy format - use async method for this too
+                        const assignedByMember = findMemberById(item.assignedBy, project);
+                        const assignedByName = assignedByMember ? assignedByMember.name : item.assignedBy;
+                        
+                        // Create a unique placeholder for this assigned by name
+                        const placeholderClass = `assigned-by-placeholder-${index}`;
+                        
+                        // Initialize with just the name
+                        assignedByNameForTitle = `<div class="assigned-by-name ${placeholderClass}">by ${assignedByName}</div>`;
+                        
+                        // Try to make it a link if it's a faculty member
+                        if (assignedByName && (assignedByName !== 'Unknown')) {
+                            createProfileLink(assignedByName, item.assignedBy, 'faculty').then(linkedName => {
+                                // Update all instances of this placeholder with the linked name
+                                document.querySelectorAll(`.${placeholderClass}`).forEach(el => {
+                                    el.innerHTML = `by ${linkedName}`;
+                                });
+                            }).catch(error => {
+                                console.log('Failed to create faculty profile link:', error);
+                            });
+                        }
+                    }
                 }
                 
-                // Add team members if available
-                let teamInfo = '';
-                if (item.team && item.team.length > 0) {
-                    const teamMembers = item.team.slice(0, 3).join(', ');
-                    const moreMembers = item.team.length > 3 ? ` +${item.team.length - 3} more` : '';
-                    teamInfo = `<div class="timeline-team mt-2">
-                        <i class="bi bi-people-fill me-1"></i>
-                        <span class="text-muted small">${teamMembers}${moreMembers}</span>
-                    </div>`;
+                // Build assigned to info for bottom (only assigned to, no assigned by)
+                let teamAssignmentInfo = '';
+                if (item.assignedTo && Array.isArray(item.assignedTo) && item.assignedTo.length > 0) {
+                    teamAssignmentInfo = '<div class="timeline-assignments-bottom">';
+                    
+                    // Create placeholders for all assignees
+                    const assigneeData = item.assignedTo.map((assignee, idx) => {
+                        if (typeof assignee === 'object' && assignee !== null) {
+                            // New format
+                            const name = assignee.name || 'Unknown';
+                            const userId = assignee.id;
+                            // Default to student but allow override if specified
+                            const userType = assignee.type || 'student'; 
+                            
+                            return {
+                                name,
+                                userId,
+                                userType,
+                                placeholder: `assignee-${index}-${idx}`
+                            };
+                        } else {
+                            // Legacy format
+                            const assignedToMember = findMemberById(assignee, project);
+                            const name = assignedToMember ? assignedToMember.name : assignee;
+                            
+                            return {
+                                name,
+                                userId: assignee,
+                                userType: null, // Will be determined automatically
+                                placeholder: `assignee-${index}-${idx}`
+                            };
+                        }
+                    });
+                    
+                    // Generate initial placeholder HTML
+                    const assignedToNames = assigneeData.map(data => data.name);
+                    
+                    let assignmentRow = '<div class="assignment-row-inline">';
+                    assignmentRow += `
+                        <div class="assignment-inline">
+                            <span class="assignment-label">Assigned to:</span>
+                            <div class="assignment-badges-inline">
+                    `;
+                    
+                    assigneeData.forEach((data, idx) => {
+                        assignmentRow += `
+                            <span class="assignment-badge assigned-to-badge ${data.placeholder}">
+                                <i class="bi bi-person-check-fill"></i> ${data.name}
+                            </span>
+                        `;
+                        
+                        // Asynchronously update with profile links
+                        if (data.name && (data.name !== 'Unknown')) {
+                            createProfileLink(data.name, data.userId, data.userType).then(linkedName => {
+                                // Update all instances of this placeholder with the linked name
+                                document.querySelectorAll(`.${data.placeholder}`).forEach(el => {
+                                    el.innerHTML = `<i class="bi bi-person-check-fill"></i> ${linkedName}`;
+                                });
+                            }).catch(error => {
+                                console.log(`Failed to create profile link for ${data.name}:`, error);
+                            });
+                        }
+                    });
+                    
+                    assignmentRow += '</div></div>';
+                    assignmentRow += '</div>';
+                    teamAssignmentInfo += assignmentRow + '</div>';
                 }
                 
                 timelineHTML += `
-                    <div class="timeline-item timeline-right" 
-                         data-status="${statusClass}"
-                         data-aos="fade-left" 
+                    <div class="timeline-milestone ${statusClass}" 
+                         data-aos="fade-up" 
                          data-aos-delay="${delay}"
                          data-timeline-index="${index}"
                          onclick="highlightTimelineItem(${index})">
-                        <div class="timeline-content">
-                            <div class="timeline-title-row">
-                                <div class="timeline-title">
-                                    <i class="bi ${icon} timeline-icon"></i>
-                                    <span class="timeline-title-text">${item.title}</span>
+                        <div class="milestone-icon">
+                            <i class="bi ${icon}"></i>
                                 </div>
-                                <span class="timeline-status">${status}</span>
+                        <div class="milestone-content">
+                            <div class="milestone-header">
+                                <div class="milestone-title-section">
+                                    <h5 class="milestone-title">${item.title}</h5>
+                                    ${assignedByNameForTitle}
                             </div>
-                            <p class="timeline-description mb-2" title="${description}">
-                                ${truncatedDescription}
-                                ${description.length > 150 ? 
-                                    `<button class="btn btn-link btn-sm p-0 ms-1" onclick="expandDescription(event, ${index})">
-                                        <i class="bi bi-chevron-down"></i>
-                                    </button>` : ''
-                                }
-                            </p>
-                            <div class="timeline-date">
-                                <i class="bi bi-clock"></i>${date}
+                                <div class="milestone-date">
+                                    <i class="bi bi-calendar3"></i>
+                                    <span>${date}</span>
+                                </div>
+                                <div class="milestone-status">
+                                    <i class="bi ${statusIcon}"></i>
+                                    <span>${statusText}</span>
                             </div>
-                            ${durationInfo}
-                            ${teamInfo}
                         </div>
+                            <p class="milestone-description">${description}</p>
+                            <div class="milestone-meta">
+                                ${item.duration ? `
+                                    <div class="milestone-duration">
+                                        <i class="bi bi-stopwatch"></i>
+                                        <span>${item.duration}</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            ${teamAssignmentInfo}
+                        </div>
+                        <div class="milestone-connector"></div>
                     </div>
                 `;
             });
             
-            // Set the HTML content before adding the date labels
-            timelineEl.innerHTML = timelineHTML;
+            timelineHTML += '</div>'; // Close timeline-grid
             
-            // Add labels for start and end dates if available
+            // Add project duration summary
             if (sortedTimeline.length > 0) {
                 const firstItem = sortedTimeline[0];
                 const lastItem = sortedTimeline[sortedTimeline.length - 1];
@@ -5308,36 +7166,127 @@ function createProfileLink($name, $userId, $userType = null) {
                     const startDate = formatDate(firstItem.date);
                     const endDate = formatDate(lastItem.date);
                     
-                    // Calculate total project duration
                     const startDateObj = new Date(typeof firstItem.date === 'object' && firstItem.date.$date ? 
                         firstItem.date.$date : firstItem.date);
                     const endDateObj = new Date(typeof lastItem.date === 'object' && lastItem.date.$date ? 
                         lastItem.date.$date : lastItem.date);
                     const durationDays = Math.ceil((endDateObj - startDateObj) / (1000 * 60 * 60 * 24));
-                    const durationText = durationDays > 0 ? ` (${durationDays} days)` : '';
                     
-                    // Add a tooltip or label for the start marker
-                    const startMarker = document.createElement('div');
-                    startMarker.className = 'timeline-marker-label timeline-start-label';
-                    startMarker.innerHTML = `
-                        <i class="bi bi-play-circle me-1"></i>
-                        <strong>Project Started:</strong> ${startDate}
+                    timelineHTML += `
+                        <div class="timeline-summary">
+                            <div class="summary-item">
+                                <i class="bi bi-play-circle"></i>
+                                <span>Started: ${startDate}</span>
+                            </div>
+                            <div class="summary-item">
+                                <i class="bi bi-flag-checkered"></i>
+                                <span>Latest: ${endDate}</span>
+                            </div>
+                            ${durationDays > 0 ? `
+                                <div class="summary-item">
+                                    <i class="bi bi-hourglass-split"></i>
+                                    <span>Duration: ${durationDays} days</span>
+                                </div>
+                            ` : ''}
+                        </div>
                     `;
-                    timelineEl.insertBefore(startMarker, timelineEl.firstChild);
-                    
-                    // Add a tooltip or label for the end marker
-                    const endMarker = document.createElement('div');
-                    endMarker.className = 'timeline-marker-label timeline-end-label';
-                    endMarker.innerHTML = `
-                        <i class="bi bi-flag-fill me-1"></i>
-                        <strong>Last Update:</strong> ${endDate}${durationText}
-                    `;
-                    timelineEl.appendChild(endMarker);
                 }
             }
             
+            timelineEl.innerHTML = timelineHTML;
+            
             // Initialize timeline enhancements
             initTimelineEnhancements();
+        }
+        
+        // Helper function to find member by ID
+        function findMemberById(memberId, projectData) {
+            if (!memberId || !projectData) return null;
+            
+            // Handle the new format (object with id and name)
+            if (typeof memberId === 'object' && memberId !== null) {
+                if (memberId.id) {
+                    // If we have an ID, try to find the actual member object for additional info
+                    const foundMember = findMemberByActualId(memberId.id, projectData);
+                    if (foundMember) return foundMember;
+                }
+                
+                // If member not found by ID or no ID, return the object itself as it has name
+                return memberId;
+            }
+            
+            // Legacy format - check project members first
+            if (projectData.members) {
+                const member = projectData.members.find(member => {
+                    const memberUserId = member.userId ? 
+                        (member.userId.$oid || member.userId) : null;
+                    return memberUserId === memberId || member.name === memberId;
+                });
+                
+                if (member) return member;
+            }
+            
+            // Check supervisor
+            if (projectData.supervisor) {
+                const supervisorUserId = projectData.supervisor.userId ? 
+                    (projectData.supervisor.userId.$oid || projectData.supervisor.userId) : null;
+                
+                if (supervisorUserId === memberId || projectData.supervisor.name === memberId) {
+                    return projectData.supervisor;
+                }
+            }
+            
+            return null;
+        }
+        
+        // Helper function to find member by their actual ID
+        function findMemberByActualId(memberId, projectData) {
+            if (!memberId || !projectData) return null;
+            
+            // Check project members first
+            if (projectData.members) {
+                const member = projectData.members.find(member => {
+                    const memberUserId = member.userId ? 
+                        (member.userId.$oid || member.userId) : null;
+                    return memberUserId === memberId;
+                });
+                
+                if (member) return member;
+            }
+            
+            // Check supervisor
+            if (projectData.supervisor) {
+                const supervisorUserId = projectData.supervisor.userId ? 
+                    (projectData.supervisor.userId.$oid || projectData.supervisor.userId) : null;
+                
+                if (supervisorUserId === memberId) {
+                    return projectData.supervisor;
+                }
+            }
+            
+            return null;
+        }
+        
+        // Helper function to create a client-side profile link
+        function createClientSideProfileLink(name, userId, userType) {
+            if (!userId) return name;
+            
+            let profileUrl = '';
+            if (userType === 'student') {
+                profileUrl = `Student_Profile.php?id=${userId}`;
+            } else if (userType === 'faculty') {
+                profileUrl = `Faculty_Profile.php?id=${userId}`;
+            } else {
+                // Try to determine the type based on the project data
+                const profileInfo = getUserProfileInfo(userId);
+                if (profileInfo && profileInfo.exists) {
+                    profileUrl = profileInfo.url;
+                } else {
+                    return name; // No profile link possible
+                }
+            }
+            
+            return `<a href="${profileUrl}" class="profile-link" title="View profile">${name}</a>`;
         }
         
         // Add timeline enhancement functions
@@ -5484,8 +7433,100 @@ function createProfileLink($name, $userId, $userType = null) {
                     transition: opacity 0.3s ease;
                 }
                 
+                        .timeline-assignment {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+            border-left: 2px solid rgba(76, 201, 240, 0.3);
+            padding-left: 8px;
+            margin-top: 8px;
+        }
+        
+        /* New CSS for inline assignment layout */
+        .timeline-assignments-bottom {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .assignment-row-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+        }
+        
+        .assignment-inline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .assignment-badges-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        
+        .assignment-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+        
+        .assignment-badge {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            white-space: nowrap;
+        }
+        
+        .assigned-by-badge {
+            background-color: rgba(76, 201, 240, 0.2);
+            color: var(--accent-color);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
+        
+        .assigned-to-badge {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        /* Assigned by name below title */
+        .assigned-by-name {
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            margin-top: 4px;
+            opacity: 0.8;
+            font-style: italic;
+        }
+                }
+                
+                .timeline-assignment .assignment-by {
+                    margin-bottom: 4px;
+                }
+                
+                .timeline-assignment .assignment-to {
+                    /* Styling handled by Bootstrap classes in JavaScript */
+                }
+                
+                .timeline-assignment .text-primary {
+                    color: #2563eb !important;
+                }
+                
+                .timeline-assignment .text-success {
+                    color: #10b981 !important;
+                }
+                
+                .timeline-assignment i {
+                    font-size: 0.75rem;
+                }
+                
                 .timeline-content:hover .timeline-duration,
-                .timeline-content:hover .timeline-team {
+                .timeline-content:hover .timeline-team,
+                .timeline-content:hover .timeline-assignment {
                     opacity: 1;
                 }
                 
@@ -5959,6 +8000,731 @@ function createProfileLink($name, $userId, $userType = null) {
             });
         }
 
+        // Timeline Edit Overlay Functions
+        let currentProject = null;
+        let editingTimelineItems = [];
+        let currentEditingItemIndex = -1;
+
+        /**
+         * Open the timeline edit overlay
+         * @param {Object} project - The project object containing timeline data
+         */
+        function openTimelineEditOverlay(project) {
+            currentProject = project;
+            editingTimelineItems = project.timeline ? [...project.timeline] : [];
+            
+            const overlay = document.getElementById('timelineEditOverlay');
+            overlay.style.display = 'flex';
+            
+            // Populate the timeline items
+            populateTimelineItems();
+            
+            // Add event listener for adding new timeline items
+            const addBtn = document.getElementById('addTimelineItemBtn');
+            addBtn.onclick = addNewTimelineItem;
+            
+            // Prevent body scroll when overlay is open
+            document.body.style.overflow = 'hidden';
+        }
+
+        /**
+         * Close the timeline edit overlay
+         */
+        function closeTimelineEditOverlay() {
+            const overlay = document.getElementById('timelineEditOverlay');
+            overlay.style.display = 'none';
+            
+            // Restore body scroll
+            document.body.style.overflow = 'auto';
+            
+            // Clear current editing data
+            currentProject = null;
+            editingTimelineItems = [];
+            currentEditingItemIndex = -1;
+        }
+
+        /**
+         * Populate the timeline items in the overlay
+         */
+        function populateTimelineItems() {
+            const container = document.getElementById('timelineItemsList');
+            container.innerHTML = '';
+            
+            if (editingTimelineItems.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted">No timeline items yet. Click "Add Timeline Item" to get started.</p>';
+                return;
+            }
+            
+            editingTimelineItems.forEach((item, index) => {
+                const itemEl = createTimelineItemElement(item, index);
+                container.appendChild(itemEl);
+            });
+        }
+
+        /**
+         * Create a timeline item element for the overlay
+         * @param {Object} item - Timeline item data
+         * @param {number} index - Item index
+         * @returns {HTMLElement} - The timeline item element
+         */
+        function createTimelineItemElement(item, index) {
+            const div = document.createElement('div');
+            div.className = `timeline-item ${(item.status || 'planned').toLowerCase().replace(' ', '-')}`;
+            div.dataset.index = index;
+            
+            const statusClasses = {
+                'Completed': 'completed status-completed',
+                'In Progress': 'in-progress status-in-progress',
+                'Planned': 'planned status-planned',
+                'Delayed': 'delayed status-delayed'
+            };
+            
+            const statusClass = statusClasses[item.status] || 'planned status-planned';
+            const formattedDate = formatDisplayDate(item.date);
+            
+            // Generate assignment display text
+            let assignmentInfo = '';
+            
+            // Ensure backward compatibility - handle undefined assignment fields
+            const assignedBy = item.assignedBy || '';
+            const assignedTo = item.assignedTo || [];
+            
+            if (assignedBy || (Array.isArray(assignedTo) && assignedTo.length > 0)) {
+                assignmentInfo = '<div class="assignment-info mt-2">';
+                
+                if (assignedBy) {
+                    const assignedByMember = findMemberById(assignedBy);
+                    const assignedByName = assignedByMember ? assignedByMember.name : assignedBy;
+                    assignmentInfo += `<span class="text-muted small me-3"><i class="bi bi-person-plus"></i> Assigned by: <strong>${assignedByName}</strong></span>`;
+                }
+                
+                if (Array.isArray(assignedTo) && assignedTo.length > 0) {
+                    const assignedToNames = assignedTo.map(id => {
+                        const member = findMemberById(id);
+                        return member ? member.name : id;
+                    }).join(', ');
+                    assignmentInfo += `<span class="text-muted small"><i class="bi bi-person-check"></i> Assigned to: <strong>${assignedToNames}</strong></span>`;
+                }
+                
+                assignmentInfo += '</div>';
+            }
+            
+            div.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="timeline-date">
+                        <i class="bi bi-calendar3"></i>
+                        ${formattedDate}
+                        <span class="status-badge ${statusClass}">${item.status || 'Planned'}</span>
+                    </div>
+                    <div class="timeline-controls">
+                        <button type="button" class="btn btn-sm btn-outline-primary edit-timeline" onclick="editTimelineItem(${index})">
+                            <i class="bi bi-pencil-fill"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger delete-timeline" onclick="deleteTimelineItem(${index})">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </div>
+                </div>
+                <h6 class="mb-2">${item.title || 'Untitled'}</h6>
+                <p class="mb-2 small text-muted">${item.description || 'No description'}</p>
+                ${assignmentInfo}
+            `;
+            
+            return div;
+        }
+
+        /**
+         * Add a new timeline item
+         */
+        function addNewTimelineItem() {
+            const now = new Date();
+            const formattedDate = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+            
+            const newItem = {
+                title: '',
+                description: '',
+                date: formattedDate,
+                status: 'Planned',
+                assignedBy: '',
+                assignedTo: []
+            };
+            
+            editingTimelineItems.push(newItem);
+            currentEditingItemIndex = editingTimelineItems.length - 1;
+            
+            // Open the edit modal for the new item
+            openTimelineItemEditModal(currentEditingItemIndex);
+        }
+        
+        /**
+         * Helper function to get current project members
+         */
+        function getMembersData() {
+            const members = [];
+            
+            // Get members from the current project
+            if (currentProject && currentProject.members) {
+                currentProject.members.forEach(member => {
+                    if (member.name) {
+                        members.push({
+                            name: member.name,
+                            role: member.role || 'Team Member',
+                            userId: member.userId || null
+                        });
+                    }
+                });
+            }
+            
+            return members;
+        }
+        
+        /**
+         * Helper function to find member by ID or name
+         */
+        function findMemberById(memberId, projectData) {
+            if (!memberId || !projectData) return null;
+            
+            // Handle the new format (object with id and name)
+            if (typeof memberId === 'object' && memberId !== null) {
+                if (memberId.id) {
+                    // If we have an ID, try to find the actual member object for additional info
+                    const foundMember = findMemberByActualId(memberId.id, projectData);
+                    if (foundMember) return foundMember;
+                }
+                
+                // If member not found by ID or no ID, return the object itself as it has name
+                return memberId;
+            }
+            
+            // Legacy format - check project members first
+            if (projectData.members) {
+                const member = projectData.members.find(member => {
+                    const memberUserId = member.userId ? 
+                        (member.userId.$oid || member.userId) : null;
+                    return memberUserId === memberId || member.name === memberId;
+                });
+                
+                if (member) return member;
+            }
+            
+            // Check supervisor
+            if (projectData.supervisor) {
+                const supervisorUserId = projectData.supervisor.userId ? 
+                    (projectData.supervisor.userId.$oid || projectData.supervisor.userId) : null;
+                
+                if (supervisorUserId === memberId || projectData.supervisor.name === memberId) {
+                    return projectData.supervisor;
+                }
+            }
+            
+            return null;
+        }
+        
+        // Helper function to find member by their actual ID
+        function findMemberByActualId(memberId, projectData) {
+            if (!memberId || !projectData) return null;
+            
+            // Check project members first
+            if (projectData.members) {
+                const member = projectData.members.find(member => {
+                    const memberUserId = member.userId ? 
+                        (member.userId.$oid || member.userId) : null;
+                    return memberUserId === memberId;
+                });
+                
+                if (member) return member;
+            }
+            
+            // Check supervisor
+            if (projectData.supervisor) {
+                const supervisorUserId = projectData.supervisor.userId ? 
+                    (projectData.supervisor.userId.$oid || projectData.supervisor.userId) : null;
+                
+                if (supervisorUserId === memberId) {
+                    return projectData.supervisor;
+                }
+            }
+            
+            return null;
+        }
+        
+        // Helper function to create a client-side profile link
+        function createClientSideProfileLink(name, userId, userType) {
+            if (!userId) return name;
+            
+            let profileUrl = '';
+            if (userType === 'student') {
+                profileUrl = `Student_Profile.php?id=${userId}`;
+            } else if (userType === 'faculty') {
+                profileUrl = `Faculty_Profile.php?id=${userId}`;
+            } else {
+                // Try to determine the type based on the project data
+                const profileInfo = getUserProfileInfo(userId);
+                if (profileInfo && profileInfo.exists) {
+                    profileUrl = profileInfo.url;
+                } else {
+                    return name; // No profile link possible
+                }
+            }
+            
+            return `<a href="${profileUrl}" class="profile-link" title="View profile">${name}</a>`;
+        }
+
+        /**
+         * Edit a timeline item
+         * @param {number} index - Item index
+         */
+        function editTimelineItem(index) {
+            currentEditingItemIndex = index;
+            openTimelineItemEditModal(index);
+        }
+
+        /**
+         * Delete a timeline item
+         * @param {number} index - Item index
+         */
+        function deleteTimelineItem(index) {
+            if (confirm('Are you sure you want to delete this timeline item?')) {
+                editingTimelineItems.splice(index, 1);
+                populateTimelineItems();
+            }
+        }
+
+                 /**
+          * Open the timeline item edit modal
+          * @param {number} index - Item index
+          */
+         function openTimelineItemEditModal(index) {
+             const item = editingTimelineItems[index];
+             const modalElement = document.getElementById('timelineItemEditModal');
+             
+             // Ensure the modal has the correct z-index to stay above timeline overlay
+             modalElement.style.zIndex = '10050';
+             
+             const modal = new bootstrap.Modal(modalElement, {
+                 backdrop: true,
+                 keyboard: true,
+                 focus: true
+             });
+             
+             // Populate form fields
+             document.getElementById('timelineItemTitle').value = item.title || '';
+             document.getElementById('timelineItemDescription').value = item.description || '';
+             document.getElementById('timelineItemDate').value = formatMongoDate(item.date) || new Date().toISOString().split('T')[0];
+             document.getElementById('timelineItemStatus').value = item.status || 'Planned';
+             
+             // Populate assignment dropdowns
+             populateAssignmentDropdowns();
+             
+             // Set assignment values - if no assignedBy exists, try to auto-select current user
+             let assignedByValue = item.assignedBy || '';
+             if (!assignedByValue) {
+                 // Try to find current user in the dropdown options
+                 const assignedBySelect = document.getElementById('timelineItemAssignedBy');
+                 const currentUserOption = Array.from(assignedBySelect.options).find(option => 
+                     option.value && option.value !== ''
+                 );
+                 if (currentUserOption) {
+                     assignedByValue = currentUserOption.value;
+                 }
+             }
+             document.getElementById('timelineItemAssignedBy').value = assignedByValue;
+             
+             // Handle multiple assignees for "Assigned To" with backward compatibility
+             const assignedToSelect = document.getElementById('timelineItemAssignedTo');
+             const assignedToArray = Array.isArray(item.assignedTo) ? item.assignedTo : (item.assignedTo ? [item.assignedTo] : []);
+             
+             if (Array.isArray(assignedToArray)) {
+                 Array.from(assignedToSelect.options).forEach(option => {
+                     option.selected = assignedToArray.includes(option.value);
+                 });
+             } else if (assignedToArray) {
+                 // Handle single value (backward compatibility)
+                 Array.from(assignedToSelect.options).forEach(option => {
+                     option.selected = option.value === assignedToArray;
+                 });
+             }
+             
+             // Show the modal
+             modal.show();
+             
+             // After modal is shown, ensure backdrop has correct z-index to stay above timeline overlay
+             modalElement.addEventListener('shown.bs.modal', function() {
+                 const backdrop = document.querySelector('.modal-backdrop:last-child');
+                 if (backdrop) {
+                     backdrop.style.zIndex = '10049';
+                 }
+             }, { once: true });
+         }
+
+                 /**
+          * Populate assignment dropdowns with project members
+          */
+         function populateAssignmentDropdowns() {
+             const assignedBySelect = document.getElementById('timelineItemAssignedBy');
+             const assignedToSelect = document.getElementById('timelineItemAssignedTo');
+             
+             if (!assignedBySelect || !assignedToSelect) return;
+             
+             // Clear existing options (except the first default option)
+             assignedBySelect.innerHTML = '<option value="">Select member (optional)</option>';
+             assignedToSelect.innerHTML = '<option value="">Select members (optional)</option>';
+             
+             // Get current project members
+             const members = getMembersData();
+             
+             // Add all team members to "Assigned By" dropdown, but only students to "Assigned To"
+             members.forEach(member => {
+                 if (member.name && member.name.trim()) {
+                     // Use student ID if available, otherwise use member name
+                     const optionValue = (member.userId && member.userId.$oid) ? member.userId.$oid : member.name;
+                     const optionText = `${member.name}${member.role ? ' (' + member.role + ')' : ''}`;
+                     
+                     // Add all members to "Assigned By" dropdown
+                     const assignedByOption = new Option(optionText, optionValue);
+                     assignedBySelect.add(assignedByOption);
+                     
+                     // Check if the member is a student (not supervisor/faculty) for "Assigned To"
+                     const isStudent = !member.role || 
+                                      (member.role.toLowerCase() !== 'supervisor' && 
+                                       member.role.toLowerCase() !== 'faculty' &&
+                                       member.role.toLowerCase() !== 'creator/supervisor');
+                     
+                     // Only add students to "Assigned To" dropdown
+                     if (isStudent) {
+                         const assignedToOption = new Option(optionText, optionValue);
+                         assignedToSelect.add(assignedToOption);
+                     }
+                 }
+             });
+             
+             // Add supervisor to "Assigned By" dropdown
+             if (currentProject && currentProject.supervisor && currentProject.supervisor.name) {
+                 const supervisor = currentProject.supervisor;
+                 const supervisorValue = supervisor.userId ? 
+                     (supervisor.userId.$oid || supervisor.userId) : supervisor.name;
+                 const supervisorText = `${supervisor.name} (Supervisor)`;
+                 
+                 const supervisorByOption = new Option(supervisorText, supervisorValue);
+                 assignedBySelect.add(supervisorByOption);
+             }
+         }
+
+         /**
+          * Save the current timeline item being edited
+          */
+                  function saveTimelineItem() {
+             const index = currentEditingItemIndex;
+             if (index === -1) return;
+             
+             const title = document.getElementById('timelineItemTitle').value.trim();
+             const description = document.getElementById('timelineItemDescription').value.trim();
+             const date = document.getElementById('timelineItemDate').value;
+             const status = document.getElementById('timelineItemStatus').value;
+             const assignedBy = document.getElementById('timelineItemAssignedBy').value;
+             
+             // Get multiple selected values for "Assigned To"
+             const assignedToSelect = document.getElementById('timelineItemAssignedTo');
+             const assignedTo = Array.from(assignedToSelect.selectedOptions).map(option => option.value).filter(val => val !== '');
+             
+             // Validation
+             if (!title || !date) {
+                 if (!title) document.getElementById('timelineItemTitle').classList.add('is-invalid');
+                 if (!date) document.getElementById('timelineItemDate').classList.add('is-invalid');
+                 return;
+             }
+             
+             // Remove validation classes
+             document.getElementById('timelineItemTitle').classList.remove('is-invalid');
+             document.getElementById('timelineItemDate').classList.remove('is-invalid');
+             
+             // Update the item with proper date format
+             editingTimelineItems[index] = {
+                 title,
+                 description,
+                 date,
+                 status,
+                 assignedBy,
+                 assignedTo
+             };
+             
+             // Close modal and refresh display
+             const modal = bootstrap.Modal.getInstance(document.getElementById('timelineItemEditModal'));
+            modal.hide();
+            populateTimelineItems();
+            
+            currentEditingItemIndex = -1;
+        }
+
+        /**
+         * Helper function to get current project members data
+         */
+        function getMembersData() {
+            const members = [];
+            
+            // Get members from the current project
+            if (currentProject && currentProject.members) {
+                currentProject.members.forEach(member => {
+                    if (member.name) {
+                        members.push({
+                            name: member.name,
+                            role: member.role || 'Team Member',
+                            userId: member.userId || null
+                        });
+                    }
+                });
+            }
+            
+            return members;
+        }
+
+        /**
+         * Helper function to find member by ID or name - Enhanced version from edit_project.php
+         */
+        function findMemberById(memberId, projectData) {
+            if (!memberId || !projectData) return null;
+            
+            // Handle the new format (object with id and name)
+            if (typeof memberId === 'object' && memberId !== null) {
+                if (memberId.id) {
+                    // If we have an ID, try to find the actual member object for additional info
+                    const foundMember = findMemberByActualId(memberId.id, projectData);
+                    if (foundMember) return foundMember;
+                }
+                
+                // If member not found by ID or no ID, return the object itself as it has name
+                return memberId;
+            }
+            
+            // Legacy format - check project members first
+            if (projectData.members) {
+                const member = projectData.members.find(member => {
+                    const memberUserId = member.userId ? 
+                        (member.userId.$oid || member.userId) : null;
+                    return memberUserId === memberId || member.name === memberId;
+                });
+                
+                if (member) return member;
+            }
+            
+            // Check supervisor
+            if (projectData.supervisor) {
+                const supervisorUserId = projectData.supervisor.userId ? 
+                    (projectData.supervisor.userId.$oid || projectData.supervisor.userId) : null;
+                
+                if (supervisorUserId === memberId || projectData.supervisor.name === memberId) {
+                    return projectData.supervisor;
+                }
+            }
+            
+            return null;
+        }
+        
+        // Helper function to find member by their actual ID
+        function findMemberByActualId(memberId, projectData) {
+            if (!memberId || !projectData) return null;
+            
+            // Check project members first
+            if (projectData.members) {
+                const member = projectData.members.find(member => {
+                    const memberUserId = member.userId ? 
+                        (member.userId.$oid || member.userId) : null;
+                    return memberUserId === memberId;
+                });
+                
+                if (member) return member;
+            }
+            
+            // Check supervisor
+            if (projectData.supervisor) {
+                const supervisorUserId = projectData.supervisor.userId ? 
+                    (projectData.supervisor.userId.$oid || projectData.supervisor.userId) : null;
+                
+                if (supervisorUserId === memberId) {
+                    return projectData.supervisor;
+                }
+            }
+            
+            return null;
+        }
+        
+        // Helper function to create a client-side profile link
+        function createClientSideProfileLink(name, userId, userType) {
+            if (!userId) return name;
+            
+            let profileUrl = '';
+            if (userType === 'student') {
+                profileUrl = `Student_Profile.php?id=${userId}`;
+            } else if (userType === 'faculty') {
+                profileUrl = `Faculty_Profile.php?id=${userId}`;
+            } else {
+                // Try to determine the type based on the project data
+                const profileInfo = getUserProfileInfo(userId);
+                if (profileInfo && profileInfo.exists) {
+                    profileUrl = profileInfo.url;
+                } else {
+                    return name; // No profile link possible
+                }
+            }
+            
+            return `<a href="${profileUrl}" class="profile-link" title="View profile">${name}</a>`;
+        }
+
+        /**
+         * Populate assignment dropdowns with project members
+         */
+        function populateAssignmentDropdowns() {
+            const assignedBySelect = document.getElementById('timelineItemAssignedBy');
+            const assignedToSelect = document.getElementById('timelineItemAssignedTo');
+            
+            if (!assignedBySelect || !assignedToSelect) return;
+            
+            // Clear existing options (except the first default option)
+            assignedBySelect.innerHTML = '<option value="">Select member (optional)</option>';
+            assignedToSelect.innerHTML = '<option value="">Select members (optional)</option>';
+            
+            // Get current project members
+            const members = getMembersData();
+            
+            // Add all team members to "Assigned By" dropdown, but only students to "Assigned To"
+            members.forEach(member => {
+                if (member.name && member.name.trim()) {
+                    // Use member ID if available, otherwise use member name
+                    const optionValue = (member.userId && member.userId.$oid) ? member.userId.$oid : member.name;
+                    const optionText = `${member.name}${member.role ? ' (' + member.role + ')' : ''}`;
+                
+                    // Add all members to "Assigned By" dropdown
+                    const assignedByOption = new Option(optionText, optionValue);
+                    assignedBySelect.add(assignedByOption);
+                
+                    // Check if the member is a student (not supervisor/faculty) for "Assigned To"
+                    const isStudent = !member.role || 
+                                     (member.role.toLowerCase() !== 'supervisor' && 
+                                      member.role.toLowerCase() !== 'faculty' &&
+                                      member.role.toLowerCase() !== 'creator/supervisor');
+                    
+                    // Only add students to "Assigned To" dropdown
+                    if (isStudent) {
+                        const assignedToOption = new Option(optionText, optionValue);
+                        assignedToSelect.add(assignedToOption);
+                    }
+                }
+            });
+            
+            // Add supervisor to "Assigned By" dropdown
+            if (currentProject && currentProject.supervisor && currentProject.supervisor.name) {
+                const supervisorValue = (currentProject.supervisor.userId && currentProject.supervisor.userId.$oid) ? 
+                                       currentProject.supervisor.userId.$oid : currentProject.supervisor.name;
+                const supervisorText = `${currentProject.supervisor.name} (Supervisor)`;
+                
+                const supervisorByOption = new Option(supervisorText, supervisorValue);
+                assignedBySelect.add(supervisorByOption);
+            }
+        }
+
+        /**
+         * Save all timeline changes back to the server
+         */
+        async function saveTimelineChanges() {
+            if (!currentProject) return;
+            
+            // Show loading state
+            const saveBtn = document.querySelector('.timeline-overlay-footer .btn-primary');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+            
+            try {
+                const formData = new FormData();
+                formData.append('project_id', currentProject._id.$oid);
+                formData.append('timeline', JSON.stringify(editingTimelineItems));
+                
+                const response = await fetch('src/model/update_timeline.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Update the current project's timeline
+                    currentProject.timeline = editingTimelineItems;
+                    
+                    // Refresh the timeline display on the page
+                    renderTimeline(currentProject);
+                    
+                    // Close the overlay
+                    closeTimelineEditOverlay();
+                    
+                    // Show success message
+                    showToast('Timeline updated successfully!', 'success');
+                } else {
+                    throw new Error(result.message || 'Failed to update timeline');
+                }
+            } catch (error) {
+                console.error('Error saving timeline:', error);
+                showToast('Error saving timeline: ' + error.message, 'danger');
+                
+                // Reset button state
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalText;
+            }
+        }
+
+        /**
+         * Helper function to format MongoDB date for display
+         * @param {Object|string} dateObj - MongoDB date object or ISO string
+         * @returns {string} - Formatted date string
+         */
+        function formatDisplayDate(dateObj) {
+            if (!dateObj) return 'No date';
+            
+            let dateStr;
+            if (typeof dateObj === 'object' && dateObj.$date) {
+                dateStr = dateObj.$date;
+            } else if (typeof dateObj === 'string') {
+                dateStr = dateObj;
+            } else {
+                return 'Invalid date';
+            }
+            
+            try {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            } catch (error) {
+                return 'Invalid date';
+            }
+        }
+
+        /**
+         * Helper function to format MongoDB date for input field
+         * @param {Object|string} dateObj - MongoDB date object or ISO string
+         * @returns {string} - Date string in YYYY-MM-DD format
+         */
+        function formatMongoDate(dateObj) {
+            if (!dateObj) return '';
+            
+            let dateStr;
+            if (typeof dateObj === 'object' && dateObj.$date) {
+                dateStr = dateObj.$date;
+            } else if (typeof dateObj === 'string') {
+                dateStr = dateObj;
+            } else {
+                return '';
+            }
+            
+            try {
+                const date = new Date(dateStr);
+                return date.toISOString().split('T')[0];
+            } catch (error) {
+                return '';
+            }
+        }
+
         /**
          * Show a toast notification
          * @param {string} message - The message to display
@@ -6361,7 +9127,27 @@ function createProfileLink($name, $userId, $userType = null) {
     setTimeout(() => {
         improveFileLayout();
     }, 1000);
+    
+    // Function to refresh the project timeline after edits
+    function refreshProjectTimeline() {
+        // Reload the project data and update the timeline display
+        if (currentProjectId) {
+            fetchProjectData(currentProjectId);
+            
+            // Show a subtle notification
+            const timelineSection = document.getElementById('timeline-section');
+            if (timelineSection) {
+                timelineSection.classList.add('highlight-update');
+                setTimeout(() => {
+                    timelineSection.classList.remove('highlight-update');
+                }, 2000);
+            }
+        }
+    }
     </script>
+    
+    <!-- Timeline Editor Overlay -->
+    <?php include 'timeline_editor_overlay.php'; ?>
     
 </body>
 </html> 

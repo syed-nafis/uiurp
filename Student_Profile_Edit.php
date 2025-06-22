@@ -269,6 +269,28 @@ $student = json_decode(json_encode($studentData), true);
             color: var(--text-secondary);
         }
 
+        /* Light theme file input styling */
+        [data-theme="light"] .form-control[type="file"] {
+            background: var(--bg-tertiary);
+            border: 2px dashed var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .form-control[type="file"]:hover {
+            border-color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        [data-theme="light"] .form-control[type="file"]:focus {
+            border-color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        /* Light theme remove button styling */
+        [data-theme="light"] .remove-btn {
+            border-color: var(--bg-primary);
+        }
+
         /* File Input */
         .file-upload-area {
             border: 2px dashed var(--border-color);
@@ -282,6 +304,67 @@ $student = json_decode(json_encode($studentData), true);
         .file-upload-area:hover {
             border-color: var(--accent-primary);
             background: rgba(59, 130, 246, 0.05);
+        }
+
+        /* Custom file input styling - Modern dashed border style */
+        .form-control[type="file"] {
+            position: relative;
+            background: var(--bg-tertiary);
+            border: 2px dashed var(--border-color);
+            color: var(--text-secondary);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .form-control[type="file"]:hover {
+            border-color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .form-control[type="file"]:focus {
+            border-color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.05);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Style the file input button */
+        .form-control[type="file"]::file-selector-button {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .form-control[type="file"]::file-selector-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        /* Firefox file input styling */
+        .form-control[type="file"]::-moz-file-upload-button {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .form-control[type="file"]::-moz-file-upload-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
         }
 
         .current-image {
@@ -315,22 +398,23 @@ $student = json_decode(json_encode($studentData), true);
 
         .remove-btn {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
+            top: -8px;
+            right: -8px;
             background: var(--accent-danger);
             border: none;
             border-radius: 50%;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1rem;
+            font-size: 0.875rem;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: var(--shadow-sm);
-            z-index: 10;
+            z-index: 100;
+            border: 2px solid var(--bg-secondary);
         }
 
         .remove-btn:hover {
@@ -481,11 +565,12 @@ $student = json_decode(json_encode($studentData), true);
             }
 
             .remove-btn {
-                top: 0.75rem;
-                right: 0.75rem;
-                width: 32px;
-                height: 32px;
-                font-size: 0.875rem;
+                top: -6px;
+                right: -6px;
+                width: 28px;
+                height: 28px;
+                font-size: 0.75rem;
+                border-width: 1px;
             }
         }
 

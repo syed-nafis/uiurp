@@ -123,6 +123,14 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Leave Project Section -->
+            <div class="leave-project-section">
+                <button id="leaveProjectBtn" class="leave-project-btn" title="Leave this project and group chat">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>Leave Project</span>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -1665,6 +1673,93 @@
     transform: translateX(2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
     border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Leave Project Section */
+.project-chat-overlay .leave-project-section {
+    padding: 16px;
+    margin-top: auto; /* Push to bottom */
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: linear-gradient(to bottom, transparent, rgba(255, 0, 0, 0.02));
+}
+
+.project-chat-overlay .leave-project-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(255, 59, 48, 0.1), rgba(255, 59, 48, 0.05));
+    border: 1px solid rgba(255, 59, 48, 0.2);
+    border-radius: 12px;
+    color: #ff3b30;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    letter-spacing: 0.2px;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-chat-overlay .leave-project-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 59, 48, 0), rgba(255, 59, 48, 0));
+    opacity: 0;
+    transition: all 0.3s ease;
+    border-radius: inherit;
+}
+
+.project-chat-overlay .leave-project-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 59, 48, 0.15), rgba(255, 59, 48, 0.08));
+    border-color: rgba(255, 59, 48, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 59, 48, 0.15), 0 2px 8px rgba(255, 59, 48, 0.1);
+    color: #ff2d1a;
+}
+
+.project-chat-overlay .leave-project-btn:hover::before {
+    opacity: 1;
+    background: linear-gradient(135deg, rgba(255, 59, 48, 0.1), rgba(255, 59, 48, 0.05));
+}
+
+.project-chat-overlay .leave-project-btn:active {
+    transform: translateY(-1px);
+    transition-duration: 0.1s;
+}
+
+.project-chat-overlay .leave-project-btn i {
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.project-chat-overlay .leave-project-btn:hover i {
+    transform: translateX(-2px);
+}
+
+.project-chat-overlay .leave-project-btn span {
+    position: relative;
+    z-index: 1;
+}
+
+/* Disabled state for leave button */
+.project-chat-overlay .leave-project-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    background: rgba(255, 59, 48, 0.05);
+    border-color: rgba(255, 59, 48, 0.1);
+}
+
+.project-chat-overlay .leave-project-btn:disabled:hover {
+    transform: none;
+    box-shadow: none;
 }
 
 /* Add ripple effect to buttons */
@@ -4147,6 +4242,132 @@ body.chat-pinned .full-width-bg {
             // Future: Implement direct messaging feature
         }
     });
+
+    // Handle leave project button click
+    const leaveProjectBtn = document.getElementById('leaveProjectBtn');
+    if (leaveProjectBtn) {
+        leaveProjectBtn.addEventListener('click', function() {
+            // Check if we have a current project selected
+            if (!currentProjectId || !currentProjectName) {
+                if (typeof showToast === 'function') {
+                    showToast('error', 'Error', 'No project selected');
+                }
+                return;
+            }
+            
+            // Show confirmation dialog
+            const confirmMessage = `Are you sure you want to leave "${currentProjectName}"?\n\nThis will:\n• Remove you from the project team\n• Remove you from the group chat\n• You will lose access to all project discussions\n\nThis action cannot be undone.`;
+            
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+            
+            // Disable the button to prevent multiple clicks
+            this.disabled = true;
+            const originalText = this.querySelector('span').textContent;
+            this.querySelector('span').textContent = 'Leaving...';
+            
+            // Send leave request to server
+            const formData = new FormData();
+            formData.append('projectId', currentProjectId);
+            
+            fetch('src/model/leave_project.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    if (typeof showToast === 'function') {
+                        showToast('success', 'Left Project', data.message || 'You have successfully left the project.');
+                    } else {
+                        alert('You have successfully left the project.');
+                    }
+                    
+                    // Close the chat overlay
+                    chatOverlay.classList.remove('active');
+                    chatOverlay.style.display = 'none';
+                    
+                    // Handle closing in pinned mode
+                    if (isChatPinned) {
+                        document.body.classList.remove('chat-pinned');
+                        localStorage.setItem('chatVisible', 'false');
+                        
+                        // Reset fixed elements
+                        const fixedElements = document.querySelectorAll('.navbar, .navbar-fixed-top, .sticky-top, .fixed-top, header, nav, #header');
+                        fixedElements.forEach(el => {
+                            if (el.closest('.project-chat-overlay')) return;
+                            el.style.position = '';
+                            el.style.left = '';
+                            el.style.width = '';
+                            el.style.top = '';
+                            el.style.right = '';
+                            el.style.transform = '';
+                            el.style.margin = '';
+                            el.style.zIndex = '';
+                        });
+                        
+                        document.body.style.paddingLeft = '';
+                        document.body.style.width = '';
+                        document.body.style.overflow = '';
+                        document.body.style.position = '';
+                        
+                        setTimeout(() => {
+                            window.dispatchEvent(new Event('resize'));
+                        }, 100);
+                    } else {
+                        enableScroll();
+                    }
+                    
+                    // Stop polling
+                    if (pollingInterval) {
+                        clearInterval(pollingInterval);
+                        pollingInterval = null;
+                    }
+                    
+                    // Reset current project variables
+                    currentProjectId = null;
+                    currentProjectName = null;
+                    lastMessageTimestamp = null;
+                    
+                    // Update notification badge
+                    loadUnreadMessageCount();
+                    
+                    // Refresh the page after a short delay to update the UI
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                    
+                } else {
+                    // Show error message
+                    if (typeof showToast === 'function') {
+                        showToast('error', 'Failed to Leave', data.message || 'Failed to leave the project. Please try again.');
+                    } else {
+                        alert(data.message || 'Failed to leave the project. Please try again.');
+                    }
+                    
+                    // Re-enable the button
+                    this.disabled = false;
+                    this.querySelector('span').textContent = originalText;
+                }
+            })
+            .catch(error => {
+                console.error('Error leaving project:', error);
+                
+                // Show error message
+                if (typeof showToast === 'function') {
+                    showToast('error', 'Error', 'An error occurred while trying to leave the project. Please try again.');
+                } else {
+                    alert('An error occurred while trying to leave the project. Please try again.');
+                }
+                
+                // Re-enable the button
+                this.disabled = false;
+                this.querySelector('span').textContent = originalText;
+            });
+        });
+    }
 
     // Function to preload faculty data
     function preloadFacultyData() {

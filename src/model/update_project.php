@@ -227,7 +227,9 @@ try {
                         'title' => $item['title'],
                         'description' => isset($item['description']) ? $item['description'] : '',
                         'date' => $item['date'],
-                        'status' => isset($item['status']) && !empty($item['status']) ? $item['status'] : 'Planned'
+                        'status' => isset($item['status']) && !empty($item['status']) ? $item['status'] : 'Planned',
+                        'assignedBy' => isset($item['assignedBy']) ? $item['assignedBy'] : '',
+                        'assignedTo' => isset($item['assignedTo']) ? $item['assignedTo'] : ''
                     ];
                 }
             }
@@ -447,14 +449,23 @@ try {
     // This is important for filtering projects by creator on the project_management.php page
     $createdBy = isset($project['createdBy']) ? $project['createdBy'] : null;
     
-    $updatedAt = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+        $updatedAt = new \MongoDB\BSON\UTCDateTime(time() * 1000);
     if (isset($_POST['updated_date']) && !empty($_POST['updated_date'])) {
         $updatedTime = strtotime($_POST['updated_date']);
         if ($updatedTime) {
             $updatedAt = new \MongoDB\BSON\UTCDateTime($updatedTime * 1000);
         }
     }
-    
+
+    // Process estimated completion date
+    $estimatedCompletionDate = isset($project['estimatedCompletionDate']) ? $project['estimatedCompletionDate'] : null;
+    if (isset($_POST['estimatedCompletionDate']) && !empty($_POST['estimatedCompletionDate'])) {
+        $estimatedTime = strtotime($_POST['estimatedCompletionDate']);
+        if ($estimatedTime) {
+            $estimatedCompletionDate = new \MongoDB\BSON\UTCDateTime($estimatedTime * 1000);
+        }
+    }
+
     // Update project - use fully-qualified class names to avoid linter issues
     $updateResult = $projectCollection->updateOne(
         ['_id' => new \MongoDB\BSON\ObjectId($projectId)],
@@ -485,6 +496,7 @@ try {
                 'media' => $media,
                 'createdAt' => $createdAt,
                 'updatedAt' => $updatedAt,
+                'estimatedCompletionDate' => $estimatedCompletionDate,
                 'createdBy' => $createdBy
             ]
         ]

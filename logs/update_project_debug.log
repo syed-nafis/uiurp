@@ -1668,3 +1668,464 @@
 (
 )
 
+2025-06-20 12:44:17 - POST data: Array
+(
+    [project_id] => 683ee98f2ac509172f01017b
+    [title] => chat test
+    [abstract] => chat test
+    [description] => chat test
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => ["Blockchain"]
+    [created_date] => 2025-06-03
+    [updated_date] => 2025-06-12
+    [github_url] => https://github.com/example/project14
+    [project_url] => https://blockchain-supply-chain.example.com
+    [paper_url] => https://example.com/papers/blockchain-supply-chain.pdf
+    [doi] => https://doi.org/example/project14
+    [youtube_url] => https://youtube.com/watch?v=example14
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}},{"name":"Imran Hasan","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c9"}},{"name":"Zayan Ahmed","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c5"}},{"name":"Tanvir Hossain","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2cb"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"editProjectBtneditProjectBtneditProjectBtneditProjectBtneditProjectBtneditProjectBtn","date":{"$date":"2025-06-03T00:00:00.000Z"},"status":"Planned"},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"editProjectBtneditProjectBtneditProjectBtneditProjectBtneditProjectBtneditProjectBtn","date":{"$date":"2025-06-03T00:00:00.000Z"},"status":"Planned"},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"editProjectBtneditProjectBtneditProjectBtneditProjectBtneditProjectBtneditProjectBtn","date":{"$date":"2025-06-03T00:00:00.000Z"},"status":"Planned"},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"editProjectBtneditProjectBtneditProjectBtneditProjectBtneditProjectBtneditProjectBtn","date":{"$date":"2025-06-03T00:00:00.000Z"},"status":"Planned"}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-20 12:44:17 - Privacy field: value='0', type=string
+2025-06-20 12:44:17 - References parsed as JSON: Array
+(
+)
+
+2025-06-20 12:44:17 - Final references data: Array
+(
+)
+
+2025-06-20 13:13:30 - POST data: Array
+(
+    [project_id] => 68553ea8793d650a9900a574
+    [title] => Project Timeline
+    [abstract] => Project Timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-20
+    [updated_date] => 2025-06-20
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Imran Hasan","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c9"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"Project TimelineProject TimelineProject TimelineProject TimelineProject Timeline","date":{"$date":"2025-06-20T00:00:00.000Z"},"status":"Planned","assignedBy":{"name":"Dr. Md. Nomani Kabir","userId":"67e1a9f6ebb89e49e04ddf35"},"assignedTo":[{"$oid":""},{"$oid":"68545754d25e020985fec16d"},{"$oid":"683c4be949c799b6cd328c47"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"Project TimelineProject TimelineProject TimelineProject TimelineProject TimelineProject Timeline","date":{"$date":"2025-06-20T00:00:00.000Z"},"status":"Planned","assignedBy":{"name":"Samin yeaser khan","userId":null},"assignedTo":[{"$oid":""},{"$oid":""},{"$oid":"683c4be949c799b6cd328c47"}]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-20 13:13:30 - Privacy field: value='0', type=string
+2025-06-20 13:13:30 - References parsed as JSON: Array
+(
+)
+
+2025-06-20 13:13:30 - Final references data: Array
+(
+)
+
+2025-06-20 18:14:47 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-20
+    [updated_date] => 2025-06-20
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"67e1a9f6ebb89e49e04ddf35","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"6833436be5c16779b409aa42","assignedTo":["6656d4b4f7e5b8c9a0a1b2c8"]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-20 18:14:47 - Privacy field: value='0', type=string
+2025-06-20 18:14:47 - References parsed as JSON: Array
+(
+)
+
+2025-06-20 18:14:47 - Final references data: Array
+(
+)
+
+2025-06-20 18:15:48 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-19
+    [updated_date] => 2025-06-19
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"67e1a9f6ebb89e49e04ddf35","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"6833436be5c16779b409aa42","assignedTo":["6656d4b4f7e5b8c9a0a1b2c8"]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-20 18:15:48 - Privacy field: value='0', type=string
+2025-06-20 18:15:48 - References parsed as JSON: Array
+(
+)
+
+2025-06-20 18:15:48 - Final references data: Array
+(
+)
+
+2025-06-20 18:19:24 - POST data: Array
+(
+    [project_id] => 6839534eb7804646190966c4
+    [title] => teset
+    [abstract] => tsetsetse
+    [description] => estsetsetst
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => ["Blockchain"]
+    [created_date] => 2025-05-27
+    [updated_date] => 2025-06-12
+    [github_url] => https://github.com/example/project14
+    [project_url] => https://blockchain-supply-chain.example.com
+    [paper_url] => https://example.com/papers/blockchain-supply-chain.pdf
+    [doi] => https://doi.org/example/project14
+    [youtube_url] => https://youtube.com/watch?v=example14
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Imran Hasan","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c9"}}]
+    [timeline] => [{"title":"test","description":"test","date":{"$date":"2025-06-03T00:00:00.000Z"},"status":"Planned"},{"title":"test","description":"test","date":{"$date":"2025-06-03T00:00:00.000Z"},"status":"Planned"}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-20 18:19:24 - Privacy field: value='0', type=string
+2025-06-20 18:19:24 - References parsed as JSON: Array
+(
+)
+
+2025-06-20 18:19:24 - Final references data: Array
+(
+)
+
+2025-06-20 18:30:09 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-18
+    [updated_date] => 2025-06-18
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"67e1a9f6ebb89e49e04ddf35","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"6833436be5c16779b409aa42","assignedTo":["6656d4b4f7e5b8c9a0a1b2c8"]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-20 18:30:09 - Privacy field: value='0', type=string
+2025-06-20 18:30:09 - References parsed as JSON: Array
+(
+)
+
+2025-06-20 18:30:09 - Final references data: Array
+(
+)
+
+2025-06-20 18:33:47 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-17
+    [updated_date] => 2025-06-17
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"67e1a9f6ebb89e49e04ddf35","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"6833436be5c16779b409aa42","assignedTo":["6656d4b4f7e5b8c9a0a1b2c8"]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-20 18:33:47 - Privacy field: value='0', type=string
+2025-06-20 18:33:47 - References parsed as JSON: Array
+(
+)
+
+2025-06-20 18:33:47 - Final references data: Array
+(
+)
+
+2025-06-20 18:39:59 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-16
+    [updated_date] => 2025-06-16
+    [estimatedCompletionDate] => 2025-07-11
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"67e1a9f6ebb89e49e04ddf35","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"6833436be5c16779b409aa42","assignedTo":["6656d4b4f7e5b8c9a0a1b2c8"]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-20 18:39:59 - Privacy field: value='0', type=string
+2025-06-20 18:40:00 - References parsed as JSON: Array
+(
+)
+
+2025-06-20 18:40:00 - Final references data: Array
+(
+)
+
+2025-06-20 18:43:28 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-15
+    [updated_date] => 2025-06-15
+    [estimatedCompletionDate] => 2025-07-12
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"67e1a9f6ebb89e49e04ddf35","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"6833436be5c16779b409aa42","assignedTo":["6656d4b4f7e5b8c9a0a1b2c8"]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-20 18:43:28 - Privacy field: value='0', type=string
+2025-06-20 18:43:28 - References parsed as JSON: Array
+(
+)
+
+2025-06-20 18:43:28 - Final references data: Array
+(
+)
+
+2025-06-20 20:34:59 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-14
+    [updated_date] => 2025-06-14
+    [estimatedCompletionDate] => 2025-07-11
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"6833436be5c16779b409aa42","assignedTo":["6656d4b4f7e5b8c9a0a1b2c8"]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-20 20:34:59 - Privacy field: value='0', type=string
+2025-06-20 20:34:59 - References parsed as JSON: Array
+(
+)
+
+2025-06-20 20:34:59 - Final references data: Array
+(
+)
+
+2025-06-22 08:44:25 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-13
+    [updated_date] => 2025-06-13
+    [estimatedCompletionDate] => 2025-07-10
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"6833436be5c16779b409aa42","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-22 08:44:25 - Privacy field: value='0', type=string
+2025-06-22 08:44:25 - References parsed as JSON: Array
+(
+)
+
+2025-06-22 08:44:25 - Final references data: Array
+(
+)
+
+2025-06-22 09:13:23 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-12
+    [updated_date] => 2025-06-12
+    [estimatedCompletionDate] => 2025-07-09
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"6833436be5c16779b409aa42","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-22 09:13:23 - Privacy field: value='0', type=string
+2025-06-22 09:13:23 - References parsed as JSON: Array
+(
+)
+
+2025-06-22 09:13:23 - Final references data: Array
+(
+)
+
+2025-06-22 09:14:05 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-11
+    [updated_date] => 2025-06-11
+    [estimatedCompletionDate] => 2025-07-08
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-22 09:14:05 - Privacy field: value='0', type=string
+2025-06-22 09:14:06 - References parsed as JSON: Array
+(
+)
+
+2025-06-22 09:14:06 - Final references data: Array
+(
+)
+

@@ -1026,8 +1026,69 @@ session_start();
             color: rgba(76, 201, 240, 1);
         }
         
+        /* Custom file input styling - Modern dashed border style */
+        .form-control[type="file"] {
+            position: relative;
+            background: var(--surface-1);
+            border: 2px dashed var(--border-color);
+            color: var(--text-secondary);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+        }
+
+        .form-control[type="file"]:hover {
+            border-color: var(--primary);
+            background: var(--surface-2);
+            transform: translateY(-1px);
+        }
+
+        .form-control[type="file"]:focus {
+            border-color: var(--primary);
+            background: var(--surface-2);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+        }
+
+        /* Style the file input button */
+        .form-control[type="file"]::file-selector-button {
+            background: linear-gradient(135deg, var(--primary), rgba(139, 92, 246, 0.8));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .form-control[type="file"]::file-selector-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        /* Firefox file input styling */
+        .form-control[type="file"]::-moz-file-upload-button {
+            background: linear-gradient(135deg, var(--primary), rgba(139, 92, 246, 0.8));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .form-control[type="file"]::-moz-file-upload-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+        
         /* Fix for direct file inputs that aren't using our custom upload component */
-        input[type="file"] {
+        input[type="file"]:not(.form-control) {
             color: rgba(255, 255, 255, 0.8);
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(76, 201, 240, 0.1);
@@ -1038,7 +1099,7 @@ session_start();
             box-sizing: border-box; /* Include padding in width calculation */
         }
         
-        input[type="file"]:hover {
+        input[type="file"]:not(.form-control):hover {
             border-color: rgba(76, 201, 240, 0.2);
             color: rgba(76, 201, 240, 0.9);
         }
@@ -1366,6 +1427,28 @@ session_start();
         
         .timeline-item:hover .status-badge::after {
             opacity: 1;
+        }
+        
+        /* Assignment information styling */
+        .assignment-info {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        
+        .assignment-info .bi {
+            margin-right: 0.25rem;
+            opacity: 0.7;
+        }
+        
+        .assignment-info span {
+            display: inline-block;
+            margin-right: 1rem;
+            font-size: 0.8rem;
+        }
+        
+        .assignment-info strong {
+            color: var(--primary);
         }
         
         /* Ensure linked project cards don't have default link styling */
@@ -2085,6 +2168,23 @@ session_start();
             color: var(--text-secondary);
         }
 
+        /* Light theme file input styling */
+        [data-theme="light"] .form-control[type="file"] {
+            background: var(--surface);
+            border: 2px dashed var(--border);
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .form-control[type="file"]:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        [data-theme="light"] .form-control[type="file"]:focus {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
         /* Buttons in light mode */
         [data-theme="light"] .btn-primary {
             background: var(--gradient-primary);
@@ -2298,6 +2398,15 @@ session_start();
             background: rgba(239, 68, 68, 0.1);
             color: #ef4444;
             border-color: rgba(239, 68, 68, 0.3);
+        }
+        
+        /* Assignment information styling in light mode */
+        [data-theme="light"] .assignment-info {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="light"] .assignment-info strong {
+            color: var(--primary);
         }
 
         /* Keywords in light mode */
@@ -3306,6 +3415,16 @@ session_start();
                                         </div>
                                     </div>
                                     
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="estimatedCompletionDate" class="form-label">Estimated Completion Date</label>
+                                                <input type="date" class="form-control" id="estimatedCompletionDate" name="estimatedCompletionDate">
+                                                <small class="text-muted">Expected date when the project will be completed</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="row mb-3">
                                         <div class="col-12">
                                             <div class="card">
@@ -3812,11 +3931,6 @@ session_start();
             const initialMemberRow = document.querySelector('.member-row');
             if (initialMemberRow) {
                 setupStudentSearch(initialMemberRow);
-                
-                // Auto-populate with creator data if available
-                if (currentUserData) {
-                    populateCurrentUserInFirstRow(initialMemberRow);
-                }
             }
         }, 200);
         
@@ -4264,15 +4378,7 @@ session_start();
             membersContainer.innerHTML = '';
             addMemberRow();
             
-            // Auto-populate creator if user is logged in
-            setTimeout(() => {
-                if (currentUserData) {
-                    const firstMemberRow = document.querySelector('.member-row');
-                    if (firstMemberRow) {
-                        populateCurrentUserInFirstRow(firstMemberRow);
-                    }
-                }
-            }, 100);
+
             
             // Reset timeline
             timelineContainer.innerHTML = '';
@@ -4761,6 +4867,7 @@ session_start();
                     const deleteBtn = col.querySelector('.delete-project-btn');
                     if (deleteBtn) {
                         deleteBtn.addEventListener('click', function(e) {
+                            e.preventDefault(); // Prevent link navigation
                             e.stopPropagation(); // Prevent card click
                         const projectId = this.getAttribute('data-id');
                             const projectTitle = this.getAttribute('data-title');
@@ -4917,6 +5024,12 @@ session_start();
                 document.getElementById('updatedAt').value = updatedDate.toISOString().split('T')[0];
             }
             
+            // Fill estimated completion date if it exists
+            if (project.estimatedCompletionDate && project.estimatedCompletionDate.$date) {
+                const estimatedDate = new Date(project.estimatedCompletionDate.$date);
+                document.getElementById('estimatedCompletionDate').value = estimatedDate.toISOString().split('T')[0];
+            }
+            
             // Fill supervisor
             if (project.supervisor) {
                 const supervisorInput = document.getElementById('supervisor');
@@ -5054,15 +5167,7 @@ session_start();
                 // Add at least one empty row
                 addMemberRow();
                 
-                // Auto-populate with creator if available
-                setTimeout(() => {
-                    if (currentUserData) {
-                        const firstMemberRow = document.querySelector('.member-row');
-                        if (firstMemberRow) {
-                            populateCurrentUserInFirstRow(firstMemberRow);
-                        }
-                    }
-                }, 100);
+
             }
             
             // Fill timeline items
@@ -5219,7 +5324,9 @@ session_start();
                 title: '',
                 description: '',
                 date: formattedDate,
-                status: 'Planned'
+                status: 'Planned',
+                assignedBy: null,
+                assignedTo: []
             };
             
             // Add to the array
@@ -5264,6 +5371,66 @@ session_start();
                     day: 'numeric'
                 });
                 
+                // Generate assignment display text
+                let assignmentInfo = '';
+                
+                // Ensure backward compatibility - handle various assignment field formats
+                let assignedBy = '';
+                let assignedByName = '';
+                
+                if (item.assignedBy) {
+                    // Handle new format (object with id and name)
+                    if (typeof item.assignedBy === 'object' && item.assignedBy !== null) {
+                        assignedBy = item.assignedBy.id || '';
+                        assignedByName = item.assignedBy.name || '';
+                    } 
+                    // Handle legacy format (string)
+                    else {
+                        assignedBy = item.assignedBy;
+                        const assignedByMember = findMemberById(assignedBy);
+                        assignedByName = assignedByMember ? assignedByMember.name : assignedBy;
+                    }
+                }
+                
+                let assignedTo = [];
+                let assignedToNames = [];
+                
+                if (item.assignedTo) {
+                    if (Array.isArray(item.assignedTo)) {
+                        assignedTo = item.assignedTo;
+                        
+                        // Map to names, handling both new and legacy formats
+                        assignedToNames = assignedTo.map(assignee => {
+                            // Handle new format (object with id and name)
+                            if (typeof assignee === 'object' && assignee !== null) {
+                                return assignee.name || 'Unknown';
+                            }
+                            // Handle legacy format (string ID or name)
+                            const member = findMemberById(assignee);
+                            return member ? member.name : assignee;
+                        });
+                    } else {
+                        // Handle single assignee case (backward compatibility)
+                        assignedTo = [item.assignedTo];
+                        const member = findMemberById(item.assignedTo);
+                        assignedToNames = [member ? member.name : item.assignedTo];
+                    }
+                }
+                
+                if (assignedByName || assignedToNames.length > 0) {
+                    assignmentInfo = '<div class="assignment-info mt-2">';
+                    
+                    if (assignedByName) {
+                        assignmentInfo += `<span class="text-muted small me-3"><i class="bi bi-person-plus"></i> Assigned by: <strong>${assignedByName}</strong></span>`;
+                    }
+                    
+                    if (assignedToNames.length > 0) {
+                        assignmentInfo += `<span class="text-muted small"><i class="bi bi-person-check"></i> Assigned to: <strong>${assignedToNames.join(', ')}</strong></span>`;
+                    }
+                    
+                    assignmentInfo += '</div>';
+                }
+                
                 timelineItem.innerHTML = `
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <div class="timeline-date">
@@ -5281,7 +5448,8 @@ session_start();
                         </div>
                     </div>
                     <h6 class="mb-2">${item.title}</h6>
-                    <p class="mb-0 small text-muted">${item.description}</p>
+                    <p class="mb-2 small text-muted">${item.description}</p>
+                    ${assignmentInfo}
                 `;
                 
                 timelineContainer.appendChild(timelineItem);
@@ -5348,6 +5516,19 @@ session_start();
                                             <option value="Delayed">Delayed</option>
                                         </select>
                                     </div>
+                                    <div class="mb-2" id="assignedByContainer">
+                                        <label for="timelineAssignedBy" class="form-label">Assigned By</label>
+                                        <select class="form-select" id="timelineAssignedBy">
+                                            <option value="">Select member (optional)</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-2" id="assignedToContainer">
+                                        <label for="timelineAssignedTo" class="form-label">Assigned To</label>
+                                        <select class="form-select" id="timelineAssignedTo" multiple>
+                                            <option value="">Select members (optional)</option>
+                                        </select>
+                                        <div class="form-text">Hold Ctrl/Cmd to select multiple members. Only student team members can be assigned.</div>
+                                    </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -5367,6 +5548,58 @@ session_start();
             document.getElementById('timelineDate').value = item.date;
             document.getElementById('timelineStatus').value = item.status;
             
+            // Populate assignment dropdowns with project members
+            populateAssignmentDropdowns();
+            
+            // Auto-select current user in "Assigned By" if no assignment exists or if editing
+            const assignedBySelect = document.getElementById('timelineAssignedBy');
+            const assignedToSelect = document.getElementById('timelineAssignedTo');
+            
+            // Set assignment values - if no assignedBy exists, auto-select current user
+            let assignedByValue = '';
+            
+            // Handle new format (object with id and name)
+            if (item.assignedBy && typeof item.assignedBy === 'object' && item.assignedBy.id) {
+                assignedByValue = item.assignedBy.id;
+            } 
+            // Handle legacy format (string ID or name)
+            else if (item.assignedBy) {
+                assignedByValue = item.assignedBy;
+            }
+            
+            // If no assigned by, try to auto-select current user
+            if (!assignedByValue && currentUserData) {
+                // Try to find current user in the dropdown options
+                const currentUserOption = Array.from(assignedBySelect.options).find(option => 
+                    option.value === currentUserData.id || option.value === currentUserData.name
+                );
+                if (currentUserOption) {
+                    assignedByValue = currentUserOption.value;
+                }
+            }
+            
+            document.getElementById('timelineAssignedBy').value = assignedByValue;
+            
+            // Handle multiple assignees for "Assigned To" (with backward compatibility)
+            let assignedToArray = [];
+            
+            // Handle new format (array of objects with id and name)
+            if (item.assignedTo && Array.isArray(item.assignedTo)) {
+                // Extract IDs from objects if in new format
+                assignedToArray = item.assignedTo.map(assignee => 
+                    (assignee && typeof assignee === 'object' && assignee.id) ? assignee.id : assignee
+                );
+            } 
+            // Handle legacy format
+            else if (item.assignedTo) {
+                assignedToArray = Array.isArray(item.assignedTo) ? item.assignedTo : [item.assignedTo];
+            }
+            
+            // Select the appropriate options in the dropdown
+            Array.from(assignedToSelect.options).forEach(option => {
+                option.selected = assignedToArray.includes(option.value);
+            });
+            
             // Initialize and show the modal
             const modalInstance = new bootstrap.Modal(modal);
             modalInstance.show();
@@ -5383,6 +5616,30 @@ session_start();
                 const description = document.getElementById('timelineDescription').value.trim();
                 const date = document.getElementById('timelineDate').value;
                 const status = document.getElementById('timelineStatus').value;
+                const assignedByValue = document.getElementById('timelineAssignedBy').value;
+                
+                // Get assignedBy information (both ID and name)
+                let assignedBy = null;
+                if (assignedByValue) {
+                    const selectedOption = document.getElementById('timelineAssignedBy').options[
+                        document.getElementById('timelineAssignedBy').selectedIndex
+                    ];
+                    assignedBy = {
+                        id: assignedByValue,
+                        name: selectedOption.text.replace(/ \(.*\)$/, ''), // Remove role from text
+                        type: selectedOption.text.toLowerCase().includes('supervisor') ? 'faculty' : 'student'
+                    };
+                }
+                
+                // Get multiple selected values for "Assigned To" with both ID and name
+                const assignedToSelect = document.getElementById('timelineAssignedTo');
+                const assignedTo = Array.from(assignedToSelect.selectedOptions)
+                    .filter(option => option.value !== '')
+                    .map(option => ({
+                        id: option.value,
+                        name: option.text.replace(/ \(.*\)$/, ''), // Remove role from text
+                        type: 'student' // Assuming assignedTo are only students
+                    }));
                 
                 if (!title || !date) {
                     // Show validation error
@@ -5396,7 +5653,9 @@ session_start();
                     title,
                     description,
                     date,
-                    status
+                    status,
+                    assignedBy,
+                    assignedTo
                 };
                 
                 // Update the UI
@@ -5416,6 +5675,94 @@ session_start();
         
         function getTimelineData() {
             return timelineItems;
+        }
+        
+        // Helper function to populate assignment dropdowns with project members
+        function populateAssignmentDropdowns() {
+            const assignedBySelect = document.getElementById('timelineAssignedBy');
+            const assignedToSelect = document.getElementById('timelineAssignedTo');
+            
+            if (!assignedBySelect || !assignedToSelect) return;
+            
+            // Clear existing options (except the first default option)
+            assignedBySelect.innerHTML = '<option value="">Select member (optional)</option>';
+            assignedToSelect.innerHTML = '<option value="">Select members (optional)</option>';
+            
+            // Get current project members
+            const members = getMembersData();
+            
+            // Add all team members to "Assigned By" dropdown, but only students to "Assigned To"
+            members.forEach(member => {
+                if (member.name && member.name.trim()) {
+                    // Use student ID if available, otherwise use member name
+                    const optionValue = (member.userId && member.userId.$oid) ? member.userId.$oid : member.name;
+                    const optionText = `${member.name}${member.role ? ' (' + member.role + ')' : ''}`;
+                    
+                    // Add all members to "Assigned By" dropdown
+                    const assignedByOption = new Option(optionText, optionValue);
+                    assignedBySelect.add(assignedByOption);
+                    
+                    // Check if the member is a student (not supervisor/faculty) for "Assigned To"
+                    const isStudent = !member.role || 
+                                     (member.role.toLowerCase() !== 'supervisor' && 
+                                      member.role.toLowerCase() !== 'faculty' &&
+                                      member.role.toLowerCase() !== 'creator/supervisor');
+                    
+                    // Only add students to "Assigned To" dropdown
+                    if (isStudent) {
+                        const assignedToOption = new Option(optionText, optionValue);
+                        assignedToSelect.add(assignedToOption);
+                    }
+                }
+            });
+            
+            // Add supervisor to "Assigned By" dropdown
+            const supervisorSelect = document.getElementById('supervisor');
+            const supervisorIdInput = document.getElementById('supervisorId');
+            
+            if (supervisorSelect && supervisorSelect.value && supervisorSelect.value.trim()) {
+                const supervisorValue = supervisorIdInput && supervisorIdInput.value ? supervisorIdInput.value : supervisorSelect.value;
+                const supervisorText = `${supervisorSelect.value} (Supervisor)`;
+                
+                const supervisorByOption = new Option(supervisorText, supervisorValue);
+                assignedBySelect.add(supervisorByOption);
+            }
+        }
+        
+        // Helper function to find member by ID or name
+        function findMemberById(id) {
+            if (!id) return null;
+            
+            // Check current project members
+            const members = getMembersData();
+            
+            // First try to find by user ID
+            let member = members.find(m => 
+                (m.userId && m.userId.$oid === id) || 
+                (m.userId && typeof m.userId === 'string' && m.userId === id)
+            );
+            
+            // If not found by ID, try by name
+            if (!member) {
+                member = members.find(m => m.name === id);
+            }
+            
+            // Check supervisor
+            if (!member) {
+                const supervisorSelect = document.getElementById('supervisor');
+                const supervisorIdInput = document.getElementById('supervisorId');
+                
+                if (supervisorSelect && supervisorSelect.value) {
+                    const supervisorId = supervisorIdInput && supervisorIdInput.value ? supervisorIdInput.value : supervisorSelect.value;
+                    const supervisorName = supervisorSelect.value;
+                    
+                    if (supervisorId === id || supervisorName === id) {
+                        return { name: supervisorName, role: 'Supervisor' };
+                    }
+                }
+            }
+            
+            return member || { name: id, role: 'Unknown' };
         }
         
         // Initialize references array
@@ -5720,11 +6067,7 @@ session_start();
                         currentUserData = data.user;
                         console.log('Current user loaded:', currentUserData);
                         
-                        // Auto-populate the first member row with current user data
-                        const firstMemberRow = document.querySelector('.member-row');
-                        if (firstMemberRow) {
-                            populateCurrentUserInFirstRow(firstMemberRow);
-                        }
+
                     } else {
                         console.log('User not logged in or no user data available');
                         currentUserData = null;
@@ -5736,43 +6079,7 @@ session_start();
                 });
         }
         
-        function populateCurrentUserInFirstRow(memberRow) {
-            if (!currentUserData) return;
-            
-            const studentInput = memberRow.querySelector('.member-name.student-search');
-            const studentIdInput = memberRow.querySelector('.member-student-id');
-            const roleInput = memberRow.querySelector('.member-role');
-            const contributionInput = memberRow.querySelector('.member-contribution');
-            const userIdInput = memberRow.querySelector('.member-userid');
-            
-            if (studentInput && studentIdInput && roleInput && contributionInput && userIdInput) {
-                // Populate the fields with current user data
-                studentInput.value = currentUserData.name;
-                studentIdInput.value = currentUserData.id;
-                roleInput.value = currentUserData.role;
-                contributionInput.value = currentUserData.contribution;
-                userIdInput.value = currentUserData.id;
-                
-                // Mark the input as readonly to prevent accidental changes to creator info
-                studentInput.setAttribute('readonly', true);
-                studentInput.style.backgroundColor = 'transparent';
-                studentInput.style.color = 'var(--text-secondary, #6c757d)';
-                
-                // Add a visual indicator that this is the creator
-                const creatorBadge = document.createElement('small');
-                creatorBadge.className = 'text-primary mt-1 d-block';
-                creatorBadge.innerHTML = '<i class="bi bi-person-fill me-1"></i>Project Creator';
-                studentInput.parentElement.appendChild(creatorBadge);
-                
-                // Disable the remove button for the creator's row
-                const removeBtn = memberRow.querySelector('.remove-member');
-                if (removeBtn) {
-                    removeBtn.disabled = true;
-                    removeBtn.title = 'Cannot remove project creator';
-                    removeBtn.style.opacity = '0.5';
-                }
-            }
-        }
+
     });
     </script>
 </body>
