@@ -408,37 +408,49 @@ try {
             border-radius: 0.5rem;
             overflow: hidden;
             transition: transform 0.3s ease, background 0.3s ease;
+            border: 1px solid var(--border-color);
         }
 
         .attachment-item:hover {
             transform: translateY(-2px);
             background: var(--surface-2);
+            border-color: var(--modern-blue);
         }
 
         .attachment-img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            border-radius: 0.5rem;
-            border: 1px solid var(--border-color);
+            border-radius: 0.5rem 0.5rem 0 0;
+            border-bottom: 1px solid var(--border-color);
             transition: border-color 0.3s ease;
         }
 
         .attachment-file {
             padding: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
             display: flex;
             align-items: center;
             color: var(--text-primary);
             text-decoration: none;
             transition: all 0.3s ease;
+            gap: 0.5rem;
         }
 
         .attachment-file:hover {
-            background: var(--surface-2);
-            border-color: var(--modern-blue);
             color: var(--text-link);
+            background: var(--surface-2);
+        }
+
+        .attachment-file i {
+            font-size: 1.2rem;
+            color: var(--modern-blue);
+        }
+
+        .attachment-file span {
+            max-width: calc(100% - 2rem);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         /* Form Controls */
@@ -689,44 +701,19 @@ try {
                     <div class="attachments">
                         <?php foreach ($post['attachments'] as $attachment): ?>
                             <?php 
-                                // Skip invalid attachments
-                                if (empty($attachment) || !is_array($attachment)) {
-                                    continue;
-                                }
-
-                                // Set default values for missing fields
-                                $filename = isset($attachment['filename']) ? (string)$attachment['filename'] : '';
-                                $path = isset($attachment['path']) ? (string)$attachment['path'] : '';
-                                
-                                // Skip if both filename and path are empty
-                                if (empty($filename) && empty($path)) {
-                                    continue;
-                                }
-
-                                // If filename is empty but path exists, use the basename of path as filename
-                                if (empty($filename) && !empty($path)) {
-                                    $filename = basename($path);
-                                }
-
-                                // Determine if file is an image
-                                $fileExtension = !empty($filename) ? strtolower(pathinfo($filename, PATHINFO_EXTENSION)) : '';
+                                $fileExtension = strtolower(pathinfo($attachment['original_name'], PATHINFO_EXTENSION));
                                 $isImage = in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']);
-
-                                // Ensure path starts with uploads/ if it's a relative path
-                                if (!empty($path) && !str_starts_with($path, '/') && !str_starts_with($path, 'http')) {
-                                    $path = 'uploads/' . ltrim($path, '/');
-                                }
                             ?>
                             <div class="attachment-item">
-                                <?php if ($isImage && !empty($path)): ?>
-                                    <a href="<?= htmlspecialchars($path) ?>" target="_blank" class="d-block">
-                                        <img src="<?= htmlspecialchars($path) ?>" alt="<?= htmlspecialchars($filename) ?>" class="attachment-img">
+                                <?php if ($isImage): ?>
+                                    <a href="<?= htmlspecialchars($attachment['file_path']) ?>" target="_blank">
+                                        <img src="<?= htmlspecialchars($attachment['file_path']) ?>" alt="Attachment" class="attachment-img">
                                     </a>
-                                <?php elseif (!empty($path)): ?>
-                                    <a href="<?= htmlspecialchars($path) ?>" class="attachment-file" download="<?= htmlspecialchars($filename) ?>">
-                                            <i class="bi bi-file-earmark me-2"></i>
-                                        <?= htmlspecialchars($filename) ?>
-                                </a>
+                                <?php else: ?>
+                                    <a href="<?= htmlspecialchars($attachment['file_path']) ?>" class="attachment-file" download>
+                                        <i class="bi bi-file-earmark me-2"></i>
+                                        <span class="text-truncate"><?= htmlspecialchars($attachment['original_name']) ?></span>
+                                    </a>
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
@@ -761,10 +748,14 @@ try {
             <!-- Add Comment Form -->
             <form action="src/controller/add_comment.php" method="POST" class="mb-4">
                 <input type="hidden" name="post_id" value="<?= $post['_id'] ?>">
-                <div class="form-group">
-                    <textarea name="content" class="form-control mb-3" rows="3" placeholder="Write a comment..." required></textarea>
-                                                </div>
-                <button type="submit" class="btn btn-primary">Post Comment</button>
+                <div class="d-flex gap-2">
+                    <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" 
+                         alt="Your Avatar" class="author-avatar" style="width: 32px; height: 32px;">
+                    <div class="flex-grow-1">
+                        <textarea name="comment" class="form-control mb-2" rows="3" placeholder="Write a comment..." required></textarea>
+                        <button type="submit" class="btn btn-primary">Post Comment</button>
+                    </div>
+                </div>
             </form>
 
             <!-- Comments List -->
@@ -779,19 +770,25 @@ try {
                                     <h6 class="mb-0"><?= htmlspecialchars($comment['user_name'] ?? 'Unknown User') ?></h6>
                                     <small class="text-muted">
                                                 <?php
-                                            $commentDateTime = null;
-                                            if (is_object($comment['created_at']) && method_exists($comment['created_at'], 'toDateTime')) {
-                                                $commentDateTime = $comment['created_at']->toDateTime();
+                                        $commentDateTime = null;
+                                        if (isset($comment['time'])) {
+                                                    if (is_object($comment['time']) && method_exists($comment['time'], 'toDateTime')) {
+                                                $commentDateTime = $comment['time']->toDateTime();
                                                 $commentDateTime->setTimezone(new DateTimeZone('Asia/Dhaka'));
-                                            } elseif (is_string($comment['created_at']) || is_numeric($comment['created_at'])) {
-                                                $commentDateTime = new DateTime('@' . (int)$comment['created_at']);
+                                                    } elseif (is_string($comment['time']) || is_numeric($comment['time'])) {
+                                                $commentDateTime = new DateTime('@' . (int)$comment['time']);
                                                 $commentDateTime->setTimezone(new DateTimeZone('Asia/Dhaka'));
-                                            }
-                                            echo $commentDateTime ? $commentDateTime->format('F j, Y \a\t g:i a') : 'Unknown date';
-                                        ?>
+                                                    }
+                                        }
+                                        echo $commentDateTime ? $commentDateTime->format('F j, Y \a\t g:i a') : 'Unknown date';
+                                                    
+                                                    if (isset($comment['edited']) && $comment['edited']) {
+                                                        echo ' (edited)';
+                                                    }
+                                                ?>
                                     </small>
                                     </div>
-                                <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $comment['user_id']): ?>
+                                <?php if (isset($_SESSION['user_id']) && isset($comment['user_id']) && $_SESSION['user_id'] == $comment['user_id']): ?>
                                     <div class="dropdown ms-auto">
                                         <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
                                             <i class="bi bi-three-dots-vertical"></i>
@@ -799,15 +796,15 @@ try {
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <li>
                                                 <button class="dropdown-item edit-comment-btn" 
-                                                        data-comment-id="<?= $comment['_id'] ?>"
-                                                        data-comment-content="<?= htmlspecialchars($comment['content']) ?>">
+                                                        data-comment-id="<?= $comment['_id'] ?? '' ?>"
+                                                        data-comment-content="<?= htmlspecialchars($comment['text'] ?? '') ?>">
                                                     <i class="bi bi-pencil me-2"></i> Edit
                                                 </button>
                                             </li>
                                             <li>
                                                 <form action="src/controller/delete_comment.php" method="POST" class="d-inline">
                                                     <input type="hidden" name="post_id" value="<?= $post['_id'] ?>">
-                                                    <input type="hidden" name="comment_id" value="<?= $comment['_id'] ?>">
+                                                    <input type="hidden" name="comment_id" value="<?= $comment['_id'] ?? '' ?>">
                                                     <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to delete this comment?')">
                                                         <i class="bi bi-trash me-2"></i> Delete
                                                     </button>
@@ -818,7 +815,7 @@ try {
                                 <?php endif; ?>
                             </div>
                             <div class="comment-bubble">
-                                <?= nl2br(htmlspecialchars($comment['content'])) ?>
+                                <?= nl2br(htmlspecialchars($comment['text'] ?? '')) ?>
                             </div>
                         </div>
                     <?php endforeach; ?>

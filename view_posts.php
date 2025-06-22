@@ -1268,27 +1268,36 @@ try {
                                                          alt="Avatar" class="author-avatar" style="width: 32px; height: 32px;">
                                                     <div class="flex-grow-1">
                                                         <div class="comment-bubble p-2 bg-light rounded">
+                                                                <div class="d-flex justify-content-between align-items-start">
                                                             <div class="comment-meta">
                                                                 <div class="comment-author fw-bold"><?= htmlspecialchars($comment['user_name'] ?? 'Unknown') ?></div>
-                                                                
+                                                                    </div>
                                                                 <?php if (isset($_SESSION['user_id']) && isset($comment['user_id']) && $_SESSION['user_id'] === $comment['user_id']): ?>
                                                                     <div class="dropdown">
-                                                                        <button class="btn btn-sm text-muted p-0 ms-2" type="button" data-bs-toggle="dropdown">
-                                                                            <i class="bi bi-three-dots"></i>
+                                                                            <button class="btn btn-link btn-sm text-muted p-0" type="button" data-bs-toggle="dropdown">
+                                                                                <i class="bi bi-three-dots-vertical"></i>
                                                                         </button>
                                                                         <ul class="dropdown-menu dropdown-menu-end">
-                                                                            <li><a class="dropdown-item edit-comment-btn" href="#" 
+                                                                                <li>
+                                                                                    <button class="dropdown-item edit-comment-btn" 
                                                                                 data-post-id="<?= $post['_id'] ?>" 
-                                                                                data-comment-index="<?= $index ?>">Edit</a></li>
-                                                                            <li><a class="dropdown-item delete-comment-btn" href="#" 
+                                                                                            data-comment-index="<?= $index ?>"
+                                                                                            data-comment-text="<?= htmlspecialchars($comment['text'] ?? '') ?>">
+                                                                                        <i class="bi bi-pencil me-2"></i>Edit
+                                                                                    </button>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <button class="dropdown-item text-danger delete-comment-btn" 
                                                                                 data-post-id="<?= $post['_id'] ?>" 
-                                                                                data-comment-index="<?= $index ?>">Delete</a></li>
+                                                                                            data-comment-index="<?= $index ?>">
+                                                                                        <i class="bi bi-trash me-2"></i>Delete
+                                                                                    </button>
+                                                                                </li>
                                                                         </ul>
                                                                     </div>
                                                                 <?php endif; ?>
                                                             </div>
-                                                            
-                                                            <div class="comment-content"><?= nl2br(htmlspecialchars($comment['text'] ?? '')) ?></div>
+                                                                <div class="comment-content mt-1"><?= nl2br(htmlspecialchars($comment['text'] ?? '')) ?></div>
                                                         </div>
                                                         <div class="comment-actions small mt-1">
                                                             <span class="text-muted comment-time">
@@ -1312,16 +1321,6 @@ try {
                                                                 <?php endif; ?>
                                                             </span>
                                                         </div>
-                                                        
-                                                        <!-- Edit form (hidden by default) -->
-                                                        <form class="edit-comment-form hide-comment-form mt-2" 
-                                                            id="edit-comment-form-<?= $post['_id'] ?>-<?= $index ?>">
-                                                            <textarea class="form-control mb-2" required><?= htmlspecialchars($comment['text'] ?? '') ?></textarea>
-                                                            <div class="d-flex gap-2">
-                                                                <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                                                                <button type="button" class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
-                                                            </div>
-                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1639,76 +1638,50 @@ try {
         
         // Handle edit comment
         document.querySelectorAll('.edit-comment-btn').forEach(btn => {
-            debug('Initializing edit button for comment');
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
                 
                 const postId = this.getAttribute('data-post-id');
                 const commentIndex = this.getAttribute('data-comment-index');
+                const commentText = this.getAttribute('data-comment-text');
                 const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
-                const editForm = document.getElementById(`edit-comment-form-${postId}-${commentIndex}`);
-                
-                if (commentElement && editForm) {
-                    // Show the edit form
                     const contentElement = commentElement.querySelector('.comment-content');
-                    if (contentElement) {
-                        contentElement.style.display = 'none';
-                    }
-                    editForm.classList.remove('hide-comment-form');
-                }
-            });
-        });
-        
-        // Handle cancel edit button
-        document.querySelectorAll('.cancel-edit-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const form = this.closest('.edit-comment-form');
-                const commentElement = form.closest('.comment');
                 
-                if (commentElement) {
-                    // Hide the edit form and show the content
-                    form.classList.add('hide-comment-form');
-                    const contentElement = commentElement.querySelector('.comment-content');
-                    if (contentElement) {
-                        contentElement.style.display = 'block';
-                    }
-                }
-            });
-        });
-        
-        // Handle edit comment form submission
-        document.querySelectorAll('.edit-comment-form').forEach(form => {
-            debug('Initializing edit form for comment');
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
+                if (!contentElement) return;
                 
-                const formId = this.id;
-                const matches = formId.match(/edit-comment-form-([a-f0-9]+)-(\d+)/);
-                if (!matches) {
-                    console.error('Invalid form ID format');
-                    return;
-                }
+                // Create edit form
+                const editForm = document.createElement('div');
+                editForm.className = 'edit-form mt-2';
+                editForm.innerHTML = `
+                    <textarea class="form-control mb-2">${commentText}</textarea>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-primary save-edit-btn">Save</button>
+                        <button class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
+                    </div>
+                `;
                 
-                const [_, postId, commentIndex] = matches;
-                const textarea = this.querySelector('textarea');
-                const submitButton = this.querySelector('button[type="submit"]');
+                // Store original content
+                const originalContent = contentElement.innerHTML;
                 
-                if (!textarea || !submitButton) {
-                    console.error('Required form elements not found');
-                    return;
-                }
+                // Replace content with edit form
+                contentElement.innerHTML = '';
+                contentElement.appendChild(editForm);
                 
+                // Focus textarea
+                const textarea = editForm.querySelector('textarea');
+                textarea.focus();
+                
+                // Handle save
+                editForm.querySelector('.save-edit-btn').addEventListener('click', async () => {
                 const newText = textarea.value.trim();
                 if (!newText) {
                     alert('Please enter a comment');
                     return;
                 }
                 
-                // Disable form while submitting
-                textarea.disabled = true;
-                submitButton.disabled = true;
-                
-                fetch('src/controller/edit_comment.php', {
+                    try {
+                        const response = await fetch('src/controller/edit_comment.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1718,44 +1691,78 @@ try {
                         commentIndex: parseInt(commentIndex),
                         text: newText
                     })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
+                        });
+                        
+                        const data = await response.json();
                     if (data.success) {
-                        // Update the UI
-                        const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
-                        if (commentElement) {
-                            const contentElement = commentElement.querySelector('.comment-content');
-                            if (contentElement) {
-                                contentElement.textContent = newText;
-                                contentElement.style.display = 'block';
-                            }
-                            this.classList.add('hide-comment-form');
+                            contentElement.innerHTML = nl2br(newText);
                             
-                            // Add "edited" text if not already there
+                            // Update the data-comment-text attribute
+                            this.setAttribute('data-comment-text', newText);
+                            
+                            // Add edited indicator if not present
                             const timeElement = commentElement.querySelector('.comment-time');
                             if (timeElement && !timeElement.textContent.includes('(edited)')) {
                                 timeElement.textContent += ' (edited)';
-                            }
                         }
                     } else {
                         throw new Error(data.message || 'Failed to update comment');
                     }
-                })
-                .catch(error => {
+                    } catch (error) {
                     console.error('Error:', error);
                     alert('Error updating comment: ' + error.message);
-                })
-                .finally(() => {
-                    // Re-enable form
-                    textarea.disabled = false;
-                    submitButton.disabled = false;
+                        contentElement.innerHTML = originalContent;
+                    }
                 });
+                
+                // Handle cancel
+                editForm.querySelector('.cancel-edit-btn').addEventListener('click', () => {
+                    contentElement.innerHTML = originalContent;
+                });
+            });
+        });
+        
+        // Helper function to convert newlines to <br> tags
+        function nl2br(str) {
+            return str.replace(/\n/g, '<br>');
+        }
+        
+        // Handle delete comment
+        document.querySelectorAll('.delete-comment-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const postId = this.getAttribute('data-post-id');
+                const commentIndex = this.getAttribute('data-comment-index');
+                
+                if (confirm('Are you sure you want to delete this comment? This action cannot be undone.')) {
+                    fetch('src/controller/delete_comment.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            postId: postId,
+                            commentIndex: parseInt(commentIndex)
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
+                            if (commentElement) {
+                                commentElement.remove();
+                            }
+                        } else {
+                            throw new Error(data.message || 'Failed to delete comment');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error deleting comment: ' + error.message);
+                    });
+                }
             });
         });
         
