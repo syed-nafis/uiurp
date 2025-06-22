@@ -3806,3 +3806,1583 @@ Computational investigation of Stefan blowing and multiple-slip effects on buoya
 )
 
 2025-06-22 09:14:05 - UserId extracted: 6833436be5c16779b409aa42
+2025-06-22 12:10:48 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Samin yeaser khan
+    [profile_pic] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+    [email] => www.mayen017@gmail.com
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.7
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748781177375
+                                )
+
+                        )
+
+                )
+
+            [learning_resources] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => test
+                            [url] => https://www.youtube.com
+                            [category] => Data Science
+                            [type] => Video
+                            [description] => 
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => test 2
+                            [url] => https://www.youtube.com
+                            [category] => Research Methods
+                            [type] => Course
+                            [description] => 
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-06-22 12:10:48 - UserId extracted: 6833436be5c16779b409aa42
+2025-06-22 13:11:14 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Samin yeaser khan
+    [profile_pic] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+    [email] => www.mayen017@gmail.com
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.7
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748781177375
+                                )
+
+                        )
+
+                )
+
+            [learning_resources] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => test
+                            [url] => https://www.youtube.com
+                            [category] => Data Science
+                            [type] => Video
+                            [description] => 
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => test 2
+                            [url] => https://www.youtube.com
+                            [category] => Research Methods
+                            [type] => Course
+                            [description] => 
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-06-22 13:11:14 - UserId extracted: 6833436be5c16779b409aa42
+2025-06-22 13:29:19 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Samin yeaser khan
+    [profile_pic] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+    [email] => www.mayen017@gmail.com
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.7
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748781177375
+                                )
+
+                        )
+
+                )
+
+            [learning_resources] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => test
+                            [url] => https://www.youtube.com
+                            [category] => Data Science
+                            [type] => Video
+                            [description] => 
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => test 2
+                            [url] => https://www.youtube.com
+                            [category] => Research Methods
+                            [type] => Course
+                            [description] => 
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-06-22 13:29:19 - UserId extracted: 6833436be5c16779b409aa42
+2025-06-22 14:41:37 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Samin yeaser khan
+    [profile_pic] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+    [email] => www.mayen017@gmail.com
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.7
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748781177375
+                                )
+
+                        )
+
+                )
+
+            [learning_resources] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => test
+                            [url] => https://www.youtube.com
+                            [category] => Data Science
+                            [type] => Video
+                            [description] => 
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => test 2
+                            [url] => https://www.youtube.com
+                            [category] => Research Methods
+                            [type] => Course
+                            [description] => 
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-06-22 14:41:37 - UserId extracted: 6833436be5c16779b409aa42
+2025-06-22 14:41:39 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Samin yeaser khan
+    [profile_pic] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+    [email] => www.mayen017@gmail.com
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.7
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748781177375
+                                )
+
+                        )
+
+                )
+
+            [learning_resources] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => test
+                            [url] => https://www.youtube.com
+                            [category] => Data Science
+                            [type] => Video
+                            [description] => 
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => test 2
+                            [url] => https://www.youtube.com
+                            [category] => Research Methods
+                            [type] => Course
+                            [description] => 
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-06-22 14:41:39 - UserId extracted: 6833436be5c16779b409aa42
+2025-06-22 14:53:39 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Samin yeaser khan
+    [profile_pic] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+    [email] => www.mayen017@gmail.com
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.7
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748781177375
+                                )
+
+                        )
+
+                )
+
+            [learning_resources] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => test
+                            [url] => https://www.youtube.com
+                            [category] => Data Science
+                            [type] => Video
+                            [description] => 
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => test 2
+                            [url] => https://www.youtube.com
+                            [category] => Research Methods
+                            [type] => Course
+                            [description] => 
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-06-22 14:53:39 - UserId extracted: 6833436be5c16779b409aa42
+2025-06-22 14:54:03 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Samin yeaser khan
+    [profile_pic] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+    [email] => www.mayen017@gmail.com
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.7
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748781177375
+                                )
+
+                        )
+
+                )
+
+            [learning_resources] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => test
+                            [url] => https://www.youtube.com
+                            [category] => Data Science
+                            [type] => Video
+                            [description] => 
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => test 2
+                            [url] => https://www.youtube.com
+                            [category] => Research Methods
+                            [type] => Course
+                            [description] => 
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-06-22 14:54:03 - UserId extracted: 6833436be5c16779b409aa42
+2025-06-22 14:57:29 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Samin yeaser khan
+    [profile_pic] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+    [email] => www.mayen017@gmail.com
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.7
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748781177375
+                                )
+
+                        )
+
+                )
+
+            [learning_resources] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => test
+                            [url] => https://www.youtube.com
+                            [category] => Data Science
+                            [type] => Video
+                            [description] => 
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => test 2
+                            [url] => https://www.youtube.com
+                            [category] => Research Methods
+                            [type] => Course
+                            [description] => 
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-06-22 14:57:29 - UserId extracted: 6833436be5c16779b409aa42
+2025-06-22 14:58:35 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Samin yeaser khan
+    [profile_pic] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+    [email] => www.mayen017@gmail.com
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.7
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748781177375
+                                )
+
+                        )
+
+                )
+
+            [learning_resources] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => test
+                            [url] => https://www.youtube.com
+                            [category] => Data Science
+                            [type] => Video
+                            [description] => 
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => test 2
+                            [url] => https://www.youtube.com
+                            [category] => Research Methods
+                            [type] => Course
+                            [description] => 
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-06-22 14:58:35 - UserId extracted: 6833436be5c16779b409aa42
+2025-06-22 15:20:13 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Samin yeaser khan
+    [profile_pic] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+    [email] => www.mayen017@gmail.com
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.7
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748781177375
+                                )
+
+                        )
+
+                )
+
+            [learning_resources] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => test
+                            [url] => https://www.youtube.com
+                            [category] => Data Science
+                            [type] => Video
+                            [description] => 
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => test 2
+                            [url] => https://www.youtube.com
+                            [category] => Research Methods
+                            [type] => Course
+                            [description] => 
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-06-22 15:20:13 - UserId extracted: 6833436be5c16779b409aa42

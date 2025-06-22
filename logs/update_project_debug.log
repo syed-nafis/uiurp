@@ -2129,3 +2129,405 @@
 (
 )
 
+2025-06-22 12:10:48 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-10
+    [updated_date] => 2025-06-22
+    [estimatedCompletionDate] => 2025-07-07
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"},"assignedTo":[{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-22 12:10:48 - Privacy field: value='0', type=string
+2025-06-22 12:10:48 - References parsed as JSON: Array
+(
+)
+
+2025-06-22 12:10:48 - Final references data: Array
+(
+)
+
+2025-06-22 13:11:14 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-09
+    [updated_date] => 2025-06-21
+    [estimatedCompletionDate] => 2025-07-06
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"},"assignedTo":[{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-22 13:11:14 - Privacy field: value='0', type=string
+2025-06-22 13:11:14 - References parsed as JSON: Array
+(
+)
+
+2025-06-22 13:11:14 - Final references data: Array
+(
+)
+
+2025-06-22 13:29:19 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline
+    [abstract] => test timeline
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-08
+    [updated_date] => 2025-06-20
+    [estimatedCompletionDate] => 2025-07-05
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"},"assignedTo":[{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-22 13:29:19 - Privacy field: value='0', type=string
+2025-06-22 13:29:19 - References parsed as JSON: Array
+(
+)
+
+2025-06-22 13:29:19 - Final references data: Array
+(
+)
+
+2025-06-22 14:41:37 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]}]
+    [action] => update_timeline
+)
+2025-06-22 14:41:37 - Privacy field: value=not set, type=N/A
+2025-06-22 14:41:37 - Privacy field error: Privacy field is not set in the POST data
+2025-06-22 14:41:39 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]}]
+    [action] => update_timeline
+)
+2025-06-22 14:41:39 - Privacy field: value=not set, type=N/A
+2025-06-22 14:41:39 - Privacy field error: Privacy field is not set in the POST data
+2025-06-22 14:53:39 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]}]
+    [action] => update_timeline
+)
+2025-06-22 14:53:39 - Privacy field: value=not set, type=N/A
+2025-06-22 14:53:39 - Privacy field error: Privacy field is not set in the POST data
+2025-06-22 14:54:03 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]}]
+    [action] => update_timeline
+)
+2025-06-22 14:54:03 - Privacy field: value=not set, type=N/A
+2025-06-22 14:54:03 - Privacy field error: Privacy field is not set in the POST data
+2025-06-22 14:57:29 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]}]
+    [action] => update_timeline
+)
+2025-06-22 14:57:29 - Privacy field: value=not set, type=N/A
+2025-06-22 14:57:29 - Timeline update request received: Array
+(
+    [0] => Array
+        (
+            [title] => editProjectBtneditProjectBtneditProjectBtn
+            [description] => test timelinetest timelinetest timeline
+            [date] => 2025-06-20
+            [status] => Planned
+            [assignedBy] => Dr. Md. Nomani Kabir
+            [assignedTo] => Array
+                (
+                    [0] => 6833436be5c16779b409aa42
+                    [1] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+        )
+
+    [1] => Array
+        (
+            [title] => TEST
+            [description] => TEST
+            [date] => 2025-06-22
+            [status] => Planned
+            [assignedBy] => Array
+                (
+                    [id] => Dr. Md. Nomani Kabir
+                    [name] => Dr. Md. Nomani Kabir
+                    [type] => faculty
+                )
+
+            [assignedTo] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 6833436be5c16779b409aa42
+                            [name] => Samin yeaser khan
+                            [type] => student
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 6656d4b4f7e5b8c9a0a1b2c8
+                            [name] => Sadia Akter
+                            [type] => student
+                        )
+
+                )
+
+        )
+
+    [2] => Array
+        (
+            [title] => editProjectBtneditProjectBtneditProjectBtn
+            [description] => test
+            [date] => 2025-06-22
+            [status] => Planned
+            [assignedBy] => Array
+                (
+                    [id] => Dr. Md. Nomani Kabir
+                    [name] => Dr. Md. Nomani Kabir
+                    [type] => faculty
+                )
+
+            [assignedTo] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 6833436be5c16779b409aa42
+                            [name] => Samin yeaser khan
+                            [type] => student
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 6656d4b4f7e5b8c9a0a1b2c8
+                            [name] => Sadia Akter
+                            [type] => student
+                        )
+
+                )
+
+        )
+
+)
+
+2025-06-22 14:57:29 - Timeline update result: Success
+2025-06-22 14:58:35 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [title] => test timeline TEST
+    [abstract] => test timeline TEST
+    [description] => 
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => []
+    [created_date] => 2025-06-07
+    [updated_date] => 2025-06-22
+    [estimatedCompletionDate] => 2025-07-04
+    [github_url] => 
+    [project_url] => 
+    [paper_url] => 
+    [doi] => 
+    [youtube_url] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Sadia Akter","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}},{"name":"Imran Hasan","role":"","contribution":0,"userId":null}]
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"(anonymous) @ Project_details.php?id=685551a4793d650a9900a57f:11628\nProject_details.php?id=685551a4793d650a9900a57f:11524 Starting to save timeline changes\nProject_details.php?id=685551a4793d650a9900a57f:11525 Project ID: 685551a4793d650a9900a57f\nProject_details.php?id=685551a4793d650a9900a57f:11526 Timeline items: (3) [{…}, {…}, {…}]\nProject_details.php?id=685551a4793d650a9900a57f:11556 Sending request to update_project.php\nProject_details.php?id=685551a4793d650a9900a57f:11557 Request data: {project_id: '685551a4793d650a9900a57f', action: 'update_timeline', timeline_count: 3}\nProject_details.php?id=685551a4793d650a9900a57f:11580 Using path for update_project.php: src/model/update_project.php\nProject_details.php?id=685551a4793d650a9900a57f:11588 Response received: 200\nProject_details.php?id=685551a4793d650a9900a57f:11596 Response data: {success: false, message: 'Missing required fields: title, field, privacy'}\nProject_details.php?id=685551a4793d650a9900a57f:11628 Error saving timeline: Missing required fields: title, field, privacy","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"},{"id":"Imran Hasan","name":"Imran Hasan","type":"student"}]}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-22 14:58:35 - Privacy field: value='0', type=string
+2025-06-22 14:58:35 - References parsed as JSON: Array
+(
+)
+
+2025-06-22 14:58:35 - Final references data: Array
+(
+)
+
+2025-06-22 15:20:13 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"(anonymous) @ Project_details.php?id=685551a4793d650a9900a57f:11628","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"},{"id":"Imran Hasan","name":"Imran Hasan","type":"student"}]}]
+    [action] => update_timeline
+)
+2025-06-22 15:20:13 - Privacy field: value=not set, type=N/A
+2025-06-22 15:20:13 - Timeline update request received: Array
+(
+    [0] => Array
+        (
+            [title] => editProjectBtneditProjectBtneditProjectBtn
+            [description] => test timelinetest timelinetest timeline
+            [date] => 2025-06-20
+            [status] => Planned
+            [assignedBy] => Dr. Md. Nomani Kabir
+            [assignedTo] => Array
+                (
+                    [0] => 6833436be5c16779b409aa42
+                    [1] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+        )
+
+    [1] => Array
+        (
+            [title] => TEST
+            [description] => TEST
+            [date] => 2025-06-22
+            [status] => Planned
+            [assignedBy] => Array
+                (
+                    [id] => Dr. Md. Nomani Kabir
+                    [name] => Dr. Md. Nomani Kabir
+                    [type] => faculty
+                )
+
+            [assignedTo] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 6833436be5c16779b409aa42
+                            [name] => Samin yeaser khan
+                            [type] => student
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 6656d4b4f7e5b8c9a0a1b2c8
+                            [name] => Sadia Akter
+                            [type] => student
+                        )
+
+                )
+
+        )
+
+    [2] => Array
+        (
+            [title] => editProjectBtneditProjectBtneditProjectBtn
+            [description] => test
+            [date] => 2025-06-22
+            [status] => Planned
+            [assignedBy] => Array
+                (
+                    [id] => Dr. Md. Nomani Kabir
+                    [name] => Dr. Md. Nomani Kabir
+                    [type] => faculty
+                )
+
+            [assignedTo] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 6833436be5c16779b409aa42
+                            [name] => Samin yeaser khan
+                            [type] => student
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 6656d4b4f7e5b8c9a0a1b2c8
+                            [name] => Sadia Akter
+                            [type] => student
+                        )
+
+                )
+
+        )
+
+    [3] => Array
+        (
+            [title] => editProjectBtneditProjectBtneditProjectBtn
+            [description] => (anonymous) @ Project_details.php?id=685551a4793d650a9900a57f:11628
+            [date] => 2025-06-22
+            [status] => Planned
+            [assignedBy] => Array
+                (
+                    [id] => Dr. Md. Nomani Kabir
+                    [name] => Dr. Md. Nomani Kabir
+                    [type] => faculty
+                )
+
+            [assignedTo] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 6833436be5c16779b409aa42
+                            [name] => Samin yeaser khan
+                            [type] => student
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 6656d4b4f7e5b8c9a0a1b2c8
+                            [name] => Sadia Akter
+                            [type] => student
+                        )
+
+                    [2] => Array
+                        (
+                            [id] => Imran Hasan
+                            [name] => Imran Hasan
+                            [type] => student
+                        )
+
+                )
+
+        )
+
+)
+
+2025-06-22 15:20:13 - Timeline update result: Success

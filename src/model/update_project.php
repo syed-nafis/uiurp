@@ -69,36 +69,42 @@ $userId = '000000000000000000000000';
 
 file_put_contents($log_path, date('Y-m-d H:i:s') . " - UserId extracted: $userId\n", FILE_APPEND);
 
-// Check required fields - with improved validation
-$requiredFields = ['title', 'field'];
-$missingFields = [];
+// Check if this is a timeline-only update
+$isTimelineUpdate = isset($_POST['action']) && $_POST['action'] === 'update_timeline';
 
-foreach ($requiredFields as $field) {
-    if (!isset($_POST[$field]) || empty($_POST[$field])) {
-        $missingFields[] = $field;
-    }
-}
-
-// Special handling for privacy field - accepting '0', 0, '1', 1 as valid values
-// The strict check against '' is important since 0 == '' in PHP
-if (!isset($_POST['privacy']) || ($_POST['privacy'] === '' && $_POST['privacy'] !== '0' && $_POST['privacy'] !== 0)) {
-    $missingFields[] = 'privacy';
+// Skip required field validation for timeline-only updates
+if (!$isTimelineUpdate) {
+    // Check required fields - with improved validation
+    $requiredFields = ['title', 'field'];
+    $missingFields = [];
     
-    if ($DEBUG) {
-        $privacyStatus = '';
-        if (!isset($_POST['privacy'])) {
-            $privacyStatus = 'Privacy field is not set in the POST data';
-        } else {
-            $privacyStatus = "Privacy field is set but has an empty value: '" . $_POST['privacy'] . "' (type: " . gettype($_POST['privacy']) . ")";
+    foreach ($requiredFields as $field) {
+        if (!isset($_POST[$field]) || empty($_POST[$field])) {
+            $missingFields[] = $field;
         }
-        $logData = date('Y-m-d H:i:s') . " - Privacy field error: $privacyStatus\n";
-        file_put_contents($logFile, $logData, FILE_APPEND);
     }
-}
-
-if (!empty($missingFields)) {
-    echo json_encode(['success' => false, 'message' => 'Missing required fields: ' . implode(', ', $missingFields)]);
-    exit;
+    
+    // Special handling for privacy field - accepting '0', 0, '1', 1 as valid values
+    // The strict check against '' is important since 0 == '' in PHP
+    if (!isset($_POST['privacy']) || ($_POST['privacy'] === '' && $_POST['privacy'] !== '0' && $_POST['privacy'] !== 0)) {
+        $missingFields[] = 'privacy';
+        
+        if ($DEBUG) {
+            $privacyStatus = '';
+            if (!isset($_POST['privacy'])) {
+                $privacyStatus = 'Privacy field is not set in the POST data';
+            } else {
+                $privacyStatus = "Privacy field is set but has an empty value: '" . $_POST['privacy'] . "' (type: " . gettype($_POST['privacy']) . ")";
+            }
+            $logData = date('Y-m-d H:i:s') . " - Privacy field error: $privacyStatus\n";
+            file_put_contents($logFile, $logData, FILE_APPEND);
+        }
+    }
+    
+    if (!empty($missingFields)) {
+        echo json_encode(['success' => false, 'message' => 'Missing required fields: ' . implode(', ', $missingFields)]);
+        exit;
+    }
 }
 
 try {
@@ -129,6 +135,52 @@ try {
     if (!$project || !$projectCollection) {
         echo json_encode(['success' => false, 'message' => 'Project not found']);
         exit;
+    }
+    
+    // Process timeline data if this is a timeline update
+    if ($isTimelineUpdate) {
+        // Process timeline data
+        $timeline = [];
+        if (isset($_POST['timeline']) && !empty($_POST['timeline'])) {
+            $timelineData = json_decode($_POST['timeline'], true);
+            if (is_array($timelineData)) {
+                foreach ($timelineData as $item) {
+                    if (isset($item['title']) && !empty($item['title']) && isset($item['date'])) {
+                        $timeline[] = [
+                            'title' => $item['title'],
+                            'description' => isset($item['description']) ? $item['description'] : '',
+                            'date' => $item['date'],
+                            'status' => isset($item['status']) && !empty($item['status']) ? $item['status'] : 'Planned',
+                            'assignedBy' => isset($item['assignedBy']) ? $item['assignedBy'] : '',
+                            'assignedTo' => isset($item['assignedTo']) ? $item['assignedTo'] : ''
+                        ];
+                    }
+                }
+            }
+        }
+        
+        // Log timeline update for debugging
+        $logData = date('Y-m-d H:i:s') . ' - Timeline update request received: ' . print_r($timeline, true) . "\n";
+        file_put_contents($logFile, $logData, FILE_APPEND);
+        
+        // Update only the timeline field
+        $updateResult = $projectCollection->updateOne(
+            ['_id' => new \MongoDB\BSON\ObjectId($projectId)],
+            ['$set' => ['timeline' => $timeline, 'updatedAt' => new \MongoDB\BSON\UTCDateTime(time() * 1000)]]
+        );
+        
+        if ($updateResult->getModifiedCount() > 0 || $updateResult->getMatchedCount() > 0) {
+            echo json_encode(['success' => true, 'message' => 'Timeline updated successfully']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to update timeline']);
+        }
+        
+        // Log result
+        $logData = date('Y-m-d H:i:s') . ' - Timeline update result: ' . 
+                  ($updateResult->getModifiedCount() > 0 ? 'Success' : 'Failed') . "\n";
+        file_put_contents($logFile, $logData, FILE_APPEND);
+        
+        exit; // Stop here for timeline-only updates
     }
     
     // Parse privacy value correctly

@@ -1043,13 +1043,13 @@ function createProfileLink($name, $userId, $userType = null) {
         
         .assigned-by-badge {
             background: linear-gradient(135deg, rgba(30, 64, 175, 0.15), rgba(30, 64, 175, 0.1));
-            color: #78a9ff; /* Lightened color for better visibility */
+            color: var(--primary-color);
             border: 1px solid rgba(30, 64, 175, 0.2);
         }
         
         .assigned-to-badge {
             background: linear-gradient(135deg, rgba(5, 150, 105, 0.15), rgba(5, 150, 105, 0.1));
-            color: #6ee7b7; /* Lightened color for better visibility */
+            color: var(--success-color);
             border: 1px solid rgba(5, 150, 105, 0.2);
         }
         
@@ -2406,1003 +2406,6 @@ function createProfileLink($name, $userId, $userType = null) {
         #editTimelineBtn:hover i {
             transform: scale(1.1) rotate(5deg);
         }
-
-        /* Timeline Edit Overlay Styles - Enhanced for Dark/Light Mode */
-        .timeline-edit-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999; /* Lower than timeline modal (10050) to ensure modal stays on top */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease-out;
-            backdrop-filter: blur(8px);
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .timeline-overlay-backdrop {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-        }
-
-        .timeline-overlay-content {
-            position: relative;
-            background: var(--card-bg);
-            border: 1px solid rgba(76, 201, 240, 0.2);
-            border-radius: var(--border-radius-lg);
-            box-shadow: var(--card-shadow-hover);
-            width: 90%;
-            max-width: 800px;
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            animation: slideInUp 0.3s ease-out;
-        }
-
-        .timeline-overlay-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(76, 201, 240, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .timeline-overlay-header h3 {
-            margin: 0;
-            color: var(--text-primary);
-            font-size: 1.25rem;
-            font-weight: 600;
-            flex: 1;
-        }
-
-        .timeline-overlay-close {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.25rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            margin-left: auto;
-        }
-
-        .timeline-overlay-close:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-            transform: rotate(90deg);
-        }
-
-        .timeline-overlay-body {
-            padding: 1.5rem;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .timeline-overlay-footer {
-            padding: 1.5rem 2rem;
-            border-top: 2px solid var(--glass-border);
-            background: var(--surface);
-            border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
-        }
-        
-        .timeline-overlay-footer .text-muted {
-            color: var(--text-muted) !important;
-        }
-        
-        .timeline-overlay-footer .text-muted i {
-            color: var(--accent) !important;
-        }
-        
-        .timeline-overlay-footer .btn {
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            transition: var(--transition);
-            padding: 0.75rem 1.5rem;
-            font-size: 0.95rem;
-            border: 2px solid transparent;
-        }
-        
-        .timeline-overlay-footer .btn-primary {
-            background: var(--gradient-primary);
-            border: 2px solid var(--primary);
-            color: white !important;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-        }
-        
-        .timeline-overlay-footer .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
-            border-color: var(--accent);
-        }
-        
-        .timeline-overlay-footer .btn-primary i {
-            color: white !important;
-        }
-        
-        .timeline-overlay-footer .btn-outline-secondary {
-            border: 2px solid var(--border-light);
-            color: var(--text-secondary) !important;
-            background: transparent;
-        }
-        
-        .timeline-overlay-footer .btn-outline-secondary:hover {
-            background: var(--surface-light);
-            border-color: var(--primary);
-            color: var(--text-primary) !important;
-            transform: translateY(-1px);
-        }
-        
-        .timeline-overlay-footer .btn-outline-secondary i {
-            color: inherit !important;
-        }
-        
-        /* Light mode footer overrides */
-        [data-theme="light"] .timeline-overlay-footer {
-            background: rgba(248, 250, 252, 0.8);
-        }
-        
-        [data-theme="light"] .timeline-overlay-footer .btn-primary {
-            color: white !important;
-        }
-        
-        [data-theme="light"] .timeline-overlay-footer .btn-primary i {
-            color: white !important;
-        }
-
-        .timeline-items-list {
-            max-height: 400px;
-            overflow-y: auto;
-            margin-bottom: 1rem;
-        }
-
-        .timeline-edit-item {
-            background: var(--glass-bg);
-            border: 2px solid var(--glass-border);
-            border-radius: var(--border-radius-lg);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            transition: var(--transition);
-        }
-
-        .timeline-edit-item:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
-        }
-
-        .timeline-edit-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 0.75rem;
-        }
-
-        .timeline-edit-item-title {
-            font-weight: 700;
-            color: var(--text-primary) !important;
-            margin: 0;
-            flex: 1;
-            font-size: 1.1rem;
-        }
-
-        .timeline-edit-item-controls {
-            display: flex;
-            gap: 0.75rem;
-            margin-left: 1rem;
-        }
-
-        .timeline-edit-item-date {
-            color: var(--text-secondary) !important;
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-        }
-
-        .timeline-edit-item-description {
-            color: var(--text-muted) !important;
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
-            line-height: 1.6;
-        }
-
-        .timeline-edit-item-assignment {
-            font-size: 0.85rem;
-            color: var(--text-secondary) !important;
-            font-weight: 500;
-        }
-        
-        /* Light mode timeline edit items */
-        [data-theme="light"] .timeline-edit-item {
-            background: rgba(255, 255, 255, 0.9);
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-        
-        [data-theme="light"] .timeline-edit-item:hover {
-            background: rgba(255, 255, 255, 0.95);
-            border-color: var(--primary);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .status-badge-overlay {
-            padding: 0.25rem 0.5rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-planned { background: rgba(107, 114, 128, 0.3); color: #9ca3af; }
-        .status-in-progress { background: rgba(59, 130, 246, 0.3); color: #60a5fa; }
-        .status-completed { background: rgba(16, 185, 129, 0.3); color: #34d399; }
-        .status-delayed { background: rgba(239, 68, 68, 0.3); color: #f87171; }
-
-        /* Timeline Item Edit Modal Styles - Enhanced for Dark/Light Mode */
-        #timelineItemEditModal {
-            z-index: 10050 !important; /* Higher than timeline overlay (9999) and other modals */
-        }
-
-        #timelineItemEditModal .modal-backdrop {
-            z-index: 10049 !important; /* Just below the modal */
-        }
-
-        #timelineItemEditModal .modal-content {
-            background: var(--glass-bg);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: var(--border-radius-lg);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            color: var(--text-primary);
-        }
-
-        #timelineItemEditModal .modal-header {
-            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-            padding: 1.5rem 2rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        #timelineItemEditModal .modal-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(30, 64, 175, 0.9), rgba(124, 58, 237, 0.9));
-            z-index: -1;
-        }
-
-        #timelineItemEditModal .modal-footer {
-            border-top: 1px solid rgba(148, 163, 184, 0.1);
-            padding: 1.5rem 2rem;
-            background: var(--card-bg);
-            border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
-        }
-        
-        /* Enhanced Modal Footer Styling for Dark/Light Mode */
-        #timelineItemEditModal .modal-footer.bg-light {
-            background: var(--card-bg) !important;
-            border-top: 1px solid rgba(148, 163, 184, 0.1) !important;
-        }
-        
-        #timelineItemEditModal .modal-footer.border-top-0 {
-            border-top: 1px solid rgba(148, 163, 184, 0.1) !important;
-        }
-        
-        #timelineItemEditModal .modal-footer.p-4 {
-            padding: 1.5rem 2rem !important;
-        }
-        
-        #timelineItemEditModal .modal-footer .text-muted.small {
-            font-size: 0.85rem;
-            opacity: 0.8;
-        }
-        
-        #timelineItemEditModal .modal-footer .d-flex.gap-3 {
-            gap: 1rem !important;
-        }
-        
-        #timelineItemEditModal .modal-footer .d-flex.w-100 {
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        #timelineItemEditModal .modal-title {
-            color: white !important;
-            font-weight: 600;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-        
-        #timelineItemEditModal .modal-header p {
-            color: rgba(255, 255, 255, 0.85) !important;
-            margin: 0;
-        }
-        
-        #timelineItemEditModal .modal-header i {
-            color: white !important;
-        }
-        
-        /* Light mode header text overrides */
-        [data-theme="light"] #timelineItemEditModal .modal-title {
-            color: white !important;
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .modal-header p {
-            color: rgba(255, 255, 255, 0.85) !important;
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .modal-header i {
-            color: white !important;
-        }
-        
-        #timelineItemEditModal .btn-close {
-            filter: invert(1);
-            opacity: 0.8;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            transition: all 0.3s ease;
-            border: none;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        #timelineItemEditModal .btn-close span {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-            line-height: 1;
-        }
-        
-        #timelineItemEditModal .btn-close:hover {
-            opacity: 1;
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
-        }
-        
-        #timelineItemEditModal .btn-close:hover span {
-            color: white;
-        }
-        
-        /* Form Labels */
-        #timelineItemEditModal .form-label {
-            color: var(--text-primary) !important;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        #timelineItemEditModal .form-label i {
-            color: var(--primary-color) !important;
-        }
-
-        #timelineItemEditModal .form-control,
-        #timelineItemEditModal .form-select {
-            background: var(--card-bg) !important;
-            border: 2px solid rgba(148, 163, 184, 0.1) !important;
-            color: var(--text-primary) !important;
-            border-radius: var(--border-radius);
-            transition: var(--transition-speed) var(--transition-ease);
-            font-size: 0.95rem;
-        }
-
-        #timelineItemEditModal .form-control:focus,
-        #timelineItemEditModal .form-select:focus {
-            background: var(--card-bg) !important;
-            border-color: var(--primary-color) !important;
-            box-shadow: 0 0 0 0.25rem rgba(30, 64, 175, 0.15) !important;
-            color: var(--text-primary) !important;
-        }
-        
-        #timelineItemEditModal .form-control::placeholder {
-            color: var(--text-muted) !important;
-            opacity: 0.7;
-        }
-        
-        #timelineItemEditModal .form-control-lg {
-            padding: 0.875rem 1.25rem;
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-        
-        #timelineItemEditModal .form-select-lg {
-            padding: 0.875rem 1.25rem;
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-        
-        /* Section Headers in Modal */
-        #timelineItemEditModal .section-header h6 {
-            color: var(--primary-color) !important;
-            font-weight: 700;
-            font-size: 1.1rem;
-            border-bottom: 3px solid var(--primary-color);
-            padding-bottom: 0.75rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        #timelineItemEditModal .section-header h6::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background: var(--accent-color);
-            border-radius: 2px;
-        }
-        
-        #timelineItemEditModal .section-header h6 i {
-            color: var(--primary-color) !important;
-            margin-right: 0.5rem;
-        }
-        
-        /* Enhanced form styling */
-        #timelineItemEditModal .form-text {
-            font-size: 0.85rem;
-            color: var(--text-muted) !important;
-            margin-top: 0.5rem;
-            font-style: italic;
-        }
-        
-        #timelineItemEditModal .form-text i {
-            color: var(--text-muted) !important;
-        }
-        
-        #timelineItemEditModal .invalid-feedback {
-            color: var(--error) !important;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-            font-weight: 500;
-        }
-        
-        /* Multi-select styling */
-        #timelineItemEditModal select[multiple] {
-            background: var(--card-bg) !important;
-            border: 2px solid rgba(148, 163, 184, 0.1) !important;
-            border-radius: var(--border-radius);
-            padding: 0.75rem;
-            color: var(--text-primary) !important;
-        }
-        
-        #timelineItemEditModal select[multiple] option {
-            background: var(--card-bg) !important;
-            color: var(--text-primary) !important;
-            padding: 0.75rem;
-            border-radius: 6px;
-            margin-bottom: 4px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            transition: all 0.2s ease;
-        }
-        
-        #timelineItemEditModal select[multiple] option:hover {
-            background: var(--glass-bg) !important;
-            border-color: var(--primary-color);
-        }
-        
-        #timelineItemEditModal select[multiple] option:checked {
-            background: var(--primary-color) !important;
-            color: white !important;
-            border-color: var(--primary-color);
-            font-weight: 600;
-        }
-        
-        /* Light mode multi-select checked options */
-        [data-theme="light"] #timelineItemEditModal select[multiple] option:checked {
-            color: white !important;
-        }
-        
-        /* Button enhancements */
-        #timelineItemEditModal .d-flex .btn {
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            transition: var(--transition-speed) var(--transition-ease);
-            padding: 0.75rem 1.5rem;
-            font-size: 0.95rem;
-            border: 2px solid transparent;
-        }
-        
-        #timelineItemEditModal .btn.px-4 {
-            padding-left: 1.5rem !important;
-            padding-right: 1.5rem !important;
-            padding-top: 0.75rem !important;
-            padding-bottom: 0.75rem !important;
-        }
-        
-        #timelineItemEditModal .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: 2px solid var(--primary-color);
-            color: white !important;
-            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        #timelineItemEditModal .btn-primary.glow-effect {
-            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3), 0 0 20px rgba(30, 64, 175, 0.2);
-            animation: pulse-glow 2s ease-in-out infinite alternate;
-        }
-        
-        #timelineItemEditModal .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4);
-            border-color: var(--accent-color);
-        }
-        
-        #timelineItemEditModal .btn-primary.glow-effect:hover {
-            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.5), 0 0 30px rgba(30, 64, 175, 0.3);
-            animation: none;
-        }
-        
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3), 0 0 20px rgba(30, 64, 175, 0.2); }
-            100% { box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4), 0 0 25px rgba(30, 64, 175, 0.3); }
-        }
-        
-        #timelineItemEditModal .btn-primary i {
-            color: white !important;
-        }
-        
-        /* Light mode primary button */
-        [data-theme="light"] #timelineItemEditModal .btn-primary {
-            color: white !important;
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .btn-primary i {
-            color: white !important;
-        }
-        
-        #timelineItemEditModal .btn-outline-secondary {
-            border: 2px solid rgba(148, 163, 184, 0.3);
-            color: var(--text-secondary) !important;
-            background: transparent;
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        #timelineItemEditModal .btn-outline-secondary.px-4 {
-            padding-left: 1.5rem !important;
-            padding-right: 1.5rem !important;
-        }
-        
-        #timelineItemEditModal .btn-outline-secondary:hover {
-            background: var(--glass-bg);
-            border-color: var(--primary-color);
-            color: var(--text-primary) !important;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(148, 163, 184, 0.2);
-        }
-        
-        #timelineItemEditModal .btn-outline-secondary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.1), transparent);
-            transition: left 0.5s;
-        }
-        
-        #timelineItemEditModal .btn-outline-secondary:hover::before {
-            left: 100%;
-        }
-        
-        #timelineItemEditModal .btn-outline-secondary i {
-            color: inherit !important;
-        }
-        
-        /* Footer styling */
-        #timelineItemEditModal .modal-footer .text-muted {
-            color: var(--text-muted) !important;
-        }
-        
-        #timelineItemEditModal .modal-footer .text-muted i {
-            color: var(--accent-color) !important;
-        }
-        
-        /* Light mode specific adjustments */
-        [data-theme="light"] #timelineItemEditModal .modal-content {
-            background: rgba(255, 255, 255, 0.95);
-            border-color: rgba(0, 0, 0, 0.1);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .modal-footer {
-            background: rgba(248, 250, 252, 0.8);
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .modal-footer.bg-light {
-            background: rgba(248, 250, 252, 0.8) !important;
-            border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
-        }
-        
-        /* Light mode button styling */
-        [data-theme="light"] #timelineItemEditModal .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-color: var(--primary-color);
-            color: white !important;
-            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.2);
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .btn-primary.glow-effect {
-            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.25), 0 0 20px rgba(30, 64, 175, 0.15);
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .btn-primary:hover {
-            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.3);
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .btn-primary.glow-effect:hover {
-            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4), 0 0 30px rgba(30, 64, 175, 0.25);
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .btn-outline-secondary {
-            border: 2px solid rgba(0, 0, 0, 0.15);
-            color: var(--text-secondary) !important;
-            background: rgba(255, 255, 255, 0.6);
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .btn-outline-secondary:hover {
-            background: rgba(255, 255, 255, 0.8);
-            border-color: var(--primary-color);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .form-control,
-        [data-theme="light"] #timelineItemEditModal .form-select {
-            background: white !important;
-            border-color: rgba(0, 0, 0, 0.15) !important;
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .form-control:focus,
-        [data-theme="light"] #timelineItemEditModal .form-select:focus {
-            border-color: var(--primary-color) !important;
-            box-shadow: 0 0 0 0.25rem rgba(30, 64, 175, 0.1) !important;
-        }
-        
-        [data-theme="light"] #timelineItemEditModal select[multiple] {
-            background: white !important;
-        }
-        
-        [data-theme="light"] #timelineItemEditModal select[multiple] option {
-            background: white !important;
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-        
-        [data-theme="light"] #timelineItemEditModal select[multiple] option:hover {
-            background: rgba(30, 64, 175, 0.05) !important;
-        }
-        
-        /* Light mode form select options */
-        [data-theme="light"] #timelineItemEditModal .form-select option {
-            background: white !important;
-            color: var(--text-primary) !important;
-        }
-        
-        [data-theme="light"] #timelineItemEditModal .form-select option:checked {
-            background: var(--primary-color) !important;
-            color: white !important;
-        }
-        
-        /* Responsive modal */
-        @media (max-width: 768px) {
-            #timelineItemEditModal .modal-dialog {
-                margin: 1rem;
-                max-width: calc(100vw - 2rem);
-            }
-            
-            #timelineItemEditModal .modal-header,
-            #timelineItemEditModal .modal-footer {
-                padding: 1rem;
-            }
-            
-            #timelineItemEditModal .modal-body {
-                padding: 1.5rem 1rem;
-            }
-            
-            #timelineItemEditModal .d-flex.justify-content-between {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            #timelineItemEditModal .d-flex.gap-3 {
-                width: 100%;
-            }
-            
-            #timelineItemEditModal .d-flex.gap-3 .btn {
-                flex: 1;
-            }
-        }
-            color: var(--text-primary);
-        }
-
-        #timelineItemEditModal .btn-close {
-            filter: invert(1) brightness(0.8);
-        }
-        
-        /* Enhanced Timeline Edit Container Styles - Dark/Light Mode */
-        .timeline-edit-container {
-            background: var(--glass-bg);
-            border-radius: var(--border-radius-lg);
-            padding: 2.5rem;
-            max-width: 900px;
-            width: 95%;
-            max-height: 85vh;
-            overflow-y: auto;
-            border: 2px solid var(--glass-border);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            color: var(--text-primary);
-        }
-        
-        .timeline-edit-container .timeline-item {
-            background: var(--glass-bg);
-            border-radius: var(--border-radius-lg);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid var(--primary);
-            border: 2px solid var(--glass-border);
-            color: var(--text-primary);
-            transition: var(--transition);
-            cursor: grab;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .timeline-edit-container .timeline-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            opacity: 0.3;
-        }
-        
-        .timeline-edit-container .timeline-item.grabbing {
-            cursor: grabbing;
-            transform: scale(1.02);
-        }
-        
-        .timeline-edit-container .timeline-item:hover {
-            border-color: var(--primary);
-            background: var(--surface-light);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
-            border-left-color: var(--accent);
-        }
-        
-        .timeline-edit-container .timeline-item.completed {
-            border-left-color: var(--success);
-        }
-        
-        .timeline-edit-container .timeline-item.completed:hover {
-            border-left-color: var(--success);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
-        }
-        
-        .timeline-edit-container .timeline-item.in-progress {
-            border-left-color: var(--primary);
-        }
-        
-        .timeline-edit-container .timeline-item.planned {
-            border-left-color: var(--secondary);
-        }
-        
-        .timeline-edit-container .timeline-item.planned:hover {
-            border-left-color: var(--secondary);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
-        }
-        
-        .timeline-edit-container .timeline-item.delayed {
-            border-left-color: var(--error);
-        }
-        
-        .timeline-edit-container .timeline-item.delayed:hover {
-            border-left-color: var(--error);
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.15);
-        }
-        
-        .timeline-edit-container .timeline-date {
-            color: var(--primary) !important;
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .timeline-edit-container .timeline-date i {
-            margin-right: 0.75rem;
-            color: var(--primary) !important;
-            font-size: 1.1rem;
-        }
-        
-        .timeline-edit-container .timeline-controls {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-        
-        .timeline-edit-container .timeline-item h6 {
-            color: var(--text-primary) !important;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            font-size: 1.1rem;
-        }
-        
-        .timeline-edit-container .timeline-item p {
-            color: var(--text-secondary) !important;
-            margin-bottom: 0.75rem;
-            line-height: 1.6;
-        }
-        
-        /* Enhanced Timeline action buttons */
-        .timeline-edit-container .timeline-controls .btn {
-            padding: 0.25rem 0.5rem;
-            border-radius: var(--border-radius);
-            border: 1px solid rgba(148, 163, 184, 0.3);
-            background: rgba(51, 65, 85, 0.6);
-            color: var(--text-secondary);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.8rem;
-        }
-        
-        .timeline-edit-container .timeline-controls .btn:hover {
-            transform: translateY(-1px);
-            background: rgba(51, 65, 85, 0.8);
-            border-color: var(--primary-color);
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        }
-        
-        .timeline-edit-container .timeline-controls .btn-outline-primary:hover {
-            color: var(--primary-color);
-            background: rgba(30, 64, 175, 0.1);
-        }
-        
-        .timeline-edit-container .timeline-controls .btn-outline-danger:hover {
-            color: var(--danger-color);
-            background: rgba(220, 38, 38, 0.1);
-            border-color: var(--danger-color);
-        }
-        
-        /* Timeline section highlight effect for updates */
-        @keyframes highlight-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
-            70% { box-shadow: 0 0 0 12px rgba(37, 99, 235, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
-        }
-        
-        .highlight-update {
-            animation: highlight-pulse 1.5s ease-out;
-        }
-        
-        .timeline-edit-container .status-badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.7rem;
-            font-weight: 500;
-            border-radius: 1rem;
-            margin-left: 0.5rem;
-            position: relative;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .timeline-edit-container .status-completed {
-            background: rgba(5, 150, 105, 0.2);
-            color: var(--success-color);
-            border-color: rgba(5, 150, 105, 0.3);
-        }
-        
-        .timeline-edit-container .status-in-progress {
-            background: rgba(30, 64, 175, 0.2);
-            color: var(--primary-color);
-            border-color: rgba(30, 64, 175, 0.3);
-        }
-        
-        .timeline-edit-container .status-planned {
-            background: rgba(124, 58, 237, 0.2);
-            color: var(--secondary-color);
-            border-color: rgba(124, 58, 237, 0.3);
-        }
-        
-        .timeline-edit-container .status-delayed {
-            background: rgba(220, 38, 38, 0.2);
-            color: var(--danger-color);
-            border-color: rgba(220, 38, 38, 0.3);
-        }
-        
-        /* Enhanced Assignment information styling */
-        .timeline-edit-container .assignment-info {
-            margin-top: 0.75rem;
-            padding-top: 0.75rem;
-            border-top: 2px solid var(--glass-border);
-        }
-        
-        .timeline-edit-container .assignment-info .bi {
-            margin-right: 0.5rem;
-            opacity: 0.8;
-            color: var(--primary) !important;
-        }
-        
-        .timeline-edit-container .assignment-info span {
-            display: inline-block;
-            margin-right: 1.5rem;
-            font-size: 0.85rem;
-            color: var(--text-muted) !important;
-            font-weight: 500;
-        }
-        
-        .timeline-edit-container .assignment-info strong {
-            color: var(--primary) !important;
-            font-weight: 700;
-        }
-        
-        /* Light mode adjustments for timeline container */
-        [data-theme="light"] .timeline-edit-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-color: rgba(0, 0, 0, 0.1);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-        }
-        
-        [data-theme="light"] .timeline-edit-container .timeline-item {
-            background: rgba(255, 255, 255, 0.9);
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-        
-        [data-theme="light"] .timeline-edit-container .timeline-item:hover {
-            background: rgba(255, 255, 255, 0.95);
-            border-color: var(--primary);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Ensure modal backdrop doesn't interfere with timeline overlay */
-        .modal-backdrop.show {
-            opacity: 0.3;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
         
         .toast-container {
             z-index: 1080;
@@ -4749,13 +3752,13 @@ function createProfileLink($name, $userId, $userType = null) {
         
         [data-theme="light"] .assigned-by-badge {
             background-color: rgba(30, 64, 175, 0.1);
-            color: #2563eb; /* Adjusted for light theme but still visible */
+            color: var(--primary-color);
             border: 1px solid rgba(30, 64, 175, 0.2);
         }
         
         [data-theme="light"] .assigned-to-badge {
             background-color: rgba(16, 185, 129, 0.1);
-            color: #10b981; /* Adjusted for light theme but still visible */
+            color: #059669;
             border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
@@ -4778,6 +3781,12 @@ function createProfileLink($name, $userId, $userType = null) {
             background: var(--card-bg);
             border: 2px solid var(--primary-color);
             color: var(--primary-color);
+        }
+
+        [data-theme="light"] .media-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--text-primary);
         }
 
         [data-theme="light"] .media-card:hover {
@@ -5562,7 +4571,7 @@ function createProfileLink($name, $userId, $userType = null) {
         
         /* Supervisor link styling */
         .supervisor-link {
-            color: var(--text-muted) !important;
+            color: var(--muted-color) !important;
             text-decoration: none;
             font-weight: 500;
             position: relative;
@@ -5573,16 +4582,17 @@ function createProfileLink($name, $userId, $userType = null) {
         }
         
         .supervisor-link:hover {
-            color: var(--text-muted) !important;
+            color: var(--muted-color) !important;
             text-decoration: none;
             background: linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, rgba(30, 64, 175, 0.15) 100%);
             box-shadow: 0 2px 8px rgba(30, 64, 175, 0.2);
             transform: translateY(-1px);
         }
         
+        
         /* Member link styling for consistency */
         .member-link {
-            color: #00bcf7 !important;
+            color: #00b5bf !important;
             text-decoration: none;
             font-weight: 500;
             position: relative;
@@ -5593,7 +4603,7 @@ function createProfileLink($name, $userId, $userType = null) {
         }
         
         .member-link:hover {
-            color: #00bcf7  !important;
+            color: #00b5bf !important;
             text-decoration: none;
             box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
             transform: translateY(-1px);
@@ -5603,60 +4613,6 @@ function createProfileLink($name, $userId, $userType = null) {
 </head>
 <body>
     <?php include 'src/includes/navbar.php'; ?>
-    
-    <?php 
-    // Initialize variables for project permissions
-    $canEditProject = false;
-    $projectId = isset($_GET['id']) ? $_GET['id'] : null;
-    
-    // Check if user is logged in and can edit this project
-    if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['user_id']) && $projectId) {
-        $currentUserId = $_SESSION['user_id'];
-        
-        // Try to get the project from database to check permissions
-        try {
-            $projectsCollection = $db->projectsV2;
-            $project = $projectsCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($projectId)]);
-            
-            if ($project) {
-                // Check if user is project creator
-                if (isset($project['createdBy'])) {
-                    if (is_array($project['createdBy']) && isset($project['createdBy']['$oid']) && $project['createdBy']['$oid'] === $currentUserId) {
-                        $canEditProject = true;
-                    } elseif (is_string($project['createdBy']) && $project['createdBy'] === $currentUserId) {
-                        $canEditProject = true;
-                    }
-                }
-                
-                // Check if user is supervisor
-                if (!$canEditProject && isset($project['supervisor'])) {
-                    if (isset($project['supervisor']['userId']['$oid']) && $project['supervisor']['userId']['$oid'] === $currentUserId) {
-                        $canEditProject = true;
-                    } elseif (isset($project['supervisor']['userId']) && $project['supervisor']['userId'] === $currentUserId) {
-                        $canEditProject = true;
-                    }
-                }
-                
-                // Check if user is team member
-                if (!$canEditProject && isset($project['members']) && is_array($project['members'])) {
-                    foreach ($project['members'] as $member) {
-                        if (isset($member['userId']['$oid']) && $member['userId']['$oid'] === $currentUserId) {
-                            $canEditProject = true;
-                            break;
-                        } elseif (isset($member['userId']) && $member['userId'] === $currentUserId) {
-                            $canEditProject = true;
-                            break;
-                        }
-                    }
-                }
-            }
-        } catch (Exception $e) {
-            // If there's an error, default to no editing permissions
-            error_log("Error checking project permissions: " . $e->getMessage());
-            $canEditProject = false;
-        }
-    }
-    ?>
     
     <!-- Inject PHP session data into JavaScript -->
     <script>
@@ -5726,11 +4682,9 @@ function createProfileLink($name, $userId, $userType = null) {
                     <div id="project-timeline" class="mb-5" data-aos="fade-up" data-aos-delay="400">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3 class="section-title mb-0">Project Timeline</h3>
-                            <?php if ($canEditProject && $projectId): ?>
-                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#timelineEditorModal" data-project-id="<?php echo htmlspecialchars($projectId); ?>">
-                                    <i class="bi bi-pencil me-1"></i> Edit Timeline
-                                </button>
-                            <?php endif; ?>
+                            <button id="editTimelineBtn" class="btn btn-outline-primary btn-sm" title="Edit Timeline">
+                                <i class="bi bi-pencil-square me-1"></i>Edit Timeline
+                            </button>
                         </div>
                         <div class="timeline-container" id="timeline-container">
                             <!-- Timeline items will be loaded here -->
@@ -5824,29 +4778,16 @@ function createProfileLink($name, $userId, $userType = null) {
         </div>
     </div>
 
-    <!-- Timeline Editor Overlay -->
+    <!-- Include Timeline Editor Overlay -->
     <?php include 'timeline_editor_overlay.php'; ?>
-
-    <!-- Add the refreshProjectTimeline function in the JavaScript section -->
-    <script>
-        /**
-         * Refresh the project timeline display after edits
-         */
-        function refreshProjectTimeline() {
-            // Reload the project data and update the timeline display
-            fetchProjectData(currentProjectId);
-        }
-    </script>
-
-</body>
-</html>
-
+    
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="assets/js/timeline_debug.js"></script>
     <script>
         // Initialize AOS animations with performance optimization
         document.addEventListener('DOMContentLoaded', function() {
@@ -5917,6 +4858,13 @@ function createProfileLink($name, $userId, $userType = null) {
             // Get project ID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const projectId = urlParams.get('id');
+        
+        // Handle edit timeline button click
+        document.getElementById('editTimelineBtn').addEventListener('click', function() {
+            // Open the timeline editor modal
+            const timelineEditorModal = new bootstrap.Modal(document.getElementById('timelineEditorModal'));
+            timelineEditorModal.show();
+        });
 
         // Function to create ripple effect on buttons
         function createRipple(event) {
@@ -6092,6 +5040,9 @@ function createProfileLink($name, $userId, $userType = null) {
                     
                     const project = data.project;
                     
+                    // Store project data globally for timeline editor
+                    window.currentProject = project;
+                    
                     // Hide loading spinner and show project details with nice fade effect
                     const loadingSpinner = document.getElementById('loading-spinner');
                     const projectDetails = document.getElementById('project-details');
@@ -6112,6 +5063,44 @@ function createProfileLink($name, $userId, $userType = null) {
                     renderReferences(project);
                     renderMedia(project);
                     renderStats(project);
+                        
+                        // Show Edit Timeline button only for project owners or admins
+                        const editTimelineBtn = document.getElementById('editTimelineBtn');
+                        const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+                        const loggedInUserId = <?php echo isset($_SESSION['user_id']) ? "'" . $_SESSION['user_id'] . "'" : 'null'; ?>;
+                        
+                        // Check if the current user created this project or is a member
+                        let canEditTimeline = false;
+                        
+                        if (isLoggedIn) {
+                            // Project creator check
+                            if (project.createdBy && (
+                                (project.createdBy.$oid && project.createdBy.$oid === loggedInUserId) || 
+                                project.createdBy === loggedInUserId
+                            )) {
+                                canEditTimeline = true;
+                            }
+                            
+                            // Project member check (supervisor or team member)
+                            if (!canEditTimeline && project.members && Array.isArray(project.members)) {
+                                canEditTimeline = project.members.some(member => 
+                                    member.userId && (
+                                        (member.userId.$oid && member.userId.$oid === loggedInUserId) || 
+                                        member.userId === loggedInUserId
+                                    )
+                                );
+                            }
+                            
+                            // Supervisor check
+                            if (!canEditTimeline && project.supervisor && project.supervisor.userId) {
+                                if ((project.supervisor.userId.$oid && project.supervisor.userId.$oid === loggedInUserId) ||
+                                    project.supervisor.userId === loggedInUserId) {
+                                    canEditTimeline = true;
+                                }
+                            }
+                        }
+                        
+                        editTimelineBtn.style.display = canEditTimeline ? 'inline-flex' : 'none';
                         
                         // Add title animation effect
                         animateProjectTitle();
@@ -6510,21 +5499,10 @@ function createProfileLink($name, $userId, $userType = null) {
                 leaveButton.addEventListener('mousedown', createRipple);
             }
             
-            // Show/hide timeline edit button based on authorization
+            // Add ripple effect to the timeline edit button
             const timelineEditBtn = document.getElementById('editTimelineBtn');
             if (timelineEditBtn) {
-                if (isAuthorized) {
-                    timelineEditBtn.style.display = 'inline-block';
-                    timelineEditBtn.addEventListener('click', function() {
-                        // Open timeline edit overlay instead of redirecting
-                        openTimelineEditOverlay(project);
-                    });
-                    
-                    // Add ripple effect to the timeline edit button
-                    timelineEditBtn.addEventListener('mousedown', createRipple);
-                } else {
-                    timelineEditBtn.style.display = 'none';
-                }
+                timelineEditBtn.addEventListener('mousedown', createRipple);
             }
             
             // Update page title
@@ -7267,28 +6245,6 @@ function createProfileLink($name, $userId, $userType = null) {
             return null;
         }
         
-        // Helper function to create a client-side profile link
-        function createClientSideProfileLink(name, userId, userType) {
-            if (!userId) return name;
-            
-            let profileUrl = '';
-            if (userType === 'student') {
-                profileUrl = `Student_Profile.php?id=${userId}`;
-            } else if (userType === 'faculty') {
-                profileUrl = `Faculty_Profile.php?id=${userId}`;
-            } else {
-                // Try to determine the type based on the project data
-                const profileInfo = getUserProfileInfo(userId);
-                if (profileInfo && profileInfo.exists) {
-                    profileUrl = profileInfo.url;
-                } else {
-                    return name; // No profile link possible
-                }
-            }
-            
-            return `<a href="${profileUrl}" class="profile-link" title="View profile">${name}</a>`;
-        }
-        
         // Add timeline enhancement functions
         function initTimelineEnhancements() {
             // Add scroll-based progress animation
@@ -8000,731 +6956,6 @@ function createProfileLink($name, $userId, $userType = null) {
             });
         }
 
-        // Timeline Edit Overlay Functions
-        let currentProject = null;
-        let editingTimelineItems = [];
-        let currentEditingItemIndex = -1;
-
-        /**
-         * Open the timeline edit overlay
-         * @param {Object} project - The project object containing timeline data
-         */
-        function openTimelineEditOverlay(project) {
-            currentProject = project;
-            editingTimelineItems = project.timeline ? [...project.timeline] : [];
-            
-            const overlay = document.getElementById('timelineEditOverlay');
-            overlay.style.display = 'flex';
-            
-            // Populate the timeline items
-            populateTimelineItems();
-            
-            // Add event listener for adding new timeline items
-            const addBtn = document.getElementById('addTimelineItemBtn');
-            addBtn.onclick = addNewTimelineItem;
-            
-            // Prevent body scroll when overlay is open
-            document.body.style.overflow = 'hidden';
-        }
-
-        /**
-         * Close the timeline edit overlay
-         */
-        function closeTimelineEditOverlay() {
-            const overlay = document.getElementById('timelineEditOverlay');
-            overlay.style.display = 'none';
-            
-            // Restore body scroll
-            document.body.style.overflow = 'auto';
-            
-            // Clear current editing data
-            currentProject = null;
-            editingTimelineItems = [];
-            currentEditingItemIndex = -1;
-        }
-
-        /**
-         * Populate the timeline items in the overlay
-         */
-        function populateTimelineItems() {
-            const container = document.getElementById('timelineItemsList');
-            container.innerHTML = '';
-            
-            if (editingTimelineItems.length === 0) {
-                container.innerHTML = '<p class="text-center text-muted">No timeline items yet. Click "Add Timeline Item" to get started.</p>';
-                return;
-            }
-            
-            editingTimelineItems.forEach((item, index) => {
-                const itemEl = createTimelineItemElement(item, index);
-                container.appendChild(itemEl);
-            });
-        }
-
-        /**
-         * Create a timeline item element for the overlay
-         * @param {Object} item - Timeline item data
-         * @param {number} index - Item index
-         * @returns {HTMLElement} - The timeline item element
-         */
-        function createTimelineItemElement(item, index) {
-            const div = document.createElement('div');
-            div.className = `timeline-item ${(item.status || 'planned').toLowerCase().replace(' ', '-')}`;
-            div.dataset.index = index;
-            
-            const statusClasses = {
-                'Completed': 'completed status-completed',
-                'In Progress': 'in-progress status-in-progress',
-                'Planned': 'planned status-planned',
-                'Delayed': 'delayed status-delayed'
-            };
-            
-            const statusClass = statusClasses[item.status] || 'planned status-planned';
-            const formattedDate = formatDisplayDate(item.date);
-            
-            // Generate assignment display text
-            let assignmentInfo = '';
-            
-            // Ensure backward compatibility - handle undefined assignment fields
-            const assignedBy = item.assignedBy || '';
-            const assignedTo = item.assignedTo || [];
-            
-            if (assignedBy || (Array.isArray(assignedTo) && assignedTo.length > 0)) {
-                assignmentInfo = '<div class="assignment-info mt-2">';
-                
-                if (assignedBy) {
-                    const assignedByMember = findMemberById(assignedBy);
-                    const assignedByName = assignedByMember ? assignedByMember.name : assignedBy;
-                    assignmentInfo += `<span class="text-muted small me-3"><i class="bi bi-person-plus"></i> Assigned by: <strong>${assignedByName}</strong></span>`;
-                }
-                
-                if (Array.isArray(assignedTo) && assignedTo.length > 0) {
-                    const assignedToNames = assignedTo.map(id => {
-                        const member = findMemberById(id);
-                        return member ? member.name : id;
-                    }).join(', ');
-                    assignmentInfo += `<span class="text-muted small"><i class="bi bi-person-check"></i> Assigned to: <strong>${assignedToNames}</strong></span>`;
-                }
-                
-                assignmentInfo += '</div>';
-            }
-            
-            div.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div class="timeline-date">
-                        <i class="bi bi-calendar3"></i>
-                        ${formattedDate}
-                        <span class="status-badge ${statusClass}">${item.status || 'Planned'}</span>
-                    </div>
-                    <div class="timeline-controls">
-                        <button type="button" class="btn btn-sm btn-outline-primary edit-timeline" onclick="editTimelineItem(${index})">
-                            <i class="bi bi-pencil-fill"></i>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-danger delete-timeline" onclick="deleteTimelineItem(${index})">
-                            <i class="bi bi-trash-fill"></i>
-                        </button>
-                    </div>
-                </div>
-                <h6 class="mb-2">${item.title || 'Untitled'}</h6>
-                <p class="mb-2 small text-muted">${item.description || 'No description'}</p>
-                ${assignmentInfo}
-            `;
-            
-            return div;
-        }
-
-        /**
-         * Add a new timeline item
-         */
-        function addNewTimelineItem() {
-            const now = new Date();
-            const formattedDate = now.toISOString().split('T')[0]; // YYYY-MM-DD format
-            
-            const newItem = {
-                title: '',
-                description: '',
-                date: formattedDate,
-                status: 'Planned',
-                assignedBy: '',
-                assignedTo: []
-            };
-            
-            editingTimelineItems.push(newItem);
-            currentEditingItemIndex = editingTimelineItems.length - 1;
-            
-            // Open the edit modal for the new item
-            openTimelineItemEditModal(currentEditingItemIndex);
-        }
-        
-        /**
-         * Helper function to get current project members
-         */
-        function getMembersData() {
-            const members = [];
-            
-            // Get members from the current project
-            if (currentProject && currentProject.members) {
-                currentProject.members.forEach(member => {
-                    if (member.name) {
-                        members.push({
-                            name: member.name,
-                            role: member.role || 'Team Member',
-                            userId: member.userId || null
-                        });
-                    }
-                });
-            }
-            
-            return members;
-        }
-        
-        /**
-         * Helper function to find member by ID or name
-         */
-        function findMemberById(memberId, projectData) {
-            if (!memberId || !projectData) return null;
-            
-            // Handle the new format (object with id and name)
-            if (typeof memberId === 'object' && memberId !== null) {
-                if (memberId.id) {
-                    // If we have an ID, try to find the actual member object for additional info
-                    const foundMember = findMemberByActualId(memberId.id, projectData);
-                    if (foundMember) return foundMember;
-                }
-                
-                // If member not found by ID or no ID, return the object itself as it has name
-                return memberId;
-            }
-            
-            // Legacy format - check project members first
-            if (projectData.members) {
-                const member = projectData.members.find(member => {
-                    const memberUserId = member.userId ? 
-                        (member.userId.$oid || member.userId) : null;
-                    return memberUserId === memberId || member.name === memberId;
-                });
-                
-                if (member) return member;
-            }
-            
-            // Check supervisor
-            if (projectData.supervisor) {
-                const supervisorUserId = projectData.supervisor.userId ? 
-                    (projectData.supervisor.userId.$oid || projectData.supervisor.userId) : null;
-                
-                if (supervisorUserId === memberId || projectData.supervisor.name === memberId) {
-                    return projectData.supervisor;
-                }
-            }
-            
-            return null;
-        }
-        
-        // Helper function to find member by their actual ID
-        function findMemberByActualId(memberId, projectData) {
-            if (!memberId || !projectData) return null;
-            
-            // Check project members first
-            if (projectData.members) {
-                const member = projectData.members.find(member => {
-                    const memberUserId = member.userId ? 
-                        (member.userId.$oid || member.userId) : null;
-                    return memberUserId === memberId;
-                });
-                
-                if (member) return member;
-            }
-            
-            // Check supervisor
-            if (projectData.supervisor) {
-                const supervisorUserId = projectData.supervisor.userId ? 
-                    (projectData.supervisor.userId.$oid || projectData.supervisor.userId) : null;
-                
-                if (supervisorUserId === memberId) {
-                    return projectData.supervisor;
-                }
-            }
-            
-            return null;
-        }
-        
-        // Helper function to create a client-side profile link
-        function createClientSideProfileLink(name, userId, userType) {
-            if (!userId) return name;
-            
-            let profileUrl = '';
-            if (userType === 'student') {
-                profileUrl = `Student_Profile.php?id=${userId}`;
-            } else if (userType === 'faculty') {
-                profileUrl = `Faculty_Profile.php?id=${userId}`;
-            } else {
-                // Try to determine the type based on the project data
-                const profileInfo = getUserProfileInfo(userId);
-                if (profileInfo && profileInfo.exists) {
-                    profileUrl = profileInfo.url;
-                } else {
-                    return name; // No profile link possible
-                }
-            }
-            
-            return `<a href="${profileUrl}" class="profile-link" title="View profile">${name}</a>`;
-        }
-
-        /**
-         * Edit a timeline item
-         * @param {number} index - Item index
-         */
-        function editTimelineItem(index) {
-            currentEditingItemIndex = index;
-            openTimelineItemEditModal(index);
-        }
-
-        /**
-         * Delete a timeline item
-         * @param {number} index - Item index
-         */
-        function deleteTimelineItem(index) {
-            if (confirm('Are you sure you want to delete this timeline item?')) {
-                editingTimelineItems.splice(index, 1);
-                populateTimelineItems();
-            }
-        }
-
-                 /**
-          * Open the timeline item edit modal
-          * @param {number} index - Item index
-          */
-         function openTimelineItemEditModal(index) {
-             const item = editingTimelineItems[index];
-             const modalElement = document.getElementById('timelineItemEditModal');
-             
-             // Ensure the modal has the correct z-index to stay above timeline overlay
-             modalElement.style.zIndex = '10050';
-             
-             const modal = new bootstrap.Modal(modalElement, {
-                 backdrop: true,
-                 keyboard: true,
-                 focus: true
-             });
-             
-             // Populate form fields
-             document.getElementById('timelineItemTitle').value = item.title || '';
-             document.getElementById('timelineItemDescription').value = item.description || '';
-             document.getElementById('timelineItemDate').value = formatMongoDate(item.date) || new Date().toISOString().split('T')[0];
-             document.getElementById('timelineItemStatus').value = item.status || 'Planned';
-             
-             // Populate assignment dropdowns
-             populateAssignmentDropdowns();
-             
-             // Set assignment values - if no assignedBy exists, try to auto-select current user
-             let assignedByValue = item.assignedBy || '';
-             if (!assignedByValue) {
-                 // Try to find current user in the dropdown options
-                 const assignedBySelect = document.getElementById('timelineItemAssignedBy');
-                 const currentUserOption = Array.from(assignedBySelect.options).find(option => 
-                     option.value && option.value !== ''
-                 );
-                 if (currentUserOption) {
-                     assignedByValue = currentUserOption.value;
-                 }
-             }
-             document.getElementById('timelineItemAssignedBy').value = assignedByValue;
-             
-             // Handle multiple assignees for "Assigned To" with backward compatibility
-             const assignedToSelect = document.getElementById('timelineItemAssignedTo');
-             const assignedToArray = Array.isArray(item.assignedTo) ? item.assignedTo : (item.assignedTo ? [item.assignedTo] : []);
-             
-             if (Array.isArray(assignedToArray)) {
-                 Array.from(assignedToSelect.options).forEach(option => {
-                     option.selected = assignedToArray.includes(option.value);
-                 });
-             } else if (assignedToArray) {
-                 // Handle single value (backward compatibility)
-                 Array.from(assignedToSelect.options).forEach(option => {
-                     option.selected = option.value === assignedToArray;
-                 });
-             }
-             
-             // Show the modal
-             modal.show();
-             
-             // After modal is shown, ensure backdrop has correct z-index to stay above timeline overlay
-             modalElement.addEventListener('shown.bs.modal', function() {
-                 const backdrop = document.querySelector('.modal-backdrop:last-child');
-                 if (backdrop) {
-                     backdrop.style.zIndex = '10049';
-                 }
-             }, { once: true });
-         }
-
-                 /**
-          * Populate assignment dropdowns with project members
-          */
-         function populateAssignmentDropdowns() {
-             const assignedBySelect = document.getElementById('timelineItemAssignedBy');
-             const assignedToSelect = document.getElementById('timelineItemAssignedTo');
-             
-             if (!assignedBySelect || !assignedToSelect) return;
-             
-             // Clear existing options (except the first default option)
-             assignedBySelect.innerHTML = '<option value="">Select member (optional)</option>';
-             assignedToSelect.innerHTML = '<option value="">Select members (optional)</option>';
-             
-             // Get current project members
-             const members = getMembersData();
-             
-             // Add all team members to "Assigned By" dropdown, but only students to "Assigned To"
-             members.forEach(member => {
-                 if (member.name && member.name.trim()) {
-                     // Use student ID if available, otherwise use member name
-                     const optionValue = (member.userId && member.userId.$oid) ? member.userId.$oid : member.name;
-                     const optionText = `${member.name}${member.role ? ' (' + member.role + ')' : ''}`;
-                     
-                     // Add all members to "Assigned By" dropdown
-                     const assignedByOption = new Option(optionText, optionValue);
-                     assignedBySelect.add(assignedByOption);
-                     
-                     // Check if the member is a student (not supervisor/faculty) for "Assigned To"
-                     const isStudent = !member.role || 
-                                      (member.role.toLowerCase() !== 'supervisor' && 
-                                       member.role.toLowerCase() !== 'faculty' &&
-                                       member.role.toLowerCase() !== 'creator/supervisor');
-                     
-                     // Only add students to "Assigned To" dropdown
-                     if (isStudent) {
-                         const assignedToOption = new Option(optionText, optionValue);
-                         assignedToSelect.add(assignedToOption);
-                     }
-                 }
-             });
-             
-             // Add supervisor to "Assigned By" dropdown
-             if (currentProject && currentProject.supervisor && currentProject.supervisor.name) {
-                 const supervisor = currentProject.supervisor;
-                 const supervisorValue = supervisor.userId ? 
-                     (supervisor.userId.$oid || supervisor.userId) : supervisor.name;
-                 const supervisorText = `${supervisor.name} (Supervisor)`;
-                 
-                 const supervisorByOption = new Option(supervisorText, supervisorValue);
-                 assignedBySelect.add(supervisorByOption);
-             }
-         }
-
-         /**
-          * Save the current timeline item being edited
-          */
-                  function saveTimelineItem() {
-             const index = currentEditingItemIndex;
-             if (index === -1) return;
-             
-             const title = document.getElementById('timelineItemTitle').value.trim();
-             const description = document.getElementById('timelineItemDescription').value.trim();
-             const date = document.getElementById('timelineItemDate').value;
-             const status = document.getElementById('timelineItemStatus').value;
-             const assignedBy = document.getElementById('timelineItemAssignedBy').value;
-             
-             // Get multiple selected values for "Assigned To"
-             const assignedToSelect = document.getElementById('timelineItemAssignedTo');
-             const assignedTo = Array.from(assignedToSelect.selectedOptions).map(option => option.value).filter(val => val !== '');
-             
-             // Validation
-             if (!title || !date) {
-                 if (!title) document.getElementById('timelineItemTitle').classList.add('is-invalid');
-                 if (!date) document.getElementById('timelineItemDate').classList.add('is-invalid');
-                 return;
-             }
-             
-             // Remove validation classes
-             document.getElementById('timelineItemTitle').classList.remove('is-invalid');
-             document.getElementById('timelineItemDate').classList.remove('is-invalid');
-             
-             // Update the item with proper date format
-             editingTimelineItems[index] = {
-                 title,
-                 description,
-                 date,
-                 status,
-                 assignedBy,
-                 assignedTo
-             };
-             
-             // Close modal and refresh display
-             const modal = bootstrap.Modal.getInstance(document.getElementById('timelineItemEditModal'));
-            modal.hide();
-            populateTimelineItems();
-            
-            currentEditingItemIndex = -1;
-        }
-
-        /**
-         * Helper function to get current project members data
-         */
-        function getMembersData() {
-            const members = [];
-            
-            // Get members from the current project
-            if (currentProject && currentProject.members) {
-                currentProject.members.forEach(member => {
-                    if (member.name) {
-                        members.push({
-                            name: member.name,
-                            role: member.role || 'Team Member',
-                            userId: member.userId || null
-                        });
-                    }
-                });
-            }
-            
-            return members;
-        }
-
-        /**
-         * Helper function to find member by ID or name - Enhanced version from edit_project.php
-         */
-        function findMemberById(memberId, projectData) {
-            if (!memberId || !projectData) return null;
-            
-            // Handle the new format (object with id and name)
-            if (typeof memberId === 'object' && memberId !== null) {
-                if (memberId.id) {
-                    // If we have an ID, try to find the actual member object for additional info
-                    const foundMember = findMemberByActualId(memberId.id, projectData);
-                    if (foundMember) return foundMember;
-                }
-                
-                // If member not found by ID or no ID, return the object itself as it has name
-                return memberId;
-            }
-            
-            // Legacy format - check project members first
-            if (projectData.members) {
-                const member = projectData.members.find(member => {
-                    const memberUserId = member.userId ? 
-                        (member.userId.$oid || member.userId) : null;
-                    return memberUserId === memberId || member.name === memberId;
-                });
-                
-                if (member) return member;
-            }
-            
-            // Check supervisor
-            if (projectData.supervisor) {
-                const supervisorUserId = projectData.supervisor.userId ? 
-                    (projectData.supervisor.userId.$oid || projectData.supervisor.userId) : null;
-                
-                if (supervisorUserId === memberId || projectData.supervisor.name === memberId) {
-                    return projectData.supervisor;
-                }
-            }
-            
-            return null;
-        }
-        
-        // Helper function to find member by their actual ID
-        function findMemberByActualId(memberId, projectData) {
-            if (!memberId || !projectData) return null;
-            
-            // Check project members first
-            if (projectData.members) {
-                const member = projectData.members.find(member => {
-                    const memberUserId = member.userId ? 
-                        (member.userId.$oid || member.userId) : null;
-                    return memberUserId === memberId;
-                });
-                
-                if (member) return member;
-            }
-            
-            // Check supervisor
-            if (projectData.supervisor) {
-                const supervisorUserId = projectData.supervisor.userId ? 
-                    (projectData.supervisor.userId.$oid || projectData.supervisor.userId) : null;
-                
-                if (supervisorUserId === memberId) {
-                    return projectData.supervisor;
-                }
-            }
-            
-            return null;
-        }
-        
-        // Helper function to create a client-side profile link
-        function createClientSideProfileLink(name, userId, userType) {
-            if (!userId) return name;
-            
-            let profileUrl = '';
-            if (userType === 'student') {
-                profileUrl = `Student_Profile.php?id=${userId}`;
-            } else if (userType === 'faculty') {
-                profileUrl = `Faculty_Profile.php?id=${userId}`;
-            } else {
-                // Try to determine the type based on the project data
-                const profileInfo = getUserProfileInfo(userId);
-                if (profileInfo && profileInfo.exists) {
-                    profileUrl = profileInfo.url;
-                } else {
-                    return name; // No profile link possible
-                }
-            }
-            
-            return `<a href="${profileUrl}" class="profile-link" title="View profile">${name}</a>`;
-        }
-
-        /**
-         * Populate assignment dropdowns with project members
-         */
-        function populateAssignmentDropdowns() {
-            const assignedBySelect = document.getElementById('timelineItemAssignedBy');
-            const assignedToSelect = document.getElementById('timelineItemAssignedTo');
-            
-            if (!assignedBySelect || !assignedToSelect) return;
-            
-            // Clear existing options (except the first default option)
-            assignedBySelect.innerHTML = '<option value="">Select member (optional)</option>';
-            assignedToSelect.innerHTML = '<option value="">Select members (optional)</option>';
-            
-            // Get current project members
-            const members = getMembersData();
-            
-            // Add all team members to "Assigned By" dropdown, but only students to "Assigned To"
-            members.forEach(member => {
-                if (member.name && member.name.trim()) {
-                    // Use member ID if available, otherwise use member name
-                    const optionValue = (member.userId && member.userId.$oid) ? member.userId.$oid : member.name;
-                    const optionText = `${member.name}${member.role ? ' (' + member.role + ')' : ''}`;
-                
-                    // Add all members to "Assigned By" dropdown
-                    const assignedByOption = new Option(optionText, optionValue);
-                    assignedBySelect.add(assignedByOption);
-                
-                    // Check if the member is a student (not supervisor/faculty) for "Assigned To"
-                    const isStudent = !member.role || 
-                                     (member.role.toLowerCase() !== 'supervisor' && 
-                                      member.role.toLowerCase() !== 'faculty' &&
-                                      member.role.toLowerCase() !== 'creator/supervisor');
-                    
-                    // Only add students to "Assigned To" dropdown
-                    if (isStudent) {
-                        const assignedToOption = new Option(optionText, optionValue);
-                        assignedToSelect.add(assignedToOption);
-                    }
-                }
-            });
-            
-            // Add supervisor to "Assigned By" dropdown
-            if (currentProject && currentProject.supervisor && currentProject.supervisor.name) {
-                const supervisorValue = (currentProject.supervisor.userId && currentProject.supervisor.userId.$oid) ? 
-                                       currentProject.supervisor.userId.$oid : currentProject.supervisor.name;
-                const supervisorText = `${currentProject.supervisor.name} (Supervisor)`;
-                
-                const supervisorByOption = new Option(supervisorText, supervisorValue);
-                assignedBySelect.add(supervisorByOption);
-            }
-        }
-
-        /**
-         * Save all timeline changes back to the server
-         */
-        async function saveTimelineChanges() {
-            if (!currentProject) return;
-            
-            // Show loading state
-            const saveBtn = document.querySelector('.timeline-overlay-footer .btn-primary');
-            const originalText = saveBtn.innerHTML;
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
-            
-            try {
-                const formData = new FormData();
-                formData.append('project_id', currentProject._id.$oid);
-                formData.append('timeline', JSON.stringify(editingTimelineItems));
-                
-                const response = await fetch('src/model/update_timeline.php', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    // Update the current project's timeline
-                    currentProject.timeline = editingTimelineItems;
-                    
-                    // Refresh the timeline display on the page
-                    renderTimeline(currentProject);
-                    
-                    // Close the overlay
-                    closeTimelineEditOverlay();
-                    
-                    // Show success message
-                    showToast('Timeline updated successfully!', 'success');
-                } else {
-                    throw new Error(result.message || 'Failed to update timeline');
-                }
-            } catch (error) {
-                console.error('Error saving timeline:', error);
-                showToast('Error saving timeline: ' + error.message, 'danger');
-                
-                // Reset button state
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = originalText;
-            }
-        }
-
-        /**
-         * Helper function to format MongoDB date for display
-         * @param {Object|string} dateObj - MongoDB date object or ISO string
-         * @returns {string} - Formatted date string
-         */
-        function formatDisplayDate(dateObj) {
-            if (!dateObj) return 'No date';
-            
-            let dateStr;
-            if (typeof dateObj === 'object' && dateObj.$date) {
-                dateStr = dateObj.$date;
-            } else if (typeof dateObj === 'string') {
-                dateStr = dateObj;
-            } else {
-                return 'Invalid date';
-            }
-            
-            try {
-                const date = new Date(dateStr);
-                return date.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-            } catch (error) {
-                return 'Invalid date';
-            }
-        }
-
-        /**
-         * Helper function to format MongoDB date for input field
-         * @param {Object|string} dateObj - MongoDB date object or ISO string
-         * @returns {string} - Date string in YYYY-MM-DD format
-         */
-        function formatMongoDate(dateObj) {
-            if (!dateObj) return '';
-            
-            let dateStr;
-            if (typeof dateObj === 'object' && dateObj.$date) {
-                dateStr = dateObj.$date;
-            } else if (typeof dateObj === 'string') {
-                dateStr = dateObj;
-            } else {
-                return '';
-            }
-            
-            try {
-                const date = new Date(dateStr);
-                return date.toISOString().split('T')[0];
-            } catch (error) {
-                return '';
-            }
-        }
-
         /**
          * Show a toast notification
          * @param {string} message - The message to display
@@ -9127,27 +7358,7 @@ function createProfileLink($name, $userId, $userType = null) {
     setTimeout(() => {
         improveFileLayout();
     }, 1000);
-    
-    // Function to refresh the project timeline after edits
-    function refreshProjectTimeline() {
-        // Reload the project data and update the timeline display
-        if (currentProjectId) {
-            fetchProjectData(currentProjectId);
-            
-            // Show a subtle notification
-            const timelineSection = document.getElementById('timeline-section');
-            if (timelineSection) {
-                timelineSection.classList.add('highlight-update');
-                setTimeout(() => {
-                    timelineSection.classList.remove('highlight-update');
-                }, 2000);
-            }
-        }
-    }
     </script>
-    
-    <!-- Timeline Editor Overlay -->
-    <?php include 'timeline_editor_overlay.php'; ?>
     
 </body>
 </html> 

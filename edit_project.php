@@ -1,5 +1,9 @@
 <?php
 session_start();
+
+// Define a constant to indicate this is the edit_project.php file
+// This is used by included files like timeline_editor_overlay.php
+define('INCLUDED_IN_EDIT_PROJECT', true);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -4984,5 +4988,8 @@ session_start();
         });
     });
     </script>
+    
+    <!-- Include Timeline Editor Overlay -->
+    <?php include 'timeline_editor_overlay.php'; ?>
 </body>
 </html>

@@ -1,609 +1,1103 @@
 <?php
-// Timeline Editor Overlay for Project Details
-// This file provides an overlay for editing project timeline items
-// It's designed to be included in Project_details.php
-
-// Prevent direct access
+// Prevent direct access to this file
 if (!defined('INCLUDED_IN_PROJECT_DETAILS')) {
     header("Location: index.php");
     exit();
 }
+
+// Access to project data is through the JavaScript in Project_details.php
 ?>
+
+<style>
+    /* Timeline Editor Modal - Dark Mode (Default) */
+    #timelineEditorModal .modal-content {
+        background-color: #1a1f2c;
+        border: 1px solid rgba(82, 140, 255, 0.15);
+        border-radius: 15px;
+        box-shadow: 0 0 30px rgba(0, 89, 255, 0.15);
+    }
+    
+    #timelineEditorModal .modal-header {
+        background-color: #161b26;
+        border-bottom: 1px solid rgba(82, 140, 255, 0.15);
+        padding: 15px 20px;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    #timelineEditorModal .modal-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #3d5afe, #2979ff, #3d5afe);
+        border-radius: 15px 15px 0 0;
+        opacity: 0.7;
+    }
+    
+    #timelineEditorModal .modal-footer {
+        border-top: 1px solid rgba(82, 140, 255, 0.15);
+        background-color: #161b26;
+        border-radius: 0 0 15px 15px;
+    }
+    
+    #timelineEditorModal .modal-title {
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    #timelineEditorModal .timeline-items-container {
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+    
+    #timelineEditorModal .timeline-item-card {
+        background-color: #242a38;
+        border: 1px solid rgba(82, 140, 255, 0.15);
+        transition: all 0.3s ease;
+    }
+    
+    #timelineEditorModal .timeline-item-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 89, 255, 0.15);
+        border-color: rgba(82, 140, 255, 0.3);
+    }
+    
+    #timelineEditorModal .card-title {
+        color: #ffffff;
+        font-size: 1rem;
+    }
+    
+    #timelineEditorModal .card-text {
+        color: #a0a8bd;
+    }
+    
+    #timelineEditorModal .assignment-info {
+        color: #8e97ad;
+    }
+    
+    #timelineEditorModal .badge.bg-success {
+        background-color: #00897b !important;
+    }
+    
+    #timelineEditorModal .badge.bg-primary {
+        background-color: #2962ff !important;
+    }
+    
+    #timelineEditorModal .badge.bg-info {
+        background-color: #0288d1 !important;
+    }
+    
+    #timelineEditorModal .badge.bg-danger {
+        background-color: #d32f2f !important;
+    }
+    
+    #timelineEditorModal .btn-outline-primary {
+        color: #2979ff;
+        border-color: #2979ff;
+    }
+    
+    #timelineEditorModal .btn-outline-primary:hover {
+        background-color: #2979ff;
+        color: #ffffff;
+    }
+    
+    #timelineEditorModal .btn-outline-danger {
+        color: #ff5252;
+        border-color: #ff5252;
+    }
+    
+    #timelineEditorModal .btn-outline-danger:hover {
+        background-color: #ff5252;
+        color: #ffffff;
+    }
+    
+    #timelineEditorModal .btn-primary {
+        background: linear-gradient(135deg, #3d5afe, #2979ff);
+        border: none;
+        box-shadow: 0 4px 8px rgba(41, 121, 255, 0.25);
+    }
+    
+    #timelineEditorModal .btn-primary:hover {
+        background: linear-gradient(135deg, #2979ff, #3d5afe);
+        box-shadow: 0 6px 12px rgba(41, 121, 255, 0.35);
+        transform: translateY(-1px);
+    }
+    
+    #timelineEditorModal .btn-outline-secondary {
+        color: #a0a8bd;
+        border-color: #4e5569;
+    }
+    
+    #timelineEditorModal .btn-outline-secondary:hover {
+        background-color: #4e5569;
+        color: #ffffff;
+        border-color: #4e5569;
+    }
+    
+    #editTimelineItemForm {
+        background-color: #1e2433;
+        border: 1px solid rgba(82, 140, 255, 0.15);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+    
+    #editTimelineItemForm .card-header {
+        background-color: #181e2a;
+        border-bottom: 1px solid rgba(82, 140, 255, 0.15);
+    }
+    
+    #timelineEditorModal .form-label {
+        color: #a0a8bd;
+        font-weight: 500;
+        margin-bottom: 6px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    #timelineEditorModal .form-label i {
+        margin-right: 6px;
+        color: #3d5afe;
+    }
+    
+    #timelineEditorModal .form-control,
+    #timelineEditorModal .form-select {
+        background-color: #242a38;
+        border: 1px solid #313846;
+        color: #e0e0e0;
+        border-radius: 8px;
+        padding: 10px 12px;
+    }
+    
+    #timelineEditorModal .form-control:focus,
+    #timelineEditorModal .form-select:focus {
+        background-color: #263040;
+        border-color: #3d5afe;
+        box-shadow: 0 0 0 3px rgba(61, 90, 254, 0.15);
+        color: #ffffff;
+    }
+    
+    #timelineEditorModal .form-control::placeholder {
+        color: #6c7693;
+        opacity: 0.7;
+    }
+    
+    #timelineEditorModal select[multiple] {
+        height: auto;
+        min-height: 120px;
+        padding: 8px;
+    }
+    
+    #timelineEditorModal select[multiple] option {
+        padding: 8px 12px;
+        margin-bottom: 3px;
+        border-radius: 4px;
+        background-color: #242a38;
+        color: #e0e0e0;
+    }
+    
+    #timelineEditorModal select[multiple] option:hover {
+        background-color: #313846;
+    }
+    
+    #timelineEditorModal select[multiple] option:checked {
+        background-color: #2979ff !important;
+        color: #ffffff;
+    }
+    
+    #timelineEditorModal .form-text {
+        color: #8e97ad;
+        font-size: 0.8rem;
+        margin-top: 5px;
+    }
+    
+    #timelineEditorModal .form-text i {
+        color: #3d5afe;
+        margin-right: 4px;
+    }
+    
+    #timelineEditorModal .alert-info {
+        background-color: rgba(3, 169, 244, 0.1);
+        border-color: rgba(3, 169, 244, 0.2);
+        color: #81d4fa;
+    }
+    
+    /* Timeline Editor Modal - Light Mode */
+    [data-theme="light"] #timelineEditorModal .modal-content {
+        background-color: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
+    }
+    
+    [data-theme="light"] #timelineEditorModal .modal-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    [data-theme="light"] #timelineEditorModal .modal-footer {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        background-color: #f8f9fa;
+    }
+    
+    [data-theme="light"] #timelineEditorModal .modal-title {
+        color: #212529;
+    }
+    
+    [data-theme="light"] #timelineEditorModal .timeline-item-card {
+        background-color: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    [data-theme="light"] #timelineEditorModal .timeline-item-card:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    [data-theme="light"] #timelineEditorModal .card-title {
+        color: #212529;
+    }
+    
+    [data-theme="light"] #timelineEditorModal .card-text {
+        color: #6c757d;
+    }
+    
+    [data-theme="light"] #timelineEditorModal .assignment-info {
+        color: #6c757d;
+    }
+    
+    [data-theme="light"] #editTimelineItemForm {
+        background-color: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    }
+    
+    [data-theme="light"] #editTimelineItemForm .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    [data-theme="light"] #timelineEditorModal .form-label {
+        color: #495057;
+    }
+    
+    [data-theme="light"] #timelineEditorModal .form-control,
+    [data-theme="light"] #timelineEditorModal .form-select {
+        background-color: #ffffff;
+        border: 1px solid #ced4da;
+        color: #212529;
+    }
+    
+    [data-theme="light"] #timelineEditorModal .form-control:focus,
+    [data-theme="light"] #timelineEditorModal .form-select:focus {
+        background-color: #ffffff;
+        border-color: #2979ff;
+        box-shadow: 0 0 0 3px rgba(41, 121, 255, 0.15);
+        color: #212529;
+    }
+    
+    [data-theme="light"] #timelineEditorModal .form-control::placeholder {
+        color: #adb5bd;
+    }
+    
+    [data-theme="light"] #timelineEditorModal select[multiple] option {
+        background-color: #ffffff;
+        color: #212529;
+    }
+    
+    [data-theme="light"] #timelineEditorModal select[multiple] option:hover {
+        background-color: #f8f9fa;
+    }
+    
+    [data-theme="light"] #timelineEditorModal .form-text {
+        color: #6c757d;
+    }
+    
+    [data-theme="light"] #timelineEditorModal .alert-info {
+        background-color: #e3f2fd;
+        border-color: #bbdefb;
+        color: #0d47a1;
+    }
+</style>
 
 <!-- Timeline Editor Modal -->
 <div class="modal fade" id="timelineEditorModal" tabindex="-1" aria-labelledby="timelineEditorModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="timelineEditorModalLabel">
-                    <i class="bi bi-calendar-event me-2"></i>Project Timeline
+                    <i class="bi bi-calendar3"></i> Edit Project Timeline
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="text-muted mb-3">Add key milestones and events to track your project's progress.</p>
-                
-                <div id="timelineContainer">
-                    <!-- Timeline items will be added here -->
+                <div class="timeline-items-container">
+                    <!-- Timeline items will be loaded here -->
                 </div>
                 
-                <button type="button" class="btn btn-outline-primary mt-3" id="addTimelineItem">
-                    <i class="bi bi-plus-circle me-2"></i>Add Timeline Item
-                </button>
+                <div id="timelineEditorControls" class="mt-4 mb-3 d-flex justify-content-between">
+                    <button type="button" id="addTimelineItemBtn" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i> Add New Item
+                    </button>
+                </div>
+                
+                <!-- Form for editing a single timeline item -->
+                <div id="editTimelineItemForm" class="card mb-4" style="display: none;">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span id="timelineItemFormTitle">Add Timeline Item</span>
+                        <button type="button" class="btn-close" id="closeTimelineItemFormBtn"></button>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" id="timelineItemIndex">
+                        
+                        <div class="mb-3">
+                            <label for="timelineItemTitle" class="form-label">
+                                <i class="bi bi-type-h1"></i> Title*
+                            </label>
+                            <input type="text" class="form-control" id="timelineItemTitle" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="timelineItemDate" class="form-label">
+                                <i class="bi bi-calendar-event"></i> Date*
+                            </label>
+                            <input type="date" class="form-control" id="timelineItemDate" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="timelineItemStatus" class="form-label">
+                                <i class="bi bi-flag"></i> Status
+                            </label>
+                            <select class="form-select" id="timelineItemStatus">
+                                <option value="Planned">Planned</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Delayed">Delayed</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="timelineItemDescription" class="form-label">
+                                <i class="bi bi-text-paragraph"></i> Description
+                            </label>
+                            <textarea class="form-control" id="timelineItemDescription" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="mb-3" id="assignedByFormGroup">
+                            <label for="timelineItemAssignedBy" class="form-label">
+                                <i class="bi bi-person"></i> Assigned By
+                            </label>
+                            <select class="form-select" id="timelineItemAssignedBy">
+                                <option value="">Select member (optional)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3" id="assignedToFormGroup">
+                            <label for="timelineItemAssignedTo" class="form-label">
+                                <i class="bi bi-people"></i> Assigned To
+                            </label>
+                            <select class="form-select" id="timelineItemAssignedTo" multiple size="3">
+                                <option value="">Select members (optional)</option>
+                            </select>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Hold Ctrl/Cmd to select multiple
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-end mt-4">
+                            <button type="button" class="btn btn-outline-secondary me-2" id="cancelTimelineItemBtn">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn btn-primary" id="saveTimelineItemBtn">
+                                <i class="bi bi-save me-1"></i> Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveAllTimelineChanges">Save Changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Timeline Item Edit Modal -->
-<div class="modal fade" id="timelineEditModal" tabindex="-1" aria-labelledby="timelineEditModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="timelineEditModalLabel">
-                    <i class="bi bi-calendar-event"></i> Edit Timeline Item
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="timelineEditForm">
-                    <!-- Basic Information -->
-                    <div class="section-header">
-                        <h6><i class="bi bi-info-circle"></i> Basic Information</h6>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="mb-2">
-                                <label for="timelineTitle" class="form-label">
-                                    <i class="bi bi-type"></i>Title *
-                                </label>
-                                <input type="text" class="form-control" id="timelineTitle" 
-                                       placeholder="Enter milestone title..." required>
-                                <div class="invalid-feedback">Title required</div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-2">
-                                <label for="timelineDate" class="form-label">
-                                    <i class="bi bi-calendar3"></i>Date *
-                                </label>
-                                <input type="date" class="form-control" id="timelineDate" required>
-                                <div class="invalid-feedback">Date required</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-2">
-                        <label for="timelineDescription" class="form-label">
-                            <i class="bi bi-text-paragraph"></i>Description
-                        </label>
-                        <textarea class="form-control" id="timelineDescription" rows="2" 
-                                  placeholder="Describe what needs to be accomplished..."></textarea>
-                    </div>
-
-                    <!-- Status -->
-                    <div class="section-header">
-                        <h6><i class="bi bi-flag"></i> Status</h6>
-                    </div>
-                    <div class="mb-2">
-                        <label for="timelineStatus" class="form-label">
-                            <i class="bi bi-speedometer2"></i>Current Status
-                        </label>
-                        <select class="form-select" id="timelineStatus">
-                            <option value="Planned">📋 Planned</option>
-                            <option value="In Progress">⚡ In Progress</option>
-                            <option value="Completed">✅ Completed</option>
-                            <option value="Delayed">⚠️ Delayed</option>
-                        </select>
-                    </div>
-
-                    <!-- Assignment -->
-                    <div class="section-header">
-                        <h6><i class="bi bi-people"></i> Assignment</h6>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-2">
-                                <label for="timelineAssignedBy" class="form-label">
-                                    <i class="bi bi-person-plus"></i>Assigned By
-                                </label>
-                                <select class="form-select" id="timelineAssignedBy">
-                                    <option value="">Select member</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-2">
-                                <label for="timelineAssignedTo" class="form-label">
-                                    <i class="bi bi-person-check"></i>Assigned To
-                                </label>
-                                <select class="form-select" id="timelineAssignedTo" multiple size="3">
-                                    <option value="">Select members</option>
-                                </select>
-                                <div class="form-text">
-                                    <i class="bi bi-info-circle"></i> Hold Ctrl/Cmd to select multiple
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x"></i> Cancel
-                </button>
-                <button type="button" class="btn btn-primary" id="saveTimelineChanges">
-                    <i class="bi bi-check"></i> Save
+                <button type="button" class="btn btn-primary" id="saveAllTimelineBtn">
+                    <i class="bi bi-save me-1"></i> Save All Changes
                 </button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Timeline Editor JavaScript -->
 <script>
-// Global variables for timeline editing
-window.timelineItems = [];
-let currentProjectId = null;
-let currentEditingIndex = -1;
-
-// Get data when the timeline editor modal is shown
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize the timeline editor when the modal is shown
-    const timelineEditorModal = document.getElementById('timelineEditorModal');
-    if (timelineEditorModal) {
-        timelineEditorModal.addEventListener('show.bs.modal', function (event) {
-            // Get the project ID from the button that triggered the modal
-            const button = event.relatedTarget;
-            currentProjectId = button.getAttribute('data-project-id');
-            
-            // Load the project timeline data
-            loadProjectTimeline(currentProjectId);
-        });
+    // Define utility fallback functions if not already defined
+    if (typeof showToast !== 'function') {
+        window.showToast = function(title, message, type) {
+            // Default implementation using alert if not defined in parent
+            alert(title + ': ' + message);
+        };
     }
     
-    // Add event listeners for timeline operations
-    document.getElementById('addTimelineItem').addEventListener('click', function() {
-        addTimelineItem();
-    });
+    if (typeof renderTimeline !== 'function') {
+        window.renderTimeline = function(project) {
+            // Default implementation - try to find the parent page's implementation
+            if (typeof window.renderProjectTimeline === 'function') {
+                window.renderProjectTimeline(project);
+            } 
+            // Otherwise do nothing - timeline will be updated next time page refreshes
+        };
+    }
     
-    document.getElementById('saveTimelineChanges').addEventListener('click', function() {
-        saveTimelineItem();
-    });
-    
-    document.getElementById('saveAllTimelineChanges').addEventListener('click', function() {
-        saveAllTimelineChanges();
-    });
-});
-
-// Function to load project timeline data
-function loadProjectTimeline(projectId) {
-    // Show loading state
-    const timelineContainer = document.getElementById('timelineContainer');
-    timelineContainer.innerHTML = `
-        <div class="text-center p-3">
-            <div class="spinner-border spinner-border-sm text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p class="mt-2">Loading timeline items...</p>
-        </div>
-    `;
-    
-    // Fetch project data
-    fetch(`src/model/get_project.php?id=${projectId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success && data.project) {
-                const project = data.project;
+    // This script will be initialized after the main project data is loaded
+    function initializeTimelineEditor() {
+        // Elements
+        const timelineEditorModal = document.getElementById('timelineEditorModal');
+        const timelineItemsContainer = document.querySelector('.timeline-items-container');
+        const addTimelineItemBtn = document.getElementById('addTimelineItemBtn');
+        const editTimelineItemForm = document.getElementById('editTimelineItemForm');
+        const closeTimelineItemFormBtn = document.getElementById('closeTimelineItemFormBtn');
+        const cancelTimelineItemBtn = document.getElementById('cancelTimelineItemBtn');
+        const saveTimelineItemBtn = document.getElementById('saveTimelineItemBtn');
+        const saveAllTimelineBtn = document.getElementById('saveAllTimelineBtn');
+        
+        // Form elements
+        const timelineItemFormTitle = document.getElementById('timelineItemFormTitle');
+        const timelineItemIndex = document.getElementById('timelineItemIndex');
+        const timelineItemTitle = document.getElementById('timelineItemTitle');
+        const timelineItemDate = document.getElementById('timelineItemDate');
+        const timelineItemStatus = document.getElementById('timelineItemStatus');
+        const timelineItemDescription = document.getElementById('timelineItemDescription');
+        const timelineItemAssignedBy = document.getElementById('timelineItemAssignedBy');
+        const timelineItemAssignedTo = document.getElementById('timelineItemAssignedTo');
+        
+        // Store timeline data locally for editing
+        let timelineItems = [];
+        let projectId = '';
+        
+        // Format date from various possible MongoDB formats to YYYY-MM-DD
+        function formatDateForInput(mongoDate) {
+            try {
+                if (!mongoDate) return '';
                 
-                // Process timeline items
-                if (project.timeline && project.timeline.length > 0) {
-                    window.timelineItems = project.timeline.map(item => {
-                        // Handle MongoDB date format
-                        let date = item.date;
-                        if (item.date && item.date.$date) {
-                            date = new Date(item.date.$date).toISOString().split('T')[0];
-                        } else if (typeof item.date === 'string' && item.date.includes('T')) {
-                            date = new Date(item.date).toISOString().split('T')[0];
-                        } else if (item.date) {
-                            date = item.date;
-                        } else {
-                            date = new Date().toISOString().split('T')[0];
-                        }
-                        
-                        return {
-                            title: item.title || '',
-                            description: item.description || '',
-                            date: date,
-                            status: item.status || 'Planned',
-                            assignedBy: item.assignedBy || null,
-                            assignedTo: Array.isArray(item.assignedTo) ? item.assignedTo : (item.assignedTo ? [item.assignedTo] : [])
-                        };
-                    });
-                } else {
-                    window.timelineItems = [];
+                let date;
+                
+                // Case 1: Object with $date property (MongoDB BSON Date)
+                if (mongoDate.$date) {
+                    if (typeof mongoDate.$date === 'string') {
+                        date = new Date(mongoDate.$date);
+                    } else if (typeof mongoDate.$date === 'number') {
+                        date = new Date(mongoDate.$date);
+                    } else {
+                        return '';
+                    }
+                } 
+                // Case 2: Direct ISO string
+                else if (typeof mongoDate === 'string') {
+                    date = new Date(mongoDate);
+                }
+                // Case 3: Regular date object
+                else if (mongoDate instanceof Date) {
+                    date = mongoDate;
+                }
+                // Case 4: Try to parse as string
+                else {
+                    date = new Date(mongoDate);
                 }
                 
-                // Update the UI
-                updateTimelineDisplay();
-            } else {
-                timelineContainer.innerHTML = `<div class="alert alert-danger">Failed to load project data</div>`;
-            }
-        })
-        .catch(error => {
-            console.error('Error loading project data:', error);
-            timelineContainer.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
-        });
-}
-
-// Function to update the timeline display
-function updateTimelineDisplay() {
-    const timelineContainer = document.getElementById('timelineContainer');
-    timelineContainer.innerHTML = '';
-    
-    if (window.timelineItems.length === 0) {
-        timelineContainer.innerHTML = '<p class="text-muted text-center py-3">No timeline items added yet.</p>';
-        return;
-    }
-    
-    // Sort timeline items by date
-    window.timelineItems.sort((a, b) => {
-        const dateA = a.date || '';
-        const dateB = b.date || '';
-        return new Date(dateA) - new Date(dateB);
-    });
-    
-    window.timelineItems.forEach((item, index) => {
-        const statusClasses = {
-            'Completed': 'completed status-completed',
-            'In Progress': 'in-progress status-in-progress',
-            'Planned': 'planned status-planned',
-            'Delayed': 'delayed status-delayed'
-        };
-        
-        const statusClass = statusClasses[item.status] || 'planned status-planned';
-        
-        const timelineItem = document.createElement('div');
-        timelineItem.className = `timeline-item ${item.status ? item.status.toLowerCase().replace(' ', '-') : 'planned'}`;
-        timelineItem.dataset.index = index;
-        
-        // Format date for display
-        const displayDate = new Date(item.date);
-        const formattedDisplayDate = displayDate.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-        
-        // Generate assignment display text
-        let assignmentInfo = '';
-        
-        // Process assignedBy info
-        let assignedByName = '';
-        if (item.assignedBy) {
-            if (typeof item.assignedBy === 'object' && item.assignedBy.name) {
-                assignedByName = item.assignedBy.name;
-            } else {
-                assignedByName = item.assignedBy;
+                // Check if date is valid
+                if (isNaN(date.getTime())) {
+                    console.warn('Invalid date:', mongoDate);
+                    return '';
+                }
+                
+                // Format as YYYY-MM-DD for input type="date"
+                return date.toISOString().split('T')[0];
+            } catch (error) {
+                console.error('Error formatting date:', error, mongoDate);
+                return '';
             }
         }
         
-        // Process assignedTo info
-        let assignedToNames = [];
-        if (item.assignedTo && item.assignedTo.length > 0) {
-            assignedToNames = item.assignedTo.map(assignee => {
-                if (typeof assignee === 'object' && assignee.name) {
-                    return assignee.name;
+        // Initialize the timeline editor with project data
+        function loadTimelineData(project) {
+            // Store project ID for saving - handle different MongoDB ID formats
+            if (project._id) {
+                if (typeof project._id === 'string') {
+                    projectId = project._id;
+                } else if (project._id.$oid) {
+                    projectId = project._id.$oid;
+                } else if (typeof project._id.toString === 'function') {
+                    projectId = project._id.toString();
                 }
-                return assignee;
+            }
+            
+            console.log('Timeline editor initialized with project ID:', projectId);
+            
+            // Clone the timeline data to avoid modifying the original
+            timelineItems = project.timeline ? JSON.parse(JSON.stringify(project.timeline)) : [];
+            
+            // Sort timeline items by date
+            timelineItems.sort((a, b) => {
+                const dateA = new Date(a.date).getTime() || 0;
+                const dateB = new Date(b.date).getTime() || 0;
+                return dateA - dateB;
+            });
+            
+            // Render timeline items in the editor
+            renderTimelineItems();
+        }
+        
+        // Render timeline items in the editor
+        function renderTimelineItems() {
+            if (!timelineItems || timelineItems.length === 0) {
+                timelineItemsContainer.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        No timeline items yet. Click "Add New Item" to create your first timeline item.
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '<div class="timeline-items-list">';
+            
+            timelineItems.forEach((item, index) => {
+                // Format date for display
+                const date = formatDateForInput(item.date);
+                const displayDate = new Date(date).toLocaleDateString('en-US', {
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric'
+                });
+                
+                // Determine status badge class
+                let statusBadgeClass = 'bg-secondary';
+                if (item.status) {
+                    const statusLower = item.status.toLowerCase();
+                    if (statusLower.includes('completed')) {
+                        statusBadgeClass = 'bg-success';
+                    } else if (statusLower.includes('progress')) {
+                        statusBadgeClass = 'bg-primary';
+                    } else if (statusLower.includes('delayed')) {
+                        statusBadgeClass = 'bg-danger';
+                    } else if (statusLower.includes('planned')) {
+                        statusBadgeClass = 'bg-info';
+                    }
+                }
+                
+                // Get assigned by name
+                let assignedByName = '';
+                if (item.assignedBy) {
+                    // Handle new format (object with id and name)
+                    if (typeof item.assignedBy === 'object' && item.assignedBy !== null) {
+                        assignedByName = item.assignedBy.name || '';
+                    } 
+                    // Handle legacy format (string)
+                    else {
+                        const assignedBy = item.assignedBy;
+                        const assignedByMember = findMemberById(assignedBy);
+                        assignedByName = assignedByMember ? assignedByMember.name : assignedBy;
+                    }
+                }
+                
+                // Get assigned to names
+                let assignedToNames = [];
+                if (item.assignedTo) {
+                    if (Array.isArray(item.assignedTo)) {
+                        // Map to names, handling both new and legacy formats
+                        assignedToNames = item.assignedTo.map(assignee => {
+                            // Handle new format (object with id and name)
+                            if (typeof assignee === 'object' && assignee !== null) {
+                                return assignee.name || 'Unknown';
+                            }
+                            // Handle legacy format (string ID or name)
+                            const member = findMemberById(assignee);
+                            return member ? member.name : assignee;
+                        });
+                    } else {
+                        // Handle single assignee case (backward compatibility)
+                        const member = findMemberById(item.assignedTo);
+                        assignedToNames = [member ? member.name : item.assignedTo];
+                    }
+                }
+                
+                html += `
+                    <div class="timeline-item-card card mb-3" data-index="${index}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="card-title mb-1">${item.title}</h5>
+                                    <div class="text-muted small">
+                                        <i class="bi bi-calendar me-1"></i>${displayDate}
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="badge ${statusBadgeClass} me-2">${item.status || 'Planned'}</span>
+                                    <div class="btn-group btn-group-sm">
+                                        <button type="button" class="btn btn-outline-primary edit-timeline-item" data-index="${index}">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger delete-timeline-item" data-index="${index}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            ${item.description ? `<p class="card-text mt-2">${item.description}</p>` : ''}
+                            
+                            <div class="assignment-info small mt-2">
+                                ${assignedByName ? `<div><i class="bi bi-person-check me-1"></i>Assigned by: ${assignedByName}</div>` : ''}
+                                ${assignedToNames.length > 0 ? `
+                                    <div><i class="bi bi-people me-1"></i>Assigned to: ${assignedToNames.join(', ')}</div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            timelineItemsContainer.innerHTML = html;
+            
+            // Add event listeners
+            document.querySelectorAll('.edit-timeline-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    editTimelineItem(index);
+                });
+            });
+            
+            document.querySelectorAll('.delete-timeline-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    deleteTimelineItem(index);
+                });
             });
         }
         
-        if (assignedByName || assignedToNames.length > 0) {
-            assignmentInfo = '<div class="assignment-info mt-2">';
+        // Open the edit form for a timeline item
+        function editTimelineItem(index) {
+            const item = timelineItems[index];
             
-            if (assignedByName) {
-                assignmentInfo += `<span class="text-muted small me-3"><i class="bi bi-person-plus"></i> Assigned by: <strong>${assignedByName}</strong></span>`;
+            // Update form title
+            timelineItemFormTitle.textContent = 'Edit Timeline Item';
+            
+            // Populate form fields
+            timelineItemIndex.value = index;
+            timelineItemTitle.value = item.title || '';
+            timelineItemDate.value = formatDateForInput(item.date);
+            timelineItemStatus.value = item.status || 'Planned';
+            timelineItemDescription.value = item.description || '';
+            
+            // Populate assignment dropdowns with project members
+            populateAssignmentDropdowns();
+            
+            // Set assignment values
+            let assignedByValue = '';
+            
+            // Handle new format (object with id and name)
+            if (item.assignedBy && typeof item.assignedBy === 'object' && item.assignedBy.id) {
+                assignedByValue = item.assignedBy.id;
+            } 
+            // Handle legacy format (string ID or name)
+            else if (item.assignedBy) {
+                assignedByValue = item.assignedBy;
             }
             
-            if (assignedToNames.length > 0) {
-                assignmentInfo += `<span class="text-muted small"><i class="bi bi-person-check"></i> Assigned to: <strong>${assignedToNames.join(', ')}</strong></span>`;
+            document.getElementById('timelineItemAssignedBy').value = assignedByValue;
+            
+            // Handle multiple assignees for "Assigned To" (with backward compatibility)
+            const assignedToSelect = document.getElementById('timelineItemAssignedTo');
+            
+            // Reset selections
+            Array.from(assignedToSelect.options).forEach(option => {
+                option.selected = false;
+            });
+            
+            // Set selected values
+            if (item.assignedTo && Array.isArray(item.assignedTo)) {
+                // Extract IDs from objects if in new format
+                const assignedToIds = item.assignedTo.map(assignee => 
+                    (assignee && typeof assignee === 'object' && assignee.id) ? assignee.id : assignee
+                );
+                
+                // Select the appropriate options in the dropdown
+                Array.from(assignedToSelect.options).forEach(option => {
+                    if (option.value) {
+                        option.selected = assignedToIds.includes(option.value);
+                    }
+                });
             }
             
-            assignmentInfo += '</div>';
+            // Show the form
+            editTimelineItemForm.style.display = 'block';
+            
+            // Scroll to the form
+            editTimelineItemForm.scrollIntoView({ behavior: 'smooth' });
         }
-
-        timelineItem.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <div class="timeline-date">
-                    <i class="bi bi-calendar3"></i>
-                    ${formattedDisplayDate}
-                    <span class="status-badge ${statusClass}">${item.status || 'Planned'}</span>
-                </div>
-                <div class="timeline-controls">
-                    <button type="button" class="btn btn-sm btn-outline-primary edit-timeline" data-index="${index}">
-                        <i class="bi bi-pencil-fill"></i>
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-danger delete-timeline" data-index="${index}">
-                        <i class="bi bi-trash-fill"></i>
-                    </button>
-                </div>
-            </div>
-            <h6 class="mb-2">${item.title || ''}</h6>
-            <p class="mb-2 small text-muted">${item.description || ''}</p>
-            ${assignmentInfo}
-        `;
         
-        timelineContainer.appendChild(timelineItem);
-        
-        // Add event listeners
-        const editBtn = timelineItem.querySelector('.edit-timeline');
-        const deleteBtn = timelineItem.querySelector('.delete-timeline');
-        
-        editBtn.addEventListener('click', function() {
-            const index = parseInt(this.dataset.index);
-            editTimelineItem(index);
-        });
-        
-        deleteBtn.addEventListener('click', function() {
-            const index = parseInt(this.dataset.index);
-            deleteTimelineItem(index);
-        });
-    });
-}
-
-// Function to add a new timeline item
-function addTimelineItem(item = null) {
-    const now = new Date();
-    const formattedDate = now.toISOString().split('T')[0]; // YYYY-MM-DD format
-    
-    const newItem = item || {
-        title: '',
-        description: '',
-        date: formattedDate,
-        status: 'Planned',
-        assignedBy: null,
-        assignedTo: []
-    };
-    
-    // Add to the array
-    if (!item) {
-        window.timelineItems.push(newItem);
-    }
-    
-    // Update the display
-    updateTimelineDisplay();
-    
-    // If it's a new item, open the edit dialog
-    if (!item) {
-        editTimelineItem(window.timelineItems.length - 1);
-    }
-}
-
-// Function to edit a timeline item
-function editTimelineItem(index) {
-    currentEditingIndex = index;
-    const item = window.timelineItems[index];
-    
-    // Set form values
-    document.getElementById('timelineTitle').value = item.title || '';
-    document.getElementById('timelineDescription').value = item.description || '';
-    document.getElementById('timelineDate').value = item.date || new Date().toISOString().split('T')[0];
-    document.getElementById('timelineStatus').value = item.status || 'Planned';
-    
-    // Populate assignment dropdowns with project members
-    populateAssignmentDropdowns();
-    
-    // Set assignment values
-    let assignedByValue = '';
-    if (item.assignedBy) {
-        if (typeof item.assignedBy === 'object' && item.assignedBy.id) {
-            assignedByValue = item.assignedBy.id;
-        } else {
-            assignedByValue = item.assignedBy;
+        // Add a new timeline item
+        function addTimelineItem() {
+            // Clear form fields
+            timelineItemFormTitle.textContent = 'Add New Timeline Item';
+            timelineItemIndex.value = '';
+            timelineItemTitle.value = '';
+            timelineItemDate.value = new Date().toISOString().split('T')[0]; // Today's date
+            timelineItemStatus.value = 'Planned';
+            timelineItemDescription.value = '';
+            
+            // Populate assignment dropdowns
+            populateAssignmentDropdowns();
+            
+            // Reset selections in dropdowns
+            timelineItemAssignedBy.value = '';
+            
+            Array.from(timelineItemAssignedTo.options).forEach(option => {
+                option.selected = false;
+            });
+            
+            // Show the form
+            editTimelineItemForm.style.display = 'block';
+            
+            // Scroll to the form
+            editTimelineItemForm.scrollIntoView({ behavior: 'smooth' });
         }
-    }
-    document.getElementById('timelineAssignedBy').value = assignedByValue;
-    
-    // Set assignedTo values
-    const assignedToSelect = document.getElementById('timelineAssignedTo');
-    const assignedTo = Array.isArray(item.assignedTo) ? item.assignedTo : [];
-    
-    Array.from(assignedToSelect.options).forEach(option => {
-        option.selected = assignedTo.some(assignee => {
-            if (typeof assignee === 'object' && assignee.id) {
-                return assignee.id === option.value;
+        
+        // Delete a timeline item
+        function deleteTimelineItem(index) {
+            if (confirm('Are you sure you want to delete this timeline item?')) {
+                timelineItems.splice(index, 1);
+                renderTimelineItems();
+                
+                // Hide form if currently editing the deleted item
+                if (timelineItemIndex.value == index) {
+                    editTimelineItemForm.style.display = 'none';
+                }
             }
-            return assignee === option.value;
+        }
+        
+        // Save current timeline item
+        function saveTimelineItem() {
+            // Validate required fields
+            if (!timelineItemTitle.value) {
+                alert('Please enter a title for the timeline item.');
+                timelineItemTitle.focus();
+                return;
+            }
+            
+            if (!timelineItemDate.value) {
+                alert('Please enter a date for the timeline item.');
+                timelineItemDate.focus();
+                return;
+            }
+            
+            // Prepare timeline item data
+            const item = {
+                title: timelineItemTitle.value,
+                description: timelineItemDescription.value,
+                date: timelineItemDate.value,
+                status: timelineItemStatus.value,
+            };
+            
+            // Handle assignedBy - get both ID and name
+            if (timelineItemAssignedBy.value) {
+                const selectedOption = timelineItemAssignedBy.options[
+                    timelineItemAssignedBy.selectedIndex
+                ];
+                item.assignedBy = {
+                    id: timelineItemAssignedBy.value,
+                    name: selectedOption.text.replace(/ \(.*\)$/, ''), // Remove role from text
+                    type: selectedOption.text.toLowerCase().includes('supervisor') ? 'faculty' : 'student'
+                };
+            }
+            
+            // Handle assignedTo - get multiple selected values with both ID and name
+            const assignedTo = Array.from(timelineItemAssignedTo.selectedOptions)
+                .filter(option => option.value !== '')
+                .map(option => ({
+                    id: option.value,
+                    name: option.text.replace(/ \(.*\)$/, ''), // Remove role from text
+                    type: 'student' // Assuming assignedTo are only students
+                }));
+                
+            if (assignedTo.length > 0) {
+                item.assignedTo = assignedTo;
+            }
+            
+            // Add or update the item
+            const index = timelineItemIndex.value !== '' ? parseInt(timelineItemIndex.value) : -1;
+            if (index >= 0) {
+                timelineItems[index] = item;
+            } else {
+                timelineItems.push(item);
+            }
+            
+            // Update the UI
+            renderTimelineItems();
+            
+            // Hide the form
+            editTimelineItemForm.style.display = 'none';
+        }
+        
+        // Save all timeline changes to the server
+        function saveAllTimelineChanges() {
+            // Show loading state on button
+            const saveButton = document.getElementById('saveAllTimelineBtn');
+            const originalText = saveButton.innerHTML;
+            saveButton.disabled = true;
+            saveButton.innerHTML = '<i class="bi bi-hourglass-split me-1"></i> Saving...';
+            
+            // Log what's happening
+            console.log('Starting to save timeline changes');
+            console.log('Project ID:', projectId);
+            console.log('Timeline items:', timelineItems);
+            
+            // Validate project ID
+            if (!projectId) {
+                console.error('Error: Project ID is missing or invalid');
+                saveButton.disabled = false;
+                saveButton.innerHTML = originalText;
+                
+                if (typeof showToast === 'function') {
+                    showToast('Error', 'Project ID is missing or invalid', 'error');
+                } else {
+                    alert('Error: Project ID is missing or invalid');
+                }
+                return;
+            }
+            
+            // Sort timeline items by date before saving
+            timelineItems.sort((a, b) => {
+                const dateA = new Date(formatDateForInput(a.date)).getTime() || 0;
+                const dateB = new Date(formatDateForInput(b.date)).getTime() || 0;
+                return dateA - dateB;
+            });
+            
+            // Prepare data for submission
+            const data = new FormData();
+            data.append('project_id', projectId);
+            data.append('timeline', JSON.stringify(timelineItems));
+            data.append('action', 'update_timeline'); // Specify that we're updating the timeline
+            
+            // Log the request
+            console.log('Sending request to update_project.php');
+            console.log('Request data:', {
+                project_id: projectId,
+                action: 'update_timeline',
+                timeline_count: timelineItems.length
+            });
+            
+            // Determine correct path to update_project.php
+            let basePath = '';
+            if (window.location.pathname.includes('/Project_details.php')) {
+                // If we're on the project details page, use relative path
+                basePath = 'src/model/update_project.php';
+            } else {
+                // Try to build path based on current URL depth
+                const pathParts = window.location.pathname.split('/');
+                if (pathParts.length > 2) {
+                    // We're in a subdirectory, adjust path accordingly
+                    basePath = '../src/model/update_project.php';
+                } else {
+                    // We're at root level
+                    basePath = 'src/model/update_project.php';
+                }
+            }
+            
+            console.log('Using path for update_project.php:', basePath);
+            
+            // Send to server
+            fetch(basePath, {
+                method: 'POST',
+                body: data
+            })
+            .then(response => {
+                console.log('Response received:', response.status);
+                if (!response.ok) {
+                    throw new Error(`Server responded with status ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(result => {
+                // Log the result
+                console.log('Response data:', result);
+                
+                // Restore button state
+                saveButton.disabled = false;
+                saveButton.innerHTML = originalText;
+                
+                if (result.success) {
+                    // Close modal
+                    const bsModal = bootstrap.Modal.getInstance(timelineEditorModal);
+                    bsModal.hide();
+                    
+                    // Show success message using alert or existing toast system
+                    if (typeof showToast === 'function') {
+                        showToast('Success', 'Timeline updated successfully', 'success');
+                    } else {
+                        // Fallback to alert if showToast is not available
+                        alert('Timeline updated successfully');
+                    }
+                    
+                    // Update project data in memory
+                    if (window.currentProject) {
+                        window.currentProject.timeline = JSON.parse(JSON.stringify(timelineItems));
+                        
+                        // Try to render timeline if the function exists
+                        if (typeof renderTimeline === 'function') {
+                            renderTimeline(window.currentProject);
+                        } else if (typeof window.renderProjectTimeline === 'function') {
+                            window.renderProjectTimeline(window.currentProject);
+                        }
+                    }
+                } else {
+                    // Show error message
+                    console.error('Error saving timeline:', result.message);
+                    if (typeof showToast === 'function') {
+                        showToast('Error', result.message || 'Failed to update timeline', 'error');
+                    } else {
+                        // Fallback to alert
+                        alert('Error: ' + (result.message || 'Failed to update timeline'));
+                    }
+                }
+            })
+            .catch(error => {
+                // Log the error
+                console.error('Error saving timeline:', error);
+                
+                // Restore button state
+                saveButton.disabled = false;
+                saveButton.innerHTML = originalText;
+                
+                // Try to provide a better error message
+                let errorMessage = 'An error occurred while updating the timeline';
+                
+                // Check if we can get a more specific error
+                if (error.message) {
+                    errorMessage += ': ' + error.message;
+                }
+                
+                // Show error message
+                if (typeof showToast === 'function') {
+                    showToast('Error', errorMessage, 'error');
+                } else {
+                    // Fallback to alert
+                    alert('Error: ' + errorMessage);
+                }
+            });
+        }
+        
+        // Helper function to populate assignment dropdowns with project members
+        function populateAssignmentDropdowns() {
+            const assignedBySelect = timelineItemAssignedBy;
+            const assignedToSelect = timelineItemAssignedTo;
+            
+            if (!assignedBySelect || !assignedToSelect) return;
+            
+            // Clear existing options (except the first default option)
+            assignedBySelect.innerHTML = '<option value="">Select member (optional)</option>';
+            assignedToSelect.innerHTML = '<option value="">Select members (optional)</option>';
+            
+            // Get current project members from the main page if available
+            if (window.currentProject && window.currentProject.members) {
+                const members = window.currentProject.members;
+                
+                // Add all team members to "Assigned By" dropdown, but only students to "Assigned To"
+                members.forEach(member => {
+                    if (member.name && member.name.trim()) {
+                        // Use student ID if available, otherwise use member name
+                        const optionValue = (member.userId && member.userId.$oid) ? member.userId.$oid : member.name;
+                        const optionText = `${member.name}${member.role ? ' (' + member.role + ')' : ''}`;
+                        
+                        // Add all members to "Assigned By" dropdown
+                        const assignedByOption = new Option(optionText, optionValue);
+                        assignedBySelect.add(assignedByOption);
+                        
+                        // Check if the member is a student (not supervisor/faculty) for "Assigned To"
+                        const isStudent = !member.role || 
+                                        (member.role.toLowerCase() !== 'supervisor' && 
+                                        member.role.toLowerCase() !== 'faculty' &&
+                                        member.role.toLowerCase() !== 'creator/supervisor');
+                        
+                        // Only add students to "Assigned To" dropdown
+                        if (isStudent) {
+                            const assignedToOption = new Option(optionText, optionValue);
+                            assignedToSelect.add(assignedToOption);
+                        }
+                    }
+                });
+                
+                // Add supervisor to "Assigned By" dropdown if exists
+                if (window.currentProject.supervisor) {
+                    const supervisor = window.currentProject.supervisor;
+                    const supervisorName = typeof supervisor === 'object' ? supervisor.name : supervisor;
+                    const supervisorId = typeof supervisor === 'object' && supervisor.id ? supervisor.id : supervisorName;
+                    
+                    if (supervisorName && supervisorName.trim()) {
+                        const supervisorText = `${supervisorName} (Supervisor)`;
+                        const supervisorByOption = new Option(supervisorText, supervisorId);
+                        assignedBySelect.add(supervisorByOption);
+                    }
+                }
+            }
+        }
+        
+        // Helper function to find member by ID or name
+        function findMemberById(id) {
+            if (!id || !window.currentProject || !window.currentProject.members) return null;
+            
+            // Check current project members
+            const members = window.currentProject.members;
+            
+            // First try to find by user ID
+            let member = members.find(m => 
+                (m.userId && m.userId.$oid === id) || 
+                (m.userId && typeof m.userId === 'string' && m.userId === id)
+            );
+            
+            // If not found by ID, try by name
+            if (!member) {
+                member = members.find(m => m.name === id);
+            }
+            
+            return member;
+        }
+        
+        // Event listeners
+        addTimelineItemBtn.addEventListener('click', addTimelineItem);
+        closeTimelineItemFormBtn.addEventListener('click', () => {
+            editTimelineItemForm.style.display = 'none';
         });
-    });
-    
-    // Show the modal
-    const timelineEditModal = new bootstrap.Modal(document.getElementById('timelineEditModal'));
-    timelineEditModal.show();
-}
-
-// Function to save changes to a timeline item
-function saveTimelineItem() {
-    // Get form values
-    const title = document.getElementById('timelineTitle').value.trim();
-    const description = document.getElementById('timelineDescription').value.trim();
-    const date = document.getElementById('timelineDate').value;
-    const status = document.getElementById('timelineStatus').value;
-    
-    // Validate required fields
-    if (!title || !date) {
-        if (!title) document.getElementById('timelineTitle').classList.add('is-invalid');
-        if (!date) document.getElementById('timelineDate').classList.add('is-invalid');
-        return;
-    }
-    
-    // Get assignedBy information
-    const assignedBySelect = document.getElementById('timelineAssignedBy');
-    let assignedBy = null;
-    
-    if (assignedBySelect.value) {
-        const selectedOption = assignedBySelect.options[assignedBySelect.selectedIndex];
-        assignedBy = {
-            id: assignedBySelect.value,
-            name: selectedOption.text.replace(/ \(.*\)$/, '') // Remove role from text
+        cancelTimelineItemBtn.addEventListener('click', () => {
+            editTimelineItemForm.style.display = 'none';
+        });
+        saveTimelineItemBtn.addEventListener('click', saveTimelineItem);
+        saveAllTimelineBtn.addEventListener('click', saveAllTimelineChanges);
+        
+        // Modal events
+        timelineEditorModal.addEventListener('shown.bs.modal', function() {
+            // Ensure we have latest data when modal opens
+            if (window.currentProject) {
+                loadTimelineData(window.currentProject);
+            }
+        });
+        
+        // Make timeline items sortable with drag and drop (optional enhancement)
+        // This would require additional jQuery UI or SortableJS library
+        
+        // Return public methods for external access
+        return {
+            loadTimelineData: loadTimelineData
         };
     }
     
-    // Get assignedTo information
-    const assignedToSelect = document.getElementById('timelineAssignedTo');
-    const assignedTo = Array.from(assignedToSelect.selectedOptions)
-        .filter(option => option.value)
-        .map(option => ({
-            id: option.value,
-            name: option.text.replace(/ \(.*\)$/, '') // Remove role from text
-        }));
-    
-    // Update the timeline item
-    window.timelineItems[currentEditingIndex] = {
-        title,
-        description,
-        date,
-        status,
-        assignedBy,
-        assignedTo
-    };
-    
-    // Update the UI
-    updateTimelineDisplay();
-    
-    // Close the modal
-    const modal = bootstrap.Modal.getInstance(document.getElementById('timelineEditModal'));
-    modal.hide();
-}
-
-// Function to delete a timeline item
-function deleteTimelineItem(index) {
-    if (confirm('Are you sure you want to delete this timeline item?')) {
-        window.timelineItems.splice(index, 1);
-        updateTimelineDisplay();
-    }
-}
-
-// Function to populate assignment dropdowns
-function populateAssignmentDropdowns() {
-    // This is a simplified version since we don't have direct access to members data
-    // We'll fetch the project data to get members
-    
-    if (!currentProjectId) return;
-    
-    const assignedBySelect = document.getElementById('timelineAssignedBy');
-    const assignedToSelect = document.getElementById('timelineAssignedTo');
-    
-    // Clear existing options
-    assignedBySelect.innerHTML = '<option value="">Select member (optional)</option>';
-    assignedToSelect.innerHTML = '';
-    
-    // Fetch project data to get members
-    fetch(`src/model/get_project.php?id=${currentProjectId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success && data.project) {
-                const project = data.project;
-                
-                // Add project members
-                if (project.members && project.members.length > 0) {
-                    project.members.forEach(member => {
-                        if (member.name) {
-                            const memberId = member.userId && member.userId.$oid ? member.userId.$oid : member.name;
-                            const memberText = `${member.name}${member.role ? ' (' + member.role + ')' : ''}`;
-                            
-                            // Add to assignedBy dropdown
-                            const assignedByOption = new Option(memberText, memberId);
-                            assignedBySelect.add(assignedByOption);
-                            
-                            // Add to assignedTo dropdown if not supervisor/faculty
-                            const isStudent = !member.role || 
-                                           !member.role.toLowerCase().includes('supervisor') && 
-                                           !member.role.toLowerCase().includes('faculty');
-                            
-                            if (isStudent) {
-                                const assignedToOption = new Option(memberText, memberId);
-                                assignedToSelect.add(assignedToOption);
-                            }
-                        }
-                    });
-                }
-                
-                // Add supervisor to assignedBy dropdown
-                if (project.supervisor) {
-                    const supervisorName = project.supervisor.name || 'Supervisor';
-                    const supervisorId = project.supervisor.userId && project.supervisor.userId.$oid ? 
-                        project.supervisor.userId.$oid : supervisorName;
-                    
-                    const supervisorOption = new Option(`${supervisorName} (Supervisor)`, supervisorId);
-                    assignedBySelect.add(supervisorOption);
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Error loading project members:', error);
-        });
-}
-
-// Function to save all timeline changes
-function saveAllTimelineChanges() {
-    if (!currentProjectId) {
-        alert('Project ID not found');
-        return;
-    }
-    
-    // Show loading state
-    const saveBtn = document.getElementById('saveAllTimelineChanges');
-    const originalText = saveBtn.innerHTML;
-    saveBtn.disabled = true;
-    saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
-    
-    // Prepare data for submission
-    const data = {
-        project_id: currentProjectId,
-        timeline: window.timelineItems
-    };
-    
-    // Send AJAX request
-    fetch('src/model/update_timeline.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            alert('Timeline updated successfully');
-            
-            // Close the modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('timelineEditorModal'));
-            modal.hide();
-            
-            // Refresh the timeline display on the main page
-            if (typeof refreshProjectTimeline === 'function') {
-                refreshProjectTimeline();
-            }
-        } else {
-            alert('Error: ' + (result.message || 'Failed to update timeline'));
-        }
+    // Initialize the editor when page loads
+    let timelineEditor;
+    document.addEventListener('DOMContentLoaded', function() {
+        timelineEditor = initializeTimelineEditor();
         
-        // Restore button state
-        saveBtn.disabled = false;
-        saveBtn.innerHTML = originalText;
-    })
-    .catch(error => {
-        console.error('Error saving timeline:', error);
-        alert('Error: ' + error.message);
-        
-        // Restore button state
-        saveBtn.disabled = false;
-        saveBtn.innerHTML = originalText;
+        // Expose to window for access from main script
+        window.timelineEditor = timelineEditor;
     });
-}
 </script> 
