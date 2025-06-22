@@ -928,6 +928,35 @@ if (!defined('INCLUDED_IN_PROJECT_DETAILS')) {
                 saveButton.innerHTML = originalText;
                 
                 if (result.success) {
+                    // Fetch current user info first
+                    fetch('src/model/get_current_user.php')
+                    .then(response => response.json())
+                    .then(userData => {
+                        // Get user name from response or use fallback
+                        let currentUserName = 'Someone';
+                        if (userData && userData.success && userData.isLoggedIn && userData.user) {
+                            currentUserName = userData.user.name || 'Someone';
+                        }
+                        
+                        // Send system message with the user name
+                        const systemMessageData = new FormData();
+                        systemMessageData.append('projectId', projectId);
+                        systemMessageData.append('message', `${currentUserName} updated the project timeline.`);
+                        
+                        // Send the system message
+                        return fetch('src/model/send_system_chat_message.php', {
+                            method: 'POST',
+                            body: systemMessageData
+                        });
+                    })
+                    .then(response => response.json())
+                    .then(msgResult => {
+                        console.log('System message result:', msgResult);
+                    })
+                    .catch(error => {
+                        console.error('Error sending system message:', error);
+                    });
+                    
                     // Close modal
                     const bsModal = bootstrap.Modal.getInstance(timelineEditorModal);
                     bsModal.hide();

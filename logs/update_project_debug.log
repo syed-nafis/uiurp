@@ -2531,3 +2531,96 @@
 )
 
 2025-06-22 15:20:13 - Timeline update result: Success
+2025-06-22 16:07:24 - POST data: Array
+(
+    [project_id] => 685551a4793d650a9900a57f
+    [timeline] => [{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test timelinetest timelinetest timeline","date":"2025-06-20","status":"Planned","assignedBy":"Dr. Md. Nomani Kabir","assignedTo":["6833436be5c16779b409aa42","6656d4b4f7e5b8c9a0a1b2c8"]},{"title":"TEST","description":"TEST","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]},{"title":"editProjectBtneditProjectBtneditProjectBtn","description":"test","date":"2025-06-22","status":"Planned","assignedBy":{"id":"Dr. Md. Nomani Kabir","name":"Dr. Md. Nomani Kabir","type":"faculty"},"assignedTo":[{"id":"6833436be5c16779b409aa42","name":"Samin yeaser khan","type":"student"},{"id":"6656d4b4f7e5b8c9a0a1b2c8","name":"Sadia Akter","type":"student"}]}]
+    [action] => update_timeline
+)
+2025-06-22 16:07:24 - Privacy field: value=not set, type=N/A
+2025-06-22 16:07:25 - Timeline update request received: Array
+(
+    [0] => Array
+        (
+            [title] => editProjectBtneditProjectBtneditProjectBtn
+            [description] => test timelinetest timelinetest timeline
+            [date] => 2025-06-20
+            [status] => Planned
+            [assignedBy] => Dr. Md. Nomani Kabir
+            [assignedTo] => Array
+                (
+                    [0] => 6833436be5c16779b409aa42
+                    [1] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+        )
+
+    [1] => Array
+        (
+            [title] => TEST
+            [description] => TEST
+            [date] => 2025-06-22
+            [status] => Planned
+            [assignedBy] => Array
+                (
+                    [id] => Dr. Md. Nomani Kabir
+                    [name] => Dr. Md. Nomani Kabir
+                    [type] => faculty
+                )
+
+            [assignedTo] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 6833436be5c16779b409aa42
+                            [name] => Samin yeaser khan
+                            [type] => student
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 6656d4b4f7e5b8c9a0a1b2c8
+                            [name] => Sadia Akter
+                            [type] => student
+                        )
+
+                )
+
+        )
+
+    [2] => Array
+        (
+            [title] => editProjectBtneditProjectBtneditProjectBtn
+            [description] => test
+            [date] => 2025-06-22
+            [status] => Planned
+            [assignedBy] => Array
+                (
+                    [id] => Dr. Md. Nomani Kabir
+                    [name] => Dr. Md. Nomani Kabir
+                    [type] => faculty
+                )
+
+            [assignedTo] => Array
+                (
+                    [0] => Array
+                        (
+                            [id] => 6833436be5c16779b409aa42
+                            [name] => Samin yeaser khan
+                            [type] => student
+                        )
+
+                    [1] => Array
+                        (
+                            [id] => 6656d4b4f7e5b8c9a0a1b2c8
+                            [name] => Sadia Akter
+                            [type] => student
+                        )
+
+                )
+
+        )
+
+)
+
+2025-06-22 16:07:25 - Timeline update result: Success

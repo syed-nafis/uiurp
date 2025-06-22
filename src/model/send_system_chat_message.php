@@ -1,90 +1,57 @@
 <?php
-require_once 'db_connect.php';
-require_once __DIR__ . '/../../vendor/autoload.php';
+/**
+ * API Endpoint for sending system messages to project chat
+ * This file accepts POST requests with:
+ * - projectId: The ID of the project
+ * - message: The system message text
+ *
+ * Returns JSON response with success status and message
+ */
 
-use MongoDB\BSON\ObjectId;
-use MongoDB\BSON\UTCDateTime;
+// Include the system message helper
+require_once 'send_system_chat_message_helper.php';
 
-// Initialize response
-$response = [
-    'success' => false,
-    'message' => ''
-];
-
+// Required headers
 header('Content-Type: application/json');
 
-// Check if API key is valid or if user is admin (this can be enhanced later)
-$isAuthorized = false;
-
-// Simple API key check (this should be improved in production)
-$apiKey = isset($_SERVER['HTTP_X_API_KEY']) ? $_SERVER['HTTP_X_API_KEY'] : null;
-if ($apiKey && $apiKey === 'system_message_api_key') {
-    $isAuthorized = true;
+// Only allow POST requests
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405); // Method Not Allowed
+    echo json_encode([
+        'success' => false,
+        'message' => 'Only POST method is allowed'
+    ]);
+    exit;
 }
 
-// Or check if user is an admin via session
+// Require logged in user
 session_start();
-if (!$isAuthorized && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
-    $isAuthorized = true;
-}
-
-// Check authorization
-if (!$isAuthorized) {
-    $response['message'] = 'Unauthorized access';
-    echo json_encode($response);
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401); // Unauthorized
+    echo json_encode([
+        'success' => false,
+        'message' => 'You must be logged in to perform this action'
+    ]);
     exit;
 }
 
-// Check if required data is provided
-if (!isset($_POST['projectId']) || !isset($_POST['message']) || trim($_POST['message']) === '') {
-    $response['message'] = 'Missing required fields';
-    echo json_encode($response);
+// Get parameters
+$projectId = $_POST['projectId'] ?? null;
+$message = $_POST['message'] ?? null;
+
+// Validate parameters
+if (empty($projectId) || empty($message)) {
+    http_response_code(400); // Bad Request
+    echo json_encode([
+        'success' => false,
+        'message' => 'Missing required parameters: projectId and message'
+    ]);
     exit;
 }
 
-$projectId = $_POST['projectId'];
-$messageText = trim($_POST['message']);
+// Call the helper function to send the system message
+$result = sendSystemChatMessage($projectId, $message);
 
-try {
-    // Connect to MongoDB
-    $client = connectToDatabase();
-    $db = $client->uiurp;
-    
-    // Current UTC timestamp
-    $currentTime = new UTCDateTime(time() * 1000);
-    
-    // Create system message document
-    $message = [
-        'projectId' => new ObjectId($projectId),
-        'sender' => [
-            'name' => 'System',
-            'userType' => 'system'
-        ],
-        'message' => $messageText,
-        'timestamp' => $currentTime,
-        'isSystemMessage' => true
-    ];
-    
-    // Insert message
-    $result = $db->project_chat_messages->insertOne($message);
-    
-    // Update project's lastUpdated timestamp
-    $db->projectsV2->updateOne(
-        ['_id' => new ObjectId($projectId)],
-        ['$set' => ['updatedAt' => $currentTime]]
-    );
-    
-    if ($result->getInsertedCount()) {
-        $response['success'] = true;
-        $response['message'] = 'System message sent successfully';
-        $response['messageId'] = (string)$result->getInsertedId();
-    } else {
-        $response['message'] = 'Failed to send system message';
-    }
-    
-} catch (Exception $e) {
-    $response['message'] = 'Error: ' . $e->getMessage();
-}
-
-echo json_encode($response);
+// Return the result
+echo json_encode($result);
 ?> 
