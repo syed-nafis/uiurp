@@ -1,0 +1,393 @@
+[
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000000"
+    },
+    "user_id": "6656d4b4f7e5b8c9a0a1b2c5",
+    "user_name": "Zayan Ahmed",
+    "user_type": "student",
+    "user_profile_pic": "uploads\\profile_images\\user_avater.png",
+    "title": "Seeking collaborators on Power System Stability research",
+    "content": "Looking for partners interested in simulating power system faults and analyzing recovery strategies. Tools: MATLAB/Simulink.",
+    "tags": [
+      "research",
+      "collaboration"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T22:00:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T22:00:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T22:00:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000001"
+    },
+    "user_id": "6656d4b4f7e5b8c9a0a1b2c8",
+    "user_name": "Sadia Akter",
+    "user_type": "student",
+    "user_profile_pic": "uploads\\profile_images\\user_avater.png",
+    "title": "Need help with ethical implications of AI in social apps",
+    "content": "Working on a paper about AI bias in dating apps. Would love references or case studies.",
+    "tags": [
+      "question",
+      "ai",
+      "ethics"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T22:10:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T22:10:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T22:10:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000002"
+    },
+    "user_id": "6656d4b4f7e5b8c9a0a1b2c9",
+    "user_name": "Imran Hasan",
+    "user_type": "student",
+    "user_profile_pic": "uploads\\profile_images\\user_avater.png",
+    "title": "Seeking members for investment modeling project",
+    "content": "We\u2019re modeling Dhaka Stock Exchange volatility. Need students good with Excel or basic R.",
+    "tags": [
+      "recruitment",
+      "finance",
+      "project"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T22:20:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T22:20:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T22:20:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000003"
+    },
+    "user_id": "6656d4b4f7e5b8c9a0a1b2cb",
+    "user_name": "Tanvir Hossain",
+    "user_type": "student",
+    "user_profile_pic": "uploads\\profile_images\\user_avater.png",
+    "title": "Can MLOps solve our data pipeline delays?",
+    "content": "Facing issues with data drift in deployed models. Any experience with MLOps tools like Sagemaker or MLflow?",
+    "tags": [
+      "question",
+      "mlops",
+      "cloud"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T22:30:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T22:30:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T22:30:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000004"
+    },
+    "user_id": "6833436be5c16779b409aa42",
+    "user_name": "Samin yeaser khan",
+    "user_type": "student",
+    "user_profile_pic": "uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg",
+    "title": "Data science research team forming",
+    "content": "Working on an NLP-based classifier for mental health support. Seeking members with Python and ML experience.",
+    "tags": [
+      "recruitment",
+      "data science",
+      "machine learning"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T22:40:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T22:40:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T22:40:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000005"
+    },
+    "user_id": "683bc89968464933b60d00bd",
+    "user_name": "Samin yeaser khan",
+    "user_type": "student",
+    "user_profile_pic": "uploads/profile_images/profile__1748748441.jpg",
+    "title": "Creating a resource list for data science starters",
+    "content": "Drop your favorite beginner tutorials for Python, Pandas, or ML. Will compile into a shared doc.",
+    "tags": [
+      "question",
+      "data science",
+      "learning"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T22:45:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T22:45:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T22:45:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000006"
+    },
+    "user_id": "6656d4b4f7e5b8c9a0a1b2c5",
+    "user_name": "Zayan Ahmed",
+    "user_type": "student",
+    "user_profile_pic": "uploads\\profile_images\\user_avater.png",
+    "title": "Does anyone have renewable energy datasets?",
+    "content": "Looking for clean datasets on solar/wind energy for a course project. Preferably from Bangladesh.",
+    "tags": [
+      "question",
+      "data",
+      "energy"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T22:50:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T22:50:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T22:50:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000007"
+    },
+    "user_id": "6656d4b4f7e5b8c9a0a1b2c8",
+    "user_name": "Sadia Akter",
+    "user_type": "student",
+    "user_profile_pic": "uploads\\profile_images\\user_avater.png",
+    "title": "Open source contributors needed!",
+    "content": "Planning to publish a mini JS library for ethical tracking. Need frontend coders for testing phase.",
+    "tags": [
+      "recruitment",
+      "opensource",
+      "javascript"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T22:55:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T22:55:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T22:55:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000008"
+    },
+    "user_id": "6656d4b4f7e5b8c9a0a1b2c9",
+    "user_name": "Imran Hasan",
+    "user_type": "student",
+    "user_profile_pic": "uploads\\profile_images\\user_avater.png",
+    "title": "Researching startup financing strategies in BD",
+    "content": "Looking for case studies and data on how local startups manage early funding and investor relations.",
+    "tags": [
+      "research",
+      "startup",
+      "finance"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T23:00:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T23:00:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T23:00:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000009"
+    },
+    "user_id": "6656d4b4f7e5b8c9a0a1b2cb",
+    "user_name": "Tanvir Hossain",
+    "user_type": "student",
+    "user_profile_pic": "uploads\\profile_images\\user_avater.png",
+    "title": "Deploying ML models \u2013 need a checklist",
+    "content": "What\u2019s your go-to checklist before deploying ML models? Especially interested in best practices for production readiness.",
+    "tags": [
+      "question",
+      "mlops",
+      "deployment"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T23:05:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T23:05:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T23:05:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000010"
+    },
+    "user_id": "6833436be5c16779b409aa42",
+    "user_name": "Samin yeaser khan",
+    "user_type": "student",
+    "user_profile_pic": "uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg",
+    "title": "Launching a community project on CSE outreach",
+    "content": "Building awareness among school students about CSE. Looking for volunteers to run workshops.",
+    "tags": [
+      "announcement",
+      "recruitment",
+      "community"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T23:10:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T23:10:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T23:10:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000011"
+    },
+    "user_id": "683bc89968464933b60d00bd",
+    "user_name": "Samin yeaser khan",
+    "user_type": "student",
+    "user_profile_pic": "uploads/profile_images/profile__1748748441.jpg",
+    "title": "Announcement: Weekly coding sprint on GitHub",
+    "content": "Let\u2019s build something! Join our weekly challenges on GitHub. 1 new problem every Saturday.",
+    "tags": [
+      "announcement",
+      "challenge",
+      "coding"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T23:15:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T23:15:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T23:15:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000012"
+    },
+    "user_id": "6656d4b4f7e5b8c9a0a1b2cb",
+    "user_name": "Tanvir Hossain",
+    "user_type": "student",
+    "user_profile_pic": "uploads\\profile_images\\user_avater.png",
+    "title": "Anyone working on Kubernetes for ML training?",
+    "content": "Trying to use k8s for distributed model training. Any tips or open notebooks to learn from?",
+    "tags": [
+      "question",
+      "cloud",
+      "machine learning"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T23:20:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T23:20:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T23:20:00Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6851f0000000000000000013"
+    },
+    "user_id": "6656d4b4f7e5b8c9a0a1b2c5",
+    "user_name": "Zayan Ahmed",
+    "user_type": "student",
+    "user_profile_pic": "uploads\\profile_images\\user_avater.png",
+    "title": "Study: Comparing diesel vs. solar cost in rural setups",
+    "content": "Collecting data on small-scale energy solutions in villages. Looking for researchers with field data.",
+    "tags": [
+      "research",
+      "energy",
+      "collaboration"
+    ],
+    "upvotes": 0,
+    "comments": [],
+    "created_at": {
+      "$date": "2025-06-17T23:25:00Z"
+    },
+    "updated_at": {
+      "$date": "2025-06-17T23:25:00Z"
+    },
+    "upvoted_by": [],
+    "timestamp": {
+      "$date": "2025-06-17T23:25:00Z"
+    }
+  }
+]
