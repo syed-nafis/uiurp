@@ -133,7 +133,7 @@ body {
     gap: 1rem;
     margin-top: 1.5rem;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.134);
     border-radius: 8px;
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -163,7 +163,7 @@ body {
 
 .attachment-file {
     padding: 0.75rem;
-    background: white;
+    background: rgba(0, 69, 167, 0.106);
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     display: flex;
