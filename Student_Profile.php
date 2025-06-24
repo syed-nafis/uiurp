@@ -2210,61 +2210,29 @@ if (!file_exists($profileImage)) {
         const projectsLoading = document.getElementById('projects-loading');
         const noProjects = document.getElementById('no-projects');
         
-        console.log('Loading user projects...');
-        console.log('Elements found:', {
-            projectsGrid: !!projectsGrid,
-            projectsLoading: !!projectsLoading,
-            noProjects: !!noProjects
-        });
-        
         // Show loading
         if (projectsLoading) projectsLoading.style.display = 'block';
         if (noProjects) noProjects.style.display = 'none';
         if (projectsGrid) projectsGrid.innerHTML = '';
         
         // Fetch all user projects (both owned and member projects)
-        console.log('Making fetch request to: src/model/fetch_all_user_projects.php');
-        fetch('src/model/fetch_all_user_projects.php')
+        // Use the same endpoint as project_management.php
+        fetch('src/model/get_user_projects.php')
             .then(response => {
-                console.log('Response status:', response.status);
-                console.log('Response OK:', response.ok);
-                console.log('Response headers:', response.headers);
-                
                 if (!response.ok) {
-                    console.error('Response not OK. Status:', response.status, 'StatusText:', response.statusText);
-                    throw new Error('Network response was not ok: ' + response.status + ' ' + response.statusText);
+                    throw new Error('Network response was not ok: ' + response.status);
                 }
-                
-                // Get response text first to see what we actually received
-                return response.text();
+                return response.json();
             })
-            .then(responseText => {
-                console.log('Raw response text:', responseText);
-                
-                // Try to parse as JSON
-                let projects;
-                try {
-                    projects = JSON.parse(responseText);
-                    console.log('Parsed projects:', projects);
-                } catch (jsonError) {
-                    console.error('JSON parse error:', jsonError);
-                    console.error('Response text that failed to parse:', responseText);
-                    throw new Error('Invalid JSON response: ' + jsonError.message);
-                }
-                
-                console.log('Projects received:', projects);
-                console.log('Number of projects:', projects ? projects.length : 0);
-                console.log('Type of projects:', typeof projects);
-                console.log('Is array:', Array.isArray(projects));
-                
+            .then(data => {
                 // Hide loading
                 if (projectsLoading) projectsLoading.style.display = 'none';
                 if (projectsGrid) projectsGrid.innerHTML = '';
                 
                 const projectsNote = document.getElementById('projects-note');
                 
-                if (projects && projects.length > 0) {
-                    console.log('Displaying projects...');
+                if (data.success && data.projects && data.projects.length > 0) {
+                    const projects = data.projects;
                     
                     // Limit to first 3 projects for profile display
                     const displayProjects = projects.slice(0, 3);
@@ -2272,12 +2240,11 @@ if (!file_exists($profileImage)) {
                     
                     // Display projects
                     displayProjects.forEach((project, index) => {
-                        console.log(`Creating card for project ${index}:`, project.title || project._id);
                         try {
-                            const projectCard = createProjectCard(project, index);
+                            const projectCard = createProjectCard(project);
                             if (projectsGrid) projectsGrid.appendChild(projectCard);
                         } catch (cardError) {
-                            console.error('Error creating project card:', cardError, 'Project data:', project);
+                            console.error('Error creating project card:', cardError);
                         }
                     });
                     
@@ -2304,7 +2271,6 @@ if (!file_exists($profileImage)) {
                         projectsNote.style.display = 'block';
                     }
                 } else {
-                    console.log('No projects found, showing empty state');
                     // Show no projects message
                     if (noProjects) noProjects.style.display = 'block';
                     if (projectsNote) projectsNote.style.display = 'none';
@@ -2312,7 +2278,6 @@ if (!file_exists($profileImage)) {
             })
             .catch(error => {
                 console.error('Error loading projects:', error);
-                console.error('Error stack:', error.stack);
                 if (projectsLoading) projectsLoading.style.display = 'none';
                 if (noProjects) noProjects.style.display = 'block';
                 const projectsNote = document.getElementById('projects-note');
@@ -2322,11 +2287,11 @@ if (!file_exists($profileImage)) {
                 const noProjectsTitle = noProjects ? noProjects.querySelector('h4') : null;
                 const noProjectsText = noProjects ? noProjects.querySelector('p') : null;
                 if (noProjectsTitle) noProjectsTitle.textContent = 'Error Loading Projects';
-                if (noProjectsText) noProjectsText.textContent = 'There was an error loading your research projects. Please check the browser console for details.';
+                if (noProjectsText) noProjectsText.textContent = 'There was an error loading your research projects. Please try again later.';
             });
     }
     
-    function createProjectCard(project, index) {
+    function createProjectCard(project) {
         // Get project ID
         const projectId = project._id && project._id.$oid ? project._id.$oid : project._id;
         
@@ -2345,7 +2310,7 @@ if (!file_exists($profileImage)) {
         // Format team members
         const teamMembers = project.members ? project.members.length + ' team member(s)' : '0 team members';
         
-        // Determine badge based on user role and privacy
+        // Determine badge based on privacy and user role
         let badgeClass = 'research-project-badge';
         let badgeText = 'Public';
         
@@ -2404,8 +2369,18 @@ if (!file_exists($profileImage)) {
         try {
             let dateValue = dateInput;
             
-            if (typeof dateInput === 'object' && dateInput.$date) {
-                dateValue = dateInput.$date;
+            if (typeof dateInput === 'object') {
+                // MongoDB date object with $date property
+                if (dateInput.$date) {
+                    if (typeof dateInput.$date === 'string') {
+                        dateValue = dateInput.$date;
+                    } else if (typeof dateInput.$date === 'object' && dateInput.$date.$numberLong) {
+                        // Handle MongoDB long format
+                        dateValue = parseInt(dateInput.$date.$numberLong);
+                    } else {
+                        dateValue = dateInput.$date;
+                    }
+                }
             }
             
             const date = new Date(dateValue);

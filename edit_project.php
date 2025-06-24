@@ -3229,7 +3229,16 @@ session_start();
                 filteredFaculty.forEach((faculty, index) => {
                     const option = document.createElement('div');
                     option.className = 'supervisor-option';
-                    option.setAttribute('data-faculty-id', faculty._id);
+                    
+                    // Extract the ObjectId string properly
+                    let facultyId;
+                    if (faculty._id && typeof faculty._id === 'object' && faculty._id.$oid) {
+                        facultyId = faculty._id.$oid;
+                    } else {
+                        facultyId = String(faculty._id);
+                    }
+                    
+                    option.setAttribute('data-faculty-id', facultyId);
                     option.setAttribute('data-faculty-name', faculty.name);
                     
                     // Create faculty info display

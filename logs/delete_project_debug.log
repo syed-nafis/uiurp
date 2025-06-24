@@ -87,3 +87,149 @@
 2025-05-19 11:44:50 - ProjectId to delete: 682ae470314b6622be02c126
 2025-05-19 11:44:50 - Created ObjectId successfully
 2025-05-19 11:44:50 - Project not found with ID: 682ae470314b6622be02c126
+2025-06-05 13:54:58 - DELETE REQUEST: {"projectId":"68418440067d8c496f07f706"}
+2025-06-05 13:54:58 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Sadia Akter
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => sadia.bscse@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Sadia Akter
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => sadia.bscse@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Science in Computer Science & Engineering
+                            [program_code] => 011
+                            [admission_year] => 23
+                            [admission_trimester] => 3
+                            [serial_number] => 0022
+                        )
+
+                    [student_id] => 0112330022
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1693526400000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1819756800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 2nd Year, Fall Trimester
+                    [cgpa] => 3.8
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Software Engineering
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1693526400000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Software Development
+                            [1] => Web Technologies
+                            [2] => AI Ethics
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => React
+                            [2] => Node.js
+                            [3] => MongoDB
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1693180800000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1746057600000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2c8
+)
+
+2025-06-05 13:54:58 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2c8
+2025-06-05 13:54:58 - Decoded data: Array
+(
+    [projectId] => 68418440067d8c496f07f706
+)
+
+2025-06-05 13:54:58 - ProjectId to delete: 68418440067d8c496f07f706
+2025-06-05 13:54:58 - Created ObjectId successfully
+2025-06-05 13:54:58 - Project found, attempting to delete
+2025-06-05 13:54:58 - Project deleted successfully
