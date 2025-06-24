@@ -70,6 +70,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Handle file uploads if present
         $attachments = $post['attachments'] ?? [];
         
+        // Initialize attachments as empty array if it's not already an array
+        if (!is_array($attachments)) {
+            $attachments = [];
+        }
+        
         if (isset($_FILES['files']) && !empty($_FILES['files']['name'][0])) {
             $uploadDir = '../../uploads/forum_attachments/';
             
@@ -107,20 +112,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Handle attachment deletions if any
         if (isset($data['delete_attachments']) && is_array($data['delete_attachments'])) {
-            foreach ($data['delete_attachments'] as $attachmentIndex) {
-                if (isset($attachments[$attachmentIndex])) {
+            $newAttachments = [];
+            foreach ($attachments as $index => $attachment) {
+                if (!in_array($index, $data['delete_attachments'])) {
+                    $newAttachments[] = $attachment;
+                } else {
                     // Delete the file from server
-                    $filePath = '../../' . $attachments[$attachmentIndex]['file_path'];
+                    $filePath = '../../' . $attachment['file_path'];
                     if (file_exists($filePath)) {
                         unlink($filePath);
                     }
-                    
-                    // Remove from attachments array
-                    unset($attachments[$attachmentIndex]);
                 }
             }
-            // Reindex array
-            $attachments = array_values($attachments);
+            $attachments = $newAttachments;
         }
         
         // Set up update data
