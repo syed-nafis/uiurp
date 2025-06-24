@@ -10,9 +10,7 @@ use MongoDB\BSON\ObjectId;
 // Start session to capture user data if available
 session_start();
 
-// Log session data for debugging
-$log_path = __DIR__ . '/../../logs/project_create_debug.log';
-file_put_contents($log_path, date('Y-m-d H:i:s') . " - SESSION: " . print_r($_SESSION, true) . "\n", FILE_APPEND);
+// Session logging removed
 
 // Set user ID and username (null if not logged in)
 $userId = null;
@@ -29,7 +27,7 @@ if (isset($_SESSION['user_id'])) {
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : 
            (isset($_SESSION['user_data']['name']) ? $_SESSION['user_data']['name'] : 'Anonymous User');
 
-file_put_contents($log_path, date('Y-m-d H:i:s') . " - UserId extracted: $userId, Username: $username\n", FILE_APPEND);
+// User ID logging removed
 
 // Set dates
 if (!empty($_POST['createdAt'])) {

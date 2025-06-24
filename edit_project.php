@@ -4323,18 +4323,31 @@ define('INCLUDED_IN_EDIT_PROJECT', true);
             // Get team members
             const teamMembers = [];
             document.querySelectorAll('.member-row').forEach(row => {
-                const name = row.querySelector('.member-name').value.trim();
-                if (name) { // Only add if there's a name
+                const memberName = row.querySelector('.member-name').value.trim();
+                if (memberName) { // Only add if there's a name
                     const role = row.querySelector('.member-role').value.trim();
                     const contribution = parseInt(row.querySelector('.member-contribution').value) || 0;
-                    const userId = row.querySelector('.member-userid').value.trim();
+                    // Check both the hidden member-student-id and the visible member-userid fields
+                    let userId = row.querySelector('.member-student-id').value.trim();
+                    if (!userId) {
+                        userId = row.querySelector('.member-userid').value.trim();
+                    }
                     
                     teamMembers.push({
-                        name: name,
+                        name: memberName,
                         role: role,
                         contribution: contribution,
                         userId: userId ? { $oid: userId } : null
                     });
+                    
+                    if (DEBUG) {
+                        console.log('Added team member:', {
+                            name: memberName,
+                            role: role,
+                            contribution: contribution,
+                            userId: userId ? { $oid: userId } : null
+                        });
+                    }
                 }
             });
             
@@ -4385,8 +4398,10 @@ define('INCLUDED_IN_EDIT_PROJECT', true);
             formData.append('doi', doi);
             formData.append('youtube_url', youtubeUrl);
             
-            // Add supervisor
+            // Add supervisor and supervisorId
             formData.append('supervisor', supervisor);
+            const supervisorId = document.getElementById('supervisorId').value.trim();
+            formData.append('supervisorId', supervisorId);
             
             // Add team members
             formData.append('team_members', JSON.stringify(teamMembers));
@@ -4629,6 +4644,11 @@ define('INCLUDED_IN_EDIT_PROJECT', true);
                         // Store globally for future use
                         window.studentsData = data;
                         allStudentsData = data;
+                        
+                        // Add debugging to inspect the structure
+                        if (DEBUG) {
+                            console.log('Loaded student data:', data[0]);
+                        }
                     } else {
                         console.error('No students data received');
                     }
@@ -4869,8 +4889,8 @@ define('INCLUDED_IN_EDIT_PROJECT', true);
             
             // Filter students based on search term
             const filteredStudents = allStudentsData.filter(student => 
-                student.name.toLowerCase().includes(searchTerm) ||
-                student.student_id.toLowerCase().includes(searchTerm)
+                (student.name && student.name.toLowerCase().includes(searchTerm)) || 
+                (student.student_id && student.student_id.toLowerCase().includes(searchTerm))
             );
             
             // Clear previous options
@@ -4915,7 +4935,26 @@ define('INCLUDED_IN_EDIT_PROJECT', true);
             const studentData = option.studentData;
             if (studentData) {
                 input.value = studentData.name;
-                hiddenInput.value = studentData.id;
+                // Store the MongoDB _id of the student in the hidden input and member-userid field
+                if (studentData._id && studentData._id.$oid) {
+                    hiddenInput.value = studentData._id.$oid;
+                    const memberRow = dropdown.closest('.member-row');
+                    if (memberRow) {
+                        const userIdInput = memberRow.querySelector('.member-userid');
+                        if (userIdInput) {
+                            userIdInput.value = studentData._id.$oid;
+                        }
+                    }
+                } else if (studentData.id) {
+                    hiddenInput.value = studentData.id;
+                    const memberRow = dropdown.closest('.member-row');
+                    if (memberRow) {
+                        const userIdInput = memberRow.querySelector('.member-userid');
+                        if (userIdInput) {
+                            userIdInput.value = studentData.id;
+                        }
+                    }
+                }
                 hideStudentDropdown(dropdown);
                 
                 // Trigger change event

@@ -10,12 +10,7 @@ use MongoDB\BSON\ObjectId;
 // Start session to capture user data if available
 session_start();
 
-// Log session data for debugging
-$log_path = __DIR__ . '/../../logs/project_update_debug.log';
-if (!file_exists(dirname($log_path))) {
-    mkdir(dirname($log_path), 0777, true);
-}
-file_put_contents($log_path, date('Y-m-d H:i:s') . " - SESSION: " . print_r($_SESSION, true) . "\n", FILE_APPEND);
+// Session logging removed
 
 header('Content-Type: application/json');
 
@@ -25,29 +20,13 @@ header('Content-Type: application/json');
 //     exit;
 // }
 
-// Enable debug mode
-$DEBUG = true;
+// Debug mode disabled
+$DEBUG = false;
 
 // Check if project ID is provided
 if (!isset($_POST['project_id']) || empty($_POST['project_id'])) {
     echo json_encode(['success' => false, 'message' => 'Project ID is required']);
     exit;
-}
-
-if ($DEBUG) {
-    // Log all POST data (for debugging)
-    $logFile = __DIR__ . '/../../logs/update_project_debug.log';
-    if (!file_exists(dirname($logFile))) {
-        mkdir(dirname($logFile), 0777, true);
-    }
-    $logData = date('Y-m-d H:i:s') . ' - POST data: ' . print_r($_POST, true);
-    file_put_contents($logFile, $logData, FILE_APPEND);
-    
-    // Specifically log the privacy field for debugging
-    $privacyValue = isset($_POST['privacy']) ? "'" . $_POST['privacy'] . "'" : 'not set';
-    $privacyType = isset($_POST['privacy']) ? gettype($_POST['privacy']) : 'N/A';
-    $logData = date('Y-m-d H:i:s') . " - Privacy field: value=$privacyValue, type=$privacyType\n";
-    file_put_contents($logFile, $logData, FILE_APPEND);
 }
 
 $projectId = $_POST['project_id'];
@@ -67,7 +46,7 @@ if (!$userId) {
 $userId = '000000000000000000000000';
 }
 
-file_put_contents($log_path, date('Y-m-d H:i:s') . " - UserId extracted: $userId\n", FILE_APPEND);
+// User ID logging removed
 
 // Check if this is a timeline-only update
 $isTimelineUpdate = isset($_POST['action']) && $_POST['action'] === 'update_timeline';
@@ -89,16 +68,7 @@ if (!$isTimelineUpdate) {
     if (!isset($_POST['privacy']) || ($_POST['privacy'] === '' && $_POST['privacy'] !== '0' && $_POST['privacy'] !== 0)) {
         $missingFields[] = 'privacy';
         
-        if ($DEBUG) {
-            $privacyStatus = '';
-            if (!isset($_POST['privacy'])) {
-                $privacyStatus = 'Privacy field is not set in the POST data';
-            } else {
-                $privacyStatus = "Privacy field is set but has an empty value: '" . $_POST['privacy'] . "' (type: " . gettype($_POST['privacy']) . ")";
-            }
-            $logData = date('Y-m-d H:i:s') . " - Privacy field error: $privacyStatus\n";
-            file_put_contents($logFile, $logData, FILE_APPEND);
-        }
+        // Debug logging removed
     }
     
     if (!empty($missingFields)) {
@@ -159,10 +129,6 @@ try {
             }
         }
         
-        // Log timeline update for debugging
-        $logData = date('Y-m-d H:i:s') . ' - Timeline update request received: ' . print_r($timeline, true) . "\n";
-        file_put_contents($logFile, $logData, FILE_APPEND);
-        
         // Update only the timeline field
         $updateResult = $projectCollection->updateOne(
             ['_id' => new \MongoDB\BSON\ObjectId($projectId)],
@@ -174,11 +140,6 @@ try {
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to update timeline']);
         }
-        
-        // Log result
-        $logData = date('Y-m-d H:i:s') . ' - Timeline update result: ' . 
-                  ($updateResult->getModifiedCount() > 0 ? 'Success' : 'Failed') . "\n";
-        file_put_contents($logFile, $logData, FILE_APPEND);
         
         exit; // Stop here for timeline-only updates
     }

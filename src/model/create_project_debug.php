@@ -10,19 +10,11 @@ use MongoDB\BSON\ObjectId;
 // Start session to capture user data if available
 session_start();
 
-// Enhanced logging
-$log_path = __DIR__ . '/../../logs/project_create_detailed_debug.log';
-
+// Debug logging removed
 function logDebug($message) {
-    global $log_path;
-    file_put_contents($log_path, date('Y-m-d H:i:s') . " - " . $message . "\n", FILE_APPEND);
+    // Function kept but logging disabled
+    return;
 }
-
-// Log all incoming data
-logDebug("=== NEW PROJECT CREATION REQUEST ===");
-logDebug("SESSION: " . print_r($_SESSION, true));
-logDebug("POST: " . print_r($_POST, true));
-logDebug("FILES: " . print_r($_FILES, true));
 
 // Set headers to ensure proper JSON response
 header('Content-Type: application/json');
