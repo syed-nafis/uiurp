@@ -613,7 +613,219 @@ try {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* File Preview Modal Styles */
+        .file-preview-modal .modal-dialog {
+            max-width: 90%;
+            height: 90vh;
+            margin: 1rem auto;
+        }
+
+        .file-preview-modal .modal-content {
+            height: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-preview-modal .modal-header {
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 1rem 1rem 0 0;
+            flex-shrink: 0;
+        }
+
+        .file-preview-modal .modal-body {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0; /* Important for proper flexbox behavior */
+            overflow: hidden; /* Prevent double scrollbars */
+        }
+
+        .preview-container {
+            flex: 1;
+            overflow: auto;
+            background: var(--surface-1);
+            margin: 1rem;
+            position: relative;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #pdf-viewer {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .preview-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: var(--surface-1);
+            border-top: 1px solid var(--border-color);
+            border-radius: 0 0 1rem 1rem;
+            flex-shrink: 0;
+        }
+
+        .preview-controls .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .pdf-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--surface-1);
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        .pdf-page-info {
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            background: var(--surface-2);
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Button Styling */
+        .preview-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .preview-btn i {
+            font-size: 1.1rem;
+        }
+
+        .preview-btn-primary {
+            background: linear-gradient(135deg, var(--modern-blue), var(--modern-purple));
+            color: white;
+            border: none;
+        }
+
+        .preview-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--border-glow);
+            color: white;
+        }
+
+        .preview-btn-secondary {
+            background: var(--surface-2);
+            color: var(--text-primary);
+        }
+
+        .preview-btn-secondary:hover {
+            background: var(--surface-1);
+            color: var(--text-primary);
+        }
+
+        /* Loading and Error States */
+        .preview-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: var(--surface-1);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-loading .spinner {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 1rem;
+            color: var(--modern-blue);
+        }
+
+        .preview-loading .loading-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .preview-error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: var(--surface-1);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 80%;
+        }
+
+        .preview-error i {
+            font-size: 2.5rem;
+            color: #dc3545;
+            margin-bottom: 1rem;
+        }
+
+        .preview-error h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-error p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        /* Theme Adjustments */
+        [data-theme="light"] .file-preview-modal .modal-content {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        [data-theme="light"] .preview-container {
+            background: white;
+        }
+
+        [data-theme="light"] .preview-controls,
+        [data-theme="light"] .pdf-controls {
+            background: var(--surface-1);
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Set worker path for PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    <!-- Image viewer library -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 </head>
 <body>
     <?php include 'src/includes/navbar.php'; ?>
@@ -705,15 +917,15 @@ try {
                                 $isImage = in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']);
                             ?>
                             <div class="attachment-item">
-                                <?php if ($isImage): ?>
+                                    <?php if ($isImage): ?>
                                     <a href="<?= htmlspecialchars($attachment['file_path']) ?>" target="_blank">
                                         <img src="<?= htmlspecialchars($attachment['file_path']) ?>" alt="Attachment" class="attachment-img">
                                     </a>
-                                <?php else: ?>
+                                    <?php else: ?>
                                     <a href="<?= htmlspecialchars($attachment['file_path']) ?>" class="attachment-file" download>
-                                        <i class="bi bi-file-earmark me-2"></i>
+                                            <i class="bi bi-file-earmark me-2"></i>
                                         <span class="text-truncate"><?= htmlspecialchars($attachment['original_name']) ?></span>
-                                    </a>
+                                </a>
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
@@ -751,11 +963,11 @@ try {
                 <div class="d-flex gap-2">
                     <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" 
                          alt="Your Avatar" class="author-avatar" style="width: 32px; height: 32px;">
-                    <div class="flex-grow-1">
+                                <div class="flex-grow-1">
                         <textarea name="comment" class="form-control mb-2" rows="3" placeholder="Write a comment..." required></textarea>
                         <button type="submit" class="btn btn-primary">Post Comment</button>
-                    </div>
-                </div>
+                                                </div>
+                                        </div>
             </form>
 
             <!-- Comments List -->
@@ -909,18 +1121,18 @@ try {
                     
                     try {
                         const response = await fetch('src/controller/edit_comment.php', {
-                method: 'POST',
+                    method: 'POST',
                             body: formData
                         });
                         
                         if (response.ok) {
                             commentBubble.innerHTML = textarea.value.replace(/\n/g, '<br>');
                             this.setAttribute('data-comment-content', textarea.value);
-                    } else {
+                        } else {
                             throw new Error('Failed to update comment');
                         }
                     } catch (error) {
-                console.error('Error:', error);
+                    console.error('Error:', error);
                         commentBubble.innerHTML = originalContent;
                     }
                 });
@@ -941,8 +1153,8 @@ try {
                 
                 try {
                     const response = await fetch('src/controller/update_votes.php', {
-                    method: 'POST',
-                    headers: {
+                method: 'POST',
+                headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
                         body: `post_id=${postId}&vote_type=${voteType}`
@@ -957,6 +1169,294 @@ try {
                 console.error('Error:', error);
                 }
             });
+        });
+    </script>
+    <!-- File Preview Modal -->
+    <div class="modal fade file-preview-modal" id="filePreviewModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filePreviewTitle">File Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="preview-container">
+                        <div class="preview-loading d-none">
+                            <div class="spinner-border spinner" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="loading-text">Loading preview...</div>
+                        </div>
+                    </div>
+                    <div id="pdfControls" class="pdf-controls d-none">
+                        <button class="preview-btn preview-btn-secondary" id="prevPage">
+                            <i class="bi bi-chevron-left"></i> Previous
+                        </button>
+                        <div class="pdf-page-info">
+                            Page <span id="currentPage">0</span> of <span id="totalPages">0</span>
+                        </div>
+                        <button class="preview-btn preview-btn-secondary" id="nextPage">
+                            Next <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="preview-controls">
+                        <div class="btn-group">
+                            <a href="#" class="preview-btn preview-btn-primary" id="downloadFile" download>
+                                <i class="bi bi-download"></i> Download
+                            </a>
+                        </div>
+                        <div class="btn-group">
+                            <button class="preview-btn preview-btn-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x"></i> Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // File Preview Functionality
+    const filePreviewModal = new bootstrap.Modal(document.getElementById('filePreviewModal'));
+    const previewContainer = document.querySelector('.preview-container');
+    const loadingIndicator = document.querySelector('.preview-loading');
+    const pdfControls = document.getElementById('pdfControls');
+
+    // PDF specific variables
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageRendering = false;
+    let pageNumPending = null;
+    let scale = 1.5;
+
+    function showLoading() {
+        loadingIndicator.classList.remove('d-none');
+    }
+
+    function hideLoading() {
+        loadingIndicator.classList.add('d-none');
+    }
+
+    function showError(message) {
+        const error = document.createElement('div');
+        error.className = 'preview-error';
+        error.innerHTML = `
+            <i class="bi bi-exclamation-circle text-danger fs-1"></i>
+            <h4 class="mt-3">Error</h4>
+            <p>${message}</p>
+        `;
+        previewContainer.appendChild(error);
+    }
+
+    function clearPreviewContainer() {
+        while (previewContainer.firstChild) {
+            previewContainer.removeChild(previewContainer.firstChild);
+        }
+        previewContainer.appendChild(loadingIndicator);
+        pdfControls.classList.add('d-none');
+    }
+
+    async function previewImage(url) {
+        try {
+            clearPreviewContainer();
+            showLoading();
+
+            const img = document.createElement('img');
+            img.className = 'preview-image';
+            img.src = url;
+
+            img.onload = () => {
+                hideLoading();
+            };
+
+            img.onerror = () => {
+                throw new Error('Failed to load image');
+            };
+
+            previewContainer.appendChild(img);
+        } catch (error) {
+            console.error('Error previewing image:', error);
+            showError('Failed to load image. Please try downloading the file instead.');
+            hideLoading();
+        }
+    }
+
+    async function previewDocument(url, fileType) {
+        try {
+            clearPreviewContainer();
+            showLoading();
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'doc-preview-wrapper';
+
+            const iframe = document.createElement('iframe');
+            iframe.className = 'preview-iframe';
+            
+            // Use Google Docs Viewer for documents
+            const googleViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+            iframe.src = googleViewerUrl;
+
+            iframe.onload = () => {
+                hideLoading();
+            };
+
+            iframe.onerror = () => {
+                throw new Error('Failed to load document preview');
+            };
+
+            wrapper.appendChild(iframe);
+            previewContainer.appendChild(wrapper);
+        } catch (error) {
+            console.error('Error previewing document:', error);
+            showError('Failed to load document preview. Please try downloading the file instead.');
+            hideLoading();
+        }
+    }
+
+    async function renderPage(num) {
+        pageRendering = true;
+        try {
+            const page = await pdfDoc.getPage(num);
+            const canvas = document.getElementById('pdf-viewer');
+            const container = canvas.parentElement;
+            
+            // Calculate the scale to fit the page width
+            const containerWidth = container.clientWidth - 40; // 40px for padding
+            const viewport = page.getViewport({ scale: 1.0 }); // Get original viewport
+            const scale = containerWidth / viewport.width;
+            
+            // Get the viewport with the calculated scale
+            const scaledViewport = page.getViewport({ scale });
+            
+            // Set canvas dimensions
+            canvas.width = scaledViewport.width;
+            canvas.height = scaledViewport.height;
+            
+            // Center the canvas if shorter than container
+            canvas.style.margin = 'auto';
+
+            const renderContext = {
+                canvasContext: canvas.getContext('2d'),
+                viewport: scaledViewport
+            };
+
+            await page.render(renderContext).promise;
+            pageRendering = false;
+
+            if (pageNumPending !== null) {
+                renderPage(pageNumPending);
+                pageNumPending = null;
+            }
+
+            // Update page counters
+            document.getElementById('currentPage').textContent = num;
+        } catch (error) {
+            console.error('Error rendering PDF page:', error);
+            showError('Failed to render PDF page. Please try downloading the file instead.');
+            hideLoading();
+        }
+    }
+
+    function queueRenderPage(num) {
+        if (pageRendering) {
+            pageNumPending = num;
+                    } else {
+            renderPage(num);
+        }
+    }
+
+    async function previewPDF(url) {
+        try {
+            clearPreviewContainer();
+            showLoading();
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'pdf-viewer';
+            previewContainer.appendChild(canvas);
+
+            const loadingTask = pdfjsLib.getDocument(url);
+            pdfDoc = await loadingTask.promise;
+            
+            document.getElementById('totalPages').textContent = pdfDoc.numPages;
+            pdfControls.classList.remove('d-none');
+            pageNum = 1;
+            renderPage(pageNum);
+        } catch (error) {
+            console.error('Error previewing PDF:', error);
+            showError('Failed to load PDF. The file might be corrupted or inaccessible.');
+            hideLoading();
+        }
+    }
+
+    // Handle attachment clicks
+    document.querySelectorAll('.attachment-file').forEach(link => {
+        link.addEventListener('click', async function(e) {
+            const filePath = this.getAttribute('href');
+            const fileName = this.querySelector('span').textContent;
+            const fileExt = fileName.split('.').pop().toLowerCase();
+
+            // Update modal title and download link
+            document.getElementById('filePreviewTitle').textContent = fileName;
+            const downloadBtn = document.getElementById('downloadFile');
+            downloadBtn.href = filePath;
+            downloadBtn.setAttribute('download', fileName);
+
+            // Determine file type and handle preview
+            const imageTypes = ['jpg', 'jpeg', 'png', 'gif'];
+            const documentTypes = ['doc', 'docx', 'ppt', 'pptx'];
+
+            if (imageTypes.includes(fileExt)) {
+                e.preventDefault();
+                filePreviewModal.show();
+                await previewImage(filePath);
+            } else if (fileExt === 'pdf') {
+                e.preventDefault();
+                filePreviewModal.show();
+                await previewPDF(filePath);
+            } else if (documentTypes.includes(fileExt)) {
+                e.preventDefault();
+                filePreviewModal.show();
+                await previewDocument(filePath, fileExt);
+            }
+            // For other file types, let the default download behavior happen
+            });
+        });
+        
+    // PDF navigation controls
+    document.getElementById('prevPage').addEventListener('click', () => {
+        if (pageNum <= 1) return;
+        pageNum--;
+        queueRenderPage(pageNum);
+    });
+
+    document.getElementById('nextPage').addEventListener('click', () => {
+        if (pageNum >= pdfDoc?.numPages) return;
+        pageNum++;
+        queueRenderPage(pageNum);
+    });
+
+    // Clean up on modal close
+    document.getElementById('filePreviewModal').addEventListener('hidden.bs.modal', function () {
+        clearPreviewContainer();
+        pdfDoc = null;
+        pageNum = 1;
+        const canvas = document.getElementById('pdf-viewer');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    });
+
+    // Add resize handler for responsive PDF rendering
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        if (pdfDoc && !resizeTimeout) {
+            resizeTimeout = setTimeout(() => {
+                renderPage(pageNum);
+                resizeTimeout = null;
+            }, 100);
+        }
     });
     </script>
 </body>

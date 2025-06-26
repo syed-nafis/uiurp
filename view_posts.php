@@ -7,13 +7,12 @@ require __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/src/model/db_connect.php';
 
 // Import MongoDB classes
-require_once __DIR__ . '/vendor/autoload.php';
-
-use \MongoDB\BSON\UTCDateTime;
-use \MongoDB\BSON\ObjectId;
-use \MongoDB\Client;
-use \MongoDB\Collection;
-use \MongoDB\Driver\Exception\ConnectionException;
+use MongoDB\BSON\UTCDateTime;
+use MongoDB\BSON\ObjectId;
+use MongoDB\Client;
+use MongoDB\Collection;
+use MongoDB\Driver\Exception\ConnectionException;
+use MongoDB\Driver\Exception\ConnectionTimeoutException;
 
 session_start();
 
@@ -1046,6 +1045,99 @@ try {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* File Preview Modal Styles */
+        .file-preview-modal .modal-dialog {
+            max-width: 90%;
+            height: 90vh;
+            margin: 1.75rem auto;
+        }
+
+        .file-preview-modal .modal-content {
+            height: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+
+        .file-preview-modal .modal-body {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 120px);
+        }
+
+        .preview-container {
+            flex: 1;
+            overflow: auto;
+            background: var(--surface-1);
+            border-radius: 0.5rem;
+            margin: 1rem;
+            position: relative;
+        }
+
+        .preview-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: calc(90vh - 200px);
+            margin: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .preview-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--surface-2);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .preview-error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--text-primary);
+            background: var(--glass-bg);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            max-width: 80%;
+        }
+
+        /* Loading animation */
+        .preview-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .preview-loading .spinner {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 1rem;
+        }
+
+        /* Theme specific adjustments */
+        [data-theme="light"] .preview-container {
+            background: var(--surface-1);
+        }
+
+        [data-theme="light"] .preview-controls {
+            background: var(--surface-2);
+        }
     </style>
 </head>
 <body>
@@ -1374,6 +1466,10 @@ try {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+    
     <script>
         // Initialize AOS
         AOS.init({
@@ -1872,6 +1968,207 @@ try {
                 }
             });
     });
+
+    // File Preview Functionality
+    const filePreviewModal = new bootstrap.Modal(document.getElementById('filePreviewModal'));
+    const previewContainer = document.querySelector('.preview-container');
+    const loadingIndicator = document.querySelector('.preview-loading');
+
+    function showLoading() {
+        loadingIndicator.classList.remove('d-none');
+    }
+
+    function hideLoading() {
+        loadingIndicator.classList.add('d-none');
+    }
+
+    function showError(message) {
+        const error = document.createElement('div');
+        error.className = 'preview-error';
+        error.innerHTML = `
+            <i class="bi bi-exclamation-circle text-danger fs-1"></i>
+            <h4 class="mt-3">Error</h4>
+            <p>${message}</p>
+        `;
+        previewContainer.appendChild(error);
+    }
+
+    function clearPreviewContainer() {
+        while (previewContainer.firstChild) {
+            previewContainer.removeChild(previewContainer.firstChild);
+        }
+        previewContainer.appendChild(loadingIndicator);
+    }
+
+    async function previewImage(url) {
+        try {
+            clearPreviewContainer();
+            showLoading();
+
+            const img = document.createElement('img');
+            img.className = 'preview-image';
+            img.src = url;
+
+            img.onload = () => {
+                hideLoading();
+            };
+
+            img.onerror = () => {
+                throw new Error('Failed to load image');
+            };
+
+            previewContainer.appendChild(img);
+        } catch (error) {
+            console.error('Error previewing image:', error);
+            showError('Failed to load image. Please try downloading the file instead.');
+            hideLoading();
+        }
+    }
+
+    async function previewDocument(url, fileType) {
+        try {
+            clearPreviewContainer();
+            showLoading();
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'doc-preview-wrapper';
+
+            const iframe = document.createElement('iframe');
+            iframe.className = 'preview-iframe';
+            
+            // Use Google Docs Viewer for documents
+            const googleViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+            iframe.src = googleViewerUrl;
+
+            iframe.onload = () => {
+                hideLoading();
+            };
+
+            iframe.onerror = () => {
+                throw new Error('Failed to load document preview');
+            };
+
+            wrapper.appendChild(iframe);
+            previewContainer.appendChild(wrapper);
+        } catch (error) {
+            console.error('Error previewing document:', error);
+            showError('Failed to load document preview. Please try downloading the file instead.');
+            hideLoading();
+        }
+    }
+
+    async function previewPDF(url) {
+        try {
+            clearPreviewContainer();
+            showLoading();
+
+            const canvas = document.createElement('canvas');
+            canvas.id = 'pdf-viewer';
+            previewContainer.appendChild(canvas);
+
+            const loadingTask = pdfjsLib.getDocument(url);
+            const pdf = await loadingTask.promise;
+            
+            const page = await pdf.getPage(1);
+            const viewport = page.getViewport({ scale: 1.5 });
+            
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            
+            const renderContext = {
+                canvasContext: canvas.getContext('2d'),
+                viewport: viewport
+            };
+
+            await page.render(renderContext).promise;
+            hideLoading();
+        } catch (error) {
+            console.error('Error previewing PDF:', error);
+            showError('Failed to load PDF. The file might be corrupted or inaccessible.');
+            hideLoading();
+        }
+    }
+
+    // Handle attachment clicks
+    document.querySelectorAll('.attachment-file').forEach(link => {
+        link.addEventListener('click', async function(e) {
+            const filePath = this.getAttribute('href');
+            const fileName = this.querySelector('span').textContent;
+            const fileExt = fileName.split('.').pop().toLowerCase();
+
+            // Update modal title and download link
+            document.getElementById('filePreviewTitle').textContent = fileName;
+            const downloadBtn = document.getElementById('downloadFile');
+            downloadBtn.href = filePath;
+            downloadBtn.setAttribute('download', fileName);
+
+            // Determine file type and handle preview
+            const imageTypes = ['jpg', 'jpeg', 'png', 'gif'];
+            const documentTypes = ['doc', 'docx', 'ppt', 'pptx'];
+
+            if (imageTypes.includes(fileExt)) {
+                e.preventDefault();
+                filePreviewModal.show();
+                await previewImage(filePath);
+            } else if (fileExt === 'pdf') {
+                e.preventDefault();
+                filePreviewModal.show();
+                await previewPDF(filePath);
+            } else if (documentTypes.includes(fileExt)) {
+                e.preventDefault();
+                filePreviewModal.show();
+                await previewDocument(filePath, fileExt);
+            }
+            // For other file types, let the default download behavior happen
+        });
+    });
+
+    // Clean up on modal close
+    document.getElementById('filePreviewModal').addEventListener('hidden.bs.modal', function () {
+        clearPreviewContainer();
+    });
+
+    // Initialize lightbox for gallery images
+    lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true,
+        'showImageNumberLabel': false
+    });
+
+    // Set worker path for PDF.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
+
+    <!-- Add this before closing body tag -->
+    <!-- File Preview Modal -->
+    <div class="modal fade file-preview-modal" id="filePreviewModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filePreviewTitle">File Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="preview-container">
+                        <!-- Preview content will be inserted here -->
+                        <div class="preview-loading d-none">
+                            <div class="spinner-border text-primary spinner" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="loading-text">Loading preview...</div>
+                        </div>
+                    </div>
+                    <div class="preview-controls">
+                        <a href="#" class="btn btn-primary" id="downloadFile" download>
+                            <i class="bi bi-download"></i> Download
+                        </a>
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x"></i> Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
