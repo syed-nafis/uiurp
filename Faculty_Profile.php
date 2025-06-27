@@ -269,15 +269,14 @@ $targetUserId = $faculty_id;
         <div class="container">
             <div class="d-flex justify-content-center align-items-center mb-5">
                 <h2 class="text-center mb-0">Research Fields
-                    <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) && $_SESSION['user_type'] === 'faculty' && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
-                        <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#interested-fields" class="btn btn-sm btn-outline-secondary ms-2">
+                    <?php if ($isOwnProfile): ?>
+                        <button class="btn btn-sm btn-outline-secondary ms-2 inline-edit-btn" data-section="research-fields" title="Edit Research Fields">
                             <i class="bi bi-pencil"></i> Edit
-                        </a>
+                        </button>
                     <?php endif; ?>
                 </h2>
             </div>
-            
-            <div class="row justify-content-center">
+            <div class="row justify-content-center" id="research-fields-view">
                 <?php foreach ($faculty['interested_fields_of_research'] as $index => $field): ?>
                     <div class="col-md-3 col-sm-6 mb-4" style="--delay: <?= $index ?>;">
                         <div class="field-box p-4 shadow-sm h-100 d-flex align-items-center justify-content-center text-center">
@@ -286,35 +285,27 @@ $targetUserId = $faculty_id;
                     </div>
                 <?php endforeach; ?>
             </div>
+            <div id="research-fields-edit" style="display:none;"></div>
         </div>
     </section>
 
     <!-- Publications Section -->
     <section id="projects" class="py-5">
         <div class="container">
-            <!-- Centered heading + edit button -->
             <div class="d-flex justify-content-center align-items-center gap-2 mb-5">
                 <h2 class="mb-0">Publications</h2>
-                <?php if (
-                    isset($_SESSION['user_id'], $_SESSION['user_type']) &&
-                    $_SESSION['user_type'] === 'faculty' &&
-                    $_SESSION['user_id'] === (string)$faculty['_id']
-                ): ?>
-                    <a href="edit_faculty.php?id=<?= htmlspecialchars((string)$faculty['_id']); ?>#projects" class="btn btn-sm btn-outline-secondary">
+                <?php if ($isOwnProfile): ?>
+                    <button class="btn btn-sm btn-outline-secondary inline-edit-btn" data-section="publications" title="Edit Publications">
                         <i class="bi bi-pencil"></i> Edit
-                    </a>
+                    </button>
                 <?php endif; ?>
             </div>
-
-            <!-- Projects grid -->
-            <div class="row">
+            <div class="row" id="publications-view">
                 <?php foreach ($faculty['projects'] as $index => $project): ?>
                     <div class="col-md-4 p-3" style="--delay: <?= $index ?>;">
                         <a href="<?= htmlspecialchars($project['link'] ?? '#'); ?>" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
                             <div class="card h-100">
-                                <?php 
-                                    $randomImage = $images[array_rand($images)]; 
-                                ?>
+                                <?php $randomImage = $images[array_rand($images)]; ?>
                                 <img src="<?= htmlspecialchars($randomImage); ?>" class="card-img-top" alt="Project Image">
                                 <div class="card-body">
                                     <h5 class="card-title"><?= htmlspecialchars($project['title']); ?></h5>
@@ -325,25 +316,22 @@ $targetUserId = $faculty_id;
                     </div>
                 <?php endforeach; ?>
             </div>
+            <div id="publications-edit" style="display:none;"></div>
         </div>
     </section>
 
     <!-- Prerequisites Section -->
     <section id="prerequisite" class="py-5">
         <div class="container">
-            <!-- Center heading and edit button together -->
             <div class="d-flex justify-content-center align-items-center gap-2 mb-5">
                 <h2 class="mb-0">Prerequisites</h2>
-                <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) 
-                        && $_SESSION['user_type'] === 'faculty' 
-                        && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
-                    <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#interested-fields" 
-                    class="btn btn-sm btn-outline-secondary">
+                <?php if ($isOwnProfile): ?>
+                    <button class="btn btn-sm btn-outline-secondary inline-edit-btn" data-section="prerequisites" title="Edit Prerequisites">
                         <i class="bi bi-pencil"></i> Edit
-                    </a>
+                    </button>
                 <?php endif; ?>
             </div>
-
+            <div id="prerequisites-view">
             <?php if (!empty($faculty['prerequisites']) && count($faculty['prerequisites']) > 0): ?>
                 <div class="row justify-content-center">
                     <?php foreach ($faculty['prerequisites'] as $index => $prerequisite): ?>
@@ -360,25 +348,23 @@ $targetUserId = $faculty_id;
                     <p class="mt-3">No prerequisites available at the moment.</p>
                 </div>
             <?php endif; ?>
+            </div>
+            <div id="prerequisites-edit" style="display:none;"></div>
         </div>
     </section>
 
     <!-- Resources Section -->
     <section id="resource" class="py-5">
         <div class="container">
-            <!-- Center heading and edit button together -->
             <div class="d-flex justify-content-center align-items-center gap-2 mb-5">
                 <h2 class="mb-0">Learning Resources</h2>
-                <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) 
-                        && $_SESSION['user_type'] === 'faculty' 
-                        && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
-                    <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#interested-fields" 
-                    class="btn btn-sm btn-outline-secondary">
+                <?php if ($isOwnProfile): ?>
+                    <button class="btn btn-sm btn-outline-secondary inline-edit-btn" data-section="resources" title="Edit Learning Resources">
                         <i class="bi bi-pencil"></i> Edit
-                    </a>
+                    </button>
                 <?php endif; ?>
             </div>
-
+            <div id="resources-view">
             <?php if (!empty($faculty['resources_to_learn_prerequisites']) && count($faculty['resources_to_learn_prerequisites']) > 0): ?>
                 <div class="row justify-content-center">
                     <?php foreach ($faculty['resources_to_learn_prerequisites'] as $index => $resource): ?>
@@ -400,6 +386,8 @@ $targetUserId = $faculty_id;
                     <p class="mt-3">No resources available at the moment.</p>
                 </div>
             <?php endif; ?>
+            </div>
+            <div id="resources-edit" style="display:none;"></div>
         </div>
     </section>
 
@@ -454,6 +442,7 @@ $targetUserId = $faculty_id;
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/scripts/faculty_profile_inline_edit.js"></script>
     
     <script>
     // Check for user's theme preference
