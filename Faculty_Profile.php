@@ -295,9 +295,9 @@ $targetUserId = $faculty_id;
             <div class="d-flex justify-content-center align-items-center gap-2 mb-5">
                 <h2 class="mb-0">Research Fields</h2>
                 <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) && $_SESSION['user_type'] === 'faculty' && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
-                    <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#interested-fields" class="btn btn-sm btn-outline-secondary">
+                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editResearchFieldsModal">
                         <i class="bi bi-pencil"></i> Edit
-                    </a>
+                    </button>
                 <?php endif; ?>
             </div>
             
@@ -332,9 +332,9 @@ $targetUserId = $faculty_id;
                     $_SESSION['user_type'] === 'faculty' &&
                     $_SESSION['user_id'] === (string)$faculty['_id']
                 ): ?>
-                    <a href="edit_faculty.php?id=<?= htmlspecialchars((string)$faculty['_id']); ?>#projects" class="btn btn-sm btn-outline-secondary">
+                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editPublicationsModal">
                         <i class="bi bi-pencil"></i> Edit
-                    </a>
+                    </button>
                 <?php endif; ?>
             </div>
 
@@ -377,10 +377,9 @@ $targetUserId = $faculty_id;
                 <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) 
                         && $_SESSION['user_type'] === 'faculty' 
                         && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
-                    <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#interested-fields" 
-                    class="btn btn-sm btn-outline-secondary">
+                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editPrerequisitesModal">
                         <i class="bi bi-pencil"></i> Edit
-                    </a>
+                    </button>
                 <?php endif; ?>
             </div>
 
@@ -413,10 +412,9 @@ $targetUserId = $faculty_id;
                 <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) 
                         && $_SESSION['user_type'] === 'faculty' 
                         && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
-                    <a href="edit_faculty.php?id=<?= $faculty['_id']; ?>#interested-fields" 
-                    class="btn btn-sm btn-outline-secondary">
+                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editResourcesModal">
                         <i class="bi bi-pencil"></i> Edit
-                    </a>
+                    </button>
                 <?php endif; ?>
             </div>
 
@@ -878,6 +876,390 @@ $targetUserId = $faculty_id;
         }
       }
     });
+    
+    // Faculty ID for API calls
+    const facultyId = '<?= (string)$faculty['_id']; ?>';
+    
+    // Research Fields functionality
+    function saveResearchFields() {
+        const fields = document.getElementById('researchFields').value;
+        const fieldsArray = fields.split(',').map(field => field.trim()).filter(field => field.length > 0);
+        
+        fetch('src/model/update_faculty_section.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                faculty_id: facultyId,
+                section: 'interested_fields_of_research',
+                data: fieldsArray
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Close modal and reload page to show updated data
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editResearchFieldsModal'));
+                modal.hide();
+                location.reload();
+            } else {
+                alert('Error saving research fields: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error saving research fields:', error);
+            alert('Error saving research fields. Please try again.');
+        });
+    }
+
+    // Publications functionality
+    let publicationCounter = <?= !empty($faculty['projects']) ? count($faculty['projects']) : 0; ?>;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add publication functionality
+        const addPublicationBtn = document.getElementById('addPublicationBtn');
+        if (addPublicationBtn) {
+            addPublicationBtn.addEventListener('click', addPublication);
+        }
+        
+        // Remove publication functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-publication-btn')) {
+                e.target.closest('.publication-block').remove();
+            }
+        });
+        
+        // Add resource functionality
+        const addResourceBtn = document.getElementById('addResourceBtn');
+        if (addResourceBtn) {
+            addResourceBtn.addEventListener('click', addResource);
+        }
+        
+        // Remove resource functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-resource-btn')) {
+                e.target.closest('.resource-block').remove();
+            }
+        });
+    });
+    
+    function addPublication() {
+        publicationCounter++;
+        const container = document.getElementById('publicationsContainer');
+        const newPublication = document.createElement('div');
+        newPublication.className = 'mb-3 p-3 border rounded publication-block';
+        newPublication.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0">Publication ${publicationCounter}</h6>
+                <button type="button" class="btn btn-sm btn-outline-danger remove-publication-btn">Remove</button>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Title</label>
+                <input type="text" class="form-control publication-title" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Description</label>
+                <textarea class="form-control publication-description" rows="3"></textarea>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Link</label>
+                <input type="url" class="form-control publication-link" placeholder="https://...">
+            </div>
+        `;
+        container.appendChild(newPublication);
+    }
+    
+    function savePublications() {
+        const publications = [];
+        const publicationBlocks = document.querySelectorAll('.publication-block');
+        
+        publicationBlocks.forEach(block => {
+            const title = block.querySelector('.publication-title').value.trim();
+            const description = block.querySelector('.publication-description').value.trim();
+            const link = block.querySelector('.publication-link').value.trim();
+            
+            if (title) {
+                publications.push({
+                    title: title,
+                    description: description,
+                    link: link
+                });
+            }
+        });
+        
+        fetch('src/model/update_faculty_section.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                faculty_id: facultyId,
+                section: 'projects',
+                data: publications
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editPublicationsModal'));
+                modal.hide();
+                location.reload();
+            } else {
+                alert('Error saving publications: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error saving publications:', error);
+            alert('Error saving publications. Please try again.');
+        });
+    }
+
+    // Prerequisites functionality
+    function savePrerequisites() {
+        const prerequisites = document.getElementById('prerequisites').value;
+        const prerequisitesArray = prerequisites.split(',').map(prereq => prereq.trim()).filter(prereq => prereq.length > 0);
+        
+        fetch('src/model/update_faculty_section.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                faculty_id: facultyId,
+                section: 'prerequisites',
+                data: prerequisitesArray
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editPrerequisitesModal'));
+                modal.hide();
+                location.reload();
+            } else {
+                alert('Error saving prerequisites: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error saving prerequisites:', error);
+            alert('Error saving prerequisites. Please try again.');
+        });
+    }
+
+    // Learning Resources functionality
+    let resourceCounter = <?= !empty($faculty['resources_to_learn_prerequisites']) ? count($faculty['resources_to_learn_prerequisites']) : 0; ?>;
+    
+    function addResource() {
+        resourceCounter++;
+        const container = document.getElementById('resourcesContainer');
+        const newResource = document.createElement('div');
+        newResource.className = 'mb-3 p-3 border rounded resource-block';
+        newResource.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0">Resource ${resourceCounter}</h6>
+                <button type="button" class="btn btn-sm btn-outline-danger remove-resource-btn">Remove</button>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Topic</label>
+                <input type="text" class="form-control resource-topic" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Link</label>
+                <input type="url" class="form-control resource-link" placeholder="https://...">
+            </div>
+        `;
+        container.appendChild(newResource);
+    }
+    
+    function saveResources() {
+        const resources = [];
+        const resourceBlocks = document.querySelectorAll('.resource-block');
+        
+        resourceBlocks.forEach(block => {
+            const topic = block.querySelector('.resource-topic').value.trim();
+            const link = block.querySelector('.resource-link').value.trim();
+            
+            if (topic) {
+                resources.push({
+                    topic: topic,
+                    link: link
+                });
+            }
+        });
+        
+        fetch('src/model/update_faculty_section.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                faculty_id: facultyId,
+                section: 'resources_to_learn_prerequisites',
+                data: resources
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editResourcesModal'));
+                modal.hide();
+                location.reload();
+            } else {
+                alert('Error saving resources: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error saving resources:', error);
+            alert('Error saving resources. Please try again.');
+        });
+    }
     </script>
+
+    <!-- Edit Research Fields Modal -->
+    <div class="modal fade edit-modal" id="editResearchFieldsModal" tabindex="-1" aria-labelledby="editResearchFieldsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editResearchFieldsModalLabel">Edit Research Fields</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="researchFieldsForm">
+                        <div class="mb-3">
+                            <label for="researchFields" class="form-label">Research Fields</label>
+                            <textarea class="form-control" id="researchFields" rows="4" placeholder="Enter your research fields, separated by commas"><?= isset($faculty['interested_fields_of_research']) ? htmlspecialchars(implode(', ', (array)$faculty['interested_fields_of_research'])) : ''; ?></textarea>
+                            <div class="form-text">Enter your research fields separated by commas (e.g., Machine Learning, Data Science, Computer Vision)</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveResearchFields()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Publications Modal -->
+    <div class="modal fade edit-modal" id="editPublicationsModal" tabindex="-1" aria-labelledby="editPublicationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPublicationsModalLabel">Edit Publications</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="publicationsForm">
+                        <div id="publicationsContainer">
+                            <?php if (!empty($faculty['projects'])): ?>
+                                <?php foreach ($faculty['projects'] as $index => $project): ?>
+                                    <div class="mb-3 p-3 border rounded publication-block">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0">Publication <?= $index + 1; ?></h6>
+                                            <button type="button" class="btn btn-sm btn-outline-danger remove-publication-btn">Remove</button>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">Title</label>
+                                            <input type="text" class="form-control publication-title" value="<?= htmlspecialchars($project['title'] ?? ''); ?>" required>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control publication-description" rows="3"><?= htmlspecialchars($project['description'] ?? ''); ?></textarea>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">Link</label>
+                                            <input type="url" class="form-control publication-link" value="<?= htmlspecialchars($project['link'] ?? ''); ?>" placeholder="https://...">
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary" id="addPublicationBtn">
+                            <i class="bi bi-plus-lg"></i> Add Publication
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="savePublications()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Prerequisites Modal -->
+    <div class="modal fade edit-modal" id="editPrerequisitesModal" tabindex="-1" aria-labelledby="editPrerequisitesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPrerequisitesModalLabel">Edit Prerequisites</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="prerequisitesForm">
+                        <div class="mb-3">
+                            <label for="prerequisites" class="form-label">Prerequisites</label>
+                            <textarea class="form-control" id="prerequisites" rows="4" placeholder="Enter prerequisites, separated by commas"><?= isset($faculty['prerequisites']) && $faculty['prerequisites'] instanceof \MongoDB\Model\BSONArray ? htmlspecialchars(implode(', ', (array) $faculty['prerequisites'])) : ''; ?></textarea>
+                            <div class="form-text">Enter the knowledge or skills students need before working with you, separated by commas</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="savePrerequisites()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Learning Resources Modal -->
+    <div class="modal fade edit-modal" id="editResourcesModal" tabindex="-1" aria-labelledby="editResourcesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editResourcesModalLabel">Edit Learning Resources</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="resourcesForm">
+                        <div id="resourcesContainer">
+                            <?php 
+                            $resources = $faculty['resources_to_learn_prerequisites'] ?? [];
+                            if ($resources instanceof \MongoDB\Model\BSONArray) {
+                                $resources = (array)$resources;
+                            }
+                            if (!empty($resources)): ?>
+                                <?php foreach ($resources as $index => $resource): ?>
+                                    <div class="mb-3 p-3 border rounded resource-block">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0">Resource <?= $index + 1; ?></h6>
+                                            <button type="button" class="btn btn-sm btn-outline-danger remove-resource-btn">Remove</button>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">Topic</label>
+                                            <input type="text" class="form-control resource-topic" value="<?= htmlspecialchars($resource['topic'] ?? ''); ?>" required>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">Link</label>
+                                            <input type="url" class="form-control resource-link" value="<?= htmlspecialchars($resource['link'] ?? ''); ?>" placeholder="https://...">
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary" id="addResourceBtn">
+                            <i class="bi bi-plus-lg"></i> Add Resource
+                        </button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveResources()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

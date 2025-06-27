@@ -977,176 +977,239 @@ section h2::after {
     line-height: 1.6;
 }
 
-/* Modal Styling */
-.modal-content {
+/* Edit Modal Styles */
+.edit-modal .modal-content {
     background: var(--glass-bg);
-    backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    box-shadow: 
-        0 20px 60px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
 }
 
-.modal-header {
-    border-bottom: 1px solid var(--glass-border);
+.edit-modal .modal-header {
     background: linear-gradient(135deg, 
-        rgba(0, 212, 255, 0.1) 0%, 
-        rgba(139, 92, 246, 0.1) 100%);
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(255, 255, 255, 0.05) 100%);
+    border-bottom: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
 }
 
-.modal-title {
+.edit-modal .modal-title {
     color: var(--text-primary);
     font-weight: 600;
+    font-size: 1.25rem;
 }
 
-.btn-close {
-    filter: invert(1);
+.edit-modal .modal-body {
+    padding: 2rem;
 }
 
-.modal-body {
-    color: var(--text-secondary);
+.edit-modal .form-label {
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
 }
 
-.modal-footer {
-    border-top: 1px solid var(--glass-border);
-}
-
-/* Schedule Item Styling */
-.section-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
+.edit-modal .form-control {
+    background: rgba(255, 255, 255, 0.1);
     border: 1px solid var(--glass-border);
-    border-radius: 15px;
+    color: var(--text-primary);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.edit-modal .form-control:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 0.2rem rgba(0, 212, 255, 0.25);
+    color: var(--text-primary);
+}
+
+.edit-modal .form-control::placeholder {
+    color: var(--text-muted);
+}
+
+.edit-modal .form-text {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.edit-modal .btn {
+    border-radius: 8px;
+    font-weight: 500;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    cursor: pointer;
 }
 
-.section-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 
-        0 15px 40px rgba(0, 0, 0, 0.3),
-        0 0 30px rgba(0, 212, 255, 0.2);
+.edit-modal .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
-.section-card .card-body {
-    padding: 1.5rem;
+.edit-modal .btn:hover::before {
+    left: 100%;
 }
 
-.section-card .card-title {
-    color: var(--text-primary);
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
-
-.section-card .badge {
+.edit-modal .btn-primary {
     background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
     border: none;
-    padding: 6px 12px;
-    border-radius: 15px;
-    font-weight: 500;
+    color: white;
 }
 
-/* Schedule modal text color adjustments for dark mode */
-[data-theme="dark"] .modal .d-flex.align-items-center.text-secondary {
-    color: white !important;
+.edit-modal .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
 }
 
-[data-theme="dark"] .modal .d-flex.align-items-center.text-secondary i {
-    color: white !important;
+.edit-modal .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
 }
 
-[data-theme="dark"] .modal .d-flex.align-items-center.text-secondary span {
-    color: white !important;
+.edit-modal .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
 }
 
-/* Hide scrollbar but keep functionality */
-.modal-dialog-scrollable .modal-body {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
-
-.modal-dialog-scrollable .modal-body::-webkit-scrollbar {
-    width: 0; /* Chrome, Safari, Opera */
+.edit-modal .btn-outline-primary {
     background: transparent;
+    border: 2px solid var(--accent-blue);
+    color: var(--accent-blue);
 }
 
-/* Responsive Design */
+.edit-modal .btn-outline-primary:hover {
+    background: var(--accent-blue);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.edit-modal .btn-outline-danger {
+    background: transparent;
+    border: 2px solid #dc3545;
+    color: #dc3545;
+}
+
+.edit-modal .btn-outline-danger:hover {
+    background: #dc3545;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Dynamic content blocks */
+.publication-block,
+.resource-block {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.publication-block::before,
+.resource-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.publication-block:hover::before,
+.resource-block:hover::before {
+    transform: scaleX(1);
+}
+
+.publication-block:hover,
+.resource-block:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Light mode edit modal adjustments */
+[data-theme="light"] .edit-modal .modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(14, 165, 233, 0.15);
+}
+
+[data-theme="light"] .edit-modal .modal-header {
+    background: linear-gradient(135deg, 
+        rgba(248, 250, 252, 0.8) 0%, 
+        rgba(255, 255, 255, 0.8) 100%);
+    border-bottom: 1px solid rgba(14, 165, 233, 0.15);
+}
+
+[data-theme="light"] .edit-modal .form-control {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(14, 165, 233, 0.2);
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .edit-modal .form-control:focus {
+    background: rgba(255, 255, 255, 1);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.25);
+}
+
+[data-theme="light"] .publication-block,
+[data-theme="light"] .resource-block {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(14, 165, 233, 0.15);
+}
+
+[data-theme="light"] .publication-block:hover,
+[data-theme="light"] .resource-block:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .edit-modal .btn-secondary {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .edit-modal .btn-secondary:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments for edit modals */
 @media (max-width: 768px) {
-    header h1 {
-        font-size: 2.5rem;
-    }
-    
-    header .row {
-        flex-direction: column-reverse;
-    }
-    
-    .profile-image-container {
-        margin-bottom: 2rem;
-    }
-    
-    #facultyImage {
-        width: 200px;
-        height: 200px;
-    }
-    
-    .profile-image-container .btn {
-        padding: 8px 16px;
-        font-size: 0.85rem;
-        margin: 0.25rem;
-    }
-    
-    section {
-        padding: 40px 0;
-    }
-    
-    .action-buttons .btn {
-        padding: 10px 20px;
-        margin-bottom: 0.5rem;
-    }
-    
-    .contact-info,
-    .contact-form {
+    .edit-modal .modal-body {
         padding: 1.5rem;
-        margin-bottom: 2rem;
     }
     
-    .empty-state {
-        padding: 3rem 1.5rem;
-        margin: 1.5rem 0;
+    .edit-modal .modal-title {
+        font-size: 1.1rem;
     }
     
-    .empty-state i {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-    }
-    
-    .empty-state h4 {
-        font-size: 1.25rem;
-        margin-bottom: 0.75rem;
-    }
-    
-    .field-box,
-    .prerequisite-card,
-    .resource-card {
+    .publication-block,
+    .resource-block {
         margin-bottom: 1rem;
     }
 }
 
 @media (max-width: 480px) {
-    header h1 {
-        font-size: 2rem;
+    .edit-modal .modal-body {
+        padding: 1rem;
     }
     
-    #facultyImage {
-        width: 200px;
-        height: 200px;
-    }
-    
-    .action-buttons .btn {
-        padding: 8px 16px;
+    .edit-modal .btn {
+        padding: 0.5rem 1rem;
         font-size: 0.9rem;
     }
 }
