@@ -290,36 +290,41 @@ $targetUserId = $faculty_id;
     </div>
 
     <!-- Research Fields Section -->
-    <section id="interested-fields" class="profile-section py-5">
-        <div class="container">
-            <div class="d-flex justify-content-center align-items-center gap-2 mb-5">
-                <h2 class="mb-0">Research Fields</h2>
-                <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) && $_SESSION['user_type'] === 'faculty' && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
-                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editResearchFieldsModal">
-                        <i class="bi bi-pencil"></i> Edit
-                    </button>
-                <?php endif; ?>
-            </div>
-            
-            <?php if (!empty($faculty['interested_fields_of_research']) && count($faculty['interested_fields_of_research']) > 0): ?>
-                <div class="row justify-content-center">
-                    <?php foreach ($faculty['interested_fields_of_research'] as $index => $field): ?>
-                        <div class="col-md-3 col-sm-6 mb-4" style="--delay: <?= $index ?>;">
-                            <div class="field-box p-4 h-100 d-flex align-items-center justify-content-center text-center">
-                                <h5 class="mb-0"><?= htmlspecialchars($field); ?></h5>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <div class="empty-state">
-                    <i class="bi bi-stars"></i>
-                    <h4>No Research Fields Added</h4>
-                    <p>Research fields help students understand your areas of expertise and research focus.</p>
-                </div>
+<section id="interested-fields" class="profile-section py-5">
+    <div class="container">
+        <div class="d-flex justify-content-center align-items-center gap-2 mb-5">
+            <h2 class="mb-0">Research Fields</h2>
+            <?php if (
+                isset($_SESSION['user_id'], $_SESSION['user_type']) &&
+                $_SESSION['user_type'] === 'faculty' &&
+                $_SESSION['user_id'] === (string)$faculty['_id']
+            ): ?>
+                <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editResearchFieldsModal">
+                    <i class="bi bi-pencil"></i> Edit
+                </button>
             <?php endif; ?>
         </div>
-    </section>
+
+        <?php if (!empty($faculty['interested_fields_of_research']) && count($faculty['interested_fields_of_research']) > 0): ?>
+            <div class="row justify-content-center">
+                <?php foreach ($faculty['interested_fields_of_research'] as $index => $field): ?>
+                    <div class="col-md-4 col-sm-6 mb-4" style="--delay: <?= $index ?>;">
+                        <div class="field-box p-4 h-100 shadow-sm border rounded">
+                            <h5 class="mb-2"><?= htmlspecialchars($field['name']); ?></h5>
+                            <p class="text-muted mb-0"><?= htmlspecialchars($field['description']); ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="empty-state text-center">
+                <i class="bi bi-stars display-4 text-muted"></i>
+                <h4 class="mt-3">No Research Fields Added</h4>
+                <p class="text-muted">Research fields help students understand your areas of expertise and research focus.</p>
+            </div>
+        <?php endif; ?>
+    </div>
+</section>
 
     <!-- Publications Section -->
     <section id="projects" class="profile-section py-5">
@@ -386,12 +391,15 @@ $targetUserId = $faculty_id;
             <?php if (!empty($faculty['prerequisites']) && count($faculty['prerequisites']) > 0): ?>
                 <div class="row justify-content-center">
                     <?php foreach ($faculty['prerequisites'] as $index => $prerequisite): ?>
-                        <div class="col-md-5 col-lg-4 mb-4" style="--delay: <?= $index ?>;">
-                            <div class="prerequisite-card p-4 h-100">
-                                <h5 class="mb-0"><?= htmlspecialchars($prerequisite); ?></h5>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+    <div class="col-md-5 col-lg-4 mb-4" style="--delay: <?= $index ?>;">
+        <div class="prerequisite-card p-4 h-100 shadow-sm border rounded">
+            <h5 class="mb-2"><?= htmlspecialchars($prerequisite['name']); ?></h5>
+            <span class="badge bg-primary mb-2"><?= htmlspecialchars($prerequisite['level']); ?></span>
+            <p class="text-muted mb-0"><?= htmlspecialchars($prerequisite['description']); ?></p>
+        </div>
+    </div>
+<?php endforeach; ?>
+
                 </div>
             <?php else: ?>
                 <div class="empty-state">
@@ -405,43 +413,47 @@ $targetUserId = $faculty_id;
 
     <!-- Resources Section -->
     <section id="resource" class="profile-section py-5">
-        <div class="container">
-            <!-- Center heading and edit button together -->
-            <div class="d-flex justify-content-center align-items-center gap-2 mb-5">
-                <h2 class="mb-0">Learning Resources</h2>
-                <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) 
-                        && $_SESSION['user_type'] === 'faculty' 
-                        && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
-                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editResourcesModal">
-                        <i class="bi bi-pencil"></i> Edit
-                    </button>
-                <?php endif; ?>
-            </div>
-
-            <?php if (!empty($faculty['resources_to_learn_prerequisites']) && count($faculty['resources_to_learn_prerequisites']) > 0): ?>
-                <div class="row justify-content-center">
-                    <?php foreach ($faculty['resources_to_learn_prerequisites'] as $index => $resource): ?>
-                        <div class="col-md-5 col-lg-4 mb-4" style="--delay: <?= $index ?>;">
-                            <a href="<?= htmlspecialchars($resource['link']); ?>" target="_blank" 
-                                class="resource-card d-block p-4 text-decoration-none h-100">
-                                <h5 class="mb-1">
-                                    <i class="bi bi-link-45deg me-2"></i>
-                                    <?= htmlspecialchars($resource['topic']); ?>
-                                </h5>
-                                <small>Click to learn more</small>
-                            </a>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <div class="empty-state">
-                    <i class="bi bi-book"></i>
-                    <h4>No Learning Resources Added</h4>
-                    <p>Share helpful resources that students can use to prepare for working with you or learn about your research areas.</p>
-                </div>
+    <div class="container">
+        <!-- Heading with Edit Button -->
+        <div class="d-flex justify-content-center align-items-center gap-2 mb-5">
+            <h2 class="mb-0">Learning Resources</h2>
+            <?php if (
+                isset($_SESSION['user_id'], $_SESSION['user_type']) &&
+                $_SESSION['user_type'] === 'faculty' &&
+                $_SESSION['user_id'] === (string)$faculty['_id']
+            ): ?>
+                <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editResourcesModal">
+                    <i class="bi bi-pencil"></i> Edit
+                </button>
             <?php endif; ?>
         </div>
-    </section>
+
+        <!-- Resource Cards -->
+        <?php if (!empty($faculty['resources_to_learn_prerequisites']) && count($faculty['resources_to_learn_prerequisites']) > 0): ?>
+            <div class="row justify-content-center">
+                <?php foreach ($faculty['resources_to_learn_prerequisites'] as $index => $resource): ?>
+                    <div class="col-md-5 col-lg-4 mb-4" style="--delay: <?= $index ?>;">
+                        <a href="<?= htmlspecialchars($resource['link']); ?>" target="_blank"
+                           class="resource-card d-block p-4 text-decoration-none h-100 shadow-sm border rounded">
+                            <h5 class="mb-2">
+                                <i class="bi bi-link-45deg me-2"></i>
+                                <?= htmlspecialchars($resource['topic']); ?>
+                            </h5>
+                            <p class="text-muted small mb-0"><?= htmlspecialchars($resource['description']); ?></p>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="empty-state text-center mt-4">
+                <i class="bi bi-book display-4 text-muted"></i>
+                <h4 class="mt-3">No Learning Resources Added</h4>
+                <p class="text-muted">Share helpful resources that students can use to prepare for working with you or learn about your research areas.</p>
+            </div>
+        <?php endif; ?>
+    </div>
+</section>
+
 
     <!-- Contact Section -->
     <section class="contact-section profile-section py-5">
@@ -956,9 +968,15 @@ $targetUserId = $faculty_id;
                 <h6 class="mb-0">Research Field ${researchFieldCounter}</h6>
                 <button type="button" class="btn btn-sm btn-outline-danger remove-research-field-btn">Remove</button>
             </div>
-            <div class="mb-2">
-                <label class="form-label">Field Name</label>
-                <input type="text" class="form-control research-field-name" placeholder="e.g., Machine Learning" required>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Field Name</label>
+                    <input type="text" class="form-control research-field-name" placeholder="e.g., Machine Learning" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control research-field-description" rows="2" placeholder="Brief description of the research field"></textarea>
+                </div>
             </div>
         `;
         container.appendChild(newField);
@@ -970,8 +988,12 @@ $targetUserId = $faculty_id;
         
         fieldBlocks.forEach(block => {
             const fieldName = block.querySelector('.research-field-name').value.trim();
+            const fieldDescription = block.querySelector('.research-field-description').value.trim();
             if (fieldName) {
-                fields.push(fieldName);
+                fields.push({
+                    name: fieldName,
+                    description: fieldDescription
+                });
             }
         });
         
@@ -1013,9 +1035,23 @@ $targetUserId = $faculty_id;
                 <h6 class="mb-0">Prerequisite ${prerequisiteCounter}</h6>
                 <button type="button" class="btn btn-sm btn-outline-danger remove-prerequisite-btn">Remove</button>
             </div>
-            <div class="mb-2">
-                <label class="form-label">Prerequisite</label>
-                <input type="text" class="form-control prerequisite-name" placeholder="e.g., Basic knowledge of Python" required>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Prerequisite Name</label>
+                    <input type="text" class="form-control prerequisite-name" placeholder="e.g., Basic knowledge of Python" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Level</label>
+                    <select class="form-select prerequisite-level">
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-2">
+                <label class="form-label">Description</label>
+                <textarea class="form-control prerequisite-description" rows="2" placeholder="Brief description of the prerequisite"></textarea>
             </div>
         `;
         container.appendChild(newPrerequisite);
@@ -1027,8 +1063,14 @@ $targetUserId = $faculty_id;
         
         prerequisiteBlocks.forEach(block => {
             const prerequisiteName = block.querySelector('.prerequisite-name').value.trim();
+            const prerequisiteLevel = block.querySelector('.prerequisite-level').value;
+            const prerequisiteDescription = block.querySelector('.prerequisite-description').value.trim();
             if (prerequisiteName) {
-                prerequisites.push(prerequisiteName);
+                prerequisites.push({
+                    name: prerequisiteName,
+                    level: prerequisiteLevel,
+                    description: prerequisiteDescription
+                });
             }
         });
         
@@ -1145,6 +1187,10 @@ $targetUserId = $faculty_id;
                 <input type="text" class="form-control resource-topic" required>
             </div>
             <div class="mb-2">
+                <label class="form-label">Description</label>
+                <textarea class="form-control resource-description" rows="2" placeholder="Brief description of the resource"></textarea>
+            </div>
+            <div class="mb-2">
                 <label class="form-label">Link</label>
                 <input type="url" class="form-control resource-link" placeholder="https://...">
             </div>
@@ -1158,11 +1204,13 @@ $targetUserId = $faculty_id;
         
         resourceBlocks.forEach(block => {
             const topic = block.querySelector('.resource-topic').value.trim();
+            const description = block.querySelector('.resource-description').value.trim();
             const link = block.querySelector('.resource-link').value.trim();
             
             if (topic) {
                 resources.push({
                     topic: topic,
+                    description: description,
                     link: link
                 });
             }
@@ -1214,9 +1262,15 @@ $targetUserId = $faculty_id;
                                             <h6 class="mb-0">Research Field <?= $index + 1; ?></h6>
                                             <button type="button" class="btn btn-sm btn-outline-danger remove-research-field-btn">Remove</button>
                                         </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Field Name</label>
-                                            <input type="text" class="form-control research-field-name" value="<?= htmlspecialchars($field); ?>" placeholder="e.g., Machine Learning" required>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Field Name</label>
+                                                <input type="text" class="form-control research-field-name" value="<?= htmlspecialchars($field['name']); ?>" placeholder="e.g., Machine Learning" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Description</label>
+                                                <textarea class="form-control research-field-description" rows="2" placeholder="Brief description of the research field"><?= htmlspecialchars($field['description']); ?></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
@@ -1300,9 +1354,23 @@ $targetUserId = $faculty_id;
                                             <h6 class="mb-0">Prerequisite <?= $index + 1; ?></h6>
                                             <button type="button" class="btn btn-sm btn-outline-danger remove-prerequisite-btn">Remove</button>
                                         </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Prerequisite</label>
-                                            <input type="text" class="form-control prerequisite-name" value="<?= htmlspecialchars($prerequisite); ?>" placeholder="e.g., Basic knowledge of Python" required>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Prerequisite Name</label>
+                                                <input type="text" class="form-control prerequisite-name" value="<?= htmlspecialchars($prerequisite['name']); ?>" placeholder="e.g., Basic knowledge of Python" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Level</label>
+                                                <select class="form-select prerequisite-level">
+                                                    <option value="Beginner" <?= $prerequisite['level'] === 'Beginner' ? 'selected' : ''; ?>>Beginner</option>
+                                                    <option value="Intermediate" <?= $prerequisite['level'] === 'Intermediate' ? 'selected' : ''; ?>>Intermediate</option>
+                                                    <option value="Advanced" <?= $prerequisite['level'] === 'Advanced' ? 'selected' : ''; ?>>Advanced</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control prerequisite-description" rows="2" placeholder="Brief description of the prerequisite"><?= htmlspecialchars($prerequisite['description']); ?></textarea>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
@@ -1347,6 +1415,10 @@ $targetUserId = $faculty_id;
                                         <div class="mb-2">
                                             <label class="form-label">Topic</label>
                                             <input type="text" class="form-control resource-topic" value="<?= htmlspecialchars($resource['topic'] ?? ''); ?>" required>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control resource-description" rows="2" placeholder="Brief description of the resource"><?= htmlspecialchars($resource['description'] ?? ''); ?></textarea>
                                         </div>
                                         <div class="mb-2">
                                             <label class="form-label">Link</label>

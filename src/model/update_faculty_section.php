@@ -52,6 +52,13 @@ try {
                 echo json_encode(['success' => false, 'message' => 'Research fields must be an array']);
                 exit();
             }
+            // Validate each research field has required fields
+            foreach ($data as $field) {
+                if (!isset($field['name']) || empty(trim($field['name']))) {
+                    echo json_encode(['success' => false, 'message' => 'Each research field must have a name']);
+                    exit();
+                }
+            }
             $updateData['interested_fields_of_research'] = $data;
             break;
             
@@ -74,6 +81,13 @@ try {
             if (!is_array($data)) {
                 echo json_encode(['success' => false, 'message' => 'Prerequisites must be an array']);
                 exit();
+            }
+            // Validate each prerequisite has required fields
+            foreach ($data as $prerequisite) {
+                if (!isset($prerequisite['name']) || empty(trim($prerequisite['name']))) {
+                    echo json_encode(['success' => false, 'message' => 'Each prerequisite must have a name']);
+                    exit();
+                }
             }
             $updateData['prerequisites'] = $data;
             break;

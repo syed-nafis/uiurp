@@ -1227,3 +1227,99 @@ section h2::after {
         font-size: 0.9rem;
     }
 }
+
+/* Ensure text visibility in both dark and light modes */
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Field box description text */
+.field-box .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Prerequisite card description text */
+.prerequisite-card .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Resource card description text */
+.resource-card .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Card description text */
+.card .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Empty state description text */
+.empty-state .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Light mode specific overrides */
+[data-theme="light"] .text-muted {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="light"] .field-box .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .prerequisite-card .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .resource-card .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .card .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .empty-state .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Additional text visibility fixes */
+.field-box p,
+.prerequisite-card p,
+.resource-card p,
+.card p {
+    color: var(--text-secondary) !important;
+}
+
+.empty-state p {
+    color: var(--text-secondary) !important;
+}
+
+/* Ensure all text elements in cards are visible */
+.field-box *,
+.prerequisite-card *,
+.resource-card *,
+.card * {
+    color: inherit;
+}
+
+.field-box h5,
+.prerequisite-card h5,
+.resource-card h5,
+.card h5 {
+    color: var(--text-primary) !important;
+}
+
+.field-box p,
+.prerequisite-card p,
+.resource-card p,
+.card p {
+    color: var(--text-secondary) !important;
+}
+
+.field-box small,
+.prerequisite-card small,
+.resource-card small,
+.card small {
+    color: var(--text-muted) !important;
+}

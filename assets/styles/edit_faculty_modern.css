@@ -64,8 +64,8 @@ body {
 }
 
 /* Headings */
-h2, h5 {
-    color: var(--text-primary);
+h2, h5, h6 {
+    color: var(--text-primary) !important;
     font-weight: 600;
 }
 
@@ -102,72 +102,12 @@ h5 {
     opacity: 0.7;
 }
 
-/* Form blocks for projects and resources */
-.project-block, 
-.resource-block {
-    background-color: var(--form-block-bg) !important;
-    border: 1px solid var(--card-border) !important;
-    border-radius: 8px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.project-block:hover, 
-.resource-block:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    border-color: var(--accent-blue) !important;
-}
-
-/* Buttons */
-.btn-primary {
-    background-color: var(--accent-primary);
-    border-color: var(--accent-primary);
-    border-radius: 8px;
-    padding: 0.6rem 1.5rem;
+/* Form labels and text visibility */
+.form-label {
+    color: var(--text-primary) !important;
     font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-    background-color: var(--accent-blue);
-    border-color: var(--accent-blue);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(76, 201, 240, 0.25);
-}
-
-.btn-outline-primary {
-    color: var(--accent-primary);
-    border-color: var(--accent-primary);
-    border-radius: 8px;
-    padding: 0.6rem 1.5rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.btn-outline-primary:hover {
-    background-color: var(--accent-primary);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(76, 201, 240, 0.25);
-}
-
-.btn-danger {
-    background-color: #ef4444;
-    border-color: #ef4444;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-}
-
-.btn-danger:hover {
-    background-color: #dc2626;
-    border-color: #dc2626;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.25);
-}
-
-/* Current image preview */
-.mt-2 strong {
-    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
 }
 
 /* Text styling */
@@ -200,4 +140,242 @@ img[alt="Profile Image"] {
     .form-control {
         padding: 0.6rem 0.8rem;
     }
+}
+
+/* Form blocks styling */
+.research-field-block,
+.prerequisite-block,
+.project-block,
+.resource-block {
+    background-color: var(--form-block-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.research-field-block:hover,
+.prerequisite-block:hover,
+.project-block:hover,
+.resource-block:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    border-color: var(--accent-blue) !important;
+}
+
+/* Ensure all text inside form blocks is visible */
+.research-field-block *,
+.prerequisite-block *,
+.project-block *,
+.resource-block * {
+    color: inherit;
+}
+
+.research-field-block h6,
+.prerequisite-block h6,
+.project-block h6,
+.resource-block h6 {
+    color: var(--text-primary) !important;
+}
+
+.research-field-block .form-label,
+.prerequisite-block .form-label,
+.project-block .form-label,
+.resource-block .form-label {
+    color: var(--text-primary) !important;
+}
+
+.research-field-block .text-muted,
+.prerequisite-block .text-muted,
+.project-block .text-muted,
+.resource-block .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Form select styling */
+.form-select {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--input-text);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-select:focus {
+    background-color: var(--input-bg);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 0.25rem rgba(76, 201, 240, 0.25);
+    color: var(--input-text);
+}
+
+/* Textarea styling */
+textarea.form-control {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--input-text);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    resize: vertical;
+}
+
+textarea.form-control:focus {
+    background-color: var(--input-bg);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 0.25rem rgba(76, 201, 240, 0.25);
+    color: var(--input-text);
+}
+
+/* File input styling */
+input[type="file"].form-control {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--input-text);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="file"].form-control:focus {
+    background-color: var(--input-bg);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 0.25rem rgba(76, 201, 240, 0.25);
+    color: var(--input-text);
+}
+
+/* Button styling improvements */
+.btn-primary {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 201, 240, 0.25);
+    color: white;
+}
+
+.btn-outline-primary {
+    color: var(--accent-primary) !important;
+    border-color: var(--accent-primary);
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 201, 240, 0.25);
+}
+
+.btn-danger {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626;
+    border-color: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.25);
+    color: white;
+}
+
+.btn-outline-danger {
+    color: #ef4444 !important;
+    border-color: #ef4444;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    background-color: transparent;
+}
+
+.btn-outline-danger:hover {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.25);
+}
+
+/* Small button variants */
+.btn-sm.btn-outline-danger {
+    color: #ef4444 !important;
+    border-color: #ef4444;
+    background-color: transparent;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.btn-sm.btn-outline-danger:hover {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: white !important;
+}
+
+.btn-sm.btn-outline-primary {
+    color: var(--accent-primary) !important;
+    border-color: var(--accent-primary);
+    background-color: transparent;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.btn-sm.btn-outline-primary:hover {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white !important;
+}
+
+/* Card content styling */
+.card * {
+    color: inherit;
+}
+
+/* Strong text styling */
+strong {
+    color: var(--text-primary) !important;
+}
+
+/* Paragraph text styling */
+p {
+    color: var(--text-secondary) !important;
+}
+
+/* Light mode specific overrides */
+[data-theme="light"] .form-label {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .text-muted {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="light"] .research-field-block .text-muted,
+[data-theme="light"] .prerequisite-block .text-muted,
+[data-theme="light"] .project-block .text-muted,
+[data-theme="light"] .resource-block .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] strong {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="light"] p {
+    color: var(--text-secondary) !important;
 } 
