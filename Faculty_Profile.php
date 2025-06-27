@@ -881,42 +881,44 @@ $targetUserId = $faculty_id;
     const facultyId = '<?= (string)$faculty['_id']; ?>';
     
     // Research Fields functionality
-    function saveResearchFields() {
-        const fields = document.getElementById('researchFields').value;
-        const fieldsArray = fields.split(',').map(field => field.trim()).filter(field => field.length > 0);
-        
-        fetch('src/model/update_faculty_section.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                faculty_id: facultyId,
-                section: 'interested_fields_of_research',
-                data: fieldsArray
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Close modal and reload page to show updated data
-                const modal = bootstrap.Modal.getInstance(document.getElementById('editResearchFieldsModal'));
-                modal.hide();
-                location.reload();
-            } else {
-                alert('Error saving research fields: ' + (data.message || 'Unknown error'));
-            }
-        })
-        .catch(error => {
-            console.error('Error saving research fields:', error);
-            alert('Error saving research fields. Please try again.');
-        });
-    }
-
+    let researchFieldCounter = <?= !empty($faculty['interested_fields_of_research']) ? count($faculty['interested_fields_of_research']) : 0; ?>;
+    
+    // Prerequisites functionality
+    let prerequisiteCounter = <?= !empty($faculty['prerequisites']) ? count($faculty['prerequisites']) : 0; ?>;
+    
     // Publications functionality
     let publicationCounter = <?= !empty($faculty['projects']) ? count($faculty['projects']) : 0; ?>;
     
+    // Learning Resources functionality
+    let resourceCounter = <?= !empty($faculty['resources_to_learn_prerequisites']) ? count($faculty['resources_to_learn_prerequisites']) : 0; ?>;
+    
     document.addEventListener('DOMContentLoaded', function() {
+        // Add research field functionality
+        const addResearchFieldBtn = document.getElementById('addResearchFieldBtn');
+        if (addResearchFieldBtn) {
+            addResearchFieldBtn.addEventListener('click', addResearchField);
+        }
+        
+        // Remove research field functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-research-field-btn')) {
+                e.target.closest('.research-field-block').remove();
+            }
+        });
+        
+        // Add prerequisite functionality
+        const addPrerequisiteBtn = document.getElementById('addPrerequisiteBtn');
+        if (addPrerequisiteBtn) {
+            addPrerequisiteBtn.addEventListener('click', addPrerequisite);
+        }
+        
+        // Remove prerequisite functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-prerequisite-btn')) {
+                e.target.closest('.prerequisite-block').remove();
+            }
+        });
+        
         // Add publication functionality
         const addPublicationBtn = document.getElementById('addPublicationBtn');
         if (addPublicationBtn) {
@@ -943,6 +945,119 @@ $targetUserId = $faculty_id;
             }
         });
     });
+    
+    function addResearchField() {
+        researchFieldCounter++;
+        const container = document.getElementById('researchFieldsContainer');
+        const newField = document.createElement('div');
+        newField.className = 'mb-3 p-3 border rounded research-field-block';
+        newField.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0">Research Field ${researchFieldCounter}</h6>
+                <button type="button" class="btn btn-sm btn-outline-danger remove-research-field-btn">Remove</button>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Field Name</label>
+                <input type="text" class="form-control research-field-name" placeholder="e.g., Machine Learning" required>
+            </div>
+        `;
+        container.appendChild(newField);
+    }
+    
+    function saveResearchFields() {
+        const fields = [];
+        const fieldBlocks = document.querySelectorAll('.research-field-block');
+        
+        fieldBlocks.forEach(block => {
+            const fieldName = block.querySelector('.research-field-name').value.trim();
+            if (fieldName) {
+                fields.push(fieldName);
+            }
+        });
+        
+        fetch('src/model/update_faculty_section.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                faculty_id: facultyId,
+                section: 'interested_fields_of_research',
+                data: fields
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Close modal and reload page to show updated data
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editResearchFieldsModal'));
+                modal.hide();
+                location.reload();
+            } else {
+                alert('Error saving research fields: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error saving research fields:', error);
+            alert('Error saving research fields. Please try again.');
+        });
+    }
+
+    function addPrerequisite() {
+        prerequisiteCounter++;
+        const container = document.getElementById('prerequisitesContainer');
+        const newPrerequisite = document.createElement('div');
+        newPrerequisite.className = 'mb-3 p-3 border rounded prerequisite-block';
+        newPrerequisite.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0">Prerequisite ${prerequisiteCounter}</h6>
+                <button type="button" class="btn btn-sm btn-outline-danger remove-prerequisite-btn">Remove</button>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Prerequisite</label>
+                <input type="text" class="form-control prerequisite-name" placeholder="e.g., Basic knowledge of Python" required>
+            </div>
+        `;
+        container.appendChild(newPrerequisite);
+    }
+    
+    function savePrerequisites() {
+        const prerequisites = [];
+        const prerequisiteBlocks = document.querySelectorAll('.prerequisite-block');
+        
+        prerequisiteBlocks.forEach(block => {
+            const prerequisiteName = block.querySelector('.prerequisite-name').value.trim();
+            if (prerequisiteName) {
+                prerequisites.push(prerequisiteName);
+            }
+        });
+        
+        fetch('src/model/update_faculty_section.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                faculty_id: facultyId,
+                section: 'prerequisites',
+                data: prerequisites
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editPrerequisitesModal'));
+                modal.hide();
+                location.reload();
+            } else {
+                alert('Error saving prerequisites: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error saving prerequisites:', error);
+            alert('Error saving prerequisites. Please try again.');
+        });
+    }
     
     function addPublication() {
         publicationCounter++;
@@ -1015,41 +1130,6 @@ $targetUserId = $faculty_id;
         });
     }
 
-    // Prerequisites functionality
-    function savePrerequisites() {
-        const prerequisites = document.getElementById('prerequisites').value;
-        const prerequisitesArray = prerequisites.split(',').map(prereq => prereq.trim()).filter(prereq => prereq.length > 0);
-        
-        fetch('src/model/update_faculty_section.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                faculty_id: facultyId,
-                section: 'prerequisites',
-                data: prerequisitesArray
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const modal = bootstrap.Modal.getInstance(document.getElementById('editPrerequisitesModal'));
-                modal.hide();
-                location.reload();
-            } else {
-                alert('Error saving prerequisites: ' + (data.message || 'Unknown error'));
-            }
-        })
-        .catch(error => {
-            console.error('Error saving prerequisites:', error);
-            alert('Error saving prerequisites. Please try again.');
-        });
-    }
-
-    // Learning Resources functionality
-    let resourceCounter = <?= !empty($faculty['resources_to_learn_prerequisites']) ? count($faculty['resources_to_learn_prerequisites']) : 0; ?>;
-    
     function addResource() {
         resourceCounter++;
         const container = document.getElementById('resourcesContainer');
@@ -1126,11 +1206,25 @@ $targetUserId = $faculty_id;
                 </div>
                 <div class="modal-body">
                     <form id="researchFieldsForm">
-                        <div class="mb-3">
-                            <label for="researchFields" class="form-label">Research Fields</label>
-                            <textarea class="form-control" id="researchFields" rows="4" placeholder="Enter your research fields, separated by commas"><?= isset($faculty['interested_fields_of_research']) ? htmlspecialchars(implode(', ', (array)$faculty['interested_fields_of_research'])) : ''; ?></textarea>
-                            <div class="form-text">Enter your research fields separated by commas (e.g., Machine Learning, Data Science, Computer Vision)</div>
+                        <div id="researchFieldsContainer">
+                            <?php if (!empty($faculty['interested_fields_of_research'])): ?>
+                                <?php foreach ($faculty['interested_fields_of_research'] as $index => $field): ?>
+                                    <div class="mb-3 p-3 border rounded research-field-block">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0">Research Field <?= $index + 1; ?></h6>
+                                            <button type="button" class="btn btn-sm btn-outline-danger remove-research-field-btn">Remove</button>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">Field Name</label>
+                                            <input type="text" class="form-control research-field-name" value="<?= htmlspecialchars($field); ?>" placeholder="e.g., Machine Learning" required>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </div>
+                        <button type="button" class="btn btn-outline-primary" id="addResearchFieldBtn">
+                            <i class="bi bi-plus-lg"></i> Add Research Field
+                        </button>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -1198,11 +1292,25 @@ $targetUserId = $faculty_id;
                 </div>
                 <div class="modal-body">
                     <form id="prerequisitesForm">
-                        <div class="mb-3">
-                            <label for="prerequisites" class="form-label">Prerequisites</label>
-                            <textarea class="form-control" id="prerequisites" rows="4" placeholder="Enter prerequisites, separated by commas"><?= isset($faculty['prerequisites']) && $faculty['prerequisites'] instanceof \MongoDB\Model\BSONArray ? htmlspecialchars(implode(', ', (array) $faculty['prerequisites'])) : ''; ?></textarea>
-                            <div class="form-text">Enter the knowledge or skills students need before working with you, separated by commas</div>
+                        <div id="prerequisitesContainer">
+                            <?php if (!empty($faculty['prerequisites'])): ?>
+                                <?php foreach ($faculty['prerequisites'] as $index => $prerequisite): ?>
+                                    <div class="mb-3 p-3 border rounded prerequisite-block">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0">Prerequisite <?= $index + 1; ?></h6>
+                                            <button type="button" class="btn btn-sm btn-outline-danger remove-prerequisite-btn">Remove</button>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">Prerequisite</label>
+                                            <input type="text" class="form-control prerequisite-name" value="<?= htmlspecialchars($prerequisite); ?>" placeholder="e.g., Basic knowledge of Python" required>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </div>
+                        <button type="button" class="btn btn-outline-primary" id="addPrerequisiteBtn">
+                            <i class="bi bi-plus-lg"></i> Add Prerequisite
+                        </button>
                     </form>
                 </div>
                 <div class="modal-footer">
