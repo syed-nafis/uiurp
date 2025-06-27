@@ -246,6 +246,102 @@ try {
     $result = $meetingsCollection->insertOne($meetingData);
     
     if ($result->getInsertedCount()) {
+        // Check if we should send a system message to the chat
+        $shouldSendMessage = false;
+        $messageType = '';
+        
+        // Parse meeting date and time
+        $meetingDateTime = DateTime::createFromFormat('Y-m-d H:i', $data['date'] . ' ' . $data['startTime']);
+        $currentDateTime = new DateTime();
+        
+        if ($meetingDateTime) {
+            // Calculate time difference in minutes
+            $timeDifference = ($meetingDateTime->getTimestamp() - $currentDateTime->getTimestamp()) / 60;
+            
+            // Send message if meeting is within the next 60 minutes or if it's starting soon
+            if ($timeDifference >= -5 && $timeDifference <= 60) {
+                $shouldSendMessage = true;
+                
+                if ($timeDifference <= 5 && $timeDifference >= -5) {
+                    $messageType = 'starting_now';
+                } elseif ($timeDifference <= 30) {
+                    $messageType = 'starting_soon';
+                } else {
+                    $messageType = 'scheduled';
+                }
+            }
+        }
+        
+        // Send system message if conditions are met
+        if ($shouldSendMessage) {
+            // Include the system message helper
+            require_once __DIR__ . '/send_system_chat_message_helper.php';
+            
+            try {
+                // Get organizer name for the message
+                $organizerName = 'A team member';
+                
+                // Try to get the organizer's name from the database
+                $usersCollection = $db->students;
+                $facultyCollection = $db->faculties;
+                
+                $organizer = $usersCollection->findOne(['_id' => convertToObjectId($currentUserId)]);
+                if (!$organizer) {
+                    $organizer = $facultyCollection->findOne(['_id' => convertToObjectId($currentUserId)]);
+                }
+                
+                if ($organizer && isset($organizer['name'])) {
+                    $organizerName = $organizer['name'];
+                }
+                
+                // Create appropriate system message based on timing
+                $messageText = "";
+                $meetingLink = $data['meetingLink'] ?? '';
+                
+                switch ($messageType) {
+                    case 'starting_now':
+                        $messageText = "🚀 **Meeting Starting Now!** 🎯\n\n";
+                        $messageText .= "**\"" . htmlspecialchars($data['title']) . "\"** scheduled by $organizerName is starting now!\n\n";
+                        if (!empty($meetingLink)) {
+                            $messageText .= "🔗 **[Join Meeting]($meetingLink)**\n\n";
+                        }
+                        $messageText .= "📞 Don't keep the team waiting - join the meeting now!";
+                        break;
+                        
+                    case 'starting_soon':
+                        $timeUntil = max(1, round($timeDifference));
+                        $messageText = "🔔 **Meeting Starting Soon!** 📅\n\n";
+                        $messageText .= "**\"" . htmlspecialchars($data['title']) . "\"** scheduled by $organizerName starts in $timeUntil minute" . ($timeUntil > 1 ? 's' : '') . "!\n\n";
+                        if (!empty($meetingLink)) {
+                            $messageText .= "🔗 **[Join Meeting]($meetingLink)**\n\n";
+                        }
+                        $messageText .= "⏰ Please prepare to join the meeting. Access is available now.";
+                        break;
+                        
+                    case 'scheduled':
+                        $messageText = "📅 **New Meeting Scheduled!** 🎯\n\n";
+                        $messageText .= "$organizerName has scheduled **\"" . htmlspecialchars($data['title']) . "\"**\n\n";
+                        $messageText .= "📍 **Time:** " . $meetingDateTime->format('g:i A') . " on " . $meetingDateTime->format('M j, Y') . "\n";
+                        if (!empty($data['description'])) {
+                            $messageText .= "📝 **Description:** " . htmlspecialchars($data['description']) . "\n";
+                        }
+                        if (!empty($meetingLink)) {
+                            $messageText .= "🔗 **[Meeting Link]($meetingLink)**\n\n";
+                        }
+                        $messageText .= "\n📋 **Mark your calendar and be ready to collaborate!**";
+                        break;
+                }
+                
+                // Send the system message
+                $messageResult = sendSystemChatMessage($data['projectId'], $messageText);
+                error_log("System message sent for meeting creation: " . print_r($messageResult, true));
+                
+            } catch (Exception $e) {
+                error_log("Error sending system message for meeting: " . $e->getMessage());
+                // Don't fail the meeting creation if system message fails
+            }
+        }
+        
         // Return success response
         echo json_encode([
             'success' => true,

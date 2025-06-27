@@ -4,6 +4,35 @@
  * Checks for meetings that are about to start and sends system messages to project chats
  */
 
+// Add CORS headers to allow cross-origin requests
+$allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost',
+    'http://localhost:80',
+    'http://localhost:8080',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1',
+    'http://127.0.0.1:80'
+];
+
+$origin = $_SERVER['HTTP_ORIGIN'] ?? 'http://localhost:3000';
+
+// Check if origin is allowed, default to localhost:3000 if not found
+if (!in_array($origin, $allowedOrigins)) {
+    $origin = 'http://localhost:3000';
+}
+
+header('Access-Control-Allow-Origin: ' . $origin);
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Access-Control-Allow-Credentials: true');
+
+// Handle preflight OPTIONS request
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 require_once 'send_system_chat_message_helper.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 

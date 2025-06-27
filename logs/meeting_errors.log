@@ -475,3 +475,87 @@
 )
  -> 67e1a9f6ebb89e49e04ddf35
 [26-Jun-2025 22:35:01 Europe/Berlin] === Save Meeting Request Completed ===
+[27-Jun-2025 11:05:15 Europe/Berlin] === Save Meeting Request Started ===
+[27-Jun-2025 11:05:15 Europe/Berlin] Request Method: POST
+[27-Jun-2025 11:05:15 Europe/Berlin] Raw Input: {"projectId":"685551a4793d650a9900a57f","title":"test m","date":"2025-06-27","startTime":"15:04","endTime":"18:04","description":"test m","meetingLink":"http://localhost:3000/Project_details.php?joinMeeting=dlq-mfhp-fks","type":"Project Meeting"}
+[27-Jun-2025 11:05:15 Europe/Berlin] Parsed JSON data: Array
+(
+    [projectId] => 685551a4793d650a9900a57f
+    [title] => test m
+    [date] => 2025-06-27
+    [startTime] => 15:04
+    [endTime] => 18:04
+    [description] => test m
+    [meetingLink] => http://localhost:3000/Project_details.php?joinMeeting=dlq-mfhp-fks
+    [type] => Project Meeting
+)
+
+[27-Jun-2025 11:05:15 Europe/Berlin] Current user ID: 67e1a9f6ebb89e49e04ddf35
+[27-Jun-2025 11:05:15 Europe/Berlin] Attempting MongoDB connection...
+[27-Jun-2025 11:05:15 Europe/Berlin] MongoDB connection successful
+[27-Jun-2025 11:05:15 Europe/Berlin] Checking supervisor userId: MongoDB\Model\BSONDocument Object
+(
+    [storage:ArrayObject:private] => Array
+        (
+            [$oid] => 67e1a9f6ebb89e49e04ddf35
+        )
+
+)
+ -> 67e1a9f6ebb89e49e04ddf35
+[27-Jun-2025 11:05:15 Europe/Berlin] === Save Meeting Request Completed ===
+[27-Jun-2025 12:01:40 Europe/Berlin] === Save Meeting Request Started ===
+[27-Jun-2025 12:01:40 Europe/Berlin] Request Method: POST
+[27-Jun-2025 12:01:40 Europe/Berlin] Raw Input: {"projectId":"685551a4793d650a9900a57f","title":"tetst","date":"2025-06-27","startTime":"16:01","endTime":"17:01","description":"t4w56w6","meetingLink":"","type":"Project Meeting"}
+[27-Jun-2025 12:01:40 Europe/Berlin] Parsed JSON data: Array
+(
+    [projectId] => 685551a4793d650a9900a57f
+    [title] => tetst
+    [date] => 2025-06-27
+    [startTime] => 16:01
+    [endTime] => 17:01
+    [description] => t4w56w6
+    [meetingLink] => 
+    [type] => Project Meeting
+)
+
+[27-Jun-2025 12:01:40 Europe/Berlin] Current user ID: 67e1a9f6ebb89e49e04ddf35
+[27-Jun-2025 12:01:40 Europe/Berlin] Attempting MongoDB connection...
+[27-Jun-2025 12:01:40 Europe/Berlin] MongoDB connection successful
+[27-Jun-2025 12:01:40 Europe/Berlin] Checking supervisor userId: MongoDB\Model\BSONDocument Object
+(
+    [storage:ArrayObject:private] => Array
+        (
+            [$oid] => 67e1a9f6ebb89e49e04ddf35
+        )
+
+)
+ -> 67e1a9f6ebb89e49e04ddf35
+[27-Jun-2025 12:01:40 Europe/Berlin] === Save Meeting Request Completed ===
+[27-Jun-2025 12:04:23 Europe/Berlin] === Save Meeting Request Started ===
+[27-Jun-2025 12:04:23 Europe/Berlin] Request Method: POST
+[27-Jun-2025 12:04:23 Europe/Berlin] Raw Input: {"projectId":"685551a4793d650a9900a57f","title":"ytdy","date":"2025-06-27","startTime":"16:04","endTime":"17:04","description":"uggfjhgf","meetingLink":"http://localhost:3000/Project_details.php?joinMeeting=qyw-wonm-kdq","type":"Project Meeting"}
+[27-Jun-2025 12:04:23 Europe/Berlin] Parsed JSON data: Array
+(
+    [projectId] => 685551a4793d650a9900a57f
+    [title] => ytdy
+    [date] => 2025-06-27
+    [startTime] => 16:04
+    [endTime] => 17:04
+    [description] => uggfjhgf
+    [meetingLink] => http://localhost:3000/Project_details.php?joinMeeting=qyw-wonm-kdq
+    [type] => Project Meeting
+)
+
+[27-Jun-2025 12:04:23 Europe/Berlin] Current user ID: 67e1a9f6ebb89e49e04ddf35
+[27-Jun-2025 12:04:23 Europe/Berlin] Attempting MongoDB connection...
+[27-Jun-2025 12:04:23 Europe/Berlin] MongoDB connection successful
+[27-Jun-2025 12:04:23 Europe/Berlin] Checking supervisor userId: MongoDB\Model\BSONDocument Object
+(
+    [storage:ArrayObject:private] => Array
+        (
+            [$oid] => 67e1a9f6ebb89e49e04ddf35
+        )
+
+)
+ -> 67e1a9f6ebb89e49e04ddf35
+[27-Jun-2025 12:04:23 Europe/Berlin] === Save Meeting Request Completed ===

@@ -8363,10 +8363,68 @@ function createProfileLink($name, $userId, $userType = null) {
                             currentUserName = userData.user.name || 'Someone';
                         }
                         
-                        // Send system message with the user name
-                        const milestoneTitle = currentProject.timeline[milestoneIndex]?.title || 'a milestone';
-                        const statusDisplay = newStatus.charAt(0).toUpperCase() + newStatus.slice(1).replace('-', ' ');
-                        const systemMessage = `${currentUserName} updated milestone "${milestoneTitle}" status to ${statusDisplay}.`;
+                        // Send system message based on assigned person and status
+                        const milestone = currentProject.timeline[milestoneIndex];
+                        const milestoneTitle = milestone?.title || 'a milestone';
+                        
+
+                        
+                        // Get assigned person(s) for personalized message
+                        let assignedPersonName = null;
+                        
+                        // Check if there are assigned people (assignedTo takes priority over assignedBy)
+                        if (milestone?.assignedTo && Array.isArray(milestone.assignedTo) && milestone.assignedTo.length > 0) {
+                            // Get first assigned person's name for the message
+                            const firstAssignee = milestone.assignedTo[0];
+                            if (typeof firstAssignee === 'object' && firstAssignee.name) {
+                                assignedPersonName = firstAssignee.name;
+                            } else if (typeof firstAssignee === 'string') {
+                                // Try to find member by ID or use the string directly
+                                const member = findMemberById(firstAssignee, currentProject);
+                                assignedPersonName = member ? member.name : firstAssignee;
+                            }
+                            
+                            // Handle multiple assignees
+                            if (milestone.assignedTo.length > 1) {
+                                assignedPersonName += " and " + (milestone.assignedTo.length - 1) + " other" + (milestone.assignedTo.length > 2 ? "s" : "");
+                            }
+                        } else if (milestone?.assignedBy) {
+                            // Fall back to assignedBy if no assignedTo
+                            if (typeof milestone.assignedBy === 'object' && milestone.assignedBy.name) {
+                                assignedPersonName = milestone.assignedBy.name;
+                            } else if (typeof milestone.assignedBy === 'string') {
+                                const member = findMemberById(milestone.assignedBy, currentProject);
+                                assignedPersonName = member ? member.name : milestone.assignedBy;
+                            }
+                        }
+                        
+                        // Create status-specific message
+                        let systemMessage = '';
+                        
+                        if (assignedPersonName) {
+                            switch (newStatus.toLowerCase()) {
+                                case 'completed':
+                                    systemMessage = `🎉 ${assignedPersonName} completed "${milestoneTitle}"!`;
+                                    break;
+                                case 'in-progress':
+                                    // Handle grammar for multiple assignees
+                                    const isPlural = assignedPersonName.includes(' and ') || assignedPersonName.includes(' others');
+                                    systemMessage = `⚡ ${assignedPersonName} ${isPlural ? 'are' : 'is'} working on "${milestoneTitle}".`;
+                                    break;
+                                case 'delayed':
+                                    systemMessage = `⏰ ${assignedPersonName} needs more time for "${milestoneTitle}".`;
+                                    break;
+                                case 'planned':
+                                    systemMessage = `📋 "${milestoneTitle}" has been planned for ${assignedPersonName}.`;
+                                    break;
+                                default:
+                                    systemMessage = `📝 ${assignedPersonName} updated "${milestoneTitle}" status to ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1).replace('-', ' ')}.`;
+                            }
+                        } else {
+                            // Fallback to original format if no assigned person
+                            const statusDisplay = newStatus.charAt(0).toUpperCase() + newStatus.slice(1).replace('-', ' ');
+                            systemMessage = `${currentUserName} updated milestone "${milestoneTitle}" status to ${statusDisplay}.`;
+                        }
                         
                         const systemMessageData = new FormData();
                         systemMessageData.append('projectId', currentProject._id.$oid || currentProject._id);
@@ -10725,6 +10783,74 @@ function createProfileLink($name, $userId, $userType = null) {
         return `${year}${month}${day}T${hour}${minute}${second}`;
     }
 
+    // Send system message to project chat when meeting is created (similar to timeline editor)
+    async function sendMeetingSystemMessage(meetingDate, startTime, meetingTitle, timeDifference, meetingLink = '') {
+        try {
+            // Get current user info first
+            const userResponse = await fetch('src/model/get_current_user.php', {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            const userData = await userResponse.json();
+            
+            // Get user name from response or use fallback
+            let currentUserName = 'Someone';
+            if (userData && userData.success && userData.isLoggedIn && userData.user) {
+                currentUserName = userData.user.name || 'Someone';
+            }
+            
+            // Create appropriate message based on timing
+            let systemMessage = '';
+            const meetingDateTime = new Date(`${meetingDate}T${startTime}:00`);
+            const formattedTime = meetingDateTime.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+            const formattedDate = meetingDateTime.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            
+            if (timeDifference <= 5 && timeDifference >= -5) {
+                // Meeting starting now
+                systemMessage = `🚀 ${currentUserName} just scheduled "${meetingTitle}" and it's starting NOW! `;
+                if (meetingLink) {
+                    systemMessage += `[Join Meeting](${meetingLink})`;
+                }
+            } else if (timeDifference <= 30) {
+                // Meeting starting soon
+                const minutesUntil = Math.max(1, Math.round(timeDifference));
+                systemMessage = `🔔 ${currentUserName} scheduled "${meetingTitle}" for ${formattedTime} (in ${minutesUntil} minute${minutesUntil > 1 ? 's' : ''}). `;
+                if (meetingLink) {
+                    systemMessage += `[Join Meeting](${meetingLink})`;
+                }
+            } else {
+                // Meeting scheduled for later
+                systemMessage = `📅 ${currentUserName} scheduled "${meetingTitle}" for ${formattedTime} on ${formattedDate}. `;
+                if (meetingLink) {
+                    systemMessage += `[Meeting Link](${meetingLink})`;
+                }
+            }
+            
+            // Send the system message
+            const systemMessageData = new FormData();
+            systemMessageData.append('projectId', projectId);
+            systemMessageData.append('message', systemMessage);
+            
+            return fetch('src/model/send_system_chat_message.php', {
+                method: 'POST',
+                body: systemMessageData
+            });
+            
+        } catch (error) {
+            console.error('Error sending meeting system message:', error);
+            throw error;
+        }
+    }
+
     // Show meeting information after creation
     function showMeetingInfo(meetingData) {
         const availabilityResults = document.getElementById('availabilityResults');
@@ -11542,6 +11668,52 @@ function createProfileLink($name, $userId, $userType = null) {
             console.log('Parsed response data:', data);
             if (data.success) {
                 showToast('Meeting scheduled successfully!', 'success');
+                
+                // Check if the meeting was created for current time or soon, and refresh chat
+                const meetingDate = document.getElementById('meetingDate').value;
+                const startTime = document.getElementById('meetingStartTime').value;
+                
+                if (meetingDate && startTime) {
+                    const meetingDateTime = new Date(`${meetingDate}T${startTime}:00`);
+                    const currentDateTime = new Date();
+                    const timeDifference = (meetingDateTime.getTime() - currentDateTime.getTime()) / (1000 * 60); // in minutes
+                    
+                    // If meeting is within the next 60 minutes, refresh chat to show system messages
+                    if (timeDifference >= -5 && timeDifference <= 60) {
+                        console.log('Meeting scheduled for soon, refreshing chat to show system messages');
+                        
+                        // Refresh chat messages after a short delay to allow system message to be sent
+                        // Send additional real-time system message to chat (similar to timeline editor)
+                        const title = document.getElementById('meetingTitle').value.trim();
+                        const meetingLink = document.getElementById('meetingLink').value.trim();
+                        sendMeetingSystemMessage(meetingDate, startTime, title, timeDifference, meetingLink)
+                            .then(() => {
+                                console.log('Real-time system message sent for meeting');
+                            })
+                            .catch(error => {
+                                console.error('Error sending real-time system message:', error);
+                            });
+                        
+                        setTimeout(() => {
+                            // Check if chat overlay exists and is visible
+                            const chatOverlay = document.getElementById('projectChatOverlay');
+                            if (chatOverlay && chatOverlay.classList.contains('active')) {
+                                // If chat is open, reload messages
+                                if (typeof loadChatMessages === 'function') {
+                                    loadChatMessages();
+                                } else if (typeof window.loadChatMessages === 'function') {
+                                    window.loadChatMessages();
+                                }
+                            }
+                            
+                            // Also trigger meeting notification refresh if available
+                            if (typeof window.globalMeetingNotifications !== 'undefined' && 
+                                window.globalMeetingNotifications.refreshNotifications) {
+                                window.globalMeetingNotifications.refreshNotifications();
+                            }
+                        }, 2000); // 2 second delay to allow system message to be processed
+                    }
+                }
                 
                 // Close modal
                 const modal = bootstrap.Modal.getInstance(document.getElementById('meetingModal'));
