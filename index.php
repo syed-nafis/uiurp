@@ -8487,5 +8487,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     <!-- Include Calendar Overlay -->
     <?php include 'calendar-overlay.php'; ?>
+    
+    <!-- Include Global Meeting Notifications -->
+    <?php include 'src/includes/global-meeting-notifications.php'; ?>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 // Prevent direct access to this file
-if (!defined('INCLUDED_IN_PROJECT_DETAILS')) {
+if (!defined('INCLUDED_IN_PROJECT_DETAILS') && !defined('INCLUDED_IN_EDIT_PROJECT')) {
     header("Location: index.php");
     exit();
 }
@@ -128,6 +128,39 @@ if (!defined('INCLUDED_IN_PROJECT_DETAILS')) {
         background: linear-gradient(135deg, #2979ff, #3d5afe);
         box-shadow: 0 6px 12px rgba(41, 121, 255, 0.35);
         transform: translateY(-1px);
+    }
+    
+    /* Close button styling - Red color */
+    #timelineEditorModal .btn-close {
+        filter: invert(22%) sepia(95%) saturate(7426%) hue-rotate(353deg) brightness(103%) contrast(118%);
+        opacity: 0.8;
+    }
+    
+    #timelineEditorModal .btn-close:hover {
+        filter: invert(17%) sepia(100%) saturate(6827%) hue-rotate(0deg) brightness(104%) contrast(121%);
+        opacity: 1;
+    }
+    
+    /* Date input calendar icon styling - Blue color */
+    #timelineEditorModal input[type="date"] {
+        color-scheme: dark;
+        position: relative;
+    }
+    
+    #timelineEditorModal input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(42%) sepia(93%) saturate(2613%) hue-rotate(209deg) brightness(103%) contrast(101%);
+        cursor: pointer;
+        opacity: 0.8;
+    }
+    
+    #timelineEditorModal input[type="date"]::-webkit-calendar-picker-indicator:hover {
+        filter: invert(27%) sepia(100%) saturate(2878%) hue-rotate(217deg) brightness(104%) contrast(97%);
+        opacity: 1;
+    }
+    
+    /* Ensure Add New Item button text is white */
+    #timelineEditorModal #addTimelineItemBtn {
+        color: #ffffff !important;
     }
     
     #timelineEditorModal .btn-outline-secondary {
@@ -321,6 +354,38 @@ if (!defined('INCLUDED_IN_PROJECT_DETAILS')) {
         background-color: #e3f2fd;
         border-color: #bbdefb;
         color: #0d47a1;
+    }
+    
+    /* Light mode - Close button styling - Red color */
+    [data-theme="light"] #timelineEditorModal .btn-close {
+        filter: invert(22%) sepia(95%) saturate(7426%) hue-rotate(353deg) brightness(103%) contrast(118%);
+        opacity: 0.8;
+    }
+    
+    [data-theme="light"] #timelineEditorModal .btn-close:hover {
+        filter: invert(17%) sepia(100%) saturate(6827%) hue-rotate(0deg) brightness(104%) contrast(121%);
+        opacity: 1;
+    }
+    
+    /* Light mode - Date input calendar icon styling - Blue color */
+    [data-theme="light"] #timelineEditorModal input[type="date"] {
+        color-scheme: light;
+    }
+    
+    [data-theme="light"] #timelineEditorModal input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(42%) sepia(93%) saturate(2613%) hue-rotate(209deg) brightness(103%) contrast(101%);
+        cursor: pointer;
+        opacity: 0.8;
+    }
+    
+    [data-theme="light"] #timelineEditorModal input[type="date"]::-webkit-calendar-picker-indicator:hover {
+        filter: invert(27%) sepia(100%) saturate(2878%) hue-rotate(217deg) brightness(104%) contrast(97%);
+        opacity: 1;
+    }
+    
+    /* Light mode - Ensure Add New Item button text is white */
+    [data-theme="light"] #timelineEditorModal #addTimelineItemBtn {
+        color: #ffffff !important;
     }
 </style>
 

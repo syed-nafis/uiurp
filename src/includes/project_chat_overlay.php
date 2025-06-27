@@ -661,6 +661,18 @@
     opacity: 0.8;
 }
 
+.group-last-time {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    align-self: flex-start;
+    margin-top: 8px;
+    flex-shrink: 0;
+    opacity: 0.7;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+}
+
 /* Center Panel - Chat Messages */
 .chat-messages-panel {
     flex: 1;
@@ -838,6 +850,19 @@
     letter-spacing: 0.1px;
 }
 
+.message-text a {
+    color: #4285f4;
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(66, 133, 244, 0.3);
+    transition: all 0.2s ease;
+}
+
+.message-text a:hover {
+    color: #3367d6;
+    border-bottom-color: #3367d6;
+}
+
 .system-message {
     align-self: center;
     padding: 8px 16px;
@@ -866,6 +891,32 @@
     letter-spacing: 0.2px;
     font-weight: 500;
     text-align: center;
+}
+
+.system-message-link {
+    color: #4285f4 !important;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background-color: rgba(66, 133, 244, 0.1);
+    border: 1px solid rgba(66, 133, 244, 0.2);
+    display: inline-block;
+    margin: 2px;
+    transition: all 0.3s ease;
+    font-size: 12px;
+}
+
+.system-message-link:hover {
+    color: #ffffff !important;
+    background-color: #4285f4;
+    border-color: #4285f4;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+}
+
+.system-message-link:active {
+    transform: translateY(0);
 }
 
 .message-input-area {
@@ -3781,7 +3832,7 @@ body.chat-pinned .full-width-bg {
             if (group.imageUrl) {
                 avatarContent = `<img src="${group.imageUrl}" alt="${group.name}" onerror="this.onerror=null;this.src='assets/resources/project_avatar.png';">`;
             } else {
-                avatarContent = `<i class="bi bi-hash"></i>`;
+                avatarContent = `<i class="bi bi-chat-square-dots"></i>`;
             }
             
             groupEl.innerHTML = `
@@ -3792,6 +3843,7 @@ body.chat-pinned .full-width-bg {
                     <div class="group-name">${group.name}</div>
                     <div class="group-last-msg">${group.lastMessage || 'No messages yet'}</div>
                 </div>
+                ${group.lastTime ? `<div class="group-last-time">${group.lastTime}</div>` : ''}
             `;
             
             groupEl.addEventListener('click', function() {
@@ -4652,6 +4704,15 @@ body.chat-pinned .full-width-bg {
         }
     }
     
+    // Function to convert markdown links to HTML links
+    function convertMarkdownLinksToHTML(text) {
+        if (!text) return text;
+        
+        // Convert markdown links [text](url) to HTML links
+        const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+        return text.replace(markdownLinkRegex, '<a href="$2" target="_blank" rel="noopener noreferrer" class="system-message-link">$1</a>');
+    }
+
     // Function to append a single message
     function appendSingleMessage(message, container) {
         // Create message element
@@ -4662,9 +4723,13 @@ body.chat-pinned .full-width-bg {
         // System message has different styling
         if (message.isSystem) {
             messageEl.className = 'system-message';
+            
+            // Convert markdown links to HTML links
+            const processedMessage = convertMarkdownLinksToHTML(message.message);
+            
             messageEl.innerHTML = `
                 <div class="system-text">
-                    ${message.message}
+                    ${processedMessage}
                 </div>
             `;
             container.appendChild(messageEl);
@@ -4692,7 +4757,7 @@ body.chat-pinned .full-width-bg {
                     <span class="message-time">${message.formattedTime}</span>
                 </div>
                 <div class="message-text">
-                    ${message.message}
+                    ${convertMarkdownLinksToHTML(message.message)}
                 </div>
             `;
         

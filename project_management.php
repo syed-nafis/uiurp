@@ -6082,5 +6082,8 @@ session_start();
 
     });
     </script>
+    
+    <!-- Include Global Meeting Notifications -->
+    <?php include 'src/includes/global-meeting-notifications.php'; ?>
 </body>
 </html> 

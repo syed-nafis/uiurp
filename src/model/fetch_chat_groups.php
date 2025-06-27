@@ -70,14 +70,84 @@ try {
     $cursor = $collection->find($filter, $options);
     $chatGroups = [];
     
+    // Get chat messages collection for fetching latest messages
+    $messagesCollection = $db->project_chat_messages;
+    
     foreach ($cursor as $project) {
+        // Get the latest message for this project
+        $latestMessage = $messagesCollection->findOne(
+            ['projectId' => $project['_id']],
+            [
+                'sort' => ['timestamp' => -1],
+                'projection' => [
+                    'message' => 1,
+                    'sender' => 1,
+                    'timestamp' => 1,
+                    'isSystemMessage' => 1,
+                    'attachment' => 1
+                ]
+            ]
+        );
+        
+        $lastMessage = 'No messages yet';
+        $lastSender = '';
+        $lastTime = '';
+        
+        if ($latestMessage) {
+            // Format the last message
+            if (isset($latestMessage['isSystemMessage']) && $latestMessage['isSystemMessage']) {
+                // For system messages, just show the message without sender name
+                $lastMessage = $latestMessage['message'];
+                $lastSender = 'System';
+            } elseif (isset($latestMessage['attachment'])) {
+                // For file attachments, show a nice preview
+                $fileName = $latestMessage['attachment']['fileName'] ?? 'file';
+                $senderName = $latestMessage['sender']['name'] ?? 'Someone';
+                $lastMessage = "$senderName shared: $fileName";
+                $lastSender = $senderName;
+            } else {
+                // Regular message
+                $lastMessage = $latestMessage['message'];
+                $lastSender = $latestMessage['sender']['name'] ?? 'Someone';
+            }
+            
+            // Truncate message if too long
+            if (strlen($lastMessage) > 50) {
+                $lastMessage = substr($lastMessage, 0, 47) . '...';
+            }
+            
+            // Format timestamp
+            if (isset($latestMessage['timestamp'])) {
+                $timestamp = $latestMessage['timestamp'];
+                if (is_object($timestamp) && method_exists($timestamp, 'toDateTime')) {
+                    $dateTime = $timestamp->toDateTime();
+                    $now = new DateTime();
+                    $diff = $now->diff($dateTime);
+                    
+                    if ($diff->days == 0) {
+                        // Today - show time
+                        $lastTime = $dateTime->format('H:i');
+                    } elseif ($diff->days == 1) {
+                        // Yesterday
+                        $lastTime = 'Yesterday';
+                    } elseif ($diff->days < 7) {
+                        // This week - show day name
+                        $lastTime = $dateTime->format('D');
+                    } else {
+                        // Older - show date
+                        $lastTime = $dateTime->format('M j');
+                    }
+                }
+            }
+        }
+        
         // Create a chat group object for each project
         $group = [
             'id' => $project['_id'],
             'name' => $project['title'],
-            'lastMessage' => 'No messages yet',
-            'lastSender' => '',
-            'lastTime' => '',
+            'lastMessage' => $lastMessage,
+            'lastSender' => $lastSender,
+            'lastTime' => $lastTime,
             'imageUrl' => isset($project['coverImage']) && isset($project['coverImage']['url']) ? 
                 $project['coverImage']['url'] : null
         ];

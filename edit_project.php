@@ -2682,15 +2682,7 @@ define('INCLUDED_IN_EDIT_PROJECT', true);
         </div>
     </div>
 
-    <footer class="text-light" style="padding: 60px 0 40px;">
-        <div class="container text-center">
-            <div data-aos="fade-up">
-                <h4 class="mb-4">UIU Research Portal</h4>
-                <p class="mb-4 opacity-75">Connecting innovative minds and groundbreaking research</p>
-                <p class="mt-5 pt-3">&copy; 2025 UIU Research Portal. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <?php include 'src/includes/footer.php'; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
@@ -3227,7 +3219,7 @@ define('INCLUDED_IN_EDIT_PROJECT', true);
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label class="form-label">Project References</label>
-                                    <div class="row g-2">
+                                    <div class="row g-2 py-3">
                                         <div class="col-md-5">
                                             <input type="text" class="form-control" id="referenceTitle" placeholder="Title/Author">
                                         </div>

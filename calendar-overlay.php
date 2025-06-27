@@ -119,7 +119,13 @@ foreach ($allEvents as $event) {
             <h3><i class="bi bi-calendar-week me-2"></i>Event Calendar</h3>
             <button class="close-calendar-btn">&times;</button>
         </div>
-        <div id="fullCalendar"></div>
+        <div class="calendar-container">
+            <div id="fullCalendar"></div>
+            <div id="eventsList" class="events-list">
+                <h4><i class="bi bi-list-ul me-2"></i>Upcoming Events</h4>
+                <div id="eventsListContent"></div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -169,13 +175,215 @@ foreach ($allEvents as $event) {
     transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), 
                 opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow-y: auto;
+    overflow: hidden;
     max-height: 85vh;
     filter: blur(5px);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     /* Add futuristic border glow */
     position: relative;
+}
+
+/* Hide scrollbars for WebKit browsers */
+.calendar-overlay-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* Calendar Container Layout */
+.calendar-container {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    width: 100%;
+    height: 600px;
+    min-height: 600px;
+    max-height: 600px;
+}
+
+/* Events List Styling */
+.events-list {
+    flex: 0 0 280px;
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 18px;
+    padding: 20px;
+    color: #fff;
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.4), 
+                inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+                inset 0 0 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    z-index: 1;
+    height: 600px;
+    min-height: 600px;
+    max-height: 600px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    /* Hide scrollbars but keep functionality */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.events-list::-webkit-scrollbar {
+    display: none;
+}
+
+.events-list::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(114, 9, 183, 0.1));
+    border-radius: 22px;
+    z-index: -1;
+    filter: blur(10px);
+    opacity: 0.7;
+}
+
+.events-list h4 {
+    margin: 0 0 20px 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #4cc9f0 0%, #7209b7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    position: relative;
+    text-shadow: 0 0 30px rgba(76, 201, 240, 0.3);
+    padding-bottom: 10px;
+    flex-shrink: 0;
+}
+
+#eventsListContent {
+    flex: 1;
+    overflow-y: auto;
+    /* Hide scrollbars but keep functionality */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#eventsListContent::-webkit-scrollbar {
+    display: none;
+}
+
+.events-list h4::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, #4cc9f0, #7209b7);
+    border-radius: 2px;
+}
+
+.events-list h4 i {
+    animation: pulseIcon 2s infinite ease-in-out;
+}
+
+/* Event List Items */
+.event-list-item {
+    background: rgba(76, 201, 240, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 12px;
+    border-left: 4px solid;
+    border-image: linear-gradient(135deg, #4cc9f0 0%, #7209b7 100%) 1;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.event-list-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.05) 0%, rgba(114, 9, 183, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.event-list-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    background: rgba(76, 201, 240, 0.15);
+}
+
+.event-list-item:hover::before {
+    opacity: 1;
+}
+
+.event-list-item.highlighted {
+    background: rgba(76, 201, 240, 0.25);
+    border-left-color: #4cc9f0;
+    transform: translateX(8px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(76, 201, 240, 0.4), 
+                0 0 0 2px rgba(76, 201, 240, 0.3);
+    animation: highlightPulse 2s infinite alternate;
+}
+
+.event-list-item.highlighted::before {
+    opacity: 1;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.15) 0%, rgba(114, 9, 183, 0.15) 100%);
+}
+
+@keyframes highlightPulse {
+    0% { box-shadow: 0 10px 30px rgba(76, 201, 240, 0.4), 0 0 0 2px rgba(76, 201, 240, 0.3); }
+    100% { box-shadow: 0 10px 35px rgba(76, 201, 240, 0.6), 0 0 0 3px rgba(76, 201, 240, 0.5); }
+}
+
+.event-list-item-title {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.event-list-item-title::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4cc9f0 0%, #7209b7 100%);
+    flex-shrink: 0;
+    box-shadow: 0 0 8px rgba(76, 201, 240, 0.5);
+}
+
+.event-list-item-date {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.event-list-item-type {
+    font-size: 0.75rem;
+    color: rgba(76, 201, 240, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.no-events {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
+    margin-top: 40px;
+    padding: 20px;
 }
 
 .calendar-overlay.active .calendar-overlay-content {
@@ -337,6 +545,7 @@ foreach ($allEvents as $event) {
 
 /* Enhanced FullCalendar Custom Styling */
 #fullCalendar {
+    flex: 1;
     background: rgba(30, 41, 59, 0.4);
     border-radius: 18px;
     padding: 15px 15px 20px; 
@@ -345,11 +554,20 @@ foreach ($allEvents as $event) {
                 inset 0 0 0 1px rgba(255, 255, 255, 0.08),
                 inset 0 0 20px rgba(0, 0, 0, 0.2);
     transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-    min-height: auto; /* Allow natural height */
-    max-height: none; /* Remove max height constraint */
-    overflow: visible; /* Allow content to flow naturally */
+    height: 600px;
+    min-height: 600px;
+    max-height: 600px;
+    overflow-y: auto;
     position: relative;
     z-index: 1;
+    /* Hide scrollbars but keep functionality */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbars for WebKit browsers in fullCalendar */
+#fullCalendar::-webkit-scrollbar {
+    display: none;
 }
 
 /* Ensure consistent display for view containers */
@@ -409,12 +627,31 @@ foreach ($allEvents as $event) {
         margin: 10px auto;
         padding: 12px;
         max-height: 90vh;
-        overflow-y: auto;
+        overflow: hidden;
+    }
+    
+    .calendar-container {
+        flex-direction: column;
+        gap: 15px;
+        height: auto;
+        max-height: none;
+    }
+    
+    .events-list {
+        flex: none;
+        width: 100%;
+        height: 300px;
+        min-height: 300px;
+        max-height: 300px;
+        order: 2;
     }
     
     #fullCalendar {
         padding: 8px;
-        min-height: auto;
+        height: 400px;
+        min-height: 400px;
+        max-height: 400px;
+        order: 1;
     }
     
     #fullCalendar .fc-toolbar {
@@ -563,12 +800,36 @@ foreach ($allEvents as $event) {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 1.5rem !important;
+}
+
+#fullCalendar .fc-toolbar .fc-toolbar-ltr {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #fullCalendar .fc-toolbar-chunk {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: center;
+}
+
+#fullCalendar .fc-toolbar-chunk:first-child {
+    flex: 0 0 auto;
+}
+
+#fullCalendar .fc-toolbar-chunk:nth-child(2) {
+    flex: 1;
+    justify-content: center;
+}
+
+#fullCalendar .fc-toolbar-chunk:last-child {
+    flex: 0 0 auto;
 }
 
 /* Calendar buttons */
@@ -1037,6 +1298,40 @@ foreach ($allEvents as $event) {
     transform: translateX(100%);
 }
 
+#fullCalendar .fc-event.highlighted {
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.95) 0%, rgba(114, 9, 183, 0.95) 100%);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 12px 25px rgba(76, 201, 240, 0.6), 
+                0 0 0 3px rgba(255, 255, 255, 0.4),
+                0 0 15px rgba(76, 201, 240, 0.8);
+    z-index: 10;
+    animation: calendarEventPulse 2s infinite alternate;
+}
+
+#fullCalendar .fc-event.highlighted::before {
+    transform: scale(1.5);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 25px rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 1);
+}
+
+#fullCalendar .fc-event.highlighted::after {
+    transform: translateX(100%);
+    opacity: 1;
+}
+
+@keyframes calendarEventPulse {
+    0% { 
+        box-shadow: 0 12px 25px rgba(76, 201, 240, 0.6), 
+                    0 0 0 3px rgba(255, 255, 255, 0.4),
+                    0 0 15px rgba(76, 201, 240, 0.8);
+    }
+    100% { 
+        box-shadow: 0 15px 30px rgba(76, 201, 240, 0.8), 
+                    0 0 0 4px rgba(255, 255, 255, 0.6),
+                    0 0 20px rgba(76, 201, 240, 1);
+    }
+}
+
 /* Fix event title and time display */
 #fullCalendar .fc-event-title,
 #fullCalendar .fc-event-time {
@@ -1172,6 +1467,14 @@ foreach ($allEvents as $event) {
     width: 280px !important;
     overflow: hidden !important;
     z-index: 1000 !important;
+    /* Hide scrollbars but keep functionality */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbars for WebKit browsers in popovers */
+.fc-popover::-webkit-scrollbar {
+    display: none;
 }
 
 /* Fix popover positioning */
@@ -1195,6 +1498,14 @@ foreach ($allEvents as $event) {
     padding: 12px !important;
     max-height: 300px !important;
     overflow-y: auto !important;
+    /* Hide scrollbars but keep functionality */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbars for WebKit browsers in popover body */
+.fc-popover .fc-popover-body::-webkit-scrollbar {
+    display: none;
 }
 
 .fc-popover .fc-daygrid-event-harness {
@@ -1291,24 +1602,25 @@ foreach ($allEvents as $event) {
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         headerToolbar: {
-            left: 'prev,next today',
+            left: 'prev,next',
             center: 'title',
-            right: 'dayGridMonth,listMonth'
+            right: 'today'
         },
         events: formattedEvents,
         eventClick: function(info) {
-                // Add a subtle animation before navigating
-                info.el.style.transform = 'scale(1.1)';
-                info.el.style.boxShadow = '0 10px 25px rgba(114, 9, 183, 0.5)';
-                
-                setTimeout(() => {
-            window.location.href = `events.php?event_id=${info.event.id}`;
-                }, 300);
+            // Prevent default navigation
+            info.jsEvent.preventDefault();
+            
+            // Highlight the clicked calendar event
+            highlightCalendarEvent(info.el);
+            
+            // Highlight and scroll to corresponding event in the list
+            highlightAndScrollToEventListItem(info.event.id);
         },
-        height: 'auto', // Allow calendar to determine its own best height
-        contentHeight: 'auto', // Let content dictate height
+        height: window.innerWidth <= 768 ? 400 : 600, // Responsive height
+        contentHeight: 'auto', // Let content dictate height within the container
         aspectRatio: 1.35, // Wider aspect ratio for better display
-        expandRows: true, // Expand rows to fill height
+        expandRows: false, // Don't expand rows, allow scrolling instead
         // Set sizing to adapt to container
         stickyHeaderDates: false,
             // Add animation to day cells
@@ -1324,6 +1636,9 @@ foreach ($allEvents as $event) {
                 info.el.style.opacity = '0';
                 info.el.style.transform = 'translateY(10px)';
                 
+                // Add data attribute for event ID
+                info.el.setAttribute('data-event-id', info.event.id);
+                
                 setTimeout(() => {
                     info.el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
                     info.el.style.opacity = '1';
@@ -1333,6 +1648,10 @@ foreach ($allEvents as $event) {
         windowResize: function(view) {
             // Update layout on window resize
             calendar.updateSize();
+        },
+        datesSet: function(info) {
+            // Update events list when calendar view changes
+            populateEventsList();
         },
             themSystem: 'standard'
         });
@@ -1351,14 +1670,17 @@ foreach ($allEvents as $event) {
                 // Add active class for animation
                 calendarOverlay.classList.add('active');
             
-            // Ensure calendar is rendered and events are visible
-            setTimeout(() => {
-                calendar.render();
-                calendar.updateSize(); // Force size update
-                    
-                    // Add particle effects
-                    createParticles();
-            }, 100);
+                    // Ensure calendar is rendered and events are visible
+        setTimeout(() => {
+            calendar.render();
+            calendar.updateSize(); // Force size update
+                
+                // Populate events list
+                populateEventsList();
+                
+                // Add particle effects
+                createParticles();
+        }, 100);
             
             document.body.style.overflow = 'hidden';
         });
@@ -1403,6 +1725,320 @@ foreach ($allEvents as $event) {
                 closeCalendarOverlay();
             }
         });
+        
+        // Function to populate the events list
+        function populateEventsList() {
+            const eventsListContent = document.getElementById('eventsListContent');
+            if (!eventsListContent) return;
+            
+            // Sort events by date (upcoming first)
+            const currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0); // Reset to start of day for proper comparison
+            
+            const upcomingEvents = formattedEvents
+                .filter(event => {
+                    const eventDate = new Date(event.start);
+                    eventDate.setHours(0, 0, 0, 0);
+                    return eventDate >= currentDate;
+                })
+                .sort((a, b) => new Date(a.start) - new Date(b.start))
+                .slice(0, 10); // Show max 10 upcoming events
+            
+            if (upcomingEvents.length === 0) {
+                eventsListContent.innerHTML = '<div class="no-events">No upcoming events</div>';
+                return;
+            }
+            
+            const eventsHTML = upcomingEvents.map(event => {
+                const eventDate = new Date(event.start);
+                const formattedDate = eventDate.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+                
+                return `
+                    <div class="event-list-item" data-event-id="${event.id}" data-event-date="${event.start}" onclick="navigateToEventDate('${event.id}', '${event.start}')">
+                        <div class="event-list-item-title">${event.title}</div>
+                        <div class="event-list-item-date">
+                            <i class="bi bi-calendar3"></i>
+                            ${formattedDate}
+                        </div>
+                        <div class="event-list-item-type">${event.eventType || 'Event'}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            eventsListContent.innerHTML = eventsHTML;
+        }
+        
+        // Function to navigate to event date in calendar
+        function navigateToEventDate(eventId, eventDate) {
+            console.log('Navigating to event:', eventId, eventDate);
+            
+            // Navigate calendar to the event date
+            const date = new Date(eventDate);
+            calendar.gotoDate(date);
+            
+            // Highlight the event list item
+            highlightEventListItem(eventId);
+            
+            // Wait for calendar to render and update, then highlight and scroll to the calendar event
+            // Use multiple attempts with increasing delays to ensure the event is found and calendar is rendered
+            
+            // First attempt after calendar navigation
+            setTimeout(() => {
+                highlightAndScrollToCalendarEvent(eventId);
+            }, 500);
+            
+            // Second attempt with longer delay
+            setTimeout(() => {
+                const event = document.querySelector(`.fc-event[data-event-id="${eventId}"]`);
+                if (event && !event.classList.contains('highlighted')) {
+                    console.log('Second attempt to highlight and scroll to event');
+                    highlightAndScrollToCalendarEvent(eventId);
+                }
+            }, 1000);
+            
+            // Final attempt with even longer delay
+            setTimeout(() => {
+                const event = document.querySelector(`.fc-event[data-event-id="${eventId}"]`);
+                if (event) {
+                    if (!event.classList.contains('highlighted')) {
+                        console.log('Final attempt to highlight event');
+                        clearAllHighlights();
+                        event.classList.add('highlighted');
+                    }
+                    // Force scroll regardless of highlight status
+                    console.log('Final attempt to scroll to event');
+                    scrollToCalendarEvent(event);
+                }
+            }, 1500);
+        }
+        
+        // Function to highlight and scroll to event list item
+        function highlightAndScrollToEventListItem(eventId) {
+            console.log('Highlighting event list item:', eventId);
+            
+            // Clear all previous highlights
+            clearAllHighlights();
+            
+            // Find the event list item
+            const eventItem = document.querySelector(`.event-list-item[data-event-id="${eventId}"]`);
+            console.log('Found event item:', eventItem);
+            
+            if (eventItem) {
+                // Highlight the selected item
+                eventItem.classList.add('highlighted');
+                
+                // Scroll to the highlighted item in the events list
+                const eventsListContent = document.getElementById('eventsListContent');
+                if (eventsListContent) {
+                    const itemTop = eventItem.offsetTop;
+                    const containerHeight = eventsListContent.clientHeight;
+                    const itemHeight = eventItem.clientHeight;
+                    
+                    eventsListContent.scrollTo({
+                        top: itemTop - (containerHeight / 2) + (itemHeight / 2),
+                        behavior: 'smooth'
+                    });
+                }
+            } else {
+                console.log('Event list item not found for ID:', eventId);
+            }
+        }
+        
+        // Function to highlight event list item (for internal use)
+        function highlightEventListItem(eventId) {
+            // Find and highlight the event list item
+            const eventItem = document.querySelector(`.event-list-item[data-event-id="${eventId}"]`);
+            if (eventItem) {
+                eventItem.classList.add('highlighted');
+            }
+        }
+        
+        // Function to highlight and scroll to calendar event
+        function highlightAndScrollToCalendarEvent(eventId) {
+            console.log('Highlighting calendar event:', eventId);
+            
+            // Clear all previous highlights
+            clearAllHighlights();
+            
+            // Find the calendar event by data attribute
+            const calendarEvent = document.querySelector(`.fc-event[data-event-id="${eventId}"]`);
+            console.log('Found calendar event:', calendarEvent);
+            
+            if (calendarEvent) {
+                // Highlight the calendar event
+                calendarEvent.classList.add('highlighted');
+                
+                // Scroll the fullCalendar container to show the event
+                const fullCalendarContainer = document.getElementById('fullCalendar');
+                if (fullCalendarContainer) {
+                    // Get the event's position relative to the calendar container
+                    const containerRect = fullCalendarContainer.getBoundingClientRect();
+                    const eventRect = calendarEvent.getBoundingClientRect();
+                    
+                    // Calculate if the event is outside the visible area
+                    const eventTop = eventRect.top - containerRect.top + fullCalendarContainer.scrollTop;
+                    const eventBottom = eventTop + eventRect.height;
+                    const containerScrollTop = fullCalendarContainer.scrollTop;
+                    const containerHeight = fullCalendarContainer.clientHeight;
+                    const visibleTop = containerScrollTop;
+                    const visibleBottom = containerScrollTop + containerHeight;
+                    
+                    // Check if event is outside visible area
+                    if (eventTop < visibleTop || eventBottom > visibleBottom) {
+                        // Calculate the scroll position to center the event
+                        const scrollToPosition = eventTop - (containerHeight / 2) + (eventRect.height / 2);
+                        
+                        fullCalendarContainer.scrollTo({
+                            top: Math.max(0, scrollToPosition),
+                            behavior: 'smooth'
+                        });
+                    }
+                    
+                    // Also use the browser's scrollIntoView as a fallback
+                    setTimeout(() => {
+                        // Try multiple scrolling approaches
+                        scrollToCalendarEvent(calendarEvent);
+                    }, 100);
+                }
+            } else {
+                console.log('Calendar event not found for ID:', eventId);
+                
+                // If event not found immediately, try again after a longer delay
+                setTimeout(() => {
+                    const retryEvent = document.querySelector(`.fc-event[data-event-id="${eventId}"]`);
+                    if (retryEvent) {
+                        console.log('Found calendar event on retry:', retryEvent);
+                        retryEvent.classList.add('highlighted');
+                        
+                        // Scroll to the event
+                        scrollToCalendarEvent(retryEvent);
+                    } else {
+                        console.log('Calendar event still not found after retry');
+                    }
+                }, 1000);
+            }
+        }
+        
+        // Function to highlight calendar event element
+        function highlightCalendarEvent(eventElement) {
+            // Clear all previous highlights first
+            clearAllHighlights();
+            
+            // Add highlight to selected event
+            eventElement.classList.add('highlighted');
+        }
+        
+        // Function to clear all highlights
+        function clearAllHighlights() {
+            document.querySelectorAll('.fc-event.highlighted').forEach(event => {
+                event.classList.remove('highlighted');
+            });
+            document.querySelectorAll('.event-list-item.highlighted').forEach(item => {
+                item.classList.remove('highlighted');
+            });
+        }
+        
+        // Helper function to scroll to a calendar event with multiple approaches
+        function scrollToCalendarEvent(eventElement) {
+            if (!eventElement) return;
+            
+            console.log('Scrolling to calendar event:', eventElement);
+            
+            // Find the main FullCalendar scrollable container
+            const fullCalendarContainer = document.getElementById('fullCalendar');
+            
+            if (fullCalendarContainer) {
+                // Get current scroll position and container dimensions
+                const containerRect = fullCalendarContainer.getBoundingClientRect();
+                const eventRect = eventElement.getBoundingClientRect();
+                const currentScrollTop = fullCalendarContainer.scrollTop;
+                
+                // Calculate event position relative to the container
+                const eventRelativeTop = eventRect.top - containerRect.top + currentScrollTop;
+                const containerHeight = fullCalendarContainer.clientHeight;
+                const eventHeight = eventRect.height;
+                
+                // Check if event is outside visible area
+                const visibleTop = currentScrollTop;
+                const visibleBottom = currentScrollTop + containerHeight;
+                
+                console.log('Container height:', containerHeight);
+                console.log('Current scroll top:', currentScrollTop);
+                console.log('Event relative top:', eventRelativeTop);
+                console.log('Event height:', eventHeight);
+                console.log('Visible area:', visibleTop, 'to', visibleBottom);
+                
+                // Calculate target scroll position to center the event
+                let targetScrollTop;
+                
+                // Always try to scroll to the event for better visibility
+                targetScrollTop = eventRelativeTop - (containerHeight / 2) + (eventHeight / 2);
+                
+                // Ensure we don't scroll beyond the limits
+                const maxScrollTop = fullCalendarContainer.scrollHeight - containerHeight;
+                targetScrollTop = Math.max(0, Math.min(targetScrollTop, maxScrollTop));
+                
+                console.log('Target scroll position:', targetScrollTop);
+                console.log('Max scroll top:', maxScrollTop);
+                console.log('Full calendar scroll height:', fullCalendarContainer.scrollHeight);
+                
+                // Always perform the scroll to ensure event is centered
+                fullCalendarContainer.scrollTo({
+                    top: targetScrollTop,
+                    behavior: 'smooth'
+                });
+                
+                console.log('Scrolling to position:', targetScrollTop);
+                
+                // Also try to scroll using a different approach as backup
+                setTimeout(() => {
+                    const newScrollTop = fullCalendarContainer.scrollTop;
+                    console.log('Current scroll position after scroll attempt:', newScrollTop);
+                    
+                    if (Math.abs(newScrollTop - targetScrollTop) > 10) {
+                        console.log('Scroll didn\'t reach target, trying alternative method');
+                        
+                        // Try direct manipulation
+                        fullCalendarContainer.scrollTop = targetScrollTop;
+                        
+                        // Try scrollBy as alternative
+                        const scrollDiff = targetScrollTop - newScrollTop;
+                        if (Math.abs(scrollDiff) > 0) {
+                            fullCalendarContainer.scrollBy({
+                                top: scrollDiff,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                }, 300);
+            }
+            
+            // Also try native scrollIntoView as backup
+            setTimeout(() => {
+                eventElement.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center',
+                    inline: 'nearest'
+                });
+            }, 200);
+        }
+        
+        // Add click handler to calendar container to clear highlights when clicking empty space
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('#fullCalendar') && 
+                !e.target.closest('.fc-event') && 
+                !e.target.closest('.event-list-item')) {
+                clearAllHighlights();
+            }
+        });
+        
+        // Make functions globally accessible for onclick handlers
+        window.navigateToEventDate = navigateToEventDate;
+        window.clearAllHighlights = clearAllHighlights;
         
         // Create particle effects for the calendar
         function createParticles() {

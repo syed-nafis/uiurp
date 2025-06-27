@@ -186,6 +186,1737 @@ function createProfileLink($name, $userId, $userType = null) {
             50% { opacity: 0.8; }
         }
         
+        /* Meeting Card Styles - Dark Mode (Default) */
+        .meeting-card {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(30, 64, 175, 0.2) !important;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .meeting-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        }
+        
+        .meeting-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.25);
+            border-color: rgba(30, 64, 175, 0.4) !important;
+            background: rgba(30, 41, 59, 0.95);
+        }
+        
+        .meeting-card h6 {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .meeting-card .text-muted {
+            color: var(--text-secondary) !important;
+        }
+        
+        .meeting-card .badge {
+            font-size: 0.75rem;
+            padding: 0.35em 0.65em;
+            background: rgba(30, 64, 175, 0.8);
+            color: var(--text-primary);
+            border: 1px solid rgba(30, 64, 175, 0.3);
+        }
+        
+        .meeting-card .badge.bg-success {
+            background: rgba(5, 150, 105, 0.8) !important;
+            border-color: rgba(5, 150, 105, 0.3);
+        }
+        
+        .meeting-card .badge.bg-warning {
+            background: rgba(217, 119, 6, 0.8) !important;
+            border-color: rgba(217, 119, 6, 0.3);
+        }
+        
+        .meeting-card .badge.bg-danger {
+            background: rgba(220, 38, 38, 0.8) !important;
+            border-color: rgba(220, 38, 38, 0.3);
+        }
+        
+        .meeting-card .badge.bg-info {
+            background: rgba(2, 132, 199, 0.8) !important;
+            border-color: rgba(2, 132, 199, 0.3);
+        }
+        
+        /* Meeting Card Styles - Light Mode */
+        [data-theme="light"] .meeting-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(30, 64, 175, 0.1) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="light"] .meeting-card::before {
+            background: linear-gradient(135deg, #1e40af, #0284c7);
+        }
+        
+        [data-theme="light"] .meeting-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.15);
+            border-color: rgba(30, 64, 175, 0.3) !important;
+            background: rgba(255, 255, 255, 1);
+        }
+        
+        [data-theme="light"] .meeting-card h6 {
+            color: #0f172a;
+            font-weight: 600;
+        }
+        
+        [data-theme="light"] .meeting-card .text-muted {
+            color: #6c757d !important;
+        }
+        
+        [data-theme="light"] .meeting-card .badge {
+            background: #1e40af;
+            color: white;
+            border: 1px solid rgba(30, 64, 175, 0.2);
+        }
+        
+        [data-theme="light"] .meeting-card .badge.bg-success {
+            background: #059669 !important;
+            border-color: rgba(5, 150, 105, 0.2);
+        }
+        
+        [data-theme="light"] .meeting-card .badge.bg-warning {
+            background: #d97706 !important;
+            border-color: rgba(217, 119, 6, 0.2);
+            color: white;
+        }
+        
+        [data-theme="light"] .meeting-card .badge.bg-danger {
+            background: #dc2626 !important;
+            border-color: rgba(220, 38, 38, 0.2);
+        }
+        
+        [data-theme="light"] .meeting-card .badge.bg-info {
+            background: #0284c7 !important;
+            border-color: rgba(2, 132, 199, 0.2);
+        }
+        
+        /* Meetings Container Theme Support */
+        #meetings-container {
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="light"] #meetings-container {
+            background: rgba(248, 250, 252, 0.8);
+            border-radius: 8px;
+        }
+        
+        [data-theme="light"] #meetings-container .card-header {
+            background: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(30, 64, 175, 0.15);
+        }
+        
+        [data-theme="light"] #meetings-container .card-header h5 {
+            color: #0f172a !important;
+        }
+        
+        [data-theme="light"] #no-meetings {
+            color: #1e40af;
+        }
+        
+        [data-theme="light"] #no-meetings i {
+            color: #1e40af !important;
+        }
+        
+        [data-theme="light"] #no-meetings p {
+            color: #1e40af !important;
+        }
+        
+        [data-theme="light"] #no-meetings small {
+            color: #6c757d !important;
+        }
+        
+        /* Loading states for light theme */
+        [data-theme="light"] #meetings-loading .text-muted {
+            color: #6c757d !important;
+        }
+        
+        [data-theme="light"] #meetings-loading .spinner-border {
+            color: #1e40af;
+        }
+        
+        /* Meeting Modal Styles */
+        #meetingModal .modal-content {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(30, 64, 175, 0.3);
+            box-shadow: 0 0 30px rgba(30, 64, 175, 0.2);
+        }
+        
+        #meetingModal .modal-header {
+            border-bottom: 1px solid rgba(30, 64, 175, 0.2);
+        }
+        
+        #meetingModal .modal-footer {
+            border-top: 1px solid rgba(30, 64, 175, 0.2);
+            position: relative !important;
+            bottom: auto !important;
+            left: auto !important;
+            right: auto !important;
+        }
+        
+        #meetingModal .form-label {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        #meetingModal .form-control {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid rgba(30, 64, 175, 0.3);
+            color: var(--text-primary);
+        }
+        
+        #meetingModal .form-control:focus {
+            background: rgba(30, 41, 59, 0.4);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(30, 64, 175, 0.25);
+            color: var(--text-primary);
+        }
+        
+        #meetingModal .form-control::placeholder {
+            color: var(--text-muted);
+        }
+        
+        /* Availability Results Styling */
+        #availabilityResults {
+            border-radius: 8px;
+            border: none;
+        }
+        
+        /* Single line availability status */
+        .availability-status-inline {
+            font-size: 0.85rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.05);
+            border-left: 3px solid #6c757d;
+            color: #6c757d;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .availability-status-inline.alert-success {
+            background: rgba(25, 135, 84, 0.1);
+            border-left-color: #198754;
+            color: #198754;
+        }
+        
+        .availability-status-inline.alert-warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-left-color: #ffc107;
+            color: #b8860b;
+        }
+        
+        .availability-status-inline.alert-danger {
+            background: rgba(220, 53, 69, 0.1);
+            border-left-color: #dc3545;
+            color: #dc3545;
+        }
+        
+        .availability-status-inline.alert-info {
+            background: rgba(13, 202, 240, 0.1);
+            border-left-color: #0dcaf0;
+            color: #087990;
+        }
+        
+        #memberSchedules {
+            background: rgba(30, 41, 59, 0);
+            border-radius: 8px;
+            padding: 1rem;
+            /* Inherit height from team-overview-sidebar class */
+            min-height: 400px !important;
+            max-height: calc(80vh - 120px) !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+        }
+        
+        #memberSchedules h6 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Custom Calendar Styles */
+        .custom-calendar {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(30, 64, 175, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            max-width: 320px;
+            width: 100%;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .calendar-nav-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .calendar-nav-btn:hover {
+            background: rgba(30, 64, 175, 0.1);
+        }
+        
+        .calendar-month-year {
+            font-weight: 600;
+            color: var(--text-while);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+        
+        .calendar-day-header {
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #6c757d;
+            padding: 8px 4px;
+        }
+        
+        .calendar-day {
+            text-align: center;
+            padding: 8px 4px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .calendar-day:hover {
+            background: rgba(30, 64, 175, 0.1);
+        }
+        
+        .calendar-day.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .calendar-day.disabled:hover {
+            background: none;
+        }
+        
+        .calendar-day.selected {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .calendar-day.today {
+            background: rgba(30, 64, 175, 0.2);
+            font-weight: 600;
+        }
+        
+        .calendar-day.other-month {
+            color: #ccc;
+        }
+        
+        /* Time Suggestions Grid */
+        .time-slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        /* Time Suggestion Cards */
+        .time-suggestion-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(30, 64, 175, 0.2) !important;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .time-suggestion-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.2);
+            border-color: rgba(30, 64, 175, 0.4) !important;
+        }
+        
+        .time-suggestion-card.selected {
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 20px rgba(30, 64, 175, 0.3);
+            background: rgba(30, 64, 175, 0.05);
+        }
+        
+        .time-suggestion-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.15);
+        }
+        
+        .time-suggestion-card.border-success {
+            border-color: #198754 !important;
+        }
+        
+        .time-suggestion-card.border-success:hover {
+            box-shadow: 0 4px 15px rgba(25, 135, 84, 0.25);
+        }
+        
+        .time-suggestion-card.border-warning {
+            border-color: #ffc107 !important;
+        }
+        
+        .time-suggestion-card.border-danger {
+            border-color: #dc3545 !important;
+        }
+        
+        /* Enhanced Time Suggestions Panel */
+        .time-suggestions-panel {
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(30, 64, 175, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            height: 100%;
+            max-height: 600px;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .panel-header {
+            border-bottom: 1px solid rgba(30, 64, 175, 0.1);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .panel-header h6 {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        /* Enhanced Loading State */
+        .loading-state {
+            background: rgba(30, 64, 175, 0.02);
+            border: 1px dashed rgba(30, 64, 175, 0.2);
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .loading-state p {
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        /* Enhanced Empty State */
+        .empty-state {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.02) 0%, rgba(124, 58, 237, 0.02) 100%);
+            border: 1px dashed rgba(30, 64, 175, 0.15);
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .empty-icon i {
+            font-size: 3rem;
+            opacity: 0.6;
+        }
+        
+        /* Availability Status */
+        .availability-status {
+            border-radius: 12px;
+            border: none !important;
+            font-weight: 500;
+            padding: 16px 20px;
+        }
+        
+        .availability-status.alert-success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            border-left: 4px solid #28a745 !important;
+        }
+        
+        .availability-status.alert-warning {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            color: #856404;
+            border-left: 4px solid #ffc107 !important;
+        }
+        
+        .availability-status.alert-info {
+            background: linear-gradient(135deg, #cce7ff 0%, #b3d9ff 100%);
+            color: #0c5460;
+            border-left: 4px solid #17a2b8 !important;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            background: rgba(30, 64, 175, 0.03);
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid rgba(30, 64, 175, 0.08);
+        }
+        
+        .quick-actions h6 {
+            font-weight: 600;
+        }
+        
+                 /* Enhanced Time Slots */
+         .enhanced-time-slots {
+             display: grid;
+             gap: 16px;
+             margin-bottom: 24px;
+             max-height: calc(100% - 60px);
+             overflow-y: auto;
+             overflow-x: hidden;
+             padding-right: 8px;
+         }
+         
+         /* Meeting Details Section */
+         .meeting-details-section {
+             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+             border: 1px solid rgba(30, 64, 175, 0.12);
+             border-radius: 16px;
+             padding: 24px;
+             min-height: 400px;
+             max-height: calc(80vh - 120px);
+             overflow-y: auto;
+             overflow-x: hidden;
+             box-shadow: 0 4px 20px rgba(30, 64, 175, 0.08);
+             backdrop-filter: blur(10px);
+             position: relative;
+             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+         }
+
+         .meeting-details-section::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: 0;
+             right: 0;
+             height: 3px;
+             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), #20c997);
+             opacity: 0.8;
+         }
+
+         .meeting-details-section:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 8px 30px rgba(30, 64, 175, 0.15);
+         }
+         
+         /* Recommendations Section */
+         .recommendations-section {
+             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+             border: 1px solid rgba(30, 64, 175, 0.12);
+             border-radius: 16px;
+             padding: 24px;
+             min-height: 400px;
+             max-height: calc(80vh - 120px);
+             overflow-y: auto;
+             overflow-x: hidden;
+             box-shadow: 0 4px 20px rgba(30, 64, 175, 0.08);
+             backdrop-filter: blur(10px);
+             position: relative;
+             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+             margin-bottom: 16px;
+         }
+         
+         /* Suggestions Container */
+         .suggestions-container {
+             min-height: 400px;
+             max-height: calc(80vh - 120px);
+             display: flex;
+             flex-direction: column;
+             overflow: visible;
+         }
+         
+         /* Availability Results */
+         .availability-status {
+             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 249, 235, 0.95) 100%);
+             border: 1px solid rgba(255, 193, 7, 0.2);
+             border-radius: 12px;
+             padding: 20px;
+             max-height: 150px;
+             overflow-y: auto;
+             overflow-x: hidden;
+             box-shadow: 0 4px 15px rgba(255, 193, 7, 0.1);
+             backdrop-filter: blur(5px);
+             word-wrap: break-word;
+             flex-shrink: 0;
+         }
+         
+         /* Availability Results Alert Styling */
+         #availabilityResults {
+             margin-bottom: 16px;
+             flex-shrink: 0;
+             word-wrap: break-word;
+             overflow-wrap: break-word;
+         }
+         
+         /* Team Overview Sidebar */
+         .team-overview-sidebar {
+             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+             border: 1px solid rgba(30, 64, 175, 0.12);
+             border-radius: 16px;
+             padding: 24px;
+             min-height: 400px;
+             max-height: calc(80vh - 120px);
+             overflow-y: auto;
+             overflow-x: hidden;
+             box-shadow: 0 4px 20px rgba(30, 64, 175, 0.08);
+             backdrop-filter: blur(10px);
+             position: relative;
+             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+         }
+
+         .recommendations-section::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: 0;
+             right: 0;
+             height: 3px;
+             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), #20c997);
+             opacity: 0.8;
+         }
+
+         .recommendations-section:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 8px 30px rgba(30, 64, 175, 0.15);
+         }
+         
+         .section-header {
+             border-bottom: 1px solid rgba(30, 64, 175, 0.08);
+             padding-bottom: 16px;
+             margin-bottom: 20px;
+             position: relative;
+         }
+
+         .section-header h6 {
+             font-weight: 700;
+             font-size: 1.1rem;
+             margin-bottom: 4px;
+             display: flex;
+             align-items: center;
+         }
+
+         .section-header h6 i {
+             font-size: 1.2rem;
+             margin-right: 8px;
+             padding: 6px;
+             background: rgba(30, 64, 175, 0.1);
+             border-radius: 8px;
+         }
+
+         .section-header small {
+             color: #6c757d;
+             font-weight: 500;
+         }
+         
+         /* Three Column Layout */
+         .modal-xl .row.g-4 > .col-lg-4 {
+             padding: 0 8px;
+         }
+         
+         /* Prevent text overflow and clipping */
+         .suggestion-card,
+         .member-card,
+         .meeting-form-fields {
+             word-wrap: break-word;
+             overflow-wrap: break-word;
+             hyphens: auto;
+         }
+         
+         .member-name {
+             max-width: 150px;
+             overflow: hidden;
+             text-overflow: ellipsis;
+             white-space: nowrap;
+         }
+         
+         .suggestion-card .time-display,
+         .suggestion-card .card-title {
+             word-break: normal;
+             overflow-wrap: break-word;
+         }
+         
+         /* Enhanced member cards for better content fitting */
+         .member-card {
+             min-height: auto;
+             height: auto;
+         }
+         
+
+         
+         /* Ensure calendar fits properly */
+         .custom-calendar {
+             min-height: 250px;
+             max-height: 350px;
+             overflow: hidden;
+         }
+         
+         .calendar-grid {
+             overflow: hidden;
+         }
+         
+                 /* Custom Calendar Styling */
+        .custom-calendar {
+            background: linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(255, 255, 255, 0.9) 100%);
+            border: 2px solid rgba(30, 64, 175, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 400px;
+            backdrop-filter: blur(5px);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(30, 64, 175, 0.1);
+        }
+
+        .calendar-nav-btn {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(30, 64, 175, 0.05));
+            border: 1px solid rgba(30, 64, 175, 0.2);
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav-btn:hover {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.15), rgba(30, 64, 175, 0.1));
+            transform: scale(1.05);
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 10px 6px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .calendar-day:hover {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(30, 64, 175, 0.05));
+            transform: scale(1.1);
+        }
+
+        .calendar-day.selected {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+            transform: scale(1.05);
+        }
+
+        .calendar-day.today {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.15), rgba(30, 64, 175, 0.1));
+            font-weight: 700;
+            border: 2px solid rgba(30, 64, 175, 0.3);
+        }
+        
+        /* Team Meeting Suggestion Cards */
+        .suggestion-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+            border: 2px solid rgba(30, 64, 175, 0.12);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        
+        .suggestion-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .suggestion-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(240, 248, 255, 1) 100%);
+        }
+        
+        .suggestion-card:hover::before {
+            opacity: 1;
+        }
+
+        .suggestion-card .time-display {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            text-align: center;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .suggestion-card .duration-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #10b981, #06d6a0);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .suggestion-card.border-success,
+        .suggestion-card.border-warning,
+        .suggestion-card.border-info {
+            border-color: var(--primary-color) !important;
+            background: rgba(30, 64, 175, 0.02) !important;
+        }
+        
+        .suggestion-card.border-success::before,
+        .suggestion-card.border-warning::before,
+        .suggestion-card.border-info::before {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .suggestion-card.border-primary {
+            border-color: var(--primary-color) !important;
+            background: rgba(30, 64, 175, 0.04) !important;
+            box-shadow: 0 8px 32px rgba(30, 64, 175, 0.15);
+        }
+        
+        .suggestion-card.border-primary::before {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            opacity: 1;
+        }
+        
+                 /* Time Card Content */
+         .suggestion-card .card-title {
+             font-size: 1.1rem;
+             font-weight: 600;
+             margin-bottom: 8px;
+         }
+         
+         .suggestion-card .badge {
+             font-size: 0.8rem;
+             padding: 6px 10px;
+             border-radius: 20px;
+         }
+         
+
+        
+                 /* Team Overview Sidebar */
+         .team-overview-sidebar {
+             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+             border: 1px solid rgba(30, 64, 175, 0.12);
+             border-radius: 16px;
+             padding: 20px;
+             height: 750px;
+             max-height: 750px;
+             overflow-y: auto;
+             overflow-x: hidden;
+             box-shadow: 0 4px 20px rgba(30, 64, 175, 0.08);
+             backdrop-filter: blur(10px);
+             position: relative;
+             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+         }
+
+         .team-overview-sidebar::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: 0;
+             right: 0;
+             height: 3px;
+             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), #20c997);
+             opacity: 0.8;
+         }
+
+         .team-overview-sidebar:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 8px 30px rgba(30, 64, 175, 0.15);
+         }
+         
+         .sidebar-header {
+             border-bottom: 1px solid rgba(30, 64, 175, 0.1);
+             padding-bottom: 12px;
+         }
+         
+         .sidebar-header h6 {
+             color: var(--primary-color);
+             font-weight: 600;
+         }
+         
+         /* Member Cards in Sidebar */
+         .member-card {
+             background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
+             border: 1px solid rgba(30, 64, 175, 0.08);
+             border-radius: 12px;
+             padding: 16px;
+             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+             margin-bottom: 12px;
+             position: relative;
+             overflow: hidden;
+         }
+
+         .member-card::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 3px;
+             height: 100%;
+             background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+             opacity: 0;
+             transition: opacity 0.3s ease;
+         }
+         
+         .member-card:hover {
+             border-color: var(--primary-color);
+             box-shadow: 0 8px 25px rgba(30, 64, 175, 0.12);
+             transform: translateX(4px);
+         }
+
+         .member-card:hover::before {
+             opacity: 1;
+         }
+         
+         .member-avatar-small {
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             width: 40px;
+             height: 40px;
+             background: linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(30, 64, 175, 0.05));
+             border-radius: 50%;
+             font-size: 1.2rem;
+             border: 2px solid rgba(30, 64, 175, 0.1);
+         }
+         
+         .member-name {
+             font-weight: 600;
+             color: var(--text-dark);
+             font-size: 0.95rem;
+             margin-bottom: 4px;
+         }
+         
+         .role-badge {
+             font-size: 0.75rem;
+             padding: 4px 10px;
+             border-radius: 15px;
+             font-weight: 600;
+         }
+
+         /* Enhanced Form Styling */
+         .meeting-form-fields .form-label {
+             font-weight: 600;
+             color: var(--text-dark);
+             margin-bottom: 8px;
+             display: flex;
+             align-items: center;
+             font-size: 0.9rem;
+         }
+
+         .meeting-form-fields .form-label::before {
+             content: '';
+             width: 4px;
+             height: 4px;
+             background: var(--primary-color);
+             border-radius: 50%;
+             margin-right: 8px;
+         }
+
+         .meeting-form-fields .form-control,
+         .meeting-form-fields .form-select {
+             border: 2px solid rgba(30, 64, 175, 0.1);
+             border-radius: 10px;
+             padding: 12px 16px;
+             font-size: 0.9rem;
+             transition: all 0.3s ease;
+             background: rgba(255, 255, 255, 0.8);
+         }
+
+         .meeting-form-fields .form-control:focus,
+         .meeting-form-fields .form-select:focus {
+             border-color: var(--primary-color);
+             box-shadow: 0 0 0 0.2rem rgba(30, 64, 175, 0.15);
+             background: rgba(255, 255, 255, 1);
+             transform: translateY(-1px);
+         }
+         
+         .status-indicator {
+             font-size: 1.2rem;
+             display: flex;
+             align-items: center;
+         }
+
+         .status-indicator .bi-check-circle-fill {
+             color: #10b981;
+             filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3));
+         }
+
+         .status-indicator .bi-exclamation-circle-fill {
+             color: #f59e0b;
+             filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3));
+         }
+         
+         /* Compact Conflicts */
+         .conflicts-compact {
+             background: linear-gradient(135deg, rgba(30, 64, 175, 0.06) 0%, rgba(30, 64, 175, 0.03) 100%);
+             border-radius: 8px;
+             padding: 12px;
+             border-left: 3px solid var(--primary-color);
+             border-top: 1px solid rgba(30, 64, 175, 0.2);
+         }
+         
+         .conflicts-label {
+             font-weight: 600;
+             font-size: 0.8rem;
+         }
+         
+         .conflict-compact {
+             background: rgba(255, 255, 255, 0.9);
+             border-radius: 6px;
+             padding: 8px 10px;
+             margin-bottom: 6px;
+             border: 1px solid rgba(30, 64, 175, 0.15);
+             transition: all 0.2s ease;
+         }
+
+         .conflict-compact:hover {
+             background: rgba(255, 255, 255, 1);
+             border-color: rgba(255, 193, 7, 0.3);
+             transform: translateX(2px);
+         }
+         
+         .conflict-compact:last-child {
+             margin-bottom: 0;
+         }
+         
+         .conflict-time-badge {
+             font-size: 0.75rem;
+             font-weight: 700;
+             color: #92400e;
+             background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.1));
+             padding: 3px 8px;
+             border-radius: 12px;
+             display: inline-block;
+             margin-bottom: 4px;
+             border: 1px solid rgba(255, 193, 7, 0.3);
+         }
+         
+         .conflict-title-small {
+             font-size: 0.8rem;
+             font-weight: 500;
+             color: var(--text-dark);
+             margin-bottom: 1px;
+         }
+         
+         .conflict-type {
+             font-size: 0.7rem;
+             color: #6c757d;
+             font-style: italic;
+         }
+         
+         /* Available Status Compact */
+         .available-compact {
+             background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.04) 100%);
+             border-radius: 8px;
+             padding: 12px;
+             border-left: 3px solid #10b981;
+             border-top: 1px solid rgba(16, 185, 129, 0.2);
+         }
+        
+                 /* Enhanced Member Schedule Cards */
+         .member-schedule-card {
+             border: 1px solid rgba(30, 64, 175, 0.1);
+             border-radius: 12px;
+             overflow: hidden;
+             transition: all 0.3s ease;
+         }
+         
+         .member-schedule-card:hover {
+             border-color: var(--primary-color);
+             box-shadow: 0 6px 20px rgba(30, 64, 175, 0.1);
+             transform: translateY(-2px);
+         }
+         
+         .member-avatar {
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             width: 50px;
+             height: 50px;
+             background: rgba(30, 64, 175, 0.05);
+             border-radius: 50%;
+         }
+         
+         .member-info h6 {
+             font-weight: 600;
+             color: var(--text-dark);
+             margin-bottom: 4px;
+         }
+         
+         .availability-indicator {
+             font-size: 1.2rem;
+         }
+         
+         /* Schedule Conflicts */
+         .schedule-conflicts {
+             background: rgba(255, 193, 7, 0.05);
+             border-radius: 8px;
+             padding: 12px;
+             border-left: 3px solid #ffc107;
+         }
+         
+         .conflicts-header {
+             font-weight: 600;
+         }
+         
+         .conflict-item {
+             background: rgba(255, 255, 255, 0.7);
+             border-radius: 6px;
+             padding: 10px;
+             margin-bottom: 8px;
+             border: 1px solid rgba(255, 193, 7, 0.2);
+         }
+         
+         .conflict-item:last-child {
+             margin-bottom: 0;
+         }
+         
+         .conflict-title {
+             font-weight: 500;
+             color: var(--text-dark);
+         }
+         
+         .conflict-time {
+             font-size: 0.75rem;
+             padding: 4px 8px;
+         }
+         
+         /* Available Status */
+         .available-status {
+             background: rgba(40, 167, 69, 0.05);
+             border-radius: 8px;
+             padding: 12px;
+             border-left: 3px solid #28a745;
+         }
+         
+         /* Schedule Header */
+         .schedule-header {
+             padding: 16px 0;
+             border-bottom: 1px solid rgba(30, 64, 175, 0.1);
+         }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .time-suggestions-panel {
+                padding: 16px;
+                max-height: none;
+            }
+            
+            .enhanced-time-slots {
+                grid-template-columns: 1fr;
+            }
+            
+            .suggestion-card {
+                padding: 12px;
+            }
+        }
+        
+        /* Enhanced Modal */
+        #meetingModal .modal-content {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+        }
+
+        #meetingModal .modal-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 20px 24px;
+            border: none;
+        }
+
+        #meetingModal .modal-title {
+            color: white;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        #meetingModal .modal-footer {
+            border: none;
+            padding: 20px 24px;
+            background: rgba(248, 250, 252, 0.5);
+            border-radius: 0 0 20px 20px;
+            position: relative !important;
+            bottom: auto !important;
+            left: auto !important;
+            right: auto !important;
+            width: auto !important;
+        }
+
+        #meetingModal .modal-dialog {
+            max-width: 1200px;
+            width: 95%;
+        }
+
+                 #meetingModal .modal-body {
+             max-height: 85vh;
+             min-height: 60vh;
+             padding: 20px 24px;
+             overflow-y: auto;
+             overflow-x: hidden;
+         }
+        
+        /* Enhanced Buttons */
+
+        #saveMeetingBtn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            padding: 12px 24px;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        #saveMeetingBtn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+        
+                 /* Custom Scrollbar Styling for Sections */
+         .meeting-details-section::-webkit-scrollbar,
+         .recommendations-section::-webkit-scrollbar,
+         .team-overview-sidebar::-webkit-scrollbar {
+             width: 6px;
+         }
+
+         .meeting-details-section::-webkit-scrollbar-track,
+         .recommendations-section::-webkit-scrollbar-track,
+         .team-overview-sidebar::-webkit-scrollbar-track {
+             background: rgba(255, 255, 255, 0.1);
+             border-radius: 3px;
+         }
+
+         .meeting-details-section::-webkit-scrollbar-thumb {
+             background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+             border-radius: 3px;
+         }
+
+         .recommendations-section::-webkit-scrollbar-thumb {
+             background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+             border-radius: 3px;
+         }
+
+         .team-overview-sidebar::-webkit-scrollbar-thumb {
+             background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+             border-radius: 3px;
+         }
+
+         .meeting-details-section::-webkit-scrollbar-thumb:hover,
+         .recommendations-section::-webkit-scrollbar-thumb:hover,
+         .team-overview-sidebar::-webkit-scrollbar-thumb:hover {
+             opacity: 0.8;
+         }
+
+         /* Responsive Enhancements */
+         @media (max-width: 992px) {
+             .meeting-details-section,
+             .team-overview-sidebar {
+                 margin-bottom: 20px;
+                 min-height: 350px;
+                 max-height: calc(75vh - 100px);
+             }
+
+             .recommendations-section {
+                 margin-bottom: 20px;
+                 min-height: 350px;
+                 max-height: calc(75vh - 100px);
+             }
+             
+             #memberSchedules {
+                 min-height: 350px !important;
+                 max-height: calc(75vh - 100px) !important;
+             }
+             
+             #meetingModal .modal-dialog {
+                 max-width: 95%;
+                 margin: 10px auto;
+             }
+
+             #meetingModal .modal-body {
+                 max-height: 80vh;
+                 min-height: 50vh;
+             }
+         }
+
+                 @media (max-width: 768px) {
+             #meetingModal .modal-dialog {
+                 max-width: 98%;
+                 width: 98%;
+                 margin: 5px auto;
+             }
+
+             #meetingModal .modal-body {
+                 max-height: 75vh;
+                 min-height: 50vh;
+                 padding: 15px;
+             }
+
+             .meeting-details-section,
+             .team-overview-sidebar {
+                 min-height: 300px;
+                 max-height: calc(70vh - 80px);
+                 margin-bottom: 15px;
+                 padding: 16px;
+             }
+
+             .recommendations-section {
+                 min-height: 300px;
+                 max-height: calc(70vh - 80px);
+                 margin-bottom: 15px;
+                 padding: 16px;
+             }
+             
+             #memberSchedules {
+                 min-height: 300px !important;
+                 max-height: calc(70vh - 80px) !important;
+                 margin-bottom: 15px;
+                 padding: 16px;
+             }
+             
+             .section-header h6 {
+                 font-size: 1rem;
+             }
+             
+             .suggestion-card {
+                 padding: 16px;
+             }
+             
+             .suggestion-card .time-display {
+                 font-size: 1.1rem;
+             }
+             
+             .member-card {
+                 padding: 12px;
+             }
+             
+             .time-slots-grid {
+                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                 gap: 8px;
+             }
+
+             /* Stack sections vertically on mobile */
+             .modal-body .row.g-4 > .col-lg-4 {
+                 flex: 0 0 100%;
+                 max-width: 100%;
+             }
+         }
+
+         /* ================================
+            DARK MODE STYLES FOR MEETING MODAL
+         ================================ */
+         
+         [data-theme="dark"] #meetingModal .modal-content {
+             background: linear-gradient(135deg, rgba(17, 24, 39, 0.98) 0%, rgba(31, 41, 55, 0.98) 100%);
+             border: 1px solid rgba(75, 85, 99, 0.4);
+             box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+         }
+
+         [data-theme="dark"] #meetingModal .modal-header {
+             background: linear-gradient(135deg, #111827, #1f2937);
+             border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+             color: #f9fafb;
+         }
+
+         [data-theme="dark"] #meetingModal .modal-footer {
+             background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.9));
+             border-top: 1px solid rgba(75, 85, 99, 0.3);
+             position: relative !important;
+             bottom: auto !important;
+             left: auto !important;
+             right: auto !important;
+             width: auto !important;
+         }
+
+         [data-theme="dark"] .meeting-details-section {
+             background: linear-gradient(135deg, rgba(17, 24, 39, 0.98) 0%, rgba(31, 41, 55, 0.95) 100%);
+             border: 1px solid rgba(59, 130, 246, 0.25);
+             color: #f3f4f6;
+         }
+
+         [data-theme="dark"] .recommendations-section {
+             background: linear-gradient(135deg, rgba(17, 24, 39, 0.98) 0%, rgba(31, 41, 55, 0.95) 100%);
+             border: 1px solid rgba(34, 197, 94, 0.25);
+             color: #f3f4f6;
+         }
+
+         [data-theme="dark"] .team-overview-sidebar {
+             background: linear-gradient(135deg, rgba(17, 24, 39, 0.98) 0%, rgba(31, 41, 55, 0.95) 100%);
+             border: 1px solid rgba(168, 85, 247, 0.25);
+             color: #f3f4f6;
+         }
+
+         [data-theme="dark"] .section-header {
+             border-bottom: 1px solid rgba(75, 85, 99, 0.25);
+         }
+
+         [data-theme="dark"] .section-header h6 {
+             color: #f9fafb;
+         }
+
+         [data-theme="dark"] .section-header h6 i {
+             background: rgba(75, 85, 99, 0.3);
+             color: #d1d5db;
+         }
+
+         [data-theme="dark"] .section-header small {
+             color: #9ca3af;
+         }
+
+         [data-theme="dark"] .meeting-form-fields .form-label {
+             color: #f3f4f6;
+         }
+
+         [data-theme="dark"] .meeting-form-fields .form-control,
+         [data-theme="dark"] .meeting-form-fields .form-select {
+             background: rgba(31, 41, 55, 0.9);
+             border: 2px solid rgba(75, 85, 99, 0.4);
+             color: #f3f4f6;
+         }
+
+         [data-theme="dark"] .meeting-form-fields .form-control:focus,
+         [data-theme="dark"] .meeting-form-fields .form-select:focus {
+             background: rgba(31, 41, 55, 1);
+             border-color: #3b82f6;
+             color: #f9fafb;
+             box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.2);
+         }
+
+         [data-theme="dark"] .suggestion-card {
+             background: linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(55, 65, 81, 0.95) 100%);
+             border: 2px solid rgba(75, 85, 99, 0.4);
+             color: #f3f4f6;
+         }
+
+         [data-theme="dark"] .suggestion-card:hover {
+             background: linear-gradient(135deg, rgba(31, 41, 55, 1) 0%, rgba(59, 130, 246, 0.08) 100%);
+             border-color: #3b82f6;
+             box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);
+         }
+
+         [data-theme="dark"] .suggestion-card.border-primary {
+             border-color: #3b82f6 !important;
+             background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.06) 100%) !important;
+             box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+         }
+
+         [data-theme="dark"] .member-card {
+             background: linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(55, 65, 81, 0.95) 100%);
+             border: 1px solid rgba(75, 85, 99, 0.3);
+             color: #f3f4f6;
+         }
+
+         [data-theme="dark"] .member-card:hover {
+             border-color: #3b82f6;
+             background: linear-gradient(135deg, rgba(31, 41, 55, 1) 0%, rgba(59, 130, 246, 0.06) 100%);
+             box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
+         }
+
+         [data-theme="dark"] .member-avatar-small {
+             background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(168, 85, 247, 0.15));
+             border: 2px solid rgba(75, 85, 99, 0.4);
+             color: #d1d5db;
+         }
+
+         [data-theme="dark"] .member-name {
+             color: #f9fafb;
+         }
+
+         [data-theme="dark"] .conflicts-compact {
+             background: linear-gradient(135deg, rgba(15, 11, 245, 0.14) 0%, rgba(11, 46, 245, 0.08) 100%);
+             border-left: 3px solidrgb(11, 34, 245);
+             border-top: 1px solid rgba(245, 158, 11, 0.3);
+         }
+
+         [data-theme="dark"] .conflict-compact {
+             background: rgba(30, 41, 59, 0.9);
+             border: 1px solid rgba(27, 11, 245, 0.3);
+             color: #e2e8f0;
+         }
+
+         [data-theme="dark"] .conflict-compact:hover {
+             background: rgba(30, 41, 59, 1);
+             border-color: rgba(27, 11, 245, 0.5);
+         }
+
+         [data-theme="dark"] .conflict-time-badge {
+             background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(245, 158, 11, 0.2));
+             color: #fbbf24;
+             border: 1px solid rgba(245, 158, 11, 0.5);
+         }
+
+         [data-theme="dark"] .conflict-title-small {
+             color: #e2e8f0;
+         }
+
+         [data-theme="dark"] .conflict-type {
+             color: #94a3b8;
+         }
+
+         [data-theme="dark"] .available-compact {
+             background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.08) 100%);
+             border-left: 3px solid #10b981;
+             border-top: 1px solid rgba(16, 185, 129, 0.3);
+             color: #e2e8f0;
+         }
+
+         [data-theme="dark"] .availability-status.alert-success {
+             background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%);
+             color: #6ee7b7;
+             border-left: 4px solid #10b981;
+         }
+
+         [data-theme="dark"] .availability-status.alert-warning {
+             background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+             color: #fbbf24;
+             border-left: 4px solid #f59e0b;
+         }
+
+         [data-theme="dark"] .availability-status.alert-info {
+             background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
+             color: #93c5fd;
+             border-left: 4px solid #3b82f6;
+         }
+
+         [data-theme="dark"] .availability-status.alert-danger {
+             background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.1) 100%);
+             color: #fca5a5;
+             border-left: 4px solid #ef4444;
+         }
+
+         [data-theme="dark"] .custom-calendar {
+             background: linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(55, 65, 81, 0.95) 100%);
+             border: 2px solid rgba(75, 85, 99, 0.4);
+             color: #f3f4f6;
+         }
+
+         [data-theme="dark"] .calendar-header {
+             border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+         }
+
+         [data-theme="dark"] .calendar-nav-btn {
+             background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.08));
+             border: 1px solid rgba(59, 130, 246, 0.4);
+             color: #3b82f6;
+         }
+
+         [data-theme="dark"] .calendar-nav-btn:hover {
+             background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(59, 130, 246, 0.15));
+             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+         }
+
+         [data-theme="dark"] .calendar-day {
+             color: #f3f4f6;
+         }
+
+         [data-theme="dark"] .calendar-day:hover {
+             background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.08));
+         }
+
+         [data-theme="dark"] .calendar-day.selected {
+             background: linear-gradient(135deg, #3b82f6, #2563eb);
+             color: white;
+             box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+         }
+
+         [data-theme="dark"] .calendar-day.today {
+             background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.12));
+             border: 2px solid rgba(59, 130, 246, 0.5);
+             color: #f9fafb;
+         }
+
+         [data-theme="dark"] .calendar-day.disabled {
+             color: #6b7280;
+         }
+
+         [data-theme="dark"] .calendar-day.other-month {
+             color: #6b7280;
+         }
+
+
+
+         [data-theme="dark"] #saveMeetingBtn {
+             background: linear-gradient(135deg, #22c55e, #16a34a);
+             border: 1px solid rgba(34, 197, 94, 0.3);
+             box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2);
+         }
+
+         [data-theme="dark"] #saveMeetingBtn:hover {
+             background: linear-gradient(135deg, #16a34a, #15803d);
+             box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+             transform: translateY(-1px);
+         }
+
+         [data-theme="dark"] .loading-state {
+             background: linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(55, 65, 81, 0.9) 100%);
+             border: 2px dashed rgba(75, 85, 99, 0.5);
+             color: #f3f4f6;
+         }
+
+         [data-theme="dark"] .empty-state {
+             background: linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(55, 65, 81, 0.9) 100%);
+             border: 2px dashed rgba(75, 85, 99, 0.4);
+             color: #f3f4f6;
+         }
+
+         [data-theme="dark"] .empty-icon i {
+             color: #9ca3af;
+         }
+         
+         /* Dark mode styles for inline availability status */
+         [data-theme="dark"] .availability-status-inline {
+             background: rgba(75, 85, 99, 0.1);
+             border-left-color: #9ca3af;
+             color: #9ca3af;
+         }
+         
+         [data-theme="dark"] .availability-status-inline.alert-success {
+             background: rgba(34, 197, 94, 0.1);
+             border-left-color: #22c55e;
+             color: #22c55e;
+         }
+         
+         [data-theme="dark"] .availability-status-inline.alert-warning {
+             background: rgba(251, 191, 36, 0.1);
+             border-left-color: #fbbf24;
+             color: #fbbf24;
+         }
+         
+         [data-theme="dark"] .availability-status-inline.alert-danger {
+             background: rgba(239, 68, 68, 0.1);
+             border-left-color: #ef4444;
+             color: #ef4444;
+         }
+         
+         [data-theme="dark"] .availability-status-inline.alert-info {
+             background: rgba(59, 130, 246, 0.1);
+             border-left-color: #3b82f6;
+             color: #3b82f6;
+         }
+
+         /* Scrollbar styles for dark mode */
+         [data-theme="dark"] .meeting-details-section::-webkit-scrollbar-track,
+         [data-theme="dark"] .recommendations-section::-webkit-scrollbar-track,
+         [data-theme="dark"] .team-overview-sidebar::-webkit-scrollbar-track {
+             background: rgba(31, 41, 55, 0.6);
+         }
+
+         [data-theme="dark"] .meeting-details-section::-webkit-scrollbar-thumb {
+             background: linear-gradient(180deg, #3b82f6, #2563eb);
+             border-radius: 6px;
+             border: 2px solid rgba(31, 41, 55, 0.6);
+         }
+
+         [data-theme="dark"] .recommendations-section::-webkit-scrollbar-thumb {
+             background: linear-gradient(180deg, #22c55e, #16a34a);
+             border-radius: 6px;
+             border: 2px solid rgba(31, 41, 55, 0.6);
+         }
+
+         [data-theme="dark"] .team-overview-sidebar::-webkit-scrollbar-thumb {
+             background: linear-gradient(180deg, #a855f7, #9333ea);
+             border-radius: 6px;
+             border: 2px solid rgba(31, 41, 55, 0.6);
+         }
+
+         [data-theme="dark"] .meeting-details-section::-webkit-scrollbar-thumb:hover,
+         [data-theme="dark"] .recommendations-section::-webkit-scrollbar-thumb:hover,
+         [data-theme="dark"] .team-overview-sidebar::-webkit-scrollbar-thumb:hover {
+             background-opacity: 0.8;
+         }
+        
+        .time-suggestion-card .time-display {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .time-suggestion-card .availability-info {
+            color: #6c757d;
+        }
+        
+        .time-suggestion-card .conflicts {
+            border-top: 1px solid rgba(255, 193, 7, 0.3);
+            padding-top: 0.5rem;
+        }
+        
+        /* Suggested Times Section */
+        #suggestedTimes {
+            background: rgba(30, 41, 59, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(30, 64, 175, 0.1);
+        }
+        
+        #suggestedTimes h6 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Auto Suggest Button */
+        #autoSuggestBtn {
+            background: linear-gradient(45deg, #20c997, #198754);
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        #autoSuggestBtn:hover {
+            background: linear-gradient(45deg, #198754, #20c997);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(32, 201, 151, 0.3);
+        }
+        
         /* Futuristic glowing elements */
         .glow-effect {
             position: relative;
@@ -217,12 +1948,6 @@ function createProfileLink($name, $userId, $userType = null) {
             0% { opacity: 0.1; }
             50% { opacity: 0.3; }
             100% { opacity: 0.1; }
-        }
-        
-        /* Enhanced focus effect for interactive elements */
-        a:focus, button:focus, input:focus, textarea:focus, select:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(58, 134, 255, 0.5), 0 0 15px rgba(76, 201, 240, 0.3);
         }
         
         /* Smooth scroll behavior */
@@ -936,6 +2661,54 @@ function createProfileLink($name, $userId, $userType = null) {
             background: linear-gradient(135deg, rgba(107, 114, 128, 0.2), rgba(156, 163, 175, 0.1));
             color: var(--text-muted);
             border-color: rgba(107, 114, 128, 0.3);
+        }
+        
+        /* Milestone Status Dropdown for Supervisors */
+        .milestone-status-dropdown {
+            background: rgba(14, 24, 39, 0) !important;
+            border: 1px solid rgba(255, 255, 255, 0) !important;
+            color: var(--text-primary) !important;
+            font-size: 0.75rem !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            border-radius: 8px !important;
+            padding: 2px 6px !important;
+            min-height: unset !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease !important;
+            cursor: pointer;
+        }
+        
+        .milestone-status-dropdown:focus {
+            box-shadow: 0 0 0 2px rgba(30, 64, 175, 0) !important;
+            border-color: var(--primary-color) !important;
+            outline: none !important;
+        }
+        
+        .milestone-status-dropdown:hover {
+            border-color: rgba(255, 255, 255, 0) !important;
+        }
+        
+        .milestone-status-dropdown option {
+            background: rgba(30, 41, 59, 0.45) !important;
+            color: var(--text-primary) !important;
+            padding: 4px 8px !important;
+        }
+        
+        /* Remove focus effects from timeline cards */
+        .timeline-milestone:focus {
+            outline: none !important;
+            box-shadow: none !important;
+            filter: none !important;
+            backdrop-filter: none !important;
+        }
+        
+        .timeline-milestone:focus-visible {
+            outline: none !important;
+            box-shadow: none !important;
+            filter: none !important;
+            backdrop-filter: none !important;
         }
         
         /* Milestone Content - Right Side */
@@ -3923,7 +5696,7 @@ function createProfileLink($name, $userId, $userType = null) {
         }
 
         [data-theme="light"] .alert {
-            background: var(--card-bg);
+            background: #07880030;
             border: 1px solid rgba(0, 0, 0, 0.1);
             color: var(--text-primary);
         }
@@ -4008,6 +5781,12 @@ function createProfileLink($name, $userId, $userType = null) {
             background: linear-gradient(135deg, rgba(2, 132, 199, 0.1), rgba(2, 132, 199, 0.05)) !important;
             border-color: rgba(2, 132, 199, 0.3);
             color: #0284c7 !important;
+        }
+
+        /* Bootstrap bg-info override for consistent minimal design */
+        .bg-info {
+            --bs-bg-opacity: 1;
+            background-color: rgba(30, 64, 175, 0.1) !important;
         }
 
         [data-theme="light"] .status-badge.bg-danger {
@@ -4708,6 +6487,36 @@ function createProfileLink($name, $userId, $userType = null) {
                         </div>
                     </div>
                     
+                    <!-- Project Meetings Section -->
+                    <div class="card mb-4" data-aos="fade-left" data-aos-delay="150">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 text-white">
+                                <i class="bi bi-calendar-event me-2"></i>Project Meetings
+                            </h5>
+                            <button id="addMeetingBtn" class="btn btn-sm btn-primary" title="Schedule Meeting">
+                                <i class="bi bi-plus-circle"></i>
+                            </button>
+                        </div>
+                        <div class="card-body" id="meetings-container">
+                            <div id="meetings-loading" style="display: none;">
+                                <div class="text-center py-3">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2 mb-0 text-muted small">Loading meetings...</p>
+                                </div>
+                            </div>
+                            <div id="meetings-list">
+                                <!-- Meetings will be loaded here -->
+                            </div>
+                            <div id="no-meetings" class="text-center py-4">
+                                <i class="bi bi-calendar-x text-primary" style="font-size: 2rem;"></i>
+                                <p class="text-primary mt-2 mb-0">No meetings scheduled yet</p>
+                                <small class="text-primary">Click the + button to schedule a meeting</small>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="card mb-4" data-aos="fade-left" data-aos-delay="200">
                         <div class="card-header">
                             <h5 class="mb-0 text-white">Team Members</h5>
@@ -4780,6 +6589,192 @@ function createProfileLink($name, $userId, $userType = null) {
 
     <!-- Include Timeline Editor Overlay -->
     <?php include 'timeline_editor_overlay.php'; ?>
+    
+    <!-- Meeting Creation Modal -->
+    <div class="modal fade" id="meetingModal" tabindex="-1" aria-labelledby="meetingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="meetingModalLabel">
+                        <i class="bi bi-calendar-plus me-2"></i>Schedule Meeting
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Meeting Form -->
+                    <form id="meetingForm">
+                        <!-- Loading indicator for suggestions -->
+                        <div id="timeSuggestionsLoading" class="loading-state" style="display: none;">
+                            <div class="d-flex align-items-center justify-content-center py-4">
+                                <div class="spinner-border spinner-border-sm text-primary me-3" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <div>
+                                    <p class="mb-1 fw-medium">Analyzing Team Schedules</p>
+                                    <small class="text-muted">Finding optimal meeting times...</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- No Date Selected Message -->
+                        <div id="noDateSelected" class="empty-state">
+                            <div class="text-center py-4">
+                                <div class="empty-icon mb-3">
+                                    <i class="bi bi-calendar-date text-muted"></i>
+                                </div>
+                                <h6 class="text-muted mb-2">Select a Date First</h6>
+                                <p class="text-muted small mb-0">Choose a meeting date from the calendar to see available time slots</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Three Column Layout -->
+                        <div class="row g-4">
+                            <!-- Left Column: Meeting Details & Calendar -->
+                                        <div class="col-lg-4">
+                                            <div class="meeting-details-section">
+                                                <div class="section-header mb-3">
+                                                    <h6 class="text-primary mb-1">
+                                                        <i class="bi bi-calendar3 me-2"></i>Meeting Details
+                                </h6>
+                                                    <small class="text-muted">Set up your team meeting</small>
+                                                </div>
+                                
+                                                <!-- Meeting Form Fields -->
+                                                <div class="meeting-form-fields">
+                                <div class="mb-3">
+                                                        <label for="meetingTitle" class="form-label fw-medium">Meeting Title</label>
+                                                        <input type="text" class="form-control" id="meetingTitle" placeholder="Enter meeting title">
+                                </div>
+                                
+                                <div class="mb-3">
+                                                        <label for="meetingDescription" class="form-label fw-medium">Description</label>
+                                                        <textarea class="form-control" id="meetingDescription" rows="3" placeholder="Meeting agenda or description"></textarea>
+                                </div>
+                                
+                                <div class="mb-3">
+                                                        <label for="meetingLink" class="form-label fw-medium">Meeting Link</label>
+                                                        <input type="url" class="form-control" id="meetingLink" placeholder="Zoom, Google Meet, etc.">
+                                                        <div class="mt-2">
+                                                            <button type="button" id="createGoogleMeetBtn" class="btn btn-outline-primary btn-sm w-100">
+                                                                <i class="bi bi-camera-video me-2"></i>Create Google Meet Link
+                                                            </button>
+                                                            <button type="button" id="testMeetingBtn" class="btn btn-outline-secondary btn-sm w-100 mt-2">
+                                                                <i class="bi bi-play-circle me-2"></i>Test Meeting (Current Time)
+                                                            </button>
+                                                        </div>
+                                </div>
+                                
+                                <!-- Manual Time Selection for Testing -->
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium text-warning">
+                                        <i class="bi bi-tools me-2"></i>Manual Time Selection (Testing)
+                                    </label>
+                                    <div class="border border-warning rounded p-3" style="background-color: #fff8e1;">
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <label for="manualStartTime" class="form-label">Start Time</label>
+                                                <input type="time" class="form-control form-control-sm" id="manualStartTime">
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="manualEndTime" class="form-label">End Time</label>
+                                                <input type="time" class="form-control form-control-sm" id="manualEndTime">
+                                            </div>
+                                        </div>
+                                        <div class="mt-2">
+                                            <button type="button" class="btn btn-warning btn-sm w-100" onclick="setManualTime()">
+                                                <i class="bi bi-clock me-2"></i>Set Manual Time
+                                            </button>
+                                        </div>
+                                        <small class="text-muted d-block mt-1">
+                                            <i class="bi bi-info-circle me-1"></i>
+                                            For testing: Bypass suggestions and set exact time
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                                        <label for="meetingDate" class="form-label fw-medium">Select Date</label>
+                                                        <input type="date" class="form-control" id="meetingDate">
+                                                    </div>
+                                                    
+                                                    <!-- Calendar Widget -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label fw-medium">Calendar View</label>
+                                    <div id="meetingCalendar" class="custom-calendar">
+                                        <!-- Calendar will be rendered here -->
+                                    </div>
+                                                    </div>
+                                                </div>
+                                </div>
+                            </div>
+                            
+                                        <!-- Middle Column: Time Suggestions -->
+                                        <div class="col-lg-4">
+                                            <div id="timeSuggestionsContainer" class="suggestions-container" style="display: none;">
+                                                <div class="recommendations-section">
+                                                    <div class="section-header mb-3">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <h6 class="text-success mb-0">
+                                                                <i class="bi bi-lightbulb-fill me-2"></i>Time Suggestions
+                                                            </h6>
+                                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="refreshTimeSuggestions()" title="Recalculate suggestions">
+                                                                <i class="bi bi-arrow-clockwise"></i>
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <!-- Time Filter Buttons -->
+                                                        <div class="mb-2">
+                                                            <div class="btn-group btn-group-sm" role="group" aria-label="Time filter">
+                                                                <button type="button" class="btn btn-outline-secondary active" id="filterAll" onclick="filterSuggestions('all')">
+                                                                    All
+                                                                </button>
+                                                                <button type="button" class="btn btn-outline-secondary" id="filterAM" onclick="filterSuggestions('am')">
+                                                                    AM
+                                                                </button>
+                                                                <button type="button" class="btn btn-outline-secondary" id="filterPM" onclick="filterSuggestions('pm')">
+                                                                    PM
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <small class="text-muted">When everyone is free</small>
+                                                        
+                                                        <!-- Availability Status moved below heading -->
+                                                <div id="availabilityResults" class="availability-status-inline mb-2" style="display: none;">
+                                                    <!-- Availability results will be shown here -->
+                                                </div>
+                                </div>
+                                
+                                                    <!-- Time Slots Grid -->
+                                                    <div id="timeSlots" class="enhanced-time-slots">
+                                                        <!-- Suggested time slots will be shown here -->
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                                
+                            <!-- Right Column: Team Availability Overview -->
+                            <div class="col-lg-4">
+                                <div id="memberSchedules" class="team-overview-sidebar" style="display: none;">
+                                    <!-- Member schedules will be shown here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hidden fields for selected time -->
+                        <input type="hidden" id="meetingStartTime">
+                        <input type="hidden" id="meetingEndTime">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="saveMeetingBtn" class="btn btn-primary">
+                        <i class="bi bi-calendar-check me-1"></i>Schedule Meeting
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -5101,6 +7096,11 @@ function createProfileLink($name, $userId, $userType = null) {
                         }
                         
                         editTimelineBtn.style.display = canEditTimeline ? 'inline-flex' : 'none';
+                        
+                        // Show milestone status dropdowns for supervisors (with slight delay to ensure DOM is ready)
+                        setTimeout(() => {
+                            checkSupervisorAccess(project, loggedInUserId);
+                        }, 100);
                         
                         // Add title animation effect
                         animateProjectTitle();
@@ -6112,9 +8112,15 @@ function createProfileLink($name, $userId, $userType = null) {
                                     <i class="bi bi-calendar3"></i>
                                     <span>${date}</span>
                                 </div>
-                                <div class="milestone-status">
+                                <div class="milestone-status" data-milestone-index="${index}">
                                     <i class="bi ${statusIcon}"></i>
-                                    <span>${statusText}</span>
+                                    <span class="status-display">${statusText}</span>
+                                    <select class="milestone-status-dropdown form-select form-select-sm" style="display: none;" data-milestone-index="${index}">
+                                        <option value="planned" ${statusClass === 'pending' || item.status?.toLowerCase().includes('planned') ? 'selected' : ''}>Planned</option>
+                                        <option value="in-progress" ${statusClass === 'in-progress' || item.status?.toLowerCase().includes('progress') ? 'selected' : ''}>In Progress</option>
+                                        <option value="completed" ${statusClass === 'completed' || item.status?.toLowerCase().includes('completed') ? 'selected' : ''}>Completed</option>
+                                        <option value="delayed" ${statusClass === 'delayed' || item.status?.toLowerCase().includes('delayed') ? 'selected' : ''}>Delayed</option>
+                                    </select>
                             </div>
                         </div>
                             <p class="milestone-description">${description}</p>
@@ -6245,6 +8251,300 @@ function createProfileLink($name, $userId, $userType = null) {
             return null;
         }
         
+        // Function to check supervisor access and enable milestone status editing
+        function checkSupervisorAccess(project, loggedInUserId) {
+            if (!loggedInUserId || !project) return;
+            
+            let isSupervisor = false;
+            
+            // Check if current user is the supervisor
+            if (project.supervisor && project.supervisor.userId) {
+                if ((project.supervisor.userId.$oid && project.supervisor.userId.$oid === loggedInUserId) ||
+                    project.supervisor.userId === loggedInUserId) {
+                    isSupervisor = true;
+                }
+            }
+            
+            // If user is supervisor, show dropdowns and hide status text
+            if (isSupervisor) {
+                const statusDisplays = document.querySelectorAll('.milestone-status .status-display');
+                const statusDropdowns = document.querySelectorAll('.milestone-status-dropdown');
+                
+                statusDisplays.forEach(display => {
+                    display.style.display = 'none';
+                });
+                
+                statusDropdowns.forEach(dropdown => {
+                    dropdown.style.display = 'inline-block';
+                    
+                    // Add change event listener
+                    dropdown.addEventListener('change', function() {
+                        const milestoneIndex = this.getAttribute('data-milestone-index');
+                        const newStatus = this.value;
+                        updateMilestoneStatus(milestoneIndex, newStatus);
+                    });
+                });
+                
+                // Store supervisor status globally for other functions
+                window.currentUserIsSupervisor = true;
+            }
+        }
+        
+        // Function to update milestone status
+        function updateMilestoneStatus(milestoneIndex, newStatus) {
+            if (!currentProject || !currentProject._id) {
+                console.error('No current project available');
+                return;
+            }
+            
+            // Show loading state
+            const dropdown = document.querySelector(`[data-milestone-index="${milestoneIndex}"]`);
+            if (dropdown) {
+                dropdown.disabled = true;
+            }
+            
+            // Update the milestone status in current project data
+            if (currentProject.timeline && currentProject.timeline[milestoneIndex]) {
+                currentProject.timeline[milestoneIndex].status = newStatus;
+            }
+            
+            // Prepare FormData like timeline_editor_overlay.php does
+            const data = new FormData();
+            data.append('project_id', currentProject._id.$oid || currentProject._id);
+            data.append('timeline', JSON.stringify(currentProject.timeline));
+            data.append('action', 'update_timeline'); // Same action as timeline editor
+            
+            console.log('Sending milestone status update via timeline update');
+            console.log('Request data:', {
+                project_id: currentProject._id.$oid || currentProject._id,
+                action: 'update_timeline',
+                milestone_index: milestoneIndex,
+                new_status: newStatus
+            });
+            
+            // Determine correct path to update_project.php (same logic as timeline editor)
+            let basePath = '';
+            if (window.location.pathname.includes('/Project_details.php')) {
+                basePath = 'src/model/update_project.php';
+            } else {
+                const pathParts = window.location.pathname.split('/');
+                if (pathParts.length > 2) {
+                    basePath = '../src/model/update_project.php';
+                } else {
+                    basePath = 'src/model/update_project.php';
+                }
+            }
+            
+            console.log('Using path for update_project.php:', basePath);
+            
+            // Send to server using same method as timeline editor
+            fetch(basePath, {
+                method: 'POST',
+                body: data
+            })
+            .then(response => {
+                console.log('Response received:', response.status);
+                if (!response.ok) {
+                    throw new Error(`Server responded with status ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(result => {
+                console.log('Response data:', result);
+                
+                if (result.success) {
+                    // Fetch current user info and send system message like timeline editor does
+                    fetch('src/model/get_current_user.php')
+                    .then(response => response.json())
+                    .then(userData => {
+                        // Get user name from response or use fallback
+                        let currentUserName = 'Someone';
+                        if (userData && userData.success && userData.isLoggedIn && userData.user) {
+                            currentUserName = userData.user.name || 'Someone';
+                        }
+                        
+                        // Send system message based on assigned person and status
+                        const milestone = currentProject.timeline[milestoneIndex];
+                        const milestoneTitle = milestone?.title || 'a milestone';
+                        
+
+                        
+                        // Get assigned person(s) for personalized message
+                        let assignedPersonName = null;
+                        
+                        // Check if there are assigned people (assignedTo takes priority over assignedBy)
+                        if (milestone?.assignedTo && Array.isArray(milestone.assignedTo) && milestone.assignedTo.length > 0) {
+                            // Get first assigned person's name for the message
+                            const firstAssignee = milestone.assignedTo[0];
+                            if (typeof firstAssignee === 'object' && firstAssignee.name) {
+                                assignedPersonName = firstAssignee.name;
+                            } else if (typeof firstAssignee === 'string') {
+                                // Try to find member by ID or use the string directly
+                                const member = findMemberById(firstAssignee, currentProject);
+                                assignedPersonName = member ? member.name : firstAssignee;
+                            }
+                            
+                            // Handle multiple assignees
+                            if (milestone.assignedTo.length > 1) {
+                                assignedPersonName += " and " + (milestone.assignedTo.length - 1) + " other" + (milestone.assignedTo.length > 2 ? "s" : "");
+                            }
+                        } else if (milestone?.assignedBy) {
+                            // Fall back to assignedBy if no assignedTo
+                            if (typeof milestone.assignedBy === 'object' && milestone.assignedBy.name) {
+                                assignedPersonName = milestone.assignedBy.name;
+                            } else if (typeof milestone.assignedBy === 'string') {
+                                const member = findMemberById(milestone.assignedBy, currentProject);
+                                assignedPersonName = member ? member.name : milestone.assignedBy;
+                            }
+                        }
+                        
+                        // Create status-specific message
+                        let systemMessage = '';
+                        
+                        if (assignedPersonName) {
+                            switch (newStatus.toLowerCase()) {
+                                case 'completed':
+                                    systemMessage = `🎉 ${assignedPersonName} completed "${milestoneTitle}"!`;
+                                    break;
+                                case 'in-progress':
+                                    // Handle grammar for multiple assignees
+                                    const isPlural = assignedPersonName.includes(' and ') || assignedPersonName.includes(' others');
+                                    systemMessage = `⚡ ${assignedPersonName} ${isPlural ? 'are' : 'is'} working on "${milestoneTitle}".`;
+                                    break;
+                                case 'delayed':
+                                    systemMessage = `⏰ ${assignedPersonName} needs more time for "${milestoneTitle}".`;
+                                    break;
+                                case 'planned':
+                                    systemMessage = `📋 "${milestoneTitle}" has been planned for ${assignedPersonName}.`;
+                                    break;
+                                default:
+                                    systemMessage = `📝 ${assignedPersonName} updated "${milestoneTitle}" status to ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1).replace('-', ' ')}.`;
+                            }
+                        } else {
+                            // Fallback to original format if no assigned person
+                            const statusDisplay = newStatus.charAt(0).toUpperCase() + newStatus.slice(1).replace('-', ' ');
+                            systemMessage = `${currentUserName} updated milestone "${milestoneTitle}" status to ${statusDisplay}.`;
+                        }
+                        
+                        const systemMessageData = new FormData();
+                        systemMessageData.append('projectId', currentProject._id.$oid || currentProject._id);
+                        systemMessageData.append('message', systemMessage);
+                        
+                        // Send the system message
+                        return fetch('src/model/send_system_chat_message.php', {
+                            method: 'POST',
+                            body: systemMessageData
+                        });
+                    })
+                    .then(response => response.json())
+                    .then(msgResult => {
+                        console.log('System message result:', msgResult);
+                    })
+                    .catch(error => {
+                        console.error('Error sending system message:', error);
+                    });
+                    
+                    // Re-render timeline to reflect changes
+                    renderTimeline(currentProject);
+                    
+                    // Re-enable supervisor access after timeline re-render
+                    setTimeout(() => {
+                        const loggedInUserId = <?php echo isset($_SESSION['user_id']) ? "'" . $_SESSION['user_id'] . "'" : 'null'; ?>;
+                        checkSupervisorAccess(currentProject, loggedInUserId);
+                    }, 100);
+                    
+                    // Show success message
+                    showStatusUpdateMessage('Milestone status updated successfully!', 'success');
+                } else {
+                    console.error('Error updating milestone status:', result.message);
+                    showStatusUpdateMessage('Failed to update milestone status: ' + (result.message || 'Unknown error'), 'error');
+                    
+                    // Revert the change in local data
+                    const originalStatus = getCurrentStatusFromTimeline(milestoneIndex);
+                    if (currentProject.timeline && currentProject.timeline[milestoneIndex]) {
+                        currentProject.timeline[milestoneIndex].status = originalStatus;
+                    }
+                    
+                    // Revert dropdown value
+                    if (dropdown) {
+                        dropdown.value = originalStatus;
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error updating milestone status:', error);
+                
+                // Revert the change in local data
+                const originalStatus = getCurrentStatusFromTimeline(milestoneIndex);
+                if (currentProject.timeline && currentProject.timeline[milestoneIndex]) {
+                    currentProject.timeline[milestoneIndex].status = originalStatus;
+                }
+                
+                let errorMessage = 'An error occurred while updating the milestone status';
+                if (error.message) {
+                    errorMessage += ': ' + error.message;
+                }
+                
+                showStatusUpdateMessage(errorMessage, 'error');
+                
+                // Revert dropdown value
+                if (dropdown) {
+                    dropdown.value = originalStatus;
+                }
+            })
+            .finally(() => {
+                // Re-enable dropdown
+                if (dropdown) {
+                    dropdown.disabled = false;
+                }
+            });
+        }
+        
+        // Helper function to get current status from timeline
+        function getCurrentStatusFromTimeline(milestoneIndex) {
+            if (currentProject && currentProject.timeline && currentProject.timeline[milestoneIndex]) {
+                const status = currentProject.timeline[milestoneIndex].status || 'planned';
+                return status.toLowerCase().replace(/\s+/g, '-');
+            }
+            return 'planned';
+        }
+        
+        // Function to show status update messages
+        function showStatusUpdateMessage(message, type) {
+            // Create or update notification element
+            let notification = document.getElementById('milestone-status-notification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'milestone-status-notification';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 10000;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                `;
+                document.body.appendChild(notification);
+            }
+            
+            // Set message and style based on type
+            notification.textContent = message;
+            notification.className = type === 'success' ? 'alert-success' : 'alert-danger';
+            notification.style.backgroundColor = type === 'success' ? '#059669' : '#dc2626';
+            
+            // Show notification
+            notification.style.opacity = '1';
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+            }, 3000);
+        }
+        
         // Add timeline enhancement functions
         function initTimelineEnhancements() {
             // Add scroll-based progress animation
@@ -6370,7 +8670,7 @@ function createProfileLink($name, $userId, $userType = null) {
                 }
                 
                 .timeline-highlighted {
-                    transform: translateY(-10px) scale(1.03) !important;
+                    transform: translateY(-10px) !important;
                     z-index: 100 !important;
                 }
                 
@@ -7358,7 +9658,2128 @@ function createProfileLink($name, $userId, $userType = null) {
     setTimeout(() => {
         improveFileLayout();
     }, 1000);
+    
+    // Meeting functionality
+    let memberScheduleData = [];
+    
+    // Global calendar functions (needed for onclick handlers)
+    window.navigateCalendar = function(direction) {
+        currentCalendarDate.setMonth(currentCalendarDate.getMonth() + direction);
+        renderCalendar();
+    };
+    
+    window.selectDate = function(dateString) {
+        selectedDate = dateString;
+        document.getElementById('meetingDate').value = dateString;
+        renderCalendar(); // Re-render to show selection
+        
+        // Hide no date selected message and trigger time suggestions
+        document.getElementById('noDateSelected').style.display = 'none';
+        onDateChange();
+    };
+    
+    // Initialize meeting functionality
+    function initializeMeetingFeature() {
+        // Add event listeners
+        document.getElementById('addMeetingBtn').addEventListener('click', openMeetingModal);
+        document.getElementById('saveMeetingBtn').addEventListener('click', saveMeeting);
+        
+
+        
+        // Load existing meetings
+        loadProjectMeetings();
+    }
+    
+    // Calendar state
+    let currentCalendarDate = new Date();
+    let selectedDate = null;
+    
+    // Open meeting modal
+    function openMeetingModal() {
+        const modal = new bootstrap.Modal(document.getElementById('meetingModal'));
+        
+        // Reset form and suggestions
+        document.getElementById('meetingForm').reset();
+        document.getElementById('availabilityResults').style.display = 'none';
+        document.getElementById('timeSuggestionsContainer').style.display = 'none';
+        document.getElementById('timeSuggestionsLoading').style.display = 'none';
+        document.getElementById('memberSchedules').style.display = 'none';
+        document.getElementById('noDateSelected').style.display = 'none'; // Hide "no date selected" message
+        
+        // Set calendar to current date and automatically select today
+        currentCalendarDate = new Date();
+        const today = new Date();
+        selectedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+        document.getElementById('meetingDate').value = selectedDate;
+        
+        // Render calendar with today highlighted
+        renderCalendar();
+        
+        modal.show();
+        
+        // Automatically load suggestions for today
+        if (memberScheduleData.length === 0) {
+            // Load member schedules first, then generate suggestions for today
+            loadMemberSchedules(() => {
+                generateTimeSuggestionsForDate(selectedDate);
+            });
+        } else {
+            // Generate suggestions for today immediately
+            generateTimeSuggestionsForDate(selectedDate);
+        }
+    }
+    
+    // Render calendar
+    function renderCalendar() {
+        const calendarContainer = document.getElementById('meetingCalendar');
+        const today = new Date();
+        const year = currentCalendarDate.getFullYear();
+        const month = currentCalendarDate.getMonth();
+        
+        // Create calendar HTML
+        const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        
+        let calendarHTML = `
+            <div class="calendar-header">
+                <button type="button" class="calendar-nav-btn" onclick="navigateCalendar(-1)">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+                <div class="calendar-month-year">
+                    ${monthNames[month]} ${year}
+                </div>
+                <button type="button" class="calendar-nav-btn" onclick="navigateCalendar(1)">
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+            <div class="calendar-grid">
+        `;
+        
+        // Add day headers
+        dayNames.forEach(day => {
+            calendarHTML += `<div class="calendar-day-header">${day}</div>`;
+        });
+        
+        // Get first day of month and number of days
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const daysInPrevMonth = new Date(year, month, 0).getDate();
+        
+        // Add previous month's trailing days
+        for (let i = firstDay - 1; i >= 0; i--) {
+            const day = daysInPrevMonth - i;
+            calendarHTML += `<div class="calendar-day other-month">${day}</div>`;
+        }
+        
+        // Add current month's days
+        for (let day = 1; day <= daysInMonth; day++) {
+            const date = new Date(year, month, day);
+            const dateString = date.toISOString().split('T')[0];
+            const isToday = date.toDateString() === today.toDateString();
+            const isPast = date < today && !isToday;
+            const isSelected = selectedDate && selectedDate === dateString;
+            
+            let classes = 'calendar-day';
+            if (isPast) classes += ' disabled';
+            if (isToday) classes += ' today';
+            if (isSelected) classes += ' selected';
+            
+            const clickHandler = isPast ? '' : `onclick="selectDate('${dateString}')"`;
+            
+            calendarHTML += `<div class="${classes}" ${clickHandler}>${day}</div>`;
+        }
+        
+        // Add next month's leading days
+        const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+        const remainingCells = totalCells - (firstDay + daysInMonth);
+        for (let day = 1; day <= remainingCells; day++) {
+            calendarHTML += `<div class="calendar-day other-month">${day}</div>`;
+        }
+        
+        calendarHTML += '</div>';
+        
+        calendarContainer.innerHTML = calendarHTML;
+    }
+    
+
+    
+    // Handle date change event
+    function onDateChange() {
+        const selectedDate = document.getElementById('meetingDate').value;
+        
+        if (!selectedDate) {
+            document.getElementById('timeSuggestionsContainer').style.display = 'none';
+            return;
+        }
+        
+        // Show loading
+        document.getElementById('timeSuggestionsLoading').style.display = 'block';
+        document.getElementById('timeSuggestionsContainer').style.display = 'none';
+        
+        // Generate suggestions for the selected date
+        if (memberScheduleData.length > 0) {
+            generateTimeSuggestionsForDate(selectedDate);
+        } else {
+            // Load schedules first, then generate suggestions
+            loadMemberSchedules(() => {
+                generateTimeSuggestionsForDate(selectedDate);
+            });
+        }
+    }
+    
+    // Refresh time suggestions
+    function refreshTimeSuggestions() {
+        const selectedDate = document.getElementById('meetingDate').value;
+        if (selectedDate) {
+            onDateChange();
+        }
+    }
+    
+    // Manual time selection for testing
+    function setManualTime() {
+        const selectedDate = document.getElementById('meetingDate').value;
+        const startTime = document.getElementById('manualStartTime').value;
+        const endTime = document.getElementById('manualEndTime').value;
+        
+        // Validate inputs
+        if (!selectedDate) {
+            alert('Please select a date first');
+            return;
+        }
+        
+        if (!startTime || !endTime) {
+            alert('Please enter both start and end times');
+            return;
+        }
+        
+        // Convert to Date objects for validation
+        const startDateTime = new Date(`${selectedDate}T${startTime}`);
+        const endDateTime = new Date(`${selectedDate}T${endTime}`);
+        
+        if (endDateTime <= startDateTime) {
+            alert('End time must be after start time');
+            return;
+        }
+        
+        // Set the times in the hidden fields
+        document.getElementById('meetingStartTime').value = startTime;
+        document.getElementById('meetingEndTime').value = endTime;
+        document.getElementById('meetingDate').value = selectedDate;
+        
+        // Clear any existing suggestion selections
+        document.querySelectorAll('.suggestion-card').forEach(card => {
+            card.classList.remove('border-primary', 'bg-primary', 'bg-opacity-10');
+        });
+        
+        // Calculate duration
+        const durationMs = endDateTime - startDateTime;
+        const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
+        const durationMinutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+        
+        let durationText = '';
+        if (durationHours > 0) {
+            durationText += `${durationHours}h `;
+        }
+        if (durationMinutes > 0) {
+            durationText += `${durationMinutes}min`;
+        }
+        
+        // Enable save button and show confirmation
+        document.getElementById('saveMeetingBtn').disabled = false;
+        
+        const availabilityResults = document.getElementById('availabilityResults');
+        const formattedDate = new Date(selectedDate).toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+        
+        availabilityResults.innerHTML = `
+            <i class="bi bi-tools me-2 text-warning"></i>
+            <strong>Manual Time Set:</strong> ${startTime} - ${endTime} (${durationText}) on ${formattedDate}
+            <br><small class="text-warning">⚠️ Testing mode - Team availability not checked</small>
+        `;
+        availabilityResults.className = 'alert alert-warning';
+        availabilityResults.style.display = 'block';
+        
+        console.log('Manual time set:', {
+            date: selectedDate,
+            startTime: startTime,
+            endTime: endTime,
+            duration: durationText
+        });
+    }
+    
+    // Filter time suggestions by AM/PM
+    function filterSuggestions(filter) {
+        // Update button states
+        document.querySelectorAll('#timeSuggestionsContainer .btn-group button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        const buttonId = filter === 'all' ? 'filterAll' : 
+                         filter === 'am' ? 'filterAM' : 
+                         filter === 'pm' ? 'filterPM' : '';
+        if (buttonId) {
+            document.getElementById(buttonId).classList.add('active');
+        }
+        
+        // Get all suggestion elements
+        const suggestions = document.querySelectorAll('#timeSlots .suggestion-card');
+        
+        suggestions.forEach((suggestion, index) => {
+            const timeDisplayElement = suggestion.querySelector('.time-display .card-title');
+            const startTimeText = timeDisplayElement ? timeDisplayElement.textContent.trim() : '';
+            
+            // Extract start time from format like "08:00 - 09:00" (ignore the icon text)
+            const timeMatch = startTimeText.match(/(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/);
+            const startTime = timeMatch ? timeMatch[1] : '';
+            
+            let showSuggestion = true;
+            
+            if (startTime && filter !== 'all') {
+                const [hours, minutes] = startTime.split(':').map(Number);
+                
+                if (filter === 'am') {
+                    // Show only AM suggestions (before 12:00)
+                    showSuggestion = hours < 12;
+                } else if (filter === 'pm') {
+                    // Show only PM suggestions (12:00 and after)
+                    showSuggestion = hours >= 12;
+                }
+            }
+            
+            suggestion.style.display = showSuggestion ? 'block' : 'none';
+        });
+        
+        // Update count display
+        const visibleSuggestions = document.querySelectorAll('#timeSlots .suggestion-card:not([style*="display: none"])').length;
+        
+        const availabilityResults = document.getElementById('availabilityResults');
+        if (availabilityResults && availabilityResults.style.display !== 'none') {
+            const filterText = filter === 'all' ? '' : ` (${filter.toUpperCase()} only)`;
+            availabilityResults.innerHTML = availabilityResults.innerHTML.replace(
+                /\d+ team meeting slots/,
+                `${visibleSuggestions} team meeting slots`
+            ).replace(/ \(AM only\)| \(PM only\)/g, '') + filterText;
+        }
+    }
+    
+    // Load member schedules using individual get_schedule.php calls
+    function loadMemberSchedules(callback = null) {
+        console.log('Starting to load member schedules for project:', projectId);
+        
+        // First, get the project details using GET request (not POST)
+        fetch(`src/model/get_project.php?id=${projectId}`)
+        .then(response => {
+            console.log('Project fetch response status:', response.status);
+            return response.json();
+        })
+        .then(projectData => {
+            console.log('Project data received:', projectData);
+            
+            if (!projectData.success || !projectData.project) {
+                throw new Error('Could not load project details: ' + (projectData.message || 'Unknown error'));
+            }
+            
+            const project = projectData.project;
+            const memberPromises = [];
+            let memberCount = 0;
+            
+            console.log('Project loaded:', {
+                title: project.title,
+                members: project.members ? project.members.length : 0,
+                supervisor: project.supervisor ? 'Yes' : 'No'
+            });
+            
+            // Collect all team members
+            if (project.members && Array.isArray(project.members)) {
+                console.log('Processing', project.members.length, 'team members');
+                
+                project.members.forEach((member, index) => {
+                    console.log(`Member ${index + 1}:`, member);
+                    
+                    if (member.userId) {
+                        let userId = member.userId;
+                        
+                        // Handle different userId formats
+                        if (typeof userId === 'object') {
+                            if (userId.$oid) {
+                                userId = userId.$oid;
+                            } else if (userId.oid) {
+                                userId = userId.oid;
+                            } else {
+                                userId = String(userId);
+                            }
+                        } else {
+                            userId = String(userId);
+                        }
+                        
+                        console.log(`  - Extracted userId: ${userId}`);
+                        memberCount++;
+                        
+                        // Create promise to fetch this member's schedule
+                        const schedulePromise = fetch('src/model/get_schedule.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ userId: userId })
+                        })
+                        .then(response => {
+                            console.log(`Schedule fetch for ${member.name} (${userId}) - Status:`, response.status);
+                            return response.json();
+                        })
+                        .then(scheduleData => {
+                            console.log(`Schedule data for ${member.name}:`, scheduleData);
+                            
+                            return {
+                                userId: userId,
+                                name: member.name || 'Unknown',
+                                role: member.role || 'Team Member',
+                                type: 'student',
+                                schedule: scheduleData.success && scheduleData.schedule ? scheduleData.schedule : []
+                            };
+                        })
+                        .catch(error => {
+                            console.error(`Error fetching schedule for ${member.name}:`, error);
+                            return {
+                                userId: userId,
+                                name: member.name || 'Unknown',
+                                role: member.role || 'Team Member',
+                                type: 'student',
+                                schedule: []
+                            };
+                        });
+                        
+                        memberPromises.push(schedulePromise);
+                    } else {
+                        console.warn(`Member ${index + 1} has no userId:`, member);
+                    }
+                });
+            }
+            
+            // Add supervisor
+            if (project.supervisor && project.supervisor.userId) {
+                console.log('Processing supervisor:', project.supervisor);
+                
+                let supervisorId = project.supervisor.userId;
+                
+                // Handle different userId formats
+                if (typeof supervisorId === 'object') {
+                    if (supervisorId.$oid) {
+                        supervisorId = supervisorId.$oid;
+                    } else if (supervisorId.oid) {
+                        supervisorId = supervisorId.oid;
+                    } else {
+                        supervisorId = String(supervisorId);
+                    }
+                } else {
+                    supervisorId = String(supervisorId);
+                }
+                
+                console.log(`  - Supervisor userId: ${supervisorId}`);
+                memberCount++;
+                
+                const supervisorSchedulePromise = fetch('src/model/get_schedule.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userId: supervisorId })
+                })
+                .then(response => {
+                    console.log(`Schedule fetch for supervisor ${project.supervisor.name} (${supervisorId}) - Status:`, response.status);
+                    return response.json();
+                })
+                .then(scheduleData => {
+                    console.log(`Schedule data for supervisor ${project.supervisor.name}:`, scheduleData);
+                    
+                    return {
+                        userId: supervisorId,
+                        name: project.supervisor.name || 'Unknown',
+                        role: 'Supervisor',
+                        type: 'faculty',
+                        schedule: scheduleData.success && scheduleData.schedule ? scheduleData.schedule : []
+                    };
+                })
+                .catch(error => {
+                    console.error(`Error fetching schedule for supervisor ${project.supervisor.name}:`, error);
+                    return {
+                        userId: supervisorId,
+                        name: project.supervisor.name || 'Unknown',
+                        role: 'Supervisor',
+                        type: 'faculty',
+                        schedule: []
+                    };
+                });
+                
+                memberPromises.push(supervisorSchedulePromise);
+            }
+            
+            console.log(`Total members to fetch schedules for: ${memberCount}`);
+            
+            if (memberPromises.length === 0) {
+                throw new Error('No team members or supervisors found in project');
+            }
+            
+            // Wait for all schedule requests to complete
+            return Promise.all(memberPromises);
+        })
+        .then(allMemberSchedules => {
+            memberScheduleData = allMemberSchedules;
+            console.log('Successfully loaded schedules for', memberScheduleData.length, 'members');
+            
+            // Log summary of loaded data
+            allMemberSchedules.forEach(member => {
+                console.log(`${member.name} (${member.role}): ${member.schedule.length} schedule items`);
+            });
+            
+            if (callback) callback();
+        })
+        .catch(error => {
+            console.error('Error loading member schedules:', error);
+            document.getElementById('timeSuggestionsLoading').style.display = 'none';
+            
+            // Show detailed error message
+            const availabilityResults = document.getElementById('availabilityResults');
+            availabilityResults.innerHTML = `<i class="bi bi-x-circle me-2"></i>Error loading team schedules: ${error.message}`;
+            availabilityResults.className = 'alert alert-danger';
+            availabilityResults.style.display = 'block';
+        });
+    }
+    
+    // Load project meetings
+    function loadProjectMeetings() {
+        const meetingsLoading = document.getElementById('meetings-loading');
+        const meetingsList = document.getElementById('meetings-list');
+        const noMeetings = document.getElementById('no-meetings');
+        
+        meetingsLoading.style.display = 'block';
+        meetingsList.style.display = 'none';
+        noMeetings.style.display = 'none';
+        
+        // Construct proper URL for the API endpoint
+        // If we're on a development server (port 3000), point to XAMPP on default port
+        let getMeetingsUrl;
+        if (window.location.port === '3000') {
+            // Development server - point to XAMPP
+            getMeetingsUrl = window.location.protocol + '//' + window.location.hostname + '/uiurp/src/model/get_project_meetings.php';
+        } else {
+            // Same server - use relative path with proper construction
+            getMeetingsUrl = window.location.protocol + '//' + window.location.hostname + 
+                            (window.location.port && window.location.port !== '80' && window.location.port !== '443' 
+                             ? ':' + window.location.port : '') + 
+                            window.location.pathname.replace(/\/[^\/]*$/, '') + '/src/model/get_project_meetings.php';
+        }
+        
+        fetch(getMeetingsUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ projectId: projectId }),
+            credentials: 'include'  // Include session cookies for cross-origin
+        })
+        .then(response => response.json())
+        .then(data => {
+            meetingsLoading.style.display = 'none';
+            
+            if (data.success && data.meetings && data.meetings.length > 0) {
+                renderMeetings(data.meetings);
+                meetingsList.style.display = 'block';
+                noMeetings.style.display = 'none';
+            } else {
+                meetingsList.style.display = 'none';
+                noMeetings.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading meetings:', error);
+            meetingsLoading.style.display = 'none';
+            meetingsList.style.display = 'none';
+            noMeetings.style.display = 'block';
+        });
+    }
+    
+    // Render meetings
+    function renderMeetings(meetings) {
+        const meetingsList = document.getElementById('meetings-list');
+        meetingsList.innerHTML = '';
+        
+        meetings.forEach(meeting => {
+            const meetingCard = createMeetingCard(meeting);
+            meetingsList.appendChild(meetingCard);
+        });
+    }
+    
+    // Create meeting card
+    function createMeetingCard(meeting) {
+        const card = document.createElement('div');
+        card.className = 'meeting-card mb-3 p-3 border rounded';
+        
+        const meetingDate = new Date(meeting.date);
+        const formattedDate = meetingDate.toLocaleDateString();
+        const startTime = formatTime(meeting.startTime);
+        const endTime = formatTime(meeting.endTime);
+        
+        // Determine status color
+        let statusClass = 'bg-primary';
+        const currentDate = new Date();
+        const meetingDateTime = new Date(meeting.date + 'T' + meeting.startTime);
+        
+        if (meetingDateTime < currentDate) {
+            statusClass = 'bg-secondary'; // Past meeting
+        } else if (meeting.status === 'Cancelled') {
+            statusClass = 'bg-danger';
+        }
+        
+        card.innerHTML = `
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <h6 class="mb-0">${meeting.title}</h6>
+                <span class="badge ${statusClass}">${meeting.status}</span>
+            </div>
+            <div class="meeting-details">
+                <div class="d-flex align-items-center text-muted mb-1">
+                    <i class="bi bi-calendar3 me-2"></i>
+                    <small>${formattedDate}</small>
+                </div>
+                <div class="d-flex align-items-center text-muted mb-1">
+                    <i class="bi bi-clock me-2"></i>
+                    <small>${startTime} - ${endTime}</small>
+                </div>
+                ${meeting.meetingLink ? `
+                    <div class="d-flex align-items-center text-muted mb-1">
+                        <i class="bi bi-link-45deg me-2"></i>
+                        <small><a href="#" onclick="handleMeetingJoin('${meeting.meetingId}'); return false;" class="text-primary">Join Meeting (Time Restricted)</a></small>
+                    </div>
+                ` : ''}
+                <div class="d-flex align-items-center text-muted">
+                    <i class="bi bi-person me-2"></i>
+                    <small>Organized by ${meeting.organizer}</small>
+                </div>
+            </div>
+            ${meeting.description ? `
+                <p class="text-muted small mt-2 mb-0">${meeting.description}</p>
+            ` : ''}
+        `;
+        
+        return card;
+    }
+    
+    // Generate time suggestions for a specific date using team schedule analysis
+    function generateTimeSuggestionsForDate(selectedDate) {
+        const targetDate = new Date(selectedDate);
+        const dayName = targetDate.toLocaleDateString('en-US', { weekday: 'long' });
+        
+        console.log('Generating suggestions for', selectedDate, '(', dayName, ') using team schedule analysis');
+        
+        // Construct proper URL for the API endpoint
+        let suggestionsUrl;
+        if (window.location.port === '3000') {
+            // Development server - point to XAMPP
+            suggestionsUrl = `http://localhost/uiurp/src/model/get_project_meeting_suggestions.php?projectId=${projectId}&date=${selectedDate}`;
+        } else {
+            // Same server - use relative path
+            suggestionsUrl = `src/model/get_project_meeting_suggestions.php?projectId=${projectId}&date=${selectedDate}`;
+        }
+        
+        // Fetch suggestions from our new backend API
+        fetch(suggestionsUrl, {
+            method: 'GET',
+            credentials: 'include'  // Include session cookies for cross-origin
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Team schedule analysis result:', data);
+                
+                // Hide loading indicator
+                document.getElementById('timeSuggestionsLoading').style.display = 'none';
+                
+                if (data.success) {
+                    const suggestions = data.suggestions || [];
+                    const memberConflicts = data.memberConflicts || {};
+                    
+                    // Debug: Log all suggestions received from API
+                    console.log('Raw suggestions from API:', suggestions.map(s => `${s.startTime} - ${s.endTime}`));
+                    console.log('Debug info:', data.debug);
+                    
+                    if (suggestions.length > 0) {
+                        // Convert suggestions to our expected format
+                        const formattedSuggestions = suggestions.map(suggestion => ({
+                date: selectedDate,
+                displayDate: targetDate.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric' 
+                }),
+                            startTime: suggestion.startTime,
+                            endTime: suggestion.endTime,
+                            duration: suggestion.duration,
+                            durationText: suggestion.durationText,
+                            quality: suggestion.quality,
+                            available: data.teamMembers.length, // Everyone is available in these slots
+                            total: data.teamMembers.length,
+                            conflicts: [], // No conflicts in suggested times
+                            score: 1.0, // Perfect score since everyone is free
+                            isCompletelyFree: true
+                        }));
+        
+                        // Render the suggestions
+                        renderTeamTimeSuggestions(formattedSuggestions, data.teamMembers, memberConflicts);
+            document.getElementById('timeSuggestionsContainer').style.display = 'block';
+            
+                        // Show success message
+            const availabilityResults = document.getElementById('availabilityResults');
+                        availabilityResults.innerHTML = `<i class="bi bi-check-circle me-2 text-success"></i><strong>${suggestions.length} team meeting slots found when everyone is free!</strong>`;
+                availabilityResults.className = 'alert alert-success';
+                        availabilityResults.style.display = 'block';
+                        
+                        // Show team member schedules
+                        displayTeamSchedules(data.teamMembers, memberConflicts, data.dayOfWeek);
+                        
+            } else {
+                        // No suggestions found
+                        document.getElementById('timeSuggestionsContainer').style.display = 'none';
+                        
+                        const availabilityResults = document.getElementById('availabilityResults');
+                        availabilityResults.innerHTML = `<i class="bi bi-x-circle me-2 text-warning"></i><strong>No free time slots found on ${dayName} when everyone is available</strong><br><small>Consider selecting a different date or shorter meeting duration</small>`;
+                availabilityResults.className = 'alert alert-warning';
+            availabilityResults.style.display = 'block';
+                        
+                        // Still show team schedules to help understand conflicts
+                        displayTeamSchedules(data.teamMembers, memberConflicts, data.dayOfWeek);
+                    }
+        } else {
+                    // Error occurred
+            document.getElementById('timeSuggestionsContainer').style.display = 'none';
+            
+            const availabilityResults = document.getElementById('availabilityResults');
+                    availabilityResults.innerHTML = `<i class="bi bi-exclamation-triangle me-2 text-danger"></i><strong>Error loading team schedules:</strong> ${data.error}`;
+            availabilityResults.className = 'alert alert-danger';
+            availabilityResults.style.display = 'block';
+        }
+            })
+            .catch(error => {
+                console.error('Error fetching team schedule suggestions:', error);
+                
+                // Hide loading and show error
+                document.getElementById('timeSuggestionsLoading').style.display = 'none';
+                document.getElementById('timeSuggestionsContainer').style.display = 'none';
+                
+                const availabilityResults = document.getElementById('availabilityResults');
+                availabilityResults.innerHTML = `<i class="bi bi-exclamation-triangle me-2 text-danger"></i><strong>Error loading team schedules.</strong> Please try again.`;
+                availabilityResults.className = 'alert alert-danger';
+                availabilityResults.style.display = 'block';
+            });
+    }
+    
+    // Render team time suggestions with enhanced formatting
+    function renderTeamTimeSuggestions(suggestions, teamMembers, memberConflicts) {
+        const timeSlots = document.getElementById('timeSlots');
+        
+        if (suggestions.length === 0) {
+            timeSlots.innerHTML = `
+                <div class="text-center py-4">
+                    <i class="bi bi-clock-history text-muted mb-3" style="font-size: 2.5rem;"></i>
+                    <h6 class="text-muted mb-2">No Available Time Slots</h6>
+                    <p class="text-muted small mb-0">All team members are busy during this day. Try selecting a different date.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        
+        // Group suggestions by quality for better organization
+        const groupedSuggestions = {
+            long: suggestions.filter(s => s.quality === 'long'),
+            medium: suggestions.filter(s => s.quality === 'medium'),
+            short: suggestions.filter(s => s.quality === 'short')
+        };
+        
+        // Show best suggestions first
+        Object.entries(groupedSuggestions).forEach(([quality, items]) => {
+            if (items.length === 0) return;
+            
+            items.forEach((suggestion, index) => {
+                const priorityClass = suggestion.quality === 'long' ? 'border-success' : 
+                                    suggestion.quality === 'medium' ? 'border-warning' : 'border-info';
+                
+                const priorityIcon = suggestion.quality === 'long' ? 'bi-star-fill text-success' : 
+                                   suggestion.quality === 'medium' ? 'bi-star-half text-warning' : 'bi-star text-info';
+                
+                const qualityLabel = suggestion.quality === 'long' ? 'Optimal' :
+                                   suggestion.quality === 'medium' ? 'Good' : 'Quick';
+                
+                const qualityColor = suggestion.quality === 'long' ? 'success' :
+                                   suggestion.quality === 'medium' ? 'warning' : 'info';
+                
+                html += `
+                    <div class="suggestion-card ${priorityClass}" onclick="selectTimeSuggestion('${suggestion.startTime}', '${suggestion.endTime}', '${suggestion.date}')">
+                        <div class="card-header-section">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="time-display">
+                                    <h6 class="card-title mb-1">
+                                        <i class="bi ${priorityIcon} me-2"></i>
+                                        ${suggestion.startTime} - ${suggestion.endTime}
+                                    </h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar3 me-1"></i>${suggestion.displayDate}
+                                    </small>
+                                </div>
+                                <div class="badges">
+                                    <span class="badge bg-${qualityColor} bg-opacity-15 text-${qualityColor} mb-1">
+                                        ${qualityLabel}
+                                    </span>
+                                    <br>
+                                    <span class="badge bg-primary bg-opacity-10 text-primary">
+                                        ${suggestion.durationText}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        
+                        <div class="availability-info">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center text-success">
+                                    <i class="bi bi-check-circle-fill me-2"></i>
+                                    <span class="small fw-medium">
+                                        Everyone Available
+                                    </span>
+                                </div>
+                                <div class="d-flex align-items-center text-muted small">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+        
+        timeSlots.innerHTML = html;
+        
+        // Reset filter to "All" when new suggestions are loaded
+        setTimeout(() => {
+            const filterAllBtn = document.getElementById('filterAll');
+            if (filterAllBtn) {
+                document.querySelectorAll('#timeSuggestionsContainer .btn-group button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                filterAllBtn.classList.add('active');
+            }
+        }, 100);
+    }
+    
+    // Display team schedules and conflicts as sidebar
+    function displayTeamSchedules(teamMembers, memberConflicts, dayOfWeek) {
+        const memberSchedules = document.getElementById('memberSchedules');
+        
+        let html = `
+            <div class="sidebar-header mb-3">
+                <h6 class="text-primary mb-1">
+                    <i class="bi bi-people-fill me-2"></i>Team Availability
+                </h6>
+                <small class="text-muted">Individual schedules for ${dayOfWeek}</small>
+            </div>
+            <div class="members-list">
+        `;
+        
+        teamMembers.forEach(member => {
+            const conflicts = memberConflicts[member.name] || [];
+            const roleIcon = member.type === 'supervisor' ? 'bi-mortarboard-fill' : 'bi-person-circle';
+            const roleColor = member.type === 'supervisor' ? 'text-primary' : 'text-info';
+            
+            html += `
+                <div class="member-card mb-3">
+                    <div class="member-header">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="member-avatar-small me-2">
+                                <i class="bi ${roleIcon} ${roleColor}"></i>
+                            </div>
+                            <div class="member-info flex-grow-1">
+                                <div class="member-name">${member.name}</div>
+                                <span class="role-badge badge bg-${member.type === 'supervisor' ? 'primary' : 'info'} bg-opacity-15 text-${member.type === 'supervisor' ? 'primary' : 'info'}">
+                                    ${member.role}
+                                </span>
+                            </div>
+                            <div class="status-indicator">
+                                ${conflicts.length === 0 ? 
+                                    '<i class="bi bi-check-circle-fill text-success" title="Available"></i>' : 
+                                    '<i class="bi bi-exclamation-circle-fill text-warning" title="Has conflicts"></i>'
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="member-schedule">
+                        ${conflicts.length > 0 ? `
+                            <div class="conflicts-compact">
+                                <small class="conflicts-label text-warning fw-medium mb-1 d-block">
+                                    <i class="bi bi-clock me-1"></i>Busy (${conflicts.length})
+                                </small>
+                                ${conflicts.map(conflict => `
+                                    <div class="conflict-compact">
+                                        <div class="conflict-time-badge">${conflict.startTime}-${conflict.endTime}</div>
+                                        <div class="conflict-title-small">${conflict.title}</div>
+                                        ${conflict.type ? `<div class="conflict-type">${conflict.type}</div>` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : `
+                            <div class="available-compact">
+                                <small class="text-success fw-medium">
+                                    <i class="bi bi-check-circle-fill me-1"></i>
+                                    Available all day
+                                </small>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        memberSchedules.innerHTML = html;
+        memberSchedules.style.display = 'block';
+    }
+    
+    // Select a time suggestion and fill the form (global function)
+    window.selectTimeSuggestion = function(startTime, endTime, date) {
+        // Fill hidden fields
+        document.getElementById('meetingStartTime').value = startTime;
+        document.getElementById('meetingEndTime').value = endTime;
+        document.getElementById('meetingDate').value = date;
+        
+        // Update visual feedback
+        document.querySelectorAll('.suggestion-card').forEach(card => {
+            card.classList.remove('border-primary', 'bg-primary', 'bg-opacity-10');
+        });
+        
+        // Highlight selected card
+        event.currentTarget.classList.add('border-primary', 'bg-primary', 'bg-opacity-10');
+        
+        // Enable save button
+        document.getElementById('saveMeetingBtn').disabled = false;
+        
+        // Show confirmation
+        const availabilityResults = document.getElementById('availabilityResults');
+        availabilityResults.innerHTML = `<i class="bi bi-check-circle me-2 text-success"></i><strong>Selected:</strong> ${startTime} - ${endTime} on ${new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}`;
+        availabilityResults.className = 'alert alert-info';
+        availabilityResults.style.display = 'block';
+    };
+
+    // Create Google Meet link functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const createGoogleMeetBtn = document.getElementById('createGoogleMeetBtn');
+        const meetingLinkInput = document.getElementById('meetingLink');
+        const meetingTitleInput = document.getElementById('meetingTitle');
+        const meetingDescriptionInput = document.getElementById('meetingDescription');
+        const meetingDateInput = document.getElementById('meetingDate');
+        const meetingStartTimeInput = document.getElementById('meetingStartTime');
+        const meetingEndTimeInput = document.getElementById('meetingEndTime');
+
+        if (createGoogleMeetBtn) {
+            createGoogleMeetBtn.addEventListener('click', function() {
+                // Validate that time and date are selected
+                const date = meetingDateInput.value;
+                const startTime = meetingStartTimeInput.value;
+                const endTime = meetingEndTimeInput.value;
+
+                if (!date || !startTime || !endTime) {
+                    alert('Please select a date and time first by choosing from the time suggestions.');
+                    return;
+                }
+
+                // Show loading state
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Creating Meeting...';
+                this.disabled = true;
+
+                // Get meeting details
+                const title = meetingTitleInput.value || 'Team Meeting';
+                const description = meetingDescriptionInput.value || 'Project team meeting';
+
+                // Create time-restricted Google Meet link
+                createTimedGoogleMeetLink(title, description, date, startTime, endTime)
+                    .then(meetingData => {
+                        // Set the meeting link with time validation
+                        meetingLinkInput.value = meetingData.accessUrl;
+                        
+                        // Store meeting data for validation
+                        window.currentMeetingData = meetingData;
+                        
+                        // Show success state
+                        this.innerHTML = '<i class="bi bi-check-circle me-2"></i>Meeting Created!';
+                        this.classList.remove('btn-outline-primary');
+                        this.classList.add('btn-success');
+                        
+                        // Show meeting info
+                        showMeetingInfo(meetingData);
+                    })
+                    .catch(error => {
+                        console.error('Error creating meeting:', error);
+                        this.innerHTML = '<i class="bi bi-exclamation-triangle me-2"></i>Error Creating Meeting';
+                        this.classList.remove('btn-outline-primary');
+                        this.classList.add('btn-danger');
+                    })
+                    .finally(() => {
+                        // Reset button after 3 seconds
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.disabled = false;
+                            this.classList.remove('btn-success', 'btn-danger');
+                            this.classList.add('btn-outline-primary');
+                        }, 3000);
+                    });
+            });
+        }
+
+        // Test meeting button for current time
+        const testMeetingBtn = document.getElementById('testMeetingBtn');
+        if (testMeetingBtn) {
+            testMeetingBtn.addEventListener('click', function() {
+                // Show loading state
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Creating Test...';
+                this.disabled = true;
+
+                // Get current time and create 30-minute meeting
+                const now = new Date();
+                const endTime = new Date(now.getTime() + 30 * 60 * 1000); // 30 minutes later
+
+                // Format times for the function
+                const currentDate = now.toISOString().split('T')[0];
+                const currentTime = now.toTimeString().slice(0, 5);
+                const testEndTime = endTime.toTimeString().slice(0, 5);
+
+                // Get meeting details or use defaults
+                const title = meetingTitleInput.value || 'Test Meeting';
+                const description = meetingDescriptionInput.value || 'Test meeting for current time';
+
+                // Create time-restricted Google Meet link for current time
+                createTimedGoogleMeetLink(title, description, currentDate, currentTime, testEndTime)
+                    .then(meetingData => {
+                        // Set the meeting link with time validation
+                        meetingLinkInput.value = meetingData.accessUrl;
+                        
+                        // Store meeting data for validation
+                        window.currentMeetingData = meetingData;
+                        
+                        // Show success state
+                        this.innerHTML = '<i class="bi bi-check-circle me-2"></i>Test Created!';
+                        this.classList.remove('btn-outline-secondary');
+                        this.classList.add('btn-success');
+                        
+                        // Show meeting info with test indicator
+                        showTestMeetingInfo(meetingData);
+                    })
+                    .catch(error => {
+                        console.error('Error creating test meeting:', error);
+                        this.innerHTML = '<i class="bi bi-exclamation-triangle me-2"></i>Error';
+                        this.classList.remove('btn-outline-secondary');
+                        this.classList.add('btn-danger');
+                    })
+                    .finally(() => {
+                        // Reset button after 3 seconds
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.disabled = false;
+                            this.classList.remove('btn-success', 'btn-danger');
+                            this.classList.add('btn-outline-secondary');
+                        }, 3000);
+                    });
+            });
+        }
+    });
+
+    // Function to create time-restricted Google Meet link
+    async function createTimedGoogleMeetLink(title, description, date, startTime, endTime) {
+        return new Promise((resolve) => {
+            // Create unique meeting ID
+            const meetingId = generateMeetingId();
+            
+            // Create meeting start and end datetime objects
+            const startDateTime = new Date(`${date}T${startTime}:00`);
+            const endDateTime = new Date(`${date}T${endTime}:00`);
+            
+            // Use Google Meet's instant meeting URL (new meeting each time)
+            const instantMeetUrl = 'https://meet.google.com/new';
+            
+            // Create the meeting data
+            const meetingData = {
+                id: meetingId,
+                title: title,
+                description: description,
+                startTime: startDateTime,
+                endTime: endDateTime,
+                googleMeetUrl: instantMeetUrl,
+                accessUrl: `${window.location.origin}${window.location.pathname}?joinMeeting=${meetingId}`,
+                calendarUrl: createCalendarLink(title, description, date, startTime, endTime, instantMeetUrl)
+            };
+            
+            // Store meeting data in localStorage for validation
+            const meetings = JSON.parse(localStorage.getItem('scheduledMeetings') || '{}');
+            meetings[meetingId] = meetingData;
+            localStorage.setItem('scheduledMeetings', JSON.stringify(meetings));
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                resolve(meetingData);
+            }, 1500);
+        });
+    }
+
+    // Function to create calendar link with Google Meet
+    function createCalendarLink(title, description, date, startTime, endTime, meetingUrl) {
+        const baseUrl = 'https://calendar.google.com/calendar/render';
+        const startDateTime = formatDateForGoogle(new Date(`${date}T${startTime}:00`));
+        const endDateTime = formatDateForGoogle(new Date(`${date}T${endTime}:00`));
+        
+        const params = new URLSearchParams({
+            action: 'TEMPLATE',
+            text: title,
+            details: `${description}\n\nJoin Google Meet: ${meetingUrl}\n\nNote: This meeting link is only active during the scheduled time.`,
+            dates: `${startDateTime}/${endDateTime}`,
+            add: 'conferenceType=hangoutsMeet'
+        });
+        
+        return `${baseUrl}?${params.toString()}`;
+    }
+
+    // Generate unique meeting ID
+    function generateMeetingId() {
+        const chars = 'abcdefghijklmnopqrstuvwxyz';
+        const segments = [];
+        
+        // Generate 3 segments of 3-4 characters each (like Google Meet format)
+        for (let i = 0; i < 3; i++) {
+            let segment = '';
+            const length = i === 1 ? 4 : 3; // Middle segment is 4 chars
+            for (let j = 0; j < length; j++) {
+                segment += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            segments.push(segment);
+        }
+        
+        return segments.join('-');
+    }
+
+    // Helper function to format date for Google Calendar
+    function formatDateForGoogle(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hour = String(date.getHours()).padStart(2, '0');
+        const minute = String(date.getMinutes()).padStart(2, '0');
+        const second = '00';
+        
+        return `${year}${month}${day}T${hour}${minute}${second}`;
+    }
+
+    // Send system message to project chat when meeting is created (similar to timeline editor)
+    async function sendMeetingSystemMessage(meetingDate, startTime, meetingTitle, timeDifference, meetingLink = '') {
+        try {
+            // Get current user info first
+            const userResponse = await fetch('src/model/get_current_user.php', {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            const userData = await userResponse.json();
+            
+            // Get user name from response or use fallback
+            let currentUserName = 'Someone';
+            if (userData && userData.success && userData.isLoggedIn && userData.user) {
+                currentUserName = userData.user.name || 'Someone';
+            }
+            
+            // Create appropriate message based on timing
+            let systemMessage = '';
+            const meetingDateTime = new Date(`${meetingDate}T${startTime}:00`);
+            const formattedTime = meetingDateTime.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+            const formattedDate = meetingDateTime.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            
+            if (timeDifference <= 5 && timeDifference >= -5) {
+                // Meeting starting now
+                systemMessage = `🚀 ${currentUserName} just scheduled "${meetingTitle}" and it's starting NOW! `;
+                if (meetingLink) {
+                    systemMessage += `[Join Meeting](${meetingLink})`;
+                }
+            } else if (timeDifference <= 30) {
+                // Meeting starting soon
+                const minutesUntil = Math.max(1, Math.round(timeDifference));
+                systemMessage = `🔔 ${currentUserName} scheduled "${meetingTitle}" for ${formattedTime} (in ${minutesUntil} minute${minutesUntil > 1 ? 's' : ''}). `;
+                if (meetingLink) {
+                    systemMessage += `[Join Meeting](${meetingLink})`;
+                }
+            } else {
+                // Meeting scheduled for later
+                systemMessage = `📅 ${currentUserName} scheduled "${meetingTitle}" for ${formattedTime} on ${formattedDate}. `;
+                if (meetingLink) {
+                    systemMessage += `[Meeting Link](${meetingLink})`;
+                }
+            }
+            
+            // Send the system message
+            const systemMessageData = new FormData();
+            systemMessageData.append('projectId', projectId);
+            systemMessageData.append('message', systemMessage);
+            
+            return fetch('src/model/send_system_chat_message.php', {
+                method: 'POST',
+                body: systemMessageData
+            });
+            
+        } catch (error) {
+            console.error('Error sending meeting system message:', error);
+            throw error;
+        }
+    }
+
+    // Show meeting information after creation
+    function showMeetingInfo(meetingData) {
+        const availabilityResults = document.getElementById('availabilityResults');
+        const meetingTime = meetingData.startTime.toLocaleString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        const endTime = meetingData.endTime.toLocaleString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        availabilityResults.innerHTML = `
+            <div class="d-flex align-items-start">
+                <i class="bi bi-check-circle-fill me-2 text-success mt-1"></i>
+                <div>
+                    <strong>📅 Scheduled Meeting Created!</strong><br>
+                    <small class="text-muted">${meetingTime} - ${endTime}</small><br>
+                    <small class="text-info">Meeting ID: ${meetingData.id}</small><br>
+                    <div class="mt-2">
+                        <a href="${meetingData.accessUrl}" class="btn btn-sm btn-primary me-2">
+                            <i class="bi bi-box-arrow-up-right me-1"></i>Join Link (Time Restricted)
+                        </a>
+                        <a href="${meetingData.calendarUrl}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-calendar-plus me-1"></i>Add to Calendar
+                        </a>
+                    </div>
+                    <small class="text-muted d-block mt-2">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Join link will be active 5 minutes before the meeting starts.
+                    </small>
+                </div>
+            </div>
+        `;
+        availabilityResults.className = 'alert alert-success';
+        availabilityResults.style.display = 'block';
+    }
+
+    // Show test meeting information after creation
+    function showTestMeetingInfo(meetingData) {
+        const availabilityResults = document.getElementById('availabilityResults');
+        const meetingTime = meetingData.startTime.toLocaleString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        const endTime = meetingData.endTime.toLocaleString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        availabilityResults.innerHTML = `
+            <div class="d-flex align-items-start">
+                <i class="bi bi-play-circle-fill me-2 text-warning mt-1"></i>
+                <div>
+                    <strong>🧪 Test Meeting Created!</strong><br>
+                    <small class="text-muted">Active: ${meetingTime} - ${endTime} (30 min)</small><br>
+                    <small class="text-info">Meeting ID: ${meetingData.id}</small><br>
+                    <div class="mt-2">
+                        <a href="${meetingData.accessUrl}" target="_blank" class="btn btn-sm btn-warning me-2">
+                            <i class="bi bi-box-arrow-up-right me-1"></i>Test Join Link
+                        </a>
+                        <button onclick="window.open('${meetingData.googleMeetUrl}', '_blank')" class="btn btn-sm btn-success">
+                            <i class="bi bi-camera-video me-1"></i>Direct Meet
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        availabilityResults.className = 'alert alert-warning';
+        availabilityResults.style.display = 'block';
+    }
+
+    // Check if meeting is accessible at current time
+    async function validateMeetingAccess(meetingId) {
+        // First, check localStorage for Google Meet style meetings
+        const meetings = JSON.parse(localStorage.getItem('scheduledMeetings') || '{}');
+        let meeting = meetings[meetingId];
+        
+        // If not found in localStorage, check the database for regular meetings
+        if (!meeting) {
+            try {
+                meeting = await getMeetingFromDatabase(meetingId);
+            } catch (error) {
+                console.error('Error fetching meeting from database:', error);
+                return { accessible: false, reason: 'Meeting not found' };
+            }
+        }
+        
+        if (!meeting) {
+            return { accessible: false, reason: 'Meeting not found' };
+        }
+        
+        const now = new Date();
+        let startTime, endTime;
+        
+        // Handle different meeting data formats
+        if (meeting.startTime instanceof Date) {
+            // Google Meet style meeting (from localStorage)
+            startTime = meeting.startTime;
+            endTime = meeting.endTime;
+        } else {
+            // Database meeting - handle different datetime formats
+            if (meeting.startTime.includes('T') && meeting.startTime.includes('Z')) {
+                // Full datetime strings (ISO format)
+                startTime = new Date(meeting.startTime);
+                endTime = new Date(meeting.endTime);
+            } else {
+                // Separate date and time components
+                const meetingDate = meeting.date || new Date().toISOString().split('T')[0];
+                startTime = new Date(`${meetingDate}T${meeting.startTime}:00`);
+                endTime = new Date(`${meetingDate}T${meeting.endTime}:00`);
+            }
+        }
+        
+        // Allow access 5 minutes before the meeting starts
+        const earlyAccess = new Date(startTime.getTime() - 5 * 60 * 1000);
+        
+        if (now < earlyAccess) {
+            const timeUntil = Math.ceil((startTime - now) / (1000 * 60));
+            const startDateTime = startTime.toLocaleString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            return { 
+                accessible: false, 
+                reason: `Meeting starts in ${timeUntil} minutes on ${startDateTime}` 
+            };
+        }
+        
+        if (now > endTime) {
+            const endDateTime = endTime.toLocaleString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            return { 
+                accessible: false, 
+                reason: `Meeting ended on ${endDateTime}` 
+            };
+        }
+        
+        return { 
+            accessible: true, 
+            meeting: meeting,
+            meetingLink: meeting.googleMeetUrl || meeting.meetingLink || 'https://meet.google.com/new'
+        };
+    }
+    
+    // Get meeting from database by ID
+    async function getMeetingFromDatabase(meetingId) {
+        // Construct proper URL for the API endpoint
+        let apiUrl;
+        if (window.location.port === '3000') {
+            apiUrl = `http://localhost/uiurp/src/model/get_meeting_by_id.php?id=${meetingId}`;
+        } else {
+            apiUrl = `src/model/get_meeting_by_id.php?id=${meetingId}`;
+        }
+        
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            console.log('Database meeting response:', data);
+            
+            if (data.success && data.meeting) {
+                console.log('Meeting data from database:', data.meeting);
+                return data.meeting;
+            } else {
+                console.log('No meeting found in database response');
+                return null;
+            }
+        } catch (error) {
+            console.error('Error fetching meeting from database:', error);
+            return null;
+        }
+    }
+
+    // Handle meeting join from URL parameter
+    document.addEventListener('DOMContentLoaded', async function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const joinMeetingId = urlParams.get('joinMeeting');
+        
+        if (joinMeetingId) {
+            try {
+                const access = await validateMeetingAccess(joinMeetingId);
+                
+                if (access.accessible) {
+                    // Directly redirect to Google Meet for valid meetings
+                    const meetingUrl = access.meetingLink || access.meeting.googleMeetUrl || access.meeting.meetingLink;
+                    console.log('Redirecting to Google Meet:', meetingUrl);
+                    window.location.href = meetingUrl;
+                    return; // Don't execute cleanup
+                } else {
+                    // Show better alert without redirection
+                    showMeetingAccessAlert(access.reason, access.meeting);
+                    // Clean URL without reloading the page
+                    history.replaceState({}, document.title, window.location.pathname);
+                    return;
+                }
+            } catch (error) {
+                console.error('Error validating meeting access:', error);
+                showMeetingAccessAlert('Error joining meeting. Please try again.', null);
+                // Clean URL without reloading the page
+                history.replaceState({}, document.title, window.location.pathname);
+                return;
+            }
+        }
+    });
+
+    // Show meeting access alert with better UI
+    function showMeetingAccessAlert(reason, meeting) {
+        // Create a better alert modal instead of browser alert
+        const alertHtml = `
+            <div class="modal fade" id="meetingAccessModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-warning text-dark">
+                            <h5 class="modal-title">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                Meeting Access Restricted
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-warning mb-3">
+                                <strong>${reason}</strong>
+                            </div>
+                            ${meeting ? `
+                                <div class="meeting-info">
+                                    <h6><i class="bi bi-calendar-event me-2"></i>${meeting.title || 'Meeting'}</h6>
+                                    ${meeting.description ? `<p class="text-muted small mb-2">${meeting.description}</p>` : ''}
+                                    <div class="d-flex align-items-center text-muted mb-1">
+                                        <i class="bi bi-clock me-2"></i>
+                                        <small>Access allowed 5 minutes before meeting starts</small>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-arrow-left me-1"></i>Back to Project
+                            </button>
+                            ${meeting ? `
+                                <button type="button" class="btn btn-primary" onclick="showMeetingDetails('${meeting.id || meeting.meetingId}')">
+                                    <i class="bi bi-info-circle me-1"></i>Meeting Details
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Remove existing modal if any
+        const existingModal = document.getElementById('meetingAccessModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+        
+        // Add modal to page
+        document.body.insertAdjacentHTML('beforeend', alertHtml);
+        
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('meetingAccessModal'));
+        modal.show();
+        
+        // Clean up modal after it's hidden
+        document.getElementById('meetingAccessModal').addEventListener('hidden.bs.modal', function() {
+            this.remove();
+        });
+    }
+
+    // Handle meeting join click without page navigation
+    async function handleMeetingJoin(meetingId) {
+        try {
+            const access = await validateMeetingAccess(meetingId);
+            
+            if (access.accessible) {
+                // Directly redirect to Google Meet for valid meetings
+                const meetingUrl = access.meetingLink || access.meeting.googleMeetUrl || access.meeting.meetingLink;
+                console.log('Redirecting to Google Meet:', meetingUrl);
+                window.open(meetingUrl, '_blank'); // Open in new tab
+            } else {
+                // Show better alert without any navigation
+                showMeetingAccessAlert(access.reason, access.meeting);
+            }
+        } catch (error) {
+            console.error('Error validating meeting access:', error);
+            showMeetingAccessAlert('Error joining meeting. Please try again.', null);
+        }
+    }
+
+    // Show meeting details in meetings section
+    function showMeetingDetails(meetingId) {
+        // Close the access modal
+        const accessModal = bootstrap.Modal.getInstance(document.getElementById('meetingAccessModal'));
+        if (accessModal) {
+            accessModal.hide();
+        }
+        
+        // Scroll to meetings section and highlight the specific meeting
+        const meetingsSection = document.getElementById('meetings-container');
+        if (meetingsSection) {
+            meetingsSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Highlight the specific meeting card if found
+            setTimeout(() => {
+                const meetingCards = document.querySelectorAll('.meeting-card');
+                meetingCards.forEach(card => {
+                    const cardContent = card.innerHTML;
+                    if (cardContent.includes(meetingId)) {
+                        card.style.boxShadow = '0 0 15px rgba(255, 193, 7, 0.6)';
+                        card.style.border = '2px solid #ffc107';
+                        setTimeout(() => {
+                            card.style.boxShadow = '';
+                            card.style.border = '';
+                        }, 3000);
+                    }
+                });
+            }, 500);
+        }
+    }
+    
+
+    
+    // Generate meeting suggestions
+    function generateMeetingSuggestions(memberSchedules) {
+        const availabilityResults = document.getElementById('availabilityResults');
+        const suggestedTimes = document.getElementById('suggestedTimes');
+        const timeSlots = document.getElementById('timeSlots');
+        
+        // Define possible meeting times (business hours)
+        const meetingDuration = 60; // 1 hour default
+        const possibleTimes = [
+            '09:00', '10:00', '11:00', '14:00', '15:00', '16:00'
+        ];
+        
+        // Get next 7 days (excluding weekends for now)
+        const suggestions = [];
+        const today = new Date();
+        
+        for (let dayOffset = 1; dayOffset <= 14; dayOffset++) {
+            const targetDate = new Date(today);
+            targetDate.setDate(today.getDate() + dayOffset);
+            
+            // Skip weekends
+            if (targetDate.getDay() === 0 || targetDate.getDay() === 6) {
+                continue;
+            }
+            
+            const dayName = targetDate.toLocaleDateString('en-US', { weekday: 'long' });
+            const dateString = targetDate.toISOString().split('T')[0];
+            
+            possibleTimes.forEach(startTime => {
+                const endTime = addMinutesToTime(startTime, meetingDuration);
+                
+                // Check if this time slot is available for all members
+                const availability = analyzeTimeSlot(dateString, startTime, endTime, memberSchedules);
+                
+                if (suggestions.length < 6) { // Limit to 6 suggestions
+                    suggestions.push({
+                        date: dateString,
+                        displayDate: targetDate.toLocaleDateString('en-US', { 
+                            weekday: 'short', 
+                            month: 'short', 
+                            day: 'numeric' 
+                        }),
+                        startTime: startTime,
+                        endTime: endTime,
+                        available: availability.availableCount,
+                        total: memberSchedules.length,
+                        conflicts: availability.conflicts,
+                        score: availability.availableCount / memberSchedules.length
+                    });
+                }
+            });
+        }
+        
+        // Sort by availability score (highest first)
+        suggestions.sort((a, b) => b.score - a.score);
+        
+        // Display results
+        if (suggestions.length > 0) {
+            availabilityResults.innerHTML = '<i class="bi bi-lightbulb me-2 text-success"></i><strong>Found optimal meeting times!</strong>';
+            availabilityResults.className = 'alert alert-success';
+            
+            // Render time slot suggestions
+            renderTimeSuggestions(suggestions.slice(0, 6)); // Show top 6
+            suggestedTimes.style.display = 'block';
+        } else {
+            availabilityResults.innerHTML = '<i class="bi bi-exclamation-triangle me-2 text-warning"></i><strong>No optimal times found in the next 2 weeks</strong>';
+            availabilityResults.className = 'alert alert-warning';
+        }
+    }
+    
+    // Analyze a specific time slot with detailed conflict information
+    function analyzeTimeSlotDetailed(date, startTime, endTime, memberSchedules, dayName) {
+        let availableCount = 0;
+        let conflicts = [];
+        let totalMembers = memberSchedules.length;
+        
+        console.log(`Analyzing ${startTime}-${endTime} on ${dayName} for ${totalMembers} members`);
+        
+        memberSchedules.forEach(member => {
+            let hasConflict = false;
+            let memberConflicts = [];
+            
+            // Get this member's schedule for the specific day
+            const daySchedule = member.schedule.filter(item => item.day === dayName);
+            
+            console.log(`${member.name} (${member.role}): ${daySchedule.length} schedule items on ${dayName}`);
+            
+            if (daySchedule.length === 0) {
+                // Member has no schedule items for this day - completely free
+                availableCount++;
+                console.log(`  → ${member.name} is completely free`);
+            } else {
+                // Check each schedule item for conflicts
+                daySchedule.forEach(scheduleItem => {
+                    if (timesOverlap(startTime, endTime, scheduleItem.startTime, scheduleItem.endTime)) {
+                        hasConflict = true;
+                        memberConflicts.push({
+                            title: scheduleItem.title,
+                            time: `${scheduleItem.startTime}-${scheduleItem.endTime}`,
+                            type: scheduleItem.type || 'Unknown'
+                        });
+                        console.log(`  → CONFLICT: ${scheduleItem.title} (${scheduleItem.startTime}-${scheduleItem.endTime})`);
+                    } else {
+                        console.log(`  → No conflict with: ${scheduleItem.title} (${scheduleItem.startTime}-${scheduleItem.endTime})`);
+                    }
+                });
+                
+                if (!hasConflict) {
+                    // Member has schedule items but none conflict with our time slot
+                    availableCount++;
+                    console.log(`  → ${member.name} is available (no conflicts)`);
+                } else {
+                    // Add conflicts to the main conflicts array
+                    conflicts.push({
+                        member: member.name,
+                        role: member.role,
+                        conflicts: memberConflicts
+                    });
+                }
+            }
+        });
+        
+        const isCompletelyFree = availableCount === totalMembers;
+        console.log(`Result: ${availableCount}/${totalMembers} available. Completely free: ${isCompletelyFree}`);
+        
+        return {
+            availableCount: availableCount,
+            totalMembers: totalMembers,
+            conflicts: conflicts,
+            isCompletelyFree: isCompletelyFree
+        };
+    }
+    
+    // Legacy function for backward compatibility
+    function analyzeTimeSlot(date, startTime, endTime, memberSchedules) {
+        const targetDate = new Date(date);
+        const dayName = targetDate.toLocaleDateString('en-US', { weekday: 'long' });
+        
+        const detailed = analyzeTimeSlotDetailed(date, startTime, endTime, memberSchedules, dayName);
+        
+        // Convert detailed conflicts to simple format for backward compatibility
+        const simpleConflicts = [];
+        detailed.conflicts.forEach(memberConflict => {
+            memberConflict.conflicts.forEach(conflict => {
+                simpleConflicts.push({
+                    member: memberConflict.member,
+                    conflict: conflict.title
+                });
+            });
+        });
+        
+        return {
+            availableCount: detailed.availableCount,
+            conflicts: simpleConflicts
+        };
+    }
+    
+    // Render time suggestions
+    function renderTimeSuggestions(suggestions) {
+        const timeSlots = document.getElementById('timeSlots');
+        timeSlots.innerHTML = '';
+        
+        // Show only top 8 suggestions for the selected date
+        const topSuggestions = suggestions.slice(0, 8);
+        
+        topSuggestions.forEach((suggestion, index) => {
+            const timeCard = document.createElement('div');
+            timeCard.className = 'time-suggestion-card';
+            timeCard.setAttribute('data-date', suggestion.date);
+            timeCard.setAttribute('data-start', suggestion.startTime);
+            timeCard.setAttribute('data-end', suggestion.endTime);
+            
+            const scorePercentage = Math.round(suggestion.score * 100);
+            const isCompletelyFree = suggestion.isCompletelyFree || scorePercentage === 100;
+            
+            let scoreClass = 'success';
+            let cardClass = timeCard.className;
+            let badgeText = `${scorePercentage}%`;
+            let buttonClass = 'btn-outline-primary';
+            
+            if (isCompletelyFree) {
+                scoreClass = 'success';
+                cardClass += ' border-success';
+                badgeText = 'FREE';
+                buttonClass = 'btn-success';
+            } else if (scorePercentage >= 70) {
+                scoreClass = 'warning';
+                cardClass += ' border-warning';
+            } else {
+                scoreClass = 'danger';
+                cardClass += ' border-danger';
+            }
+            
+            timeCard.className = cardClass;
+            
+            timeCard.innerHTML = `
+                <div class="time-info">
+                    <div class="fw-bold">${formatTime(suggestion.startTime)}</div>
+                    <div class="text-muted small">${formatTime(suggestion.endTime)}</div>
+                    ${isCompletelyFree ? '<div class="text-success small fw-bold">All members free!</div>' : ''}
+                </div>
+                <div class="availability-info mt-2">
+                    <span class="badge bg-${scoreClass} mb-2">${badgeText}</span>
+                    <div class="small text-muted">${suggestion.available}/${suggestion.total} available</div>
+                    ${suggestion.conflicts && suggestion.conflicts.length > 0 ? `
+                        <div class="conflicts mt-1">
+                            <small class="text-warning">
+                                <i class="bi bi-exclamation-triangle me-1"></i>
+                                ${suggestion.conflicts.length} conflict(s)
+                            </small>
+                        </div>
+                    ` : ''}
+                </div>
+                <button class="btn ${buttonClass} btn-sm mt-2 w-100 use-time-btn">
+                    <i class="bi bi-check-circle me-1"></i>
+                    ${isCompletelyFree ? 'Select (Perfect!)' : 'Select'}
+                </button>
+            `;
+            
+            timeSlots.appendChild(timeCard);
+        });
+        
+        // Add click handlers to use suggested times
+        timeSlots.querySelectorAll('.use-time-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const card = this.closest('.time-suggestion-card');
+                const startTime = card.dataset.start;
+                const endTime = card.dataset.end;
+                
+                // Set the hidden form values
+                document.getElementById('meetingStartTime').value = startTime;
+                document.getElementById('meetingEndTime').value = endTime;
+                
+                // Check availability for this specific time
+                analyzeAvailability(selectedDate, startTime, endTime, memberScheduleData);
+                
+                // Highlight the selected card
+                timeSlots.querySelectorAll('.time-suggestion-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                
+                showToast('Meeting time selected!', 'success');
+            });
+        });
+    }
+    
+    // Add minutes to time string
+    function addMinutesToTime(timeString, minutes) {
+        const [hours, mins] = timeString.split(':').map(Number);
+        const date = new Date();
+        date.setHours(hours, mins, 0, 0);
+        date.setMinutes(date.getMinutes() + minutes);
+        
+        return date.toTimeString().slice(0, 5);
+    }
+    
+    // Analyze availability with detailed member breakdown
+    function analyzeAvailability(date, startTime, endTime, memberSchedules) {
+        const targetDate = new Date(date);
+        const dayName = targetDate.toLocaleDateString('en-US', { weekday: 'long' });
+        
+        const availabilityResults = document.getElementById('availabilityResults');
+        const memberSchedulesDiv = document.getElementById('memberSchedules');
+        
+        // Use the detailed analysis function
+        const analysis = analyzeTimeSlotDetailed(date, startTime, endTime, memberSchedules, dayName);
+        
+        let availableMembers = [];
+        let conflictingMembersDetails = [];
+        
+        // Build available members list
+        memberSchedules.forEach(member => {
+            const memberHasConflict = analysis.conflicts.some(conflict => conflict.member === member.name);
+            if (!memberHasConflict) {
+                availableMembers.push(member.name);
+            }
+        });
+        
+        // Build conflicting members details
+        analysis.conflicts.forEach(memberConflict => {
+            let conflictText = '';
+            memberConflict.conflicts.forEach(conflict => {
+                conflictText += `${conflict.title} (${formatTime(conflict.time.split('-')[0])} - ${formatTime(conflict.time.split('-')[1])}); `;
+            });
+            
+            conflictingMembersDetails.push({
+                name: memberConflict.member,
+                role: memberConflict.role,
+                conflicts: conflictText
+            });
+        });
+        
+        // Display results
+        let resultHTML = '';
+        if (analysis.isCompletelyFree) {
+            resultHTML = '<i class="bi bi-check-circle me-2 text-success"></i><strong>Perfect! All team members are available!</strong>';
+            availabilityResults.className = 'alert alert-success';
+        } else if (analysis.availableCount > analysis.totalMembers * 0.7) {
+            resultHTML = `<i class="bi bi-exclamation-triangle me-2 text-warning"></i><strong>Good availability: ${analysis.availableCount}/${analysis.totalMembers} members available</strong>`;
+            availabilityResults.className = 'alert alert-warning';
+        } else {
+            resultHTML = `<i class="bi bi-x-circle me-2 text-danger"></i><strong>Limited availability: ${analysis.availableCount}/${analysis.totalMembers} members available</strong>`;
+            availabilityResults.className = 'alert alert-danger';
+        }
+        
+        availabilityResults.innerHTML = resultHTML;
+        availabilityResults.style.display = 'block';
+        
+        // Show detailed schedule information
+        let scheduleHTML = `
+            <div class="mt-3">
+                <h6>Detailed Availability for ${formatTime(startTime)} - ${formatTime(endTime)} on ${dayName}:</h6>
+        `;
+        
+        // Available members
+        if (availableMembers.length > 0) {
+            scheduleHTML += `
+                <div class="mb-3 p-2 bg-success bg-opacity-10 rounded">
+                    <strong class="text-success">
+                        <i class="bi bi-check-circle me-1"></i>Available Members (${availableMembers.length}):
+                    </strong>
+                    <div class="mt-1">${availableMembers.join(', ')}</div>
+                </div>
+            `;
+        }
+        
+        // Conflicting members
+        if (conflictingMembersDetails.length > 0) {
+            scheduleHTML += `
+                <div class="mb-3 p-2 bg-warning bg-opacity-10 rounded">
+                    <strong class="text-warning">
+                        <i class="bi bi-exclamation-triangle me-1"></i>Members with Conflicts (${conflictingMembersDetails.length}):
+                    </strong>
+                    <div class="mt-2">
+            `;
+            
+            conflictingMembersDetails.forEach(member => {
+                scheduleHTML += `
+                    <div class="mb-2 border-start border-warning ps-2">
+                        <strong>${member.name}</strong> <small class="text-muted">(${member.role})</small>
+                        <div class="small text-muted">${member.conflicts}</div>
+                    </div>
+                `;
+            });
+            
+            scheduleHTML += '</div></div>';
+        }
+        
+        scheduleHTML += '</div>';
+        memberSchedulesDiv.innerHTML = scheduleHTML;
+        memberSchedulesDiv.style.display = 'block';
+    }
+    
+    // Check if two time ranges overlap
+    function timesOverlap(start1, end1, start2, end2) {
+        return start1 < end2 && end1 > start2;
+    }
+    
+    // Format time for display
+    function formatTime(timeString) {
+        try {
+            const [hours, minutes] = timeString.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const hour12 = hour % 12 || 12;
+            return `${hour12}:${minutes} ${ampm}`;
+        } catch (e) {
+            return timeString;
+        }
+    }
+    
+    // Validate URL
+    function isValidUrl(string) {
+        try {
+            new URL(string);
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+    
+    // Save meeting
+    function saveMeeting() {
+        const title = document.getElementById('meetingTitle').value.trim();
+        const date = document.getElementById('meetingDate').value;
+        const startTime = document.getElementById('meetingStartTime').value;
+        const endTime = document.getElementById('meetingEndTime').value;
+        const description = document.getElementById('meetingDescription').value.trim();
+        const meetingLink = document.getElementById('meetingLink').value.trim();
+        
+        if (!title || !date) {
+            showToast('Please fill in the meeting title and select a date', 'warning');
+            return;
+        }
+        
+        if (!startTime || !endTime) {
+            showToast('Please select a time slot from the suggestions', 'warning');
+            return;
+        }
+        
+        if (startTime >= endTime) {
+            showToast('End time must be after start time', 'warning');
+            return;
+        }
+        
+        // Validate meeting link if provided
+        if (meetingLink && !isValidUrl(meetingLink)) {
+            showToast('Please enter a valid meeting link', 'warning');
+            return;
+        }
+        
+        const saveMeetingBtn = document.getElementById('saveMeetingBtn');
+        const originalText = saveMeetingBtn.innerHTML;
+        saveMeetingBtn.innerHTML = '<div class="spinner-border spinner-border-sm me-2"></div>Saving...';
+        saveMeetingBtn.disabled = true;
+        
+        const meetingData = {
+            projectId: projectId,
+            title: title,
+            date: date,
+            startTime: startTime,
+            endTime: endTime,
+            description: description,
+            meetingLink: meetingLink,
+            type: 'Project Meeting'
+        };
+        
+        // Construct proper URL for the API endpoint
+        // If we're on a development server (port 3000), point to XAMPP on default port
+        let apiUrl;
+        if (window.location.port === '3000') {
+            // Development server - point to XAMPP
+            apiUrl = window.location.protocol + '//' + window.location.hostname + '/uiurp/src/model/save_project_meeting.php';
+        } else {
+            // Same server - use relative path with proper construction
+            apiUrl = window.location.protocol + '//' + window.location.hostname + 
+                    (window.location.port && window.location.port !== '80' && window.location.port !== '443' 
+                     ? ':' + window.location.port : '') + 
+                    window.location.pathname.replace(/\/[^\/]*$/, '') + '/src/model/save_project_meeting.php';
+        }
+        
+        console.log('Making request to:', apiUrl);
+        
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(meetingData),
+            credentials: 'include'  // Include session cookies for cross-origin
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response OK:', response.ok);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return response.text().then(text => {
+                console.log('Raw response text:', text);
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.error('JSON parse error:', e);
+                    console.error('Response text that failed to parse:', text);
+                    throw new Error('Invalid JSON response: ' + text.substring(0, 200) + '...');
+                }
+            });
+        })
+        .then(data => {
+            console.log('Parsed response data:', data);
+            if (data.success) {
+                showToast('Meeting scheduled successfully!', 'success');
+                
+                // Check if the meeting was created for current time or soon, and refresh chat
+                const meetingDate = document.getElementById('meetingDate').value;
+                const startTime = document.getElementById('meetingStartTime').value;
+                
+                if (meetingDate && startTime) {
+                    const meetingDateTime = new Date(`${meetingDate}T${startTime}:00`);
+                    const currentDateTime = new Date();
+                    const timeDifference = (meetingDateTime.getTime() - currentDateTime.getTime()) / (1000 * 60); // in minutes
+                    
+                    // If meeting is within the next 60 minutes, refresh chat to show system messages
+                    if (timeDifference >= -5 && timeDifference <= 60) {
+                        console.log('Meeting scheduled for soon, refreshing chat to show system messages');
+                        
+                        // Refresh chat messages after a short delay to allow system message to be sent
+                        // Send additional real-time system message to chat (similar to timeline editor)
+                        const title = document.getElementById('meetingTitle').value.trim();
+                        const meetingLink = document.getElementById('meetingLink').value.trim();
+                        sendMeetingSystemMessage(meetingDate, startTime, title, timeDifference, meetingLink)
+                            .then(() => {
+                                console.log('Real-time system message sent for meeting');
+                            })
+                            .catch(error => {
+                                console.error('Error sending real-time system message:', error);
+                            });
+                        
+                        setTimeout(() => {
+                            // Check if chat overlay exists and is visible
+                            const chatOverlay = document.getElementById('projectChatOverlay');
+                            if (chatOverlay && chatOverlay.classList.contains('active')) {
+                                // If chat is open, reload messages
+                                if (typeof loadChatMessages === 'function') {
+                                    loadChatMessages();
+                                } else if (typeof window.loadChatMessages === 'function') {
+                                    window.loadChatMessages();
+                                }
+                            }
+                            
+                            // Also trigger meeting notification refresh if available
+                            if (typeof window.globalMeetingNotifications !== 'undefined' && 
+                                window.globalMeetingNotifications.refreshNotifications) {
+                                window.globalMeetingNotifications.refreshNotifications();
+                            }
+                        }, 2000); // 2 second delay to allow system message to be processed
+                    }
+                }
+                
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('meetingModal'));
+                modal.hide();
+                
+                // Reset form
+                document.getElementById('meetingForm').reset();
+                document.getElementById('availabilityResults').style.display = 'none';
+                document.getElementById('memberSchedules').style.display = 'none';
+                document.getElementById('timeSuggestionsContainer').style.display = 'none';
+                document.getElementById('timeSuggestionsLoading').style.display = 'none';
+                
+                // Reload meetings
+                loadProjectMeetings();
+            } else {
+                showToast(data.message || 'Error saving meeting', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error saving meeting:', error);
+            showToast('Error saving meeting. Please try again.', 'danger');
+        })
+        .finally(() => {
+            saveMeetingBtn.innerHTML = originalText;
+            saveMeetingBtn.disabled = false;
+        });
+    }
+    
+    // Project-specific meeting notification integration
+    function initializeProjectMeetingNotifications() {
+        // Update the global notification system with this project's ID
+        if (window.globalMeetingNotifications && projectId) {
+            window.globalMeetingNotifications.setProjectId(projectId);
+            console.log('Project meeting notifications initialized for project:', projectId);
+        }
+        
+        // Listen for meeting notifications specific to this project
+        document.addEventListener('meetingNotificationsProcessed', function(event) {
+            const detail = event.detail;
+            if (detail.projectId === projectId || !detail.projectId) {
+                console.log('Project-specific meeting notifications processed:', detail);
+                
+                // Refresh chat messages to show new system messages
+                if (typeof loadChatMessages === 'function') {
+                    setTimeout(() => {
+                        loadChatMessages();
+                    }, 1000);
+                }
+            }
+        });
+    }
+    
+    // Initialize meeting feature when project is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Wait for project to be loaded, then initialize meetings
+        setTimeout(() => {
+            if (projectId) {
+                initializeMeetingFeature();
+                initializeProjectMeetingNotifications();
+            }
+        }, 1000);
+    });
     </script>
+    
+    <!-- Include Global Meeting Notifications -->
+    <?php include 'src/includes/global-meeting-notifications.php'; ?>
     
 </body>
 </html> 

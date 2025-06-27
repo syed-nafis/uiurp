@@ -257,5 +257,8 @@ session_start();
             // Scroll reveal animation is now handled in faculty_loader.js
         });
     </script>
+    
+    <!-- Include Global Meeting Notifications -->
+    <?php include 'src/includes/global-meeting-notifications.php'; ?>
 </body>
 </html>
