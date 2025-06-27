@@ -661,6 +661,18 @@
     opacity: 0.8;
 }
 
+.group-last-time {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    align-self: flex-start;
+    margin-top: 8px;
+    flex-shrink: 0;
+    opacity: 0.7;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+}
+
 /* Center Panel - Chat Messages */
 .chat-messages-panel {
     flex: 1;
@@ -3781,7 +3793,7 @@ body.chat-pinned .full-width-bg {
             if (group.imageUrl) {
                 avatarContent = `<img src="${group.imageUrl}" alt="${group.name}" onerror="this.onerror=null;this.src='assets/resources/project_avatar.png';">`;
             } else {
-                avatarContent = `<i class="bi bi-hash"></i>`;
+                avatarContent = `<i class="bi bi-chat-square-dots"></i>`;
             }
             
             groupEl.innerHTML = `
@@ -3792,6 +3804,7 @@ body.chat-pinned .full-width-bg {
                     <div class="group-name">${group.name}</div>
                     <div class="group-last-msg">${group.lastMessage || 'No messages yet'}</div>
                 </div>
+                ${group.lastTime ? `<div class="group-last-time">${group.lastTime}</div>` : ''}
             `;
             
             groupEl.addEventListener('click', function() {

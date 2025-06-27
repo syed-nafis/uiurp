@@ -581,19 +581,22 @@ function isEventCreator($event) {
             }
         }
 
-        /* Button layout for small and medium screens */
+        /* Button layout - consistent alignment */
+        .buttons-wrapper {
+            gap: 10px;
+            align-items: center;
+            height: 52px; /* Match filter-group height */
+        }
+        
+        /* Media queries for responsive filters */
         @media (max-width: 1199px) {
             .buttons-wrapper {
                 justify-content: flex-end;
             }
         }
         
-        /* Media queries for responsive filters */
         @media (max-width: 991px) {
             .buttons-wrapper {
-                display: flex;
-                width: 100%;
-                gap: 10px;
                 justify-content: center;
                 margin-top: 10px;
             }
@@ -606,6 +609,11 @@ function isEventCreator($event) {
         @media (max-width: 767px) {
             .buttons-wrapper {
                 justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .filter-btn, .create-btn {
+                margin-bottom: 5px;
             }
         }
 
@@ -1392,7 +1400,7 @@ function isEventCreator($event) {
                 
                 <form method="GET" action="">
                     <div class="row g-3 align-items-center">
-                        <div class="col-lg-4 col-md-6">
+                        <div class="col-xl-4 col-lg-4 col-md-6">
                             <div class="input-group filter-group">
                                 <span class="input-group-text">
                                     <i class="bi bi-search"></i>
@@ -1407,13 +1415,13 @@ function isEventCreator($event) {
                             </div>
                         </div>
                         
-                        <div class="col-lg-3 col-md-6">
+                        <div class="col-xl-3 col-lg-3 col-md-6">
                             <div class="input-group filter-group">
                                 <span class="input-group-text">
                                     <i class="bi bi-tag"></i>
                                 </span>
                                 <select name="type" class="form-control filter-select">
-                                    <option value="">All Event Types</option>
+                                    <option value="">All Types</option>
                                     <?php foreach ($eventTypes as $type): ?>
                                         <option value="<?= htmlspecialchars($type) ?>" <?= $eventType === $type ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($type) ?>
@@ -1423,13 +1431,13 @@ function isEventCreator($event) {
                             </div>
                         </div>
                         
-                        <div class="col-lg-2 col-md-6">
+                        <div class="col-xl-3 col-lg-3 col-md-6">
                             <div class="input-group filter-group">
                                 <span class="input-group-text">
                                     <i class="bi bi-flag"></i>
                                 </span>
                                 <select name="status" class="form-control filter-select">
-                                    <option value="">All Statuses</option>
+                                    <option value="">All Status</option>
                                     <?php foreach ($statuses as $statusOption): ?>
                                         <option value="<?= htmlspecialchars($statusOption) ?>" <?= $status === $statusOption ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($statusOption) ?>
@@ -1439,17 +1447,17 @@ function isEventCreator($event) {
                             </div>
                         </div>
                         
-                        <div class="col-lg-3 col-md-12">
-                            <div class="buttons-wrapper d-flex">
+                        <div class="col-xl-2 col-lg-2 col-md-6">
+                            <div class="buttons-wrapper d-flex justify-content-end">
                                 <button type="submit" class="filter-btn ripple me-2" title="Apply Filters">
                                     <i class="bi bi-funnel"></i>
-                            </button>
-                            <button type="button" class="filter-btn view-calendar-btn ripple me-2" title="View Calendar">
+                                </button>
+                                <button type="button" class="filter-btn view-calendar-btn ripple me-2" title="View Calendar">
                                     <i class="bi bi-calendar-week"></i>
-                            </button>
-                            <a href="create_event.php" class="create-btn ripple" title="Create New Event">
+                                </button>
+                                <a href="create_event.php" class="create-btn ripple" title="Create New Event">
                                     <i class="bi bi-plus-lg"></i>
-                            </a>
+                                </a>
                             </div>
                         </div>
                     </div>

@@ -1792,6 +1792,136 @@ if (!file_exists($profileImage)) {
             color: #20c997;
             transform: scale(1.2);
         }
+
+        /* Modal Styling */
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--glass-border);
+            background: linear-gradient(135deg, 
+                rgba(0, 212, 255, 0.1) 0%, 
+                rgba(139, 92, 246, 0.1) 100%);
+        }
+
+        .modal-title {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .btn-close {
+            filter: invert(1);
+        }
+
+        .modal-body {
+            color: var(--text-secondary);
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--glass-border);
+        }
+
+        /* Light mode modal styles */
+        [data-theme="light"] .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(14, 165, 233, 0.15);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        [data-theme="light"] .modal-header {
+            border-bottom: 1px solid rgba(14, 165, 233, 0.15);
+            background: linear-gradient(135deg, 
+                rgba(248, 250, 252, 0.8) 0%, 
+                rgba(255, 255, 255, 0.8) 100%);
+        }
+
+        [data-theme="light"] .modal-footer {
+            border-top: 1px solid rgba(14, 165, 233, 0.15);
+        }
+
+        [data-theme="light"] .btn-close {
+            filter: none;
+        }
+
+        /* Schedule Item Styling */
+        .section-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .section-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .section-card .card-body {
+            padding: 1.5rem;
+        }
+
+        .section-card .card-title {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-card .badge {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+
+        /* Light mode schedule cards */
+        [data-theme="light"] .section-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(14, 165, 233, 0.15);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="light"] .section-card:hover {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Schedule modal text color adjustments for dark mode */
+        [data-theme="dark"] .modal .d-flex.align-items-center.text-secondary {
+            color: white !important;
+        }
+
+        [data-theme="dark"] .modal .d-flex.align-items-center.text-secondary i {
+            color: white !important;
+        }
+
+        [data-theme="dark"] .modal .d-flex.align-items-center.text-secondary span {
+            color: white !important;
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .modal-dialog-scrollable .modal-body {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* Internet Explorer 10+ */
+        }
+
+        .modal-dialog-scrollable .modal-body::-webkit-scrollbar {
+            width: 0; /* Chrome, Safari, Opera */
+            background: transparent;
+        }
     </style>
 </head>
 <body>
@@ -2638,7 +2768,7 @@ if (!file_exists($profileImage)) {
               
               <div class="d-flex justify-content-between">
                 <button type="button" class="btn btn-outline-secondary" id="cancel-schedule-form">Cancel</button>
-                <div>
+                <div class="buttons-wrapper d-flex">
                   <button type="button" class="btn btn-danger me-2" id="delete-schedule" style="display: none;">Delete</button>
                   <button type="submit" class="btn btn-primary" id="save-schedule">Save</button>
                 </div>

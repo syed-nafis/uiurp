@@ -1,0 +1,22 @@
+[25-Jun-2025 18:43:24 Europe/Berlin] Milestone update: Connected to database successfully
+[25-Jun-2025 18:43:24 Europe/Berlin] Milestone update: Received data: Array
+(
+    [projectId] => 685551a4793d650a9900a57f
+    [milestoneIndex] => 0
+    [newStatus] => completed
+)
+
+[25-Jun-2025 18:43:24 Europe/Berlin] Milestone update: ProjectId=685551a4793d650a9900a57f, Index=0, Status=completed, UserId=67e1a9f6ebb89e49e04ddf35
+[25-Jun-2025 18:43:24 Europe/Berlin] Milestone update: Project found in collection
+[25-Jun-2025 18:43:24 Europe/Berlin] Milestone update: User is supervisor, proceeding with update
+[25-Jun-2025 18:43:35 Europe/Berlin] Milestone update: Connected to database successfully
+[25-Jun-2025 18:43:35 Europe/Berlin] Milestone update: Received data: Array
+(
+    [projectId] => 685551a4793d650a9900a57f
+    [milestoneIndex] => 1
+    [newStatus] => completed
+)
+
+[25-Jun-2025 18:43:35 Europe/Berlin] Milestone update: ProjectId=685551a4793d650a9900a57f, Index=1, Status=completed, UserId=67e1a9f6ebb89e49e04ddf35
+[25-Jun-2025 18:43:35 Europe/Berlin] Milestone update: Project found in collection
+[25-Jun-2025 18:43:35 Europe/Berlin] Milestone update: User is supervisor, proceeding with update

@@ -209,4 +209,111 @@ function sendMemberJoinMessage($projectId, $memberName, $projectTitle = null) {
     
     return sendSystemChatMessage($projectId, $joinMessage);
 }
+
+/**
+ * Send a meeting notification message to the project chat
+ *
+ * @param string $projectId The project ID
+ * @param string $meetingTitle The meeting title
+ * @param string $startTime The meeting start time (H:i format)
+ * @param string $meetingLink The meeting link URL
+ * @param string $date Optional meeting date for context
+ * @return array Response with success status and message
+ */
+function sendMeetingNotificationMessage($projectId, $meetingTitle, $startTime, $meetingLink = '', $date = null) {
+    // Format the time for display
+    $startDateTime = DateTime::createFromFormat('H:i', $startTime);
+    $formattedTime = $startDateTime ? $startDateTime->format('g:i A') : $startTime;
+    
+    // Format date if provided
+    $dateText = '';
+    if ($date) {
+        $dateObj = DateTime::createFromFormat('Y-m-d', $date);
+        if ($dateObj) {
+            $dateText = ' on ' . $dateObj->format('M j, Y');
+        }
+    }
+    
+    // Create the notification message with proper formatting
+    $messageText = "🔔 **Meeting Starting Soon!** 📅\n\n";
+    $messageText .= "**\"" . htmlspecialchars($meetingTitle) . "\"** starts at **$formattedTime**$dateText (in 5 minutes)\n\n";
+    
+    if (!empty($meetingLink)) {
+        // Create a clickable link for the meeting
+        $messageText .= "🔗 **[Join Meeting]($meetingLink)**\n\n";
+    }
+    
+    $messageText .= "⏰ Please prepare to join the meeting. Access is available 5 minutes before the scheduled time.";
+    
+    return sendSystemChatMessage($projectId, $messageText);
+}
+
+/**
+ * Send a meeting started message to the project chat
+ *
+ * @param string $projectId The project ID
+ * @param string $meetingTitle The meeting title
+ * @param string $meetingLink The meeting link URL
+ * @return array Response with success status and message
+ */
+function sendMeetingStartedMessage($projectId, $meetingTitle, $meetingLink = '') {
+    // Create the meeting started message
+    $messageText = "🚀 **Meeting is Now Live!** 🎯\n\n";
+    $messageText .= "**\"" . htmlspecialchars($meetingTitle) . "\"** has started!\n\n";
+    
+    if (!empty($meetingLink)) {
+        $messageText .= "🔗 **[Join Now]($meetingLink)**\n\n";
+    }
+    
+    $messageText .= "📞 Don't keep the team waiting - join the meeting now!";
+    
+    return sendSystemChatMessage($projectId, $messageText);
+}
+
+/**
+ * Send a meeting reminder message to the project chat
+ *
+ * @param string $projectId The project ID
+ * @param string $meetingTitle The meeting title
+ * @param string $startTime The meeting start time
+ * @param int $minutesUntil Minutes until the meeting starts
+ * @param string $meetingLink Optional meeting link
+ * @return array Response with success status and message
+ */
+function sendMeetingReminderMessage($projectId, $meetingTitle, $startTime, $minutesUntil, $meetingLink = '') {
+    // Format the time for display
+    $startDateTime = DateTime::createFromFormat('H:i', $startTime);
+    $formattedTime = $startDateTime ? $startDateTime->format('g:i A') : $startTime;
+    
+    // Create reminder message based on time remaining
+    if ($minutesUntil <= 5) {
+        $urgencyIcon = "🔔";
+        $urgencyText = "Starting Very Soon!";
+    } elseif ($minutesUntil <= 15) {
+        $urgencyIcon = "⏰";
+        $urgencyText = "Starting Soon!";
+    } else {
+        $urgencyIcon = "📅";
+        $urgencyText = "Upcoming Meeting";
+    }
+    
+    $messageText = "$urgencyIcon **Meeting $urgencyText** 📋\n\n";
+    $messageText .= "**\"" . htmlspecialchars($meetingTitle) . "\"** starts at **$formattedTime** ";
+    $messageText .= $minutesUntil == 1 ? "(in 1 minute)" : "(in $minutesUntil minutes)";
+    $messageText .= "\n\n";
+    
+    if (!empty($meetingLink)) {
+        $messageText .= "🔗 **[Meeting Link]($meetingLink)**\n\n";
+    }
+    
+    if ($minutesUntil <= 5) {
+        $messageText .= "🚨 **Get ready to join now!**";
+    } elseif ($minutesUntil <= 15) {
+        $messageText .= "📝 **Please prepare for the meeting.**";
+    } else {
+        $messageText .= "📋 **Meeting scheduled - mark your calendar!**";
+    }
+    
+    return sendSystemChatMessage($projectId, $messageText);
+}
 ?> 
