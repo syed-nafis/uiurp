@@ -1050,7 +1050,7 @@ $tags = $tagCollection->find()->toArray();
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        window.location.href = 'view_posts.php';
+                        window.location.href = 'post_details.php?id=' + document.getElementById('postId').value;
                     } else {
                         alert('Error: ' + (data.message || 'Unknown error occurred'));
                     }
