@@ -32,12 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if ($data) {
         // JSON request
-        $postId = $data['postId'] ?? null;
-        $comment = $data['comment'] ?? null;
+        $postId = $data['postId'] ?? $data['post_id'] ?? null;
+        $comment = $data['comment'] ?? $data['text'] ?? null;
     } else {
         // Form request
-        $postId = $_POST['postId'] ?? null;
-        $comment = $_POST['comment'] ?? null;
+        $postId = $_POST['post_id'] ?? $_POST['postId'] ?? null;
+        $comment = $_POST['text'] ?? $_POST['comment'] ?? null;
     }
 
     // Validate input
@@ -87,7 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($result->getModifiedCount() === 1) {
-            echo json_encode(['success' => true, 'message' => 'Comment added successfully']);
+            // Redirect back to post details page
+            header('Location: ../../post_details.php?id=' . $postId);
+            exit;
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to add comment. Post may not exist.']);
         }

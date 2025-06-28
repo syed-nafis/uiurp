@@ -955,8 +955,8 @@ try {
                     <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" 
                          alt="Your Avatar" class="author-avatar" style="width: 32px; height: 32px;">
                                 <div class="flex-grow-1">
-                        <textarea name="comment" class="form-control mb-2" rows="3" placeholder="Write a comment..." required></textarea>
-                        <button type="submit" class="btn btn-primary">Post Comment</button>
+                                    <textarea name="text" class="form-control mb-2" rows="3" placeholder="Write a comment..." required></textarea>
+            <button type="submit" class="btn btn-primary">Post Comment</button>
                                                 </div>
                                         </div>
             </form>
