@@ -7,12 +7,13 @@ require __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/src/model/db_connect.php';
 
 // Import MongoDB classes
-use MongoDB\BSON\UTCDateTime;
-use MongoDB\BSON\ObjectId;
-use MongoDB\Client;
-use MongoDB\Collection;
-use MongoDB\Driver\Exception\ConnectionException;
-use MongoDB\Driver\Exception\ConnectionTimeoutException;
+require_once __DIR__ . '/vendor/autoload.php';
+
+use \MongoDB\BSON\UTCDateTime;
+use \MongoDB\BSON\ObjectId;
+use \MongoDB\Client;
+use \MongoDB\Collection;
+use \MongoDB\Driver\Exception\ConnectionException;
 
 session_start();
 
@@ -1046,28 +1047,28 @@ try {
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* File Preview Modal Styles */
-        .file-preview-modal .modal-dialog {
+        /* PDF Preview Modal Styles */
+        .pdf-preview-modal .modal-dialog {
             max-width: 90%;
             height: 90vh;
             margin: 1.75rem auto;
         }
 
-        .file-preview-modal .modal-content {
+        .pdf-preview-modal .modal-content {
             height: 100%;
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-color);
         }
 
-        .file-preview-modal .modal-body {
+        .pdf-preview-modal .modal-body {
             padding: 0;
             display: flex;
             flex-direction: column;
-            height: calc(100% - 120px);
+            height: calc(100% - 120px); /* Adjust for header and footer */
         }
 
-        .preview-container {
+        .pdf-preview-container {
             flex: 1;
             overflow: auto;
             background: var(--surface-1);
@@ -1076,22 +1077,13 @@ try {
             position: relative;
         }
 
-        .preview-iframe {
+        #pdf-viewer {
             width: 100%;
             height: 100%;
             border: none;
-            background: white;
         }
 
-        .preview-image {
-            max-width: 100%;
-            max-height: calc(90vh - 200px);
-            margin: auto;
-            display: block;
-            object-fit: contain;
-        }
-
-        .preview-controls {
+        .pdf-controls {
             display: flex;
             justify-content: center;
             gap: 1rem;
@@ -1100,7 +1092,14 @@ try {
             border-top: 1px solid var(--border-color);
         }
 
-        .preview-error {
+        .pdf-page-info {
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pdf-error {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -1115,30 +1114,39 @@ try {
             max-width: 80%;
         }
 
-        /* Loading animation */
-        .preview-loading {
+        .loading-spinner {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            text-align: center;
         }
 
-        .preview-loading .spinner {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 1rem;
+        .pdf-preview-modal .btn-close {
+            filter: invert(var(--text-primary-invert, 0));
         }
 
-        /* Theme specific adjustments */
-        [data-theme="light"] .preview-container {
+        /* Ensure PDF preview modal works well in both themes */
+        [data-theme="light"] .pdf-preview-modal .modal-content {
+            background: var(--glass-bg);
+        }
+
+        [data-theme="light"] .pdf-preview-container {
             background: var(--surface-1);
         }
 
-        [data-theme="light"] .preview-controls {
+        [data-theme="light"] .pdf-controls {
             background: var(--surface-2);
         }
+
+        [data-theme="light"] .pdf-error {
+            background: var(--glass-bg);
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Set worker path for PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
 </head>
 <body>
     <?php include 'src/includes/navbar.php'; ?>
@@ -1466,709 +1474,701 @@ try {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
-    
     <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            once: true
-        });
-        
-        // Debug flag - set to true to see console messages
-        const DEBUG = true;
-        
-        function debug(message) {
-            if (DEBUG) {
-                console.log(message);
-            }
+    // Initialize AOS
+    AOS.init({
+        duration: 800,
+        once: true
+    });
+    
+    // Debug flag - set to true to see console messages
+    const DEBUG = true;
+    
+    function debug(message) {
+        if (DEBUG) {
+            console.log(message);
         }
-        
-        // Initialize Bootstrap components
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
+    }
+    
+    // Initialize Bootstrap components
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    
+    const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+    let deleteTarget = null;
+    let deleteType = '';
+    
+    // Toggle comments visibility
+    document.querySelectorAll('.toggle-comments-btn').forEach(btn => {
+        debug('Initializing comment toggle for button: ' + btn.getAttribute('data-post-id'));
+        btn.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            
+            if (commentsSection) {
+                if (commentsSection.style.display === 'none') {
+                    commentsSection.style.display = 'block';
+                    this.classList.add('text-primary');
+                    this.classList.remove('text-muted');
+                } else {
+                    commentsSection.style.display = 'none';
+                    this.classList.add('text-muted');
+                    this.classList.remove('text-primary');
+                }
+            } else {
+                console.error(`Comments section not found for post ${postId}`);
+            }
         });
-        
-        const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
-        let deleteTarget = null;
-        let deleteType = '';
-        
-        // Toggle comments visibility
-        document.querySelectorAll('.toggle-comments-btn').forEach(btn => {
-            debug('Initializing comment toggle for button: ' + btn.getAttribute('data-post-id'));
-            btn.addEventListener('click', function() {
-                const postId = this.getAttribute('data-post-id');
-                const commentsSection = document.getElementById(`comments-${postId}`);
-                
-                if (commentsSection) {
-                    if (commentsSection.style.display === 'none') {
-                        commentsSection.style.display = 'block';
-                        this.classList.add('text-primary');
-                        this.classList.remove('text-muted');
+    });
+    
+    // Handle upvotes
+    document.querySelectorAll('.upvote-btn').forEach(btn => {
+        debug('Initializing upvote for button: ' + btn.getAttribute('data-post-id'));
+        btn.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+            const button = this;
+            
+            fetch('src/controller/update_votes.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postId: postId })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Update UI
+                    const countElements = document.querySelectorAll(`.upvote-count[data-post-id="${postId}"], .upvote-btn[data-post-id="${postId}"] .upvote-count`);
+                    countElements.forEach(el => {
+                        el.textContent = data.upvotes;
+                    });
+                    
+                    if (data.upvoted) {
+                        button.classList.add('text-primary', 'fw-bold');
+                        button.classList.remove('text-muted');
                     } else {
-                        commentsSection.style.display = 'none';
-                        this.classList.add('text-muted');
-                        this.classList.remove('text-primary');
+                        button.classList.add('text-muted');
+                        button.classList.remove('text-primary', 'fw-bold');
                     }
                 } else {
-                    console.error(`Comments section not found for post ${postId}`);
+                    throw new Error(data.message || 'Failed to update vote');
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating vote: ' + error.message);
             });
         });
+    });
+    
+    // Auto-resize textarea for comments
+    document.querySelectorAll('.add-comment-form textarea').forEach(textarea => {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
         
-        // Handle upvotes
-        document.querySelectorAll('.upvote-btn').forEach(btn => {
-            debug('Initializing upvote for button: ' + btn.getAttribute('data-post-id'));
-            btn.addEventListener('click', function() {
-                const postId = this.getAttribute('data-post-id');
-                const button = this;
-                
-                fetch('src/controller/update_votes.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ postId: postId })
+        // Focus event to expand textarea
+        textarea.addEventListener('focus', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.max(80, this.scrollHeight) + 'px';
+        });
+        
+        // Blur event to collapse textarea if empty
+        textarea.addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+                this.style.height = '40px';
+            }
+        });
+    });
+    
+    // Add comment
+    document.querySelectorAll('.add-comment-form').forEach(form => {
+        debug('Initializing comment form for post: ' + form.getAttribute('data-post-id'));
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const postId = this.getAttribute('data-post-id');
+            const textarea = this.querySelector('textarea');
+            const submitButton = this.querySelector('button[type="submit"]');
+            
+            if (!textarea || !submitButton) {
+                console.error('Required form elements not found');
+                return;
+            }
+            
+            const commentText = textarea.value.trim();
+            if (!commentText) {
+                alert('Please enter a comment');
+                return;
+            }
+            
+            // Disable form while submitting
+            textarea.disabled = true;
+            submitButton.disabled = true;
+            
+            fetch('src/controller/add_comment.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    postId: postId,
+                    comment: commentText
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Reload the page to show the new comment
+                    location.reload();
+                } else {
+                    throw new Error(data.message || 'Failed to add comment');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error adding comment: ' + error.message);
+            })
+            .finally(() => {
+                // Re-enable form
+                textarea.disabled = false;
+                submitButton.disabled = false;
+            });
+        });
+    });
+    
+    // Handle delete post button
+    document.querySelectorAll('.delete-post-btn').forEach(btn => {
+        debug('Initializing delete button for post: ' + btn.getAttribute('data-post-id'));
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            deleteTarget = this.getAttribute('data-post-id');
+            deleteType = 'post';
+            
+            document.getElementById('confirmation-message').textContent = 
+                'Are you sure you want to delete this post? This action cannot be undone.';
+            confirmationModal.show();
+        });
+    });
+    
+    // Handle delete comment button
+    document.querySelectorAll('.delete-comment-btn').forEach(btn => {
+        debug('Initializing delete button for comment');
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            deleteTarget = {
+                postId: this.getAttribute('data-post-id'),
+                commentIndex: this.getAttribute('data-comment-index')
+            };
+            deleteType = 'comment';
+            
+            document.getElementById('confirmation-message').textContent = 
+                'Are you sure you want to delete this comment? This action cannot be undone.';
+            confirmationModal.show();
+        });
+    });
+    
+    // Handle confirm delete button
+    const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function() {
+            if (!deleteTarget || !deleteType) {
+                console.error('Delete target or type not set');
+                return;
+            }
+            
+            let url = deleteType === 'post' ? 'src/controller/delete_post.php' : 'src/controller/delete_comment.php';
+            let data = deleteType === 'post' ? { postId: deleteTarget } : deleteTarget;
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    if (deleteType === 'post') {
+                        const postElement = document.getElementById(`post-${deleteTarget}`);
+                        if (postElement) {
+                            postElement.remove();
+                        }
+                    } else {
+                        const commentElement = document.getElementById(
+                            `comment-${deleteTarget.postId}-${deleteTarget.commentIndex}`
+                        );
+                        if (commentElement) {
+                            commentElement.remove();
+                        }
                     }
-                    return response.json();
+                    confirmationModal.hide();
+                } else {
+                    throw new Error(data.message || 'Failed to delete');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            });
+        });
+    }
+    
+    // Handle edit comment
+    document.querySelectorAll('.edit-comment-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const postId = this.getAttribute('data-post-id');
+            const commentIndex = this.getAttribute('data-comment-index');
+            const commentText = this.getAttribute('data-comment-text');
+            const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
+                const contentElement = commentElement.querySelector('.comment-content');
+            
+            if (!contentElement) return;
+            
+            // Create edit form
+            const editForm = document.createElement('div');
+            editForm.className = 'edit-form mt-2';
+            editForm.innerHTML = `
+                <textarea class="form-control mb-2">${commentText}</textarea>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-primary save-edit-btn">Save</button>
+                    <button class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
+                </div>
+            `;
+            
+            // Store original content
+            const originalContent = contentElement.innerHTML;
+            
+            // Replace content with edit form
+            contentElement.innerHTML = '';
+            contentElement.appendChild(editForm);
+            
+            // Focus textarea
+            const textarea = editForm.querySelector('textarea');
+            textarea.focus();
+            
+            // Handle save
+            editForm.querySelector('.save-edit-btn').addEventListener('click', async () => {
+            const newText = textarea.value.trim();
+            if (!newText) {
+                alert('Please enter a comment');
+                return;
+            }
+            
+                try {
+                    const response = await fetch('src/controller/edit_comment.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    postId: postId,
+                    commentIndex: parseInt(commentIndex),
+                    text: newText
                 })
-                .then(data => {
-                    if (data.success) {
-                        // Update UI
-                        const countElements = document.querySelectorAll(`.upvote-count[data-post-id="${postId}"], .upvote-btn[data-post-id="${postId}"] .upvote-count`);
-                        countElements.forEach(el => {
-                            el.textContent = data.upvotes;
-                        });
+                    });
+                    
+                    const data = await response.json();
+                if (data.success) {
+                        contentElement.innerHTML = nl2br(newText);
                         
-                        if (data.upvoted) {
-                            button.classList.add('text-primary', 'fw-bold');
-                            button.classList.remove('text-muted');
-                        } else {
-                            button.classList.add('text-muted');
-                            button.classList.remove('text-primary', 'fw-bold');
-                        }
-                    } else {
-                        throw new Error(data.message || 'Failed to update vote');
+                        // Update the data-comment-text attribute
+                        this.setAttribute('data-comment-text', newText);
+                        
+                        // Add edited indicator if not present
+                        const timeElement = commentElement.querySelector('.comment-time');
+                        if (timeElement && !timeElement.textContent.includes('(edited)')) {
+                            timeElement.textContent += ' (edited)';
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error updating vote: ' + error.message);
-                });
-            });
-        });
-        
-        // Auto-resize textarea for comments
-        document.querySelectorAll('.add-comment-form textarea').forEach(textarea => {
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
+                } else {
+                    throw new Error(data.message || 'Failed to update comment');
+                }
+                } catch (error) {
+                console.error('Error:', error);
+                alert('Error updating comment: ' + error.message);
+                    contentElement.innerHTML = originalContent;
+                }
             });
             
-            // Focus event to expand textarea
-            textarea.addEventListener('focus', function() {
-                this.style.height = 'auto';
-                this.style.height = Math.max(80, this.scrollHeight) + 'px';
+            // Handle cancel
+            editForm.querySelector('.cancel-edit-btn').addEventListener('click', () => {
+                contentElement.innerHTML = originalContent;
             });
+        });
+    });
+    
+    // Helper function to convert newlines to <br> tags
+    function nl2br(str) {
+        return str.replace(/\n/g, '<br>');
+    }
+    
+    // Handle delete comment
+    document.querySelectorAll('.delete-comment-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             
-            // Blur event to collapse textarea if empty
-            textarea.addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    this.style.height = '40px';
-                }
-            });
-        });
-        
-        // Add comment
-        document.querySelectorAll('.add-comment-form').forEach(form => {
-            debug('Initializing comment form for post: ' + form.getAttribute('data-post-id'));
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const postId = this.getAttribute('data-post-id');
-                const textarea = this.querySelector('textarea');
-                const submitButton = this.querySelector('button[type="submit"]');
-                
-                if (!textarea || !submitButton) {
-                    console.error('Required form elements not found');
-                    return;
-                }
-                
-                const commentText = textarea.value.trim();
-                if (!commentText) {
-                    alert('Please enter a comment');
-                    return;
-                }
-                
-                // Disable form while submitting
-                textarea.disabled = true;
-                submitButton.disabled = true;
-                
-                fetch('src/controller/add_comment.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        postId: postId,
-                        comment: commentText
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        // Reload the page to show the new comment
-                        location.reload();
-                    } else {
-                        throw new Error(data.message || 'Failed to add comment');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error adding comment: ' + error.message);
-                })
-                .finally(() => {
-                    // Re-enable form
-                    textarea.disabled = false;
-                    submitButton.disabled = false;
-                });
-            });
-        });
-        
-        // Handle delete post button
-        document.querySelectorAll('.delete-post-btn').forEach(btn => {
-            debug('Initializing delete button for post: ' + btn.getAttribute('data-post-id'));
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                deleteTarget = this.getAttribute('data-post-id');
-                deleteType = 'post';
-                
-                document.getElementById('confirmation-message').textContent = 
-                    'Are you sure you want to delete this post? This action cannot be undone.';
-                confirmationModal.show();
-            });
-        });
-        
-        // Handle delete comment button
-        document.querySelectorAll('.delete-comment-btn').forEach(btn => {
-            debug('Initializing delete button for comment');
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                deleteTarget = {
-                    postId: this.getAttribute('data-post-id'),
-                    commentIndex: this.getAttribute('data-comment-index')
-                };
-                deleteType = 'comment';
-                
-                document.getElementById('confirmation-message').textContent = 
-                    'Are you sure you want to delete this comment? This action cannot be undone.';
-                confirmationModal.show();
-            });
-        });
-        
-        // Handle confirm delete button
-        const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
-        if (confirmDeleteBtn) {
-            confirmDeleteBtn.addEventListener('click', function() {
-                if (!deleteTarget || !deleteType) {
-                    console.error('Delete target or type not set');
-                    return;
-                }
-                
-                let url = deleteType === 'post' ? 'src/controller/delete_post.php' : 'src/controller/delete_comment.php';
-                let data = deleteType === 'post' ? { postId: deleteTarget } : deleteTarget;
-                
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        if (deleteType === 'post') {
-                            const postElement = document.getElementById(`post-${deleteTarget}`);
-                            if (postElement) {
-                                postElement.remove();
-                            }
-                        } else {
-                            const commentElement = document.getElementById(
-                                `comment-${deleteTarget.postId}-${deleteTarget.commentIndex}`
-                            );
-                            if (commentElement) {
-                                commentElement.remove();
-                            }
-                        }
-                        confirmationModal.hide();
-                    } else {
-                        throw new Error(data.message || 'Failed to delete');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error: ' + error.message);
-                });
-            });
-        }
-        
-        // Handle edit comment
-        document.querySelectorAll('.edit-comment-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const postId = this.getAttribute('data-post-id');
-                const commentIndex = this.getAttribute('data-comment-index');
-                const commentText = this.getAttribute('data-comment-text');
-                const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
-                    const contentElement = commentElement.querySelector('.comment-content');
-                
-                if (!contentElement) return;
-                
-                // Create edit form
-                const editForm = document.createElement('div');
-                editForm.className = 'edit-form mt-2';
-                editForm.innerHTML = `
-                    <textarea class="form-control mb-2">${commentText}</textarea>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-primary save-edit-btn">Save</button>
-                        <button class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
-                    </div>
-                `;
-                
-                // Store original content
-                const originalContent = contentElement.innerHTML;
-                
-                // Replace content with edit form
-                contentElement.innerHTML = '';
-                contentElement.appendChild(editForm);
-                
-                // Focus textarea
-                const textarea = editForm.querySelector('textarea');
-                textarea.focus();
-                
-                // Handle save
-                editForm.querySelector('.save-edit-btn').addEventListener('click', async () => {
-                const newText = textarea.value.trim();
-                if (!newText) {
-                    alert('Please enter a comment');
-                    return;
-                }
-                
-                    try {
-                        const response = await fetch('src/controller/edit_comment.php', {
+            const postId = this.getAttribute('data-post-id');
+            const commentIndex = this.getAttribute('data-comment-index');
+            
+            if (confirm('Are you sure you want to delete this comment? This action cannot be undone.')) {
+                fetch('src/controller/delete_comment.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         postId: postId,
-                        commentIndex: parseInt(commentIndex),
-                        text: newText
+                        commentIndex: parseInt(commentIndex)
                     })
-                        });
-                        
-                        const data = await response.json();
+                })
+                .then(response => response.json())
+                .then(data => {
                     if (data.success) {
-                            contentElement.innerHTML = nl2br(newText);
-                            
-                            // Update the data-comment-text attribute
-                            this.setAttribute('data-comment-text', newText);
-                            
-                            // Add edited indicator if not present
-                            const timeElement = commentElement.querySelector('.comment-time');
-                            if (timeElement && !timeElement.textContent.includes('(edited)')) {
-                                timeElement.textContent += ' (edited)';
+                        const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
+                        if (commentElement) {
+                            commentElement.remove();
                         }
                     } else {
-                        throw new Error(data.message || 'Failed to update comment');
+                        throw new Error(data.message || 'Failed to delete comment');
                     }
-                    } catch (error) {
+                })
+                .catch(error => {
                     console.error('Error:', error);
-                    alert('Error updating comment: ' + error.message);
-                        contentElement.innerHTML = originalContent;
-                    }
+                    alert('Error deleting comment: ' + error.message);
                 });
-                
-                // Handle cancel
-                editForm.querySelector('.cancel-edit-btn').addEventListener('click', () => {
-                    contentElement.innerHTML = originalContent;
-                });
-            });
+            }
         });
+    });
+    
+    debug('All event listeners initialized');
+    
+    // Make entire posts clickable
+    document.querySelectorAll('.forum-post').forEach(post => {
+        const postId = post.id.replace('post-', '');
         
-        // Helper function to convert newlines to <br> tags
-        function nl2br(str) {
-            return str.replace(/\n/g, '<br>');
-        }
-        
-        // Handle delete comment
-        document.querySelectorAll('.delete-comment-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const postId = this.getAttribute('data-post-id');
-                const commentIndex = this.getAttribute('data-comment-index');
-                
-                if (confirm('Are you sure you want to delete this comment? This action cannot be undone.')) {
-                    fetch('src/controller/delete_comment.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            postId: postId,
-                            commentIndex: parseInt(commentIndex)
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
-                            if (commentElement) {
-                                commentElement.remove();
-                            }
-                        } else {
-                            throw new Error(data.message || 'Failed to delete comment');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error deleting comment: ' + error.message);
-                    });
-                }
-            });
-        });
-        
-        debug('All event listeners initialized');
-        
-        // Make entire posts clickable
-        document.querySelectorAll('.forum-post').forEach(post => {
-            const postId = post.id.replace('post-', '');
+        post.addEventListener('click', function(e) {
+            // Don't navigate if clicking on interactive elements
+            const interactiveElements = [
+                'button', 'a', 'input', 'textarea', 'select', 
+                '.btn', '.dropdown-toggle', '.dropdown-item',
+                '.upvote-btn', '.toggle-comments-btn', '.share-btn',
+                '.edit-post-btn', '.delete-post-btn', '.edit-comment-btn', '.delete-comment-btn'
+            ];
             
-            post.addEventListener('click', function(e) {
-                // Don't navigate if clicking on interactive elements
-                const interactiveElements = [
-                    'button', 'a', 'input', 'textarea', 'select', 
-                    '.btn', '.dropdown-toggle', '.dropdown-item',
-                    '.upvote-btn', '.toggle-comments-btn', '.share-btn',
-                    '.edit-post-btn', '.delete-post-btn', '.edit-comment-btn', '.delete-comment-btn'
-                ];
-                
-                // Check if the clicked element or its parents are interactive
-                let isInteractive = false;
-                for (let selector of interactiveElements) {
-                    if (e.target.matches(selector) || e.target.closest(selector)) {
-                        isInteractive = true;
-                        break;
-                    }
-                }
-                
-                // Also check if we're in a form or comment section that's being edited
-                if (e.target.closest('.add-comment-form') || 
-                    e.target.closest('.edit-comment-form') || 
-                    e.target.closest('.comment-section')) {
+            // Check if the clicked element or its parents are interactive
+            let isInteractive = false;
+            for (let selector of interactiveElements) {
+                if (e.target.matches(selector) || e.target.closest(selector)) {
                     isInteractive = true;
-                }
-                
-                // Navigate to post details if not clicking on interactive elements
-                if (!isInteractive) {
-                    window.location.href = `post_details.php?id=${postId}`;
-                }
-            });
-            
-            // Add visual feedback for clickability
-            post.addEventListener('mouseenter', function(e) {
-                // Don't show pointer cursor on interactive elements
-                if (!e.target.matches('button, a, input, textarea, select, .btn')) {
-                    this.style.cursor = 'pointer';
-                }
-            });
-        });
-        
-        // Theme handling - Listen for theme changes from navbar
-        document.addEventListener('themeChanged', function(e) {
-            debug('Theme changed to: ' + e.detail.theme);
-            
-            // Update modal close button filter for theme
-            const closeButton = document.querySelector('.modal .btn-close');
-            if (closeButton) {
-                if (e.detail.theme === 'light') {
-                    closeButton.style.filter = 'invert(0)';
-                } else {
-                    closeButton.style.filter = 'invert(1)';
+                    break;
                 }
             }
             
-            // Force repaint for smooth transitions
-            document.body.style.transform = 'translateZ(0)';
-            setTimeout(() => {
-                document.body.style.transform = '';
-            }, 50);
+            // Also check if we're in a form or comment section that's being edited
+            if (e.target.closest('.add-comment-form') || 
+                e.target.closest('.edit-comment-form') || 
+                e.target.closest('.comment-section')) {
+                isInteractive = true;
+            }
+            
+            // Navigate to post details if not clicking on interactive elements
+            if (!isInteractive) {
+                window.location.href = `post_details.php?id=${postId}`;
+            }
         });
         
-        // Initialize theme on page load
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        // Add visual feedback for clickability
+        post.addEventListener('mouseenter', function(e) {
+            // Don't show pointer cursor on interactive elements
+            if (!e.target.matches('button, a, input, textarea, select, .btn')) {
+                this.style.cursor = 'pointer';
+            }
+        });
+    });
+    
+    // Theme handling - Listen for theme changes from navbar
+    document.addEventListener('themeChanged', function(e) {
+        debug('Theme changed to: ' + e.detail.theme);
+        
+        // Update modal close button filter for theme
         const closeButton = document.querySelector('.modal .btn-close');
         if (closeButton) {
-            if (currentTheme === 'light') {
+            if (e.detail.theme === 'light') {
                 closeButton.style.filter = 'invert(0)';
             } else {
                 closeButton.style.filter = 'invert(1)';
             }
         }
         
-        // Handle share button clicks
-        document.querySelectorAll('.share-btn').forEach(btn => {
-            btn.addEventListener('click', async function() {
-                const postUrl = this.getAttribute('data-post-url');
-                try {
-                    await navigator.clipboard.writeText(postUrl);
-                    // Show a temporary tooltip
-                    const tooltip = document.createElement('div');
-                    tooltip.textContent = 'Link copied!';
-                    tooltip.style.cssText = `
-                        position: fixed;
-                        background: rgba(0,0,0,0.8);
-                        color: white;
-                        padding: 8px 16px;
-                        border-radius: 4px;
-                        z-index: 1000;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                    `;
-                    document.body.appendChild(tooltip);
-                    setTimeout(() => tooltip.remove(), 2000);
-                } catch (err) {
-                    console.error('Failed to copy:', err);
-                    alert('Failed to copy link. Please try again.');
-                }
-            });
+        // Force repaint for smooth transitions
+        document.body.style.transform = 'translateZ(0)';
+        setTimeout(() => {
+            document.body.style.transform = '';
+        }, 50);
     });
-
-    // File Preview Functionality
-    const filePreviewModal = new bootstrap.Modal(document.getElementById('filePreviewModal'));
-    const previewContainer = document.querySelector('.preview-container');
-    const loadingIndicator = document.querySelector('.preview-loading');
-
-    function showLoading() {
-        loadingIndicator.classList.remove('d-none');
-    }
-
-    function hideLoading() {
-        loadingIndicator.classList.add('d-none');
-    }
-
-    function showError(message) {
-        const error = document.createElement('div');
-        error.className = 'preview-error';
-        error.innerHTML = `
-            <i class="bi bi-exclamation-circle text-danger fs-1"></i>
-            <h4 class="mt-3">Error</h4>
-            <p>${message}</p>
-        `;
-        previewContainer.appendChild(error);
-    }
-
-    function clearPreviewContainer() {
-        while (previewContainer.firstChild) {
-            previewContainer.removeChild(previewContainer.firstChild);
-        }
-        previewContainer.appendChild(loadingIndicator);
-    }
-
-    async function previewImage(url) {
-        try {
-            clearPreviewContainer();
-            showLoading();
-
-            const img = document.createElement('img');
-            img.className = 'preview-image';
-            img.src = url;
-
-            img.onload = () => {
-                hideLoading();
-            };
-
-            img.onerror = () => {
-                throw new Error('Failed to load image');
-            };
-
-            previewContainer.appendChild(img);
-        } catch (error) {
-            console.error('Error previewing image:', error);
-            showError('Failed to load image. Please try downloading the file instead.');
-            hideLoading();
+    
+    // Initialize theme on page load
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const closeButton = document.querySelector('.modal .btn-close');
+    if (closeButton) {
+        if (currentTheme === 'light') {
+            closeButton.style.filter = 'invert(0)';
+        } else {
+            closeButton.style.filter = 'invert(1)';
         }
     }
-
-    async function previewDocument(url, fileType) {
-        try {
-            clearPreviewContainer();
-            showLoading();
-
-            const wrapper = document.createElement('div');
-            wrapper.className = 'doc-preview-wrapper';
-
-            const iframe = document.createElement('iframe');
-            iframe.className = 'preview-iframe';
-            
-            // Use Google Docs Viewer for documents
-            const googleViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
-            iframe.src = googleViewerUrl;
-
-            iframe.onload = () => {
-                hideLoading();
-            };
-
-            iframe.onerror = () => {
-                throw new Error('Failed to load document preview');
-            };
-
-            wrapper.appendChild(iframe);
-            previewContainer.appendChild(wrapper);
-        } catch (error) {
-            console.error('Error previewing document:', error);
-            showError('Failed to load document preview. Please try downloading the file instead.');
-            hideLoading();
-        }
-    }
-
-    async function previewPDF(url) {
-        try {
-            clearPreviewContainer();
-            showLoading();
-
-            const canvas = document.createElement('canvas');
-            canvas.id = 'pdf-viewer';
-            previewContainer.appendChild(canvas);
-
-            const loadingTask = pdfjsLib.getDocument(url);
-            const pdf = await loadingTask.promise;
-            
-            const page = await pdf.getPage(1);
-            const viewport = page.getViewport({ scale: 1.5 });
-            
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-            
-            const renderContext = {
-                canvasContext: canvas.getContext('2d'),
-                viewport: viewport
-            };
-
-            await page.render(renderContext).promise;
-            hideLoading();
-        } catch (error) {
-            console.error('Error previewing PDF:', error);
-            showError('Failed to load PDF. The file might be corrupted or inaccessible.');
-            hideLoading();
-        }
-    }
-
-    // Handle attachment clicks
-    document.querySelectorAll('.attachment-file').forEach(link => {
-        link.addEventListener('click', async function(e) {
-            const filePath = this.getAttribute('href');
-            const fileName = this.querySelector('span').textContent;
-            const fileExt = fileName.split('.').pop().toLowerCase();
-
-            // Update modal title and download link
-            document.getElementById('filePreviewTitle').textContent = fileName;
-            const downloadBtn = document.getElementById('downloadFile');
-            downloadBtn.href = filePath;
-            downloadBtn.setAttribute('download', fileName);
-
-            // Determine file type and handle preview
-            const imageTypes = ['jpg', 'jpeg', 'png', 'gif'];
-            const documentTypes = ['doc', 'docx', 'ppt', 'pptx'];
-
-            if (imageTypes.includes(fileExt)) {
-                e.preventDefault();
-                filePreviewModal.show();
-                await previewImage(filePath);
-            } else if (fileExt === 'pdf') {
-                e.preventDefault();
-                filePreviewModal.show();
-                await previewPDF(filePath);
-            } else if (documentTypes.includes(fileExt)) {
-                e.preventDefault();
-                filePreviewModal.show();
-                await previewDocument(filePath, fileExt);
+    
+    // Handle share button clicks
+    document.querySelectorAll('.share-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const postUrl = this.getAttribute('data-post-url');
+            try {
+                await navigator.clipboard.writeText(postUrl);
+                // Show a temporary tooltip
+                const tooltip = document.createElement('div');
+                tooltip.textContent = 'Link copied!';
+                tooltip.style.cssText = `
+                    position: fixed;
+                    background: rgba(0,0,0,0.8);
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                    z-index: 1000;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                `;
+                document.body.appendChild(tooltip);
+                setTimeout(() => tooltip.remove(), 2000);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy link. Please try again.');
             }
-            // For other file types, let the default download behavior happen
         });
     });
-
-    // Clean up on modal close
-    document.getElementById('filePreviewModal').addEventListener('hidden.bs.modal', function () {
-        clearPreviewContainer();
-    });
-
-    // Initialize lightbox for gallery images
-    lightbox.option({
-        'resizeDuration': 200,
-        'wrapAround': true,
-        'showImageNumberLabel': false
-    });
-
-    // Set worker path for PDF.js
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
-
-    <!-- Add this before closing body tag -->
-    <!-- File Preview Modal -->
-    <div class="modal fade file-preview-modal" id="filePreviewModal" tabindex="-1">
+    
+    <!-- PDF Preview Modal -->
+    <div class="modal fade pdf-preview-modal" id="pdfPreviewModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="filePreviewTitle">File Preview</h5>
+                    <h5 class="modal-title" id="pdfPreviewTitle">PDF Preview</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="preview-container">
-                        <!-- Preview content will be inserted here -->
-                        <div class="preview-loading d-none">
-                            <div class="spinner-border text-primary spinner" role="status">
+                    <div class="pdf-preview-container">
+                        <canvas id="pdf-viewer"></canvas>
+                        <div class="loading-spinner d-none">
+                            <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
                             </div>
-                            <div class="loading-text">Loading preview...</div>
                         </div>
                     </div>
-                    <div class="preview-controls">
-                        <a href="#" class="btn btn-primary" id="downloadFile" download>
+                    <div class="pdf-controls">
+                        <button class="btn btn-primary" id="prevPage">
+                            <i class="bi bi-chevron-left"></i> Previous
+                        </button>
+                        <div class="pdf-page-info">
+                            Page <span id="currentPage">0</span> of <span id="totalPages">0</span>
+                        </div>
+                        <button class="btn btn-primary" id="nextPage">
+                            Next <i class="bi bi-chevron-right"></i>
+                        </button>
+                        <a href="#" class="btn btn-secondary" id="downloadPdf" download>
                             <i class="bi bi-download"></i> Download
                         </a>
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">
-                            <i class="bi bi-x"></i> Close
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <script>
+    // PDF Preview Functionality
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageRendering = false;
+    let pageNumPending = null;
+    let scale = 1.5;
+    const canvas = document.getElementById('pdf-viewer');
+    const ctx = canvas.getContext('2d');
+
+    function showError(message) {
+        const container = document.querySelector('.pdf-preview-container');
+        const error = document.createElement('div');
+        error.className = 'pdf-error';
+        error.innerHTML = `
+            <i class="bi bi-exclamation-circle text-danger fs-1"></i>
+            <h4 class="mt-3">Error</h4>
+            <p>${message}</p>
+        `;
+        container.appendChild(error);
+    }
+
+    function showLoading() {
+        document.querySelector('.loading-spinner').classList.remove('d-none');
+    }
+
+    function hideLoading() {
+        document.querySelector('.loading-spinner').classList.add('d-none');
+    }
+
+    async function renderPage(num) {
+        pageRendering = true;
+        try {
+            const page = await pdfDoc.getPage(num);
+            const viewport = page.getViewport({ scale });
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+
+            await page.render(renderContext).promise;
+            pageRendering = false;
+
+            if (pageNumPending !== null) {
+                renderPage(pageNumPending);
+                pageNumPending = null;
+            }
+
+            // Update page counters
+            document.getElementById('currentPage').textContent = num;
+        } catch (error) {
+            console.error('Error rendering PDF page:', error);
+            showError('Failed to render PDF page. Please try downloading the file instead.');
+            hideLoading();
+        }
+    }
+
+    function queueRenderPage(num) {
+        if (pageRendering) {
+            pageNumPending = num;
+        } else {
+            renderPage(num);
+        }
+    }
+
+    async function loadPDF(url) {
+        try {
+            showLoading();
+            const loadingTask = pdfjsLib.getDocument(url);
+            pdfDoc = await loadingTask.promise;
+            document.getElementById('totalPages').textContent = pdfDoc.numPages;
+            renderPage(1);
+            hideLoading();
+        } catch (error) {
+            console.error('Error loading PDF:', error);
+            showError('Failed to load PDF. The file might be corrupted or inaccessible.');
+            hideLoading();
+        }
+    }
+
+    // Event listeners for PDF controls
+    document.getElementById('prevPage').addEventListener('click', () => {
+        if (pageNum <= 1) return;
+        pageNum--;
+        queueRenderPage(pageNum);
+    });
+
+    document.getElementById('nextPage').addEventListener('click', () => {
+        if (pageNum >= pdfDoc?.numPages) return;
+        pageNum++;
+        queueRenderPage(pageNum);
+    });
+
+    // Initialize PDF preview modal
+    const pdfPreviewModal = new bootstrap.Modal(document.getElementById('pdfPreviewModal'));
+
+    // Handle attachment clicks for PDF files
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find all attachment links across all posts
+        document.querySelectorAll('.attachment-file, .attachment-item a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const filePath = this.getAttribute('href');
+                if (!filePath) return;
+                
+                // For attachments without specific file info in the DOM, extract from the path
+                let fileName = '';
+                const fileNameElement = this.querySelector('span');
+                if (fileNameElement) {
+                    fileName = fileNameElement.textContent.trim();
+                } else {
+                    fileName = filePath.split('/').pop();
+                }
+                
+                const fileExt = fileName.split('.').pop().toLowerCase();
+                
+                if (fileExt === 'pdf') {
+                    e.preventDefault();
+                    
+                    // Reset PDF viewer state
+                    pageNum = 1;
+                    pdfDoc = null;
+                    if (ctx) {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                    document.getElementById('currentPage').textContent = '0';
+                    document.getElementById('totalPages').textContent = '0';
+                    
+                    // Update modal title and download link
+                    document.getElementById('pdfPreviewTitle').textContent = fileName;
+                    const downloadBtn = document.getElementById('downloadPdf');
+                    downloadBtn.href = filePath;
+                    downloadBtn.setAttribute('download', fileName);
+                    
+                    // Remove any existing error messages
+                    const existingError = document.querySelector('.pdf-error');
+                    if (existingError) existingError.remove();
+                    
+                    // Show modal and load PDF
+                    pdfPreviewModal.show();
+                    loadPDF(filePath);
+                }
+            });
+        });
+    });
+        
+    // Handle modal close
+    document.getElementById('pdfPreviewModal').addEventListener('hidden.bs.modal', function () {
+        // Clean up PDF viewer state
+        pdfDoc = null;
+        pageNum = 1;
+        if (ctx) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        const existingError = document.querySelector('.pdf-error');
+        if (existingError) existingError.remove();
+    });
+    </script>
 </body>
 </html>
