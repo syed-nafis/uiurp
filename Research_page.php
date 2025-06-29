@@ -1,8 +1,25 @@
 <?php
 session_start();
 
+// Add recommendation engine includes
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/src/model/recommendation_engine.php';
+require_once __DIR__ . '/src/model/user_preferences.php';
+
+// Initialize recommendation engine
+$recommendationEngine = new RecommendationEngine();
+$isPersonalized = false;
+
+// Check if user has personalized data
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+    $recommendations = $recommendationEngine->getDashboardRecommendations($userId);
+    $isPersonalized = $recommendations['is_personalized'] ?? false;
+}
+
 // Get search parameter from URL if it exists
 $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
+$sortOption = isset($_GET['sort']) ? $_GET['sort'] : (isset($_SESSION['user_id']) ? 'recommended' : 'newest');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1492,9 +1509,21 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
                     <h1 class="hero-title" data-aos="fade-down" data-aos-duration="1000">
                         Discover Innovative Research
                     </h1>
-                    <p class="hero-subtitle mb-5" data-aos="fade-up" data-aos-delay="200" style="font-size: 1.3rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 3rem; line-height: 1.6;">
+                    <p class="hero-subtitle mb-3" data-aos="fade-up" data-aos-delay="200" style="font-size: 1.3rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 1rem; line-height: 1.6;">
                         Explore groundbreaking research projects from brilliant minds around the world
                     </p>
+                    <?php if (isset($_SESSION['user_id']) && $sortOption === 'recommended'): ?>
+                    <p class="personalized-subtitle mb-5" data-aos="fade-up" data-aos-delay="300" style="font-size: 1rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 3rem; text-align: center;">
+                        <?php if ($isPersonalized): ?>
+                            <i class="fas fa-star" style="color: var(--modern-blue); margin-right: 8px;"></i>
+                            Showing projects tailored to your interests and activity
+                        <?php else: ?>
+                            <small>Keep interacting with projects to get personalized recommendations!</small>
+                        <?php endif; ?>
+                    </p>
+                    <?php else: ?>
+                    <div style="margin-bottom: 2rem;"></div>
+                    <?php endif; ?>
                     
                     <!-- Compact Search Bar -->
                     <div class="compact-search-container" data-aos="fade-up" data-aos-delay="300">
@@ -1508,12 +1537,22 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
           </div>
         </div>
                         
-                        <div class="text-center mt-3 d-flex justify-content-center gap-3">
-                            <button class="toggle-btn-compact" id="toggle-projects">
-                                <i class="fas fa-filter me-2"></i>Show All Projects
+                        <div class="text-center mt-3 d-flex justify-content-center gap-3 flex-wrap">
+                            <?php if (isset($_SESSION['user_id'])): ?>
+                            <button class="toggle-btn-compact" id="toggle-recommended">
+                                <i class="fas fa-star me-2"></i>
+                                <?php if ($isPersonalized): ?>
+                                    Recommended for You
+                                <?php else: ?>
+                                    Recommended for You
+                                <?php endif; ?>
                             </button>
+                            <?php endif; ?>
                             <button class="toggle-btn-compact" id="toggle-sort">
                                 <i class="fas fa-sort me-2"></i>Sort by Views
+                            </button>
+                            <button class="toggle-btn-compact" id="toggle-projects">
+                                <i class="fas fa-filter me-2"></i>Show All Projects
                             </button>
                         </div>
     </div>
@@ -1849,11 +1888,13 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
       const searchButton = document.getElementById('search-bttn');
       const toggleButton = document.getElementById('toggle-projects');
       const toggleSortButton = document.getElementById('toggle-sort');
+      const toggleRecommendedButton = document.getElementById('toggle-recommended');
       const loader = document.getElementById('loader');
       const exploreBtn = document.querySelector('.hero-actions .btn-primary');
       
       let showAllProjects = false;
-      let sortByClicks = true;
+      let sortByClicks = false;
+      let showRecommended = <?php echo (isset($_SESSION['user_id']) && $sortOption === 'recommended') ? 'true' : 'false'; ?>;
       let searchTimeout;
 
         // Explore Projects button functionality
@@ -1921,6 +1962,7 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
         // Enhanced toggle functionality
         if (toggleButton) {
             toggleButton.addEventListener('click', function() {
+                showRecommended = false;
                 showAllProjects = !showAllProjects;
                 
                 // Update button text with animation
@@ -1932,19 +1974,96 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
                     this.style.transform = 'scale(1)';
                 }, 150);
                 
+                // Reset other buttons and highlight this one
+                resetButtonStates();
+                this.style.background = 'linear-gradient(135deg, var(--modern-blue), var(--modern-purple))';
+                this.style.color = 'white';
+                
                 // Clear search input and reload default projects
                 if (searchBar) {
                     searchBar.value = '';
                 }
                 
-                const endpoint = 'src/model/fetch_projects.php?limit=15';
-                loadProjects(endpoint, sortByClicks);
+                const endpoint = 'src/model/fetch_projects.php?limit=50';
+                loadProjects(endpoint, false);
+            });
+        }
+
+        // Helper function to reset button states
+        function resetButtonStates() {
+            [toggleRecommendedButton, toggleSortButton, toggleButton].forEach(btn => {
+                if (btn) {
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }
+            });
+        }
+
+        // Function to load personalized projects
+        function loadPersonalizedProjects() {
+            showLoader();
+            
+            fetch('src/model/fetch_recommended_projects.php?limit=50')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    setTimeout(() => {
+                        if (data.projects) {
+                            displayProjects(data.projects, data.is_personalized);
+                        } else {
+                            displayProjects(data, false);
+                        }
+                        hideLoader();
+                        
+                        // Smooth scroll to results
+                        projectsList.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }, 300);
+                })
+                .catch(error => {
+                    console.error('Load personalized projects error:', error);
+                    hideLoader();
+                    // Fallback to regular projects
+                    loadProjects('src/model/fetch_projects.php?limit=50', false);
+                });
+        }
+
+        // Recommended toggle functionality
+        if (toggleRecommendedButton) {
+            toggleRecommendedButton.addEventListener('click', function() {
+                showRecommended = true;
+                sortByClicks = false;
+                
+                // Update button text with animation
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+                
+                // Reset other buttons
+                resetButtonStates();
+                this.style.background = 'linear-gradient(135deg, var(--modern-blue), var(--modern-purple))';
+                this.style.color = 'white';
+                
+                // Clear search input and load recommended projects
+                if (searchBar) {
+                    searchBar.value = '';
+                }
+                
+                loadPersonalizedProjects();
             });
         }
 
         // Sort toggle functionality
         if (toggleSortButton) {
             toggleSortButton.addEventListener('click', function() {
+                showRecommended = false;
                 sortByClicks = !sortByClicks;
                 
                 // Update button text with animation
@@ -1952,17 +2071,22 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
                 setTimeout(() => {
                     this.innerHTML = sortByClicks ? 
                         '<i class="fas fa-sort me-2"></i>Sort by Views' : 
-                        '<i class="fas fa-sort me-2"></i>Sort by Relevance';
+                        '<i class="fas fa-sort me-2"></i>Sort by Newest';
                     this.style.transform = 'scale(1)';
                 }, 150);
+                
+                // Reset other buttons and highlight this one
+                resetButtonStates();
+                this.style.background = 'linear-gradient(135deg, var(--modern-blue), var(--modern-purple))';
+                this.style.color = 'white';
                 
                 // Clear search input and reload projects with new sorting
                 if (searchBar) {
                     searchBar.value = '';
                 }
                 
-                const endpoint = 'src/model/fetch_projects.php?limit=15';
-                loadProjects(endpoint, sortByClicks);
+                const endpoint = sortByClicks ? 'src/model/fetch_projects_by_clicks.php' : 'src/model/fetch_projects.php?limit=50';
+                loadProjects(endpoint, false);
             });
         }
       
@@ -1999,6 +2123,10 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
         function performSearch(query) {
           const searchEndpoint = 'src/model/search_projects.php';
           
+          // Reset recommendation state when searching
+          showRecommended = false;
+          resetButtonStates();
+          
           // Update URL with search parameter
           const newUrl = new URL(window.location);
           if (query && query.trim()) {
@@ -2026,7 +2154,7 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
             })
               .then(data => {
                 setTimeout(() => {
-                  displayProjects(data);
+                  displayProjects(data, false);
                   hideLoader();
                   
                     // Smooth scroll to results
@@ -2063,7 +2191,7 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
                 })
                 .then(data => {
                   setTimeout(() => {
-                        displayProjects(data);
+                        displayProjects(data, false);
                         hideLoader();
                   }, 300);
               })
@@ -2085,14 +2213,14 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
             `;
         }
 
-        function displayProjects(projects) {
+        function displayProjects(projects, isPersonalized = false) {
             projectsList.innerHTML = '';
             
             if (projects && projects.length > 0) {
                 const uniqueProjects = removeDuplicateProjects(projects);
                 
                 uniqueProjects.forEach((project, index) => {
-                    const projectCard = createProjectCard(project, index);
+                    const projectCard = createProjectCard(project, index, isPersonalized);
                     projectsList.appendChild(projectCard);
                 });
                 
@@ -2103,12 +2231,16 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
                 }, 100);
                 
             } else {
+                const message = showRecommended && isPersonalized === false ? 
+                    "Keep interacting with projects to get personalized recommendations!" :
+                    "No projects found. Try different keywords or browse all available projects.";
+                    
                 projectsList.innerHTML = `
                     <div class="no-results fade-in-up">
                         <div class="no-results-icon">
                             <i class="fas fa-search"></i>
                         </div>
-                        <p class="no-results-text">No projects found. Try different keywords or browse all available projects.</p>
+                        <p class="no-results-text">${message}</p>
                     </div>
                 `;
             }
@@ -2129,7 +2261,7 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
             return uniqueProjects;
         }
 
-        function createProjectCard(project, index) {
+        function createProjectCard(project, index, isPersonalized = false) {
             const card = document.createElement('div');
             card.className = 'project-card fade-in-up';
             card.setAttribute('data-aos', 'fade-up');
@@ -2152,13 +2284,16 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
             const imageSrc = getProjectImage(project.coverImage);
             const badgeInfo = getProjectBadge(project.privacy);
             
-            // Add tracking metadata
+            // Add tracking metadata including personalization info
             const trackingData = {
                 title: project.title,
                 category: project.category || 'Research',
                 field: project.field || 'Research',
                 keywords: project.keywords || [],
-                tags: [project.category || 'Research', project.field || 'Research'].filter(Boolean)
+                tags: [project.category || 'Research', project.field || 'Research'].filter(Boolean),
+                relevance_score: project.relevance_score || 0,
+                is_recommended: project.is_recommended || false,
+                is_personalized: isPersonalized
             };
             
             card.innerHTML = `
@@ -2280,6 +2415,14 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
             return text.substring(0, maxLength) + '...';
         }
 
+        // Initialize button states based on default sorting
+        function initializeButtonStates() {
+            if (showRecommended && toggleRecommendedButton) {
+                toggleRecommendedButton.style.background = 'linear-gradient(135deg, var(--modern-blue), var(--modern-purple))';
+                toggleRecommendedButton.style.color = 'white';
+            }
+        }
+
         // Initialize with URL search parameter or default projects
         const urlParams = new URLSearchParams(window.location.search);
         const urlSearchQuery = urlParams.get('search');
@@ -2290,8 +2433,17 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
                 performSearch(urlSearchQuery.trim());
             }, 100);
         } else {
-            // Load default projects with relevance sorting
-            loadProjects('src/model/fetch_projects.php?limit=15', true);
+            // Load default projects based on user state
+            if (showRecommended) {
+                setTimeout(() => {
+                    loadPersonalizedProjects();
+                    initializeButtonStates();
+                }, 100);
+            } else {
+                setTimeout(() => {
+                    loadProjects('src/model/fetch_projects.php?limit=50', false);
+                }, 100);
+            }
         }
     }
 

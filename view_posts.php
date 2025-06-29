@@ -9,6 +9,10 @@ require_once __DIR__ . '/src/model/db_connect.php';
 // Import MongoDB classes
 require_once __DIR__ . '/vendor/autoload.php';
 
+// Add recommendation engine includes
+require_once __DIR__ . '/src/model/recommendation_engine.php';
+require_once __DIR__ . '/src/model/user_preferences.php';
+
 use \MongoDB\BSON\UTCDateTime;
 use \MongoDB\BSON\ObjectId;
 use \MongoDB\Client;
@@ -23,113 +27,209 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     exit();
 }
 
+// Initialize recommendation engine
+$recommendationEngine = new RecommendationEngine();
+$isPersonalized = false;
+$personalizedPosts = [];
+
 try {
     $client = connectToDatabase();
     $db = $client->uiurp;
     $forumPostsCollection = $db->forum_posts;
     
     // Get filter and sorting parameters
-    $sortOption = $_GET['sort'] ?? 'newest';
+    // Default to 'recommended' if user is logged in, otherwise 'newest'
+    $defaultSort = isset($_SESSION['user_id']) ? 'recommended' : 'newest';
+    $sortOption = $_GET['sort'] ?? $defaultSort;
     $tagFilter = $_GET['tag'] ?? '';
     
-    // Build query for forum_posts collection
-    $queryPosts = [];
-    if (!empty($tagFilter)) {
-        // Use $in operator to find posts that contain the specified tag
-        $queryPosts['tags'] = ['$in' => [$tagFilter]];
-    }
-    
-    // Set up sorting
-    $sortPosts = [];
-    switch ($sortOption) {
-        case 'upvotes':
-            $sortPosts = ['upvotes' => -1];
-            break;
-        case 'newest':
-        default:
-            $sortPosts = ['created_at' => -1];
-            break;
-    }
-    
-    // Fetch posts from forum_posts collection
-    $optionsPosts = ['sort' => $sortPosts];
-    $newPosts = $forumPostsCollection->find($queryPosts, $optionsPosts)->toArray();
-    
-    // Debug output
-    error_log("Found " . count($newPosts) . " posts in forum_posts collection");
-    
-    // Map posts to ensure consistent structure
-    $allPosts = [];
-    foreach ($newPosts as $post) {
-        try {
-                $currentTime = new \MongoDB\BSON\UTCDateTime((int)(microtime(true) * 1000));
-            
-            // Convert BSONArray objects to PHP arrays
-            $tags = $post['tags'] ?? ['discussion'];
-            if ($tags instanceof MongoDB\Model\BSONArray) {
-                $tags = $tags->getArrayCopy();
+    // Check if user wants personalized recommendations
+    if ($sortOption === 'recommended' && isset($_SESSION['user_id'])) {
+        // Get personalized forum posts from recommendation engine
+        $userId = $_SESSION['user_id'];
+        
+        // Get a larger set of personalized posts (up to 50)
+        $personalizedPosts = $recommendationEngine->getRecommendedForumPosts($userId, 50);
+        
+        // Check if we got personalized results
+        $hasPersonalizedResults = false;
+        foreach ($personalizedPosts as $post) {
+            if (isset($post['relevance_score']) && $post['relevance_score'] > 0) {
+                $hasPersonalizedResults = true;
+                break;
             }
-            
-            $upvotedBy = $post['upvoted_by'] ?? [];
-            if ($upvotedBy instanceof MongoDB\Model\BSONArray) {
-                $upvotedBy = $upvotedBy->getArrayCopy();
-            }
-            
-            $comments = $post['comments'] ?? [];
-            if ($comments instanceof MongoDB\Model\BSONArray) {
-                $comments = $comments->getArrayCopy();
-            }
-            
-            $attachments = $post['attachments'] ?? [];
-            if ($attachments instanceof MongoDB\Model\BSONArray) {
-                $attachments = $attachments->getArrayCopy();
-            }
-            
-            $mappedPost = [
-                '_id' => $post['_id'],
-                'user_id' => $post['user_id'] ?? null,
-                'user_name' => $post['user_name'] ?? 'Unknown User',
-                'user_profile_pic' => $post['user_profile_pic'] ?? 'uploads/profile_images/user_avater.png',
-                'title' => $post['title'] ?? 'Untitled Post',
-                'content' => $post['content'] ?? '',
-                'tags' => $tags,
-                'upvotes' => $post['upvotes'] ?? 0,
-                'upvoted_by' => $upvotedBy,
-                'comments' => $comments,
-                'created_at' => $post['created_at'] ?? $currentTime,
-                'updated_at' => $post['updated_at'] ?? $post['created_at'] ?? $currentTime,
-                'attachments' => $attachments
-            ];
-            $allPosts[] = $mappedPost;
-        } catch (Exception $e) {
-            error_log("Error mapping post: " . $e->getMessage());
-            continue;
         }
-    }
-    
-    // Debug output
-    error_log("Mapped " . count($allPosts) . " posts total");
-    
-    // Sort all posts according to sorting option
-    if ($sortOption === 'upvotes') {
-        usort($allPosts, function($a, $b) {
-            return ($b['upvotes'] ?? 0) - ($a['upvotes'] ?? 0);
-        });
+        
+        $isPersonalized = $hasPersonalizedResults;
+        
+        // Apply tag filter to personalized results if specified
+        if (!empty($tagFilter)) {
+            $personalizedPosts = array_filter($personalizedPosts, function($post) use ($tagFilter) {
+                $tags = $post['tags'] ?? [];
+                if ($tags instanceof MongoDB\Model\BSONArray) {
+                    $tags = $tags->getArrayCopy();
+                }
+                return in_array($tagFilter, $tags);
+            });
+        }
+        
+        $allPosts = [];
+        foreach ($personalizedPosts as $post) {
+            try {
+                $currentTime = new \MongoDB\BSON\UTCDateTime((int)(microtime(true) * 1000));
+                
+                // Convert BSONArray objects to PHP arrays
+                $tags = $post['tags'] ?? ['discussion'];
+                if ($tags instanceof MongoDB\Model\BSONArray) {
+                    $tags = $tags->getArrayCopy();
+                }
+                
+                $upvotedBy = $post['upvoted_by'] ?? [];
+                if ($upvotedBy instanceof MongoDB\Model\BSONArray) {
+                    $upvotedBy = $upvotedBy->getArrayCopy();
+                }
+                
+                $comments = $post['comments'] ?? [];
+                if ($comments instanceof MongoDB\Model\BSONArray) {
+                    $comments = $comments->getArrayCopy();
+                }
+                
+                $attachments = $post['attachments'] ?? [];
+                if ($attachments instanceof MongoDB\Model\BSONArray) {
+                    $attachments = $attachments->getArrayCopy();
+                }
+                
+                $mappedPost = [
+                    '_id' => $post['_id'],
+                    'user_id' => $post['user_id'] ?? null,
+                    'user_name' => $post['user_name'] ?? 'Unknown User',
+                    'user_profile_pic' => $post['user_profile_pic'] ?? 'uploads/profile_images/user_avater.png',
+                    'title' => $post['title'] ?? 'Untitled Post',
+                    'content' => $post['content'] ?? '',
+                    'tags' => $tags,
+                    'upvotes' => $post['upvotes'] ?? 0,
+                    'upvoted_by' => $upvotedBy,
+                    'comments' => $comments,
+                    'created_at' => $post['created_at'] ?? $currentTime,
+                    'updated_at' => $post['updated_at'] ?? $post['created_at'] ?? $currentTime,
+                    'attachments' => $attachments,
+                    'relevance_score' => $post['relevance_score'] ?? 0,
+                    'is_recommended' => isset($post['relevance_score']) && $post['relevance_score'] > 0
+                ];
+                $allPosts[] = $mappedPost;
+            } catch (Exception $e) {
+                error_log("Error mapping personalized post: " . $e->getMessage());
+                continue;
+            }
+        }
+        
+        // Debug output for personalized posts
+        error_log("Personalized posts: " . count($allPosts) . " (Personalized: " . ($isPersonalized ? 'Yes' : 'No') . ")");
+        
     } else {
-        // Sort by creation date
-        usort($allPosts, function($a, $b) {
-            $timeA = isset($a['created_at']) && !empty($a['created_at']) ? 
-                (is_object($a['created_at']) && method_exists($a['created_at'], 'toDateTime') ? 
-                    $a['created_at']->toDateTime()->getTimestamp() : 
-                    (is_object($a['created_at']) ? $a['created_at']->__toString() : 0)) : 0;
-            
-            $timeB = isset($b['created_at']) && !empty($b['created_at']) ? 
-                (is_object($b['created_at']) && method_exists($b['created_at'], 'toDateTime') ? 
-                    $b['created_at']->toDateTime()->getTimestamp() : 
-                    (is_object($b['created_at']) ? $b['created_at']->__toString() : 0)) : 0;
-            
-            return $timeB - $timeA;
-        });
+        // Use traditional database query for other sorting options
+        
+        // Build query for forum_posts collection
+        $queryPosts = [];
+        if (!empty($tagFilter)) {
+            // Use $in operator to find posts that contain the specified tag
+            $queryPosts['tags'] = ['$in' => [$tagFilter]];
+        }
+        
+        // Set up sorting
+        $sortPosts = [];
+        switch ($sortOption) {
+            case 'upvotes':
+                $sortPosts = ['upvotes' => -1];
+                break;
+            case 'newest':
+            default:
+                $sortPosts = ['created_at' => -1];
+                break;
+        }
+        
+        // Fetch posts from forum_posts collection
+        $optionsPosts = ['sort' => $sortPosts];
+        $newPosts = $forumPostsCollection->find($queryPosts, $optionsPosts)->toArray();
+        
+        // Debug output
+        error_log("Found " . count($newPosts) . " posts in forum_posts collection");
+        
+        // Map posts to ensure consistent structure
+        $allPosts = [];
+        foreach ($newPosts as $post) {
+            try {
+                $currentTime = new \MongoDB\BSON\UTCDateTime((int)(microtime(true) * 1000));
+                
+                // Convert BSONArray objects to PHP arrays
+                $tags = $post['tags'] ?? ['discussion'];
+                if ($tags instanceof MongoDB\Model\BSONArray) {
+                    $tags = $tags->getArrayCopy();
+                }
+                
+                $upvotedBy = $post['upvoted_by'] ?? [];
+                if ($upvotedBy instanceof MongoDB\Model\BSONArray) {
+                    $upvotedBy = $upvotedBy->getArrayCopy();
+                }
+                
+                $comments = $post['comments'] ?? [];
+                if ($comments instanceof MongoDB\Model\BSONArray) {
+                    $comments = $comments->getArrayCopy();
+                }
+                
+                $attachments = $post['attachments'] ?? [];
+                if ($attachments instanceof MongoDB\Model\BSONArray) {
+                    $attachments = $attachments->getArrayCopy();
+                }
+                
+                $mappedPost = [
+                    '_id' => $post['_id'],
+                    'user_id' => $post['user_id'] ?? null,
+                    'user_name' => $post['user_name'] ?? 'Unknown User',
+                    'user_profile_pic' => $post['user_profile_pic'] ?? 'uploads/profile_images/user_avater.png',
+                    'title' => $post['title'] ?? 'Untitled Post',
+                    'content' => $post['content'] ?? '',
+                    'tags' => $tags,
+                    'upvotes' => $post['upvotes'] ?? 0,
+                    'upvoted_by' => $upvotedBy,
+                    'comments' => $comments,
+                    'created_at' => $post['created_at'] ?? $currentTime,
+                    'updated_at' => $post['updated_at'] ?? $post['created_at'] ?? $currentTime,
+                    'attachments' => $attachments,
+                    'relevance_score' => 0,
+                    'is_recommended' => false
+                ];
+                $allPosts[] = $mappedPost;
+            } catch (Exception $e) {
+                error_log("Error mapping post: " . $e->getMessage());
+                continue;
+            }
+        }
+        
+        // Debug output
+        error_log("Mapped " . count($allPosts) . " posts total");
+        
+        // Sort all posts according to sorting option
+        if ($sortOption === 'upvotes') {
+            usort($allPosts, function($a, $b) {
+                return ($b['upvotes'] ?? 0) - ($a['upvotes'] ?? 0);
+            });
+        } else {
+            // Sort by creation date
+            usort($allPosts, function($a, $b) {
+                $timeA = isset($a['created_at']) && !empty($a['created_at']) ? 
+                    (is_object($a['created_at']) && method_exists($a['created_at'], 'toDateTime') ? 
+                        $a['created_at']->toDateTime()->getTimestamp() : 
+                        (is_object($a['created_at']) ? $a['created_at']->__toString() : 0)) : 0;
+                
+                $timeB = isset($b['created_at']) && !empty($b['created_at']) ? 
+                    (is_object($b['created_at']) && method_exists($b['created_at'], 'toDateTime') ? 
+                        $b['created_at']->toDateTime()->getTimestamp() : 
+                        (is_object($b['created_at']) ? $b['created_at']->__toString() : 0)) : 0;
+                
+                return $timeB - $timeA;
+            });
+        }
     }
     
     // Get all available tags
@@ -1037,6 +1137,16 @@ try {
             color: var(--text-link) !important;
         }
 
+        /* Forum title styling enhancements */
+        .forum-title {
+            position: relative;
+        }
+
+        .forum-subtitle {
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
         /* Animations */
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
@@ -1334,6 +1444,11 @@ try {
             <h1 class="forum-title" data-aos="fade-down">
                 Research Forum
             </h1>
+            <?php if ($sortOption === 'recommended' && isset($_SESSION['user_id']) && !$isPersonalized): ?>
+            <p class="forum-subtitle text-center" style="color: var(--text-muted); margin-bottom: 2rem;">
+                <small>Keep interacting with posts to get personalized recommendations!</small>
+            </p>
+            <?php endif; ?>
 
         <!-- Create Post Card -->
             <div class="create-post-card" data-aos="fade-up">
@@ -1354,6 +1469,11 @@ try {
             <div class="filters-card" data-aos="fade-up" data-aos-delay="100">
             <form method="GET" class="d-flex gap-2">
                 <select name="sort" class="form-select" onchange="this.form.submit()">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                    <option value="recommended" <?= $sortOption == 'recommended' ? 'selected' : '' ?>>
+                        Recommended for You
+                    </option>
+                    <?php endif; ?>
                     <option value="newest" <?= $sortOption == 'newest' ? 'selected' : '' ?>>Newest</option>
                     <option value="upvotes" <?= $sortOption == 'upvotes' ? 'selected' : '' ?>>Most Upvoted</option>
                 </select>
