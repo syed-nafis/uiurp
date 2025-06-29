@@ -7395,6 +7395,12 @@ function createProfileLink($name, $userId, $userType = null) {
                     <div>
                         <h1 class="float-animation display-4">${project.title}</h1>
                         <div class="mb-3 d-flex align-items-center mt-3">
+                            <button id="literatureMatrixBtn" class="btn btn-outline-primary me-2" data-project-id="${project._id.$oid}">
+                                <i class="bi bi-journal-text"></i> Literature Matrix
+                            </button>
+                            <button id="paperBtn" class="btn btn-outline-success me-2" data-project-id="${project._id.$oid}">
+                                <i class="bi bi-file-earmark-text"></i> Paper
+                            </button>
                             ${editBtn}
                             ${leaveBtn}
                         </div>
@@ -7534,6 +7540,70 @@ function createProfileLink($name, $userId, $userType = null) {
             
             // Add animation for the title to make it stand out
             animateProjectTitle();
+            
+            // Add event listeners for Literature Matrix button
+            const litMatrixButton = document.getElementById('literatureMatrixBtn');
+            if (litMatrixButton) {
+                litMatrixButton.addEventListener('click', function() {
+                    const projectId = this.getAttribute('data-project-id');
+                    window.location.href = `literature_matrix.php?id=${projectId}`;
+                });
+                litMatrixButton.addEventListener('mousedown', createRipple);
+            }
+
+            // Add event listeners for Paper button
+            const paperButton = document.getElementById('paperBtn');
+            if (paperButton) {
+                paperButton.addEventListener('click', async function() {
+                    const projectId = this.getAttribute('data-project-id');
+                    try {
+                        const response = await fetch('src/model/create_etherpad.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                projectId: projectId
+                            })
+                        });
+
+                        const data = await response.json();
+                        if (data.success) {
+                            // Create modal for Etherpad
+                            const modalHtml = `
+                                <div class="modal fade" id="etherpadModal" tabindex="-1" aria-labelledby="etherpadModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-fullscreen-lg-down">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="etherpadModalLabel">Collaborative Paper Writing</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body p-0">
+                                                <iframe src="${data.embedUrl}" style="width: 100%; height: 80vh; border: none;"></iframe>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            // Add modal to body if it doesn't exist
+                            if (!document.getElementById('etherpadModal')) {
+                                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                            }
+                            
+                            // Show the modal
+                            const modal = new bootstrap.Modal(document.getElementById('etherpadModal'));
+                            modal.show();
+                        } else {
+                            throw new Error(data.message || 'Failed to create paper pad');
+                        }
+                    } catch (error) {
+                        console.error('Error opening paper pad:', error);
+                        alert('Failed to open paper pad. Please try again.');
+                    }
+                });
+                paperButton.addEventListener('mousedown', createRipple);
+            }
         }
         
         function renderProjectAbstract(project) {
