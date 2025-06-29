@@ -158,6 +158,21 @@ include_once(__DIR__ . '/debug_overlay.php');
                                     </div>
                                 </div>
                                 
+                                <!-- Debug Overlay Toggle -->
+                                <div class="dropdown-theme-toggle">
+                                    <span class="theme-label"><i class="bi bi-bug-fill me-2"></i>Debug Overlay</span>
+                                    <div class="theme-toggle-container">
+                                        <button class="theme-toggle debug-toggle" id="debugOverlayToggle" aria-label="Toggle debug overlay">
+                                            <div class="toggle-track">
+                                                <div class="toggle-thumb">
+                                                    <i class="bi bi-toggle-on"></i>
+                                                    <i class="bi bi-toggle-off"></i>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                                
                                 <div class="menu-divider"></div>
                                 <a href="<?= $base_path ?>logout.php" class="menu-item logout">
                                     <i class="bi bi-box-arrow-right"></i>
@@ -1289,6 +1304,73 @@ include_once(__DIR__ . '/debug_overlay.php');
         transform: translateX(18px);
     }
 }
+
+/* Debug toggle specific styles */
+.debug-toggle .toggle-track {
+    background: rgba(247, 37, 133, 0.1);
+    border-color: rgba(247, 37, 133, 0.2);
+}
+
+.debug-toggle .toggle-track.active {
+    background: rgba(76, 201, 240, 0.2);
+    border-color: rgba(76, 201, 240, 0.4);
+    box-shadow: 0 0 10px rgba(76, 201, 240, 0.2);
+}
+
+.debug-toggle .toggle-thumb {
+    background: rgba(247, 37, 133, 0.8);
+}
+
+.debug-toggle .toggle-thumb.active {
+    transform: translateX(22px);
+    background: rgba(76, 201, 240, 0.8);
+}
+
+.debug-toggle .toggle-thumb i {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.debug-toggle .toggle-thumb .bi-toggle-on {
+    opacity: 0;
+    transform: scale(0.8);
+    position: absolute;
+}
+
+.debug-toggle .toggle-thumb .bi-toggle-off {
+    opacity: 1;
+    transform: scale(1);
+    position: absolute;
+}
+
+.debug-toggle .toggle-thumb.active .bi-toggle-on {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.debug-toggle .toggle-thumb.active .bi-toggle-off {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+[data-theme="light"] .debug-toggle .toggle-track {
+    background: rgba(247, 37, 133, 0.1);
+    border-color: rgba(247, 37, 133, 0.2);
+}
+
+[data-theme="light"] .debug-toggle .toggle-track.active {
+    background: rgba(76, 201, 240, 0.2);
+    border-color: rgba(76, 201, 240, 0.4);
+}
+
+[data-theme="light"] .debug-toggle .toggle-thumb {
+    background: rgba(247, 37, 133, 0.8);
+}
+
+[data-theme="light"] .debug-toggle .toggle-thumb.active {
+    transform: translateX(22px);
+    background: rgba(76, 201, 240, 0.8);
+}
 </style>
 
 <script>
@@ -1472,6 +1554,54 @@ include_once(__DIR__ . '/debug_overlay.php');
                 this.style.transform = 'scale(1)';
             }, 150);
         });
+    }
+    
+    // Debug overlay toggle functionality
+    const debugToggle = document.getElementById('debugOverlayToggle');
+    
+    // Check saved state on page load
+    if (debugToggle) {
+        const debugEnabled = localStorage.getItem('debugOverlayEnabled') === 'true';
+        
+        // Update toggle appearance based on current state
+        updateDebugToggleAppearance(debugEnabled);
+        
+        // Add click event listener
+        debugToggle.addEventListener('click', function() {
+            const isEnabled = localStorage.getItem('debugOverlayEnabled') === 'true';
+            const newState = !isEnabled;
+            
+            // Save state to localStorage
+            localStorage.setItem('debugOverlayEnabled', newState);
+            
+            // Update toggle appearance
+            updateDebugToggleAppearance(newState);
+            
+            // Dispatch custom event to toggle visibility
+            document.dispatchEvent(new CustomEvent('toggleDebugOverlay'));
+            
+            // Add a subtle animation effect
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+    }
+    
+    // Helper function to update debug toggle appearance
+    function updateDebugToggleAppearance(isEnabled) {
+        if (!debugToggle) return;
+        
+        const toggleThumb = debugToggle.querySelector('.toggle-thumb');
+        const toggleTrack = debugToggle.querySelector('.toggle-track');
+        
+        if (isEnabled) {
+            toggleThumb.classList.add('active');
+            toggleTrack.classList.add('active');
+        } else {
+            toggleThumb.classList.remove('active');
+            toggleTrack.classList.remove('active');
+        }
     }
 });
 </script>

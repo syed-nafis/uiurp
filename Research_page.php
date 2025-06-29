@@ -2417,4 +2417,3 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
   </script>
 </body>
 </html>
-

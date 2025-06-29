@@ -184,6 +184,232 @@ foreach ($allEvents as $event) {
     position: relative;
 }
 
+/* Light Theme Styles for Calendar Overlay */
+[data-theme="light"] .calendar-overlay-bg {
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.97) 0%, rgba(240, 240, 250, 0.95) 100%);
+}
+
+[data-theme="light"] .calendar-overlay-content {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 240, 250, 0.95) 100%);
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.2), 
+                0 0 0 1px rgba(67, 97, 238, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.8),
+                inset 0 0 30px rgba(76, 201, 240, 0.06);
+}
+
+[data-theme="light"] .calendar-header h3 {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .close-calendar-btn {
+    background: rgba(0, 0, 0, 0.05);
+    color: #1e293b;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08),
+                0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .close-calendar-btn::after {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 245, 250, 0.98) 100%);
+}
+
+[data-theme="light"] .close-calendar-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 20px -5px rgba(67, 97, 238, 0.3),
+                inset 0 0 0 1px rgba(67, 97, 238, 0.2);
+    color: rgba(30, 41, 59, 0.95);
+}
+
+[data-theme="light"] #fullCalendar {
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.1), 
+                inset 0 0 0 1px rgba(67, 97, 238, 0.08),
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="light"] #fullCalendar::before {
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+}
+
+[data-theme="light"] .events-list {
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.1), 
+                inset 0 0 0 1px rgba(67, 97, 238, 0.08),
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
+    color: #1e293b;
+}
+
+[data-theme="light"] .events-list::before {
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(114, 9, 183, 0.05));
+}
+
+[data-theme="light"] .events-list h4 {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .calendar-header::after {
+    background: linear-gradient(90deg, 
+                transparent, 
+                rgba(67, 97, 238, 0.3), 
+                rgba(114, 9, 183, 0.3), 
+                rgba(67, 97, 238, 0.3), 
+                transparent);
+}
+
+[data-theme="light"] .event-list-item {
+    background: rgba(67, 97, 238, 0.06);
+    border-left: 4px solid;
+    border-image: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%) 1;
+    color: #1e293b;
+}
+
+[data-theme="light"] .event-list-item:hover {
+    background: rgba(67, 97, 238, 0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .event-list-item.highlighted {
+    background: rgba(67, 97, 238, 0.15);
+    border-left-color: #4361ee;
+    box-shadow: 0 10px 30px rgba(67, 97, 238, 0.3), 
+                0 0 0 2px rgba(67, 97, 238, 0.2);
+}
+
+[data-theme="light"] .event-list-item-title {
+    color: #1e293b;
+}
+
+[data-theme="light"] .event-list-item-date {
+    color: rgba(30, 41, 59, 0.7);
+}
+
+[data-theme="light"] .event-list-item-type {
+    color: rgba(67, 97, 238, 0.9);
+}
+
+[data-theme="light"] .no-events {
+    color: rgba(30, 41, 59, 0.6);
+}
+
+[data-theme="light"] #fullCalendar .fc-toolbar {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+[data-theme="light"] #fullCalendar .fc-button {
+    background: rgba(67, 97, 238, 0.08) !important;
+    border-color: rgba(67, 97, 238, 0.15) !important;
+    color: #1e293b !important;
+}
+
+[data-theme="light"] #fullCalendar .fc-button:hover {
+    background: rgba(67, 97, 238, 0.12) !important;
+}
+
+[data-theme="light"] #fullCalendar .fc-button-active {
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.3) 0%, rgba(58, 12, 163, 0.3) 100%) !important;
+    box-shadow: 0 5px 15px -3px rgba(67, 97, 238, 0.2) !important;
+    color: #1e293b !important;
+}
+
+[data-theme="light"] #fullCalendar .fc-toolbar-title {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] #fullCalendar .fc-today-button {
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.2) 0%, rgba(58, 12, 163, 0.2) 100%) !important;
+}
+
+[data-theme="light"] #fullCalendar .fc-col-header-cell {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 250, 0.9) 100%) !important;
+}
+
+[data-theme="light"] #fullCalendar .fc-col-header-cell-cushion {
+    color: #1e293b;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.08) 0%, rgba(58, 12, 163, 0.04) 100%);
+    text-shadow: none;
+}
+
+[data-theme="light"] #fullCalendar .fc-daygrid-day,
+[data-theme="light"] #fullCalendar .fc-scrollgrid-sync-table td,
+[data-theme="light"] #fullCalendar .fc-daygrid-day.fc-day {
+    background: #ffffff !important;
+    border: 1px solid rgba(67, 97, 238, 0.05) !important;
+}
+
+[data-theme="light"] #fullCalendar .fc-daygrid-day-frame,
+[data-theme="light"] #fullCalendar .fc-scrollgrid-sync-inner {
+    background: #ffffff !important;
+}
+
+[data-theme="light"] #fullCalendar .fc-daygrid-day-bg {
+    background: transparent !important;
+}
+
+[data-theme="light"] #fullCalendar .fc-daygrid-day:hover,
+[data-theme="light"] #fullCalendar .fc-daygrid-day.fc-day:hover {
+    background: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(67, 97, 238, 0.08);
+}
+
+[data-theme="light"] #fullCalendar .fc-day-other,
+[data-theme="light"] #fullCalendar .fc-day-other .fc-daygrid-day-frame,
+[data-theme="light"] #fullCalendar .fc-day-other.fc-day {
+    background: #f8fafc !important;
+}
+
+[data-theme="light"] #fullCalendar .fc-day-today,
+[data-theme="light"] #fullCalendar .fc-day-today .fc-daygrid-day-frame {
+    background: #ffffff !important;
+    box-shadow: 0 0 15px rgba(67, 97, 238, 0.15);
+    border: 1px solid rgba(67, 97, 238, 0.15) !important;
+}
+
+[data-theme="light"] #fullCalendar .fc-daygrid-day-number {
+    color: #1e293b;
+    background: rgba(67, 97, 238, 0.06);
+}
+
+[data-theme="light"] #fullCalendar .fc-day-today .fc-daygrid-day-number {
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.7) 0%, rgba(58, 12, 163, 0.7) 100%);
+    box-shadow: 0 3px 15px rgba(67, 97, 238, 0.4), 
+                0 0 0 2px rgba(67, 97, 238, 0.1),
+                inset 0 0 10px rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+[data-theme="light"] #fullCalendar .fc-daygrid-more-link {
+    color: #4361ee;
+    background: rgba(67, 97, 238, 0.08);
+}
+
+[data-theme="light"] #fullCalendar .fc-daygrid-more-link:hover {
+    background: rgba(67, 97, 238, 0.15);
+    color: #3a0ca3;
+}
+
+[data-theme="light"] #fullCalendar .fc-day-other {
+    background: rgba(30, 41, 59, 0.15);
+}
+
+[data-theme="light"] .fc-popover {
+    background: rgba(255, 255, 255, 0.98) !important;
+    border: 1px solid rgba(67, 97, 238, 0.2) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-theme="light"] .fc-popover .fc-popover-header {
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(58, 12, 163, 0.1) 100%) !important;
+}
+
+[data-theme="light"] .fc-popover .fc-popover-title {
+    color: #1e293b !important;
+}
+
 /* Hide scrollbars for WebKit browsers */
 .calendar-overlay-content::-webkit-scrollbar {
     display: none;
@@ -1653,7 +1879,7 @@ foreach ($allEvents as $event) {
             // Update events list when calendar view changes
             populateEventsList();
         },
-            themSystem: 'standard'
+        themeSystem: 'standard'
         });
         
         // Enhanced view calendar button functionality with animations
@@ -2039,10 +2265,14 @@ foreach ($allEvents as $event) {
         // Make functions globally accessible for onclick handlers
         window.navigateToEventDate = navigateToEventDate;
         window.clearAllHighlights = clearAllHighlights;
+        window.scrollToCalendarEvent = scrollToCalendarEvent;
+        window.highlightCalendarEvent = highlightCalendarEvent;
+        window.highlightEventListItem = highlightEventListItem;
         
         // Create particle effects for the calendar
         function createParticles() {
             const container = document.querySelector('.calendar-overlay-content');
+            if (!container) return;
             
             // Remove existing particles
             document.querySelectorAll('.calendar-particle').forEach(particle => {
@@ -2109,7 +2339,7 @@ foreach ($allEvents as $event) {
         // DOM already loaded, run the function now
         initializeCalendar();
     }
-})();
+})(); // End of self-executing function
 </script>
 
 <!-- Add a script to ensure proper calendar sizing -->
@@ -2138,5 +2368,5 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-});
+}); // End of DOMContentLoaded event listener
 </script> 

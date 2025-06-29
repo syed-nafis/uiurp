@@ -8,7 +8,7 @@ if (isset($_SESSION['user_id'])) {
     $profile = $userPreferences->getUserProfile($userId);
     $interactions = $userPreferences->getUserInteractions($userId, 5);
     
-    echo "<div style='position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; z-index: 9999; max-width: 300px; font-size: 12px;'>";
+    echo "<div id='debugOverlay' style='position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; z-index: 9999; max-width: 300px; font-size: 12px; display: none;'>";
     echo "<h4>Debug Info</h4>";
     echo "User ID: $userId<br>";
     echo "Profile exists: " . ($profile ? 'Yes' : 'No') . "<br>";
@@ -42,6 +42,27 @@ if (isset($_SESSION['user_id'])) {
     
     echo "<br><a href='?reset_profile=1' style='color: yellow;'>Reset Profile</a>";
     echo "</div>";
+    
+    // Script to check localStorage and toggle visibility
+    echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const debugOverlay = document.getElementById('debugOverlay');
+            const debugEnabled = localStorage.getItem('debugOverlayEnabled') === 'true';
+            
+            if (debugEnabled) {
+                debugOverlay.style.display = 'block';
+            } else {
+                debugOverlay.style.display = 'none';
+            }
+            
+            // Listen for custom event to toggle visibility
+            document.addEventListener('toggleDebugOverlay', function(e) {
+                const isVisible = debugOverlay.style.display === 'block';
+                debugOverlay.style.display = isVisible ? 'none' : 'block';
+                localStorage.setItem('debugOverlayEnabled', !isVisible);
+            });
+        });
+    </script>";
     
     // Handle profile reset
     if (isset($_GET['reset_profile']) && $_GET['reset_profile'] == '1') {
