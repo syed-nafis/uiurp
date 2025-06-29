@@ -4467,7 +4467,16 @@ session_start();
                 filteredFaculty.forEach((faculty, index) => {
                     const option = document.createElement('div');
                     option.className = 'supervisor-option';
-                    option.setAttribute('data-faculty-id', faculty._id);
+                    
+                    // Extract the ObjectId string properly
+                    let facultyId;
+                    if (faculty._id && typeof faculty._id === 'object' && faculty._id.$oid) {
+                        facultyId = faculty._id.$oid;
+                    } else {
+                        facultyId = String(faculty._id);
+                    }
+                    
+                    option.setAttribute('data-faculty-id', facultyId);
                     option.setAttribute('data-faculty-name', faculty.name);
                     
                     // Create faculty info display
@@ -4931,7 +4940,14 @@ session_start();
                                 faculty.name.toLowerCase() === project.supervisor.name.toLowerCase()
                             );
                             if (matchingFaculty) {
-                                supervisorIdInput.value = matchingFaculty._id;
+                                // Extract the ObjectId string properly
+                                let facultyId;
+                                if (matchingFaculty._id && typeof matchingFaculty._id === 'object' && matchingFaculty._id.$oid) {
+                                    facultyId = matchingFaculty._id.$oid;
+                                } else {
+                                    facultyId = String(matchingFaculty._id);
+                                }
+                                supervisorIdInput.value = facultyId;
                             } else {
                                 supervisorIdInput.value = ''; // Custom supervisor
                             }

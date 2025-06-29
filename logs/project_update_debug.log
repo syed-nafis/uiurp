@@ -1598,3 +1598,295 @@
 )
 
 2025-06-03 08:42:53 - UserId extracted: 6833436be5c16779b409aa42
+2025-06-05 13:10:46 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Samin yeaser khan
+    [profile_pic] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+    [email] => www.mayen017@gmail.com
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [profile_image_url] => uploads/profile_images/profile_6833436be5c16779b409aa42_1748502587.jpg
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => www.mayen017@gmail.com
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => B.Sc. in Computer Science and Engineering
+                            [program_code] => 
+                            [admission_year] => 
+                            [admission_trimester] => 
+                            [serial_number] => 
+                        )
+
+                    [student_id] => 011222150
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1654812000000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1790632800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 3rd Year, Summer Trimester
+                    [cgpa] => 3.7
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Data Science
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1654812000000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => AI
+                            [1] => Machine Learning
+                            [2] => Data Science
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => Python
+                            [2] => HTML
+                            [3] => CSS
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748502587582
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1748781177375
+                                )
+
+                        )
+
+                )
+
+            [learning_resources] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => test
+                            [url] => https://www.youtube.com
+                            [category] => Data Science
+                            [type] => Video
+                            [description] => 
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => test 2
+                            [url] => https://www.youtube.com
+                            [category] => Research Methods
+                            [type] => Course
+                            [description] => 
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6833436be5c16779b409aa42
+)
+
+2025-06-05 13:10:46 - UserId extracted: 6833436be5c16779b409aa42
+2025-06-05 14:11:53 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Imran Hasan
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => imran.bba@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Imran Hasan
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => imran.bba@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Business Administration
+                            [program_code] => 021
+                            [admission_year] => 24
+                            [admission_trimester] => 1
+                            [serial_number] => 0030
+                        )
+
+                    [student_id] => 0212410030
+                    [department] => Business Administration
+                    [faculty] => School of Business & Economics
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1705276800000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1831507200000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 1st Year, Spring Trimester
+                    [cgpa] => 
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => Bachelor of Business Administration
+                            [institution_name] => United International University
+                            [major_field_of_study] => Finance
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1705276800000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Financial Markets
+                            [1] => Investment Analysis
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => Financial Modeling
+                            [1] => Excel
+                            [2] => Bloomberg Terminal (Basic)
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1705017600000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1740009600000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2c9
+)
+
+2025-06-05 14:11:53 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2c9

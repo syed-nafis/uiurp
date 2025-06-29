@@ -11,9 +11,6 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in'] || !isset($_SESSIO
 // Include MongoDB connection
 require __DIR__ . '/../../vendor/autoload.php';
 
-// Debug log path
-$log_path = __DIR__ . '/../../logs/session_debug.log';
-
 try {
     // Connect to MongoDB
     $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
@@ -27,10 +24,6 @@ try {
     if (is_object($userId) && get_class($userId) === 'MongoDB\BSON\ObjectId') {
         $userId = (string)$userId;
     }
-    
-    // Log debug info
-    error_log("fetch_all_user_projects.php - User ID: " . $userId);
-    file_put_contents($log_path, date('Y-m-d H:i:s') . " - fetch_all_user_projects.php - User ID: " . $userId . "\n", FILE_APPEND);
     
     // Fetch all projects where the user is involved (either as creator or member)
     // Note: Many imported projects don't have createdBy field, so we focus on members array and supervisor
@@ -46,9 +39,6 @@ try {
             ['supervisor.userId' => $userId]  // String format
         ]
     ];
-    
-    error_log("fetch_all_user_projects.php - Filter: " . json_encode($filter));
-    file_put_contents($log_path, date('Y-m-d H:i:s') . " - fetch_all_user_projects.php - Filter: " . json_encode($filter) . "\n", FILE_APPEND);
     
     $options = [
         'sort' => ['updatedAt' => -1]
@@ -85,9 +75,6 @@ try {
         $projectsArray[] = $projectArray;
     }
     
-    error_log("fetch_all_user_projects.php - Found " . count($projectsArray) . " total projects");
-    file_put_contents($log_path, date('Y-m-d H:i:s') . " - fetch_all_user_projects.php - Found " . count($projectsArray) . " total projects\n", FILE_APPEND);
-    
     // Optional: Limit projects display - currently disabled to show all projects
     /*
     // Sort by most recent and select 6 projects if we have more than 6
@@ -113,7 +100,6 @@ try {
             return $dateB <=> $dateA; // Descending order (newest first)
         });
         $projectsArray = array_slice($projectsArray, 0, 6);
-        error_log("fetch_all_user_projects.php - Selected 6 most recent projects from " . $originalCount . " total");
     }
     */
     
@@ -123,7 +109,6 @@ try {
     
 } catch (Exception $e) {
     error_log("fetch_all_user_projects.php - Error: " . $e->getMessage());
-    file_put_contents($log_path, date('Y-m-d H:i:s') . " - fetch_all_user_projects.php - Error: " . $e->getMessage() . "\n", FILE_APPEND);
     http_response_code(500);
     echo json_encode(['error' => 'Failed to fetch projects', 'details' => $e->getMessage()]);
 } 

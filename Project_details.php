@@ -866,10 +866,15 @@ function createProfileLink($name, $userId, $userType = null) {
             color: var(--primary-color);
             filter: drop-shadow(0 0 8px rgba(30, 64, 175, 0.4));
             transition: all var(--transition-speed) ease;
-            padding: var(--spacing-sm);
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: rgba(30, 64, 175, 0.1);
             border-radius: 50%;
             border: 2px solid rgba(30, 64, 175, 0.3);
+            padding: 0;
         }
         
         .timeline-right .timeline-title .timeline-icon {
@@ -1876,8 +1881,8 @@ function createProfileLink($name, $userId, $userType = null) {
         }
         
         .btn-outline-primary {
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
+            border: 2px solid #7293ff;
+            color: #7293ff;
             background: rgba(30, 64, 175, 0.1);
             backdrop-filter: blur(10px);
         }
@@ -4668,140 +4673,94 @@ function createProfileLink($name, $userId, $userType = null) {
         
         function renderProjectHeader(project) {
             const headerEl = document.getElementById('project-header');
-            const isPublic = project.privacy === 0;
-            
-            // Create supervisor info with potential link
-            let supervisorInfo = '';
-            if (project.supervisor) {
-                const supervisorName = project.supervisor.name || (typeof project.supervisor === 'string' ? project.supervisor : (project.supervisor.$oid || 'Unknown'));
-                const supervisorId = project.supervisor.userId ? (project.supervisor.userId.$oid || project.supervisor.userId) : null;
-                
-                // Initially show supervisor name (will be updated to clickable link if profile exists)
-                supervisorInfo = `<div class="meta-item"><i class="bi bi-person-badge"></i><strong>Supervisor:</strong> <span class="supervisor-display">${supervisorName}</span></div>`;
-                
-                // Try to make supervisor clickable (with or without userId)
-                createProfileLink(supervisorName, supervisorId, 'faculty').then(linkedName => {
-                    // Update all supervisor displays with clickable link
-                    document.querySelectorAll('.supervisor-display').forEach(el => {
-                        if (el.textContent.trim() === supervisorName) {
-                            el.innerHTML = linkedName;
-                        }
-                    });
-                }).catch(error => {
-                    console.log('Failed to create supervisor profile link:', error);
-                    // Keep the original name if profile check fails
-                });
-            }
-            
-            // Check if the current user is part of the project team (member or supervisor)
-            // We need to fetch the current logged-in user information from PHP session
-            let isAuthorized = false;
-            let currentUser = null;
-            
-            // Fetch the current user ID from a PHP variable injected into the page
-            if (typeof currentUserId !== 'undefined') {
-                currentUser = currentUserId;
-            }
-            
-            // Check if the current user is authorized to edit the project
-            if (currentUser) {
-                // Check if user is in members list (team members)
-                if (project.members && project.members.length > 0) {
-                    isAuthorized = project.members.some(member => 
-                        (member.userId && member.userId.$oid === currentUser) || 
-                        (member.userId === currentUser)
-                    );
-                }
-                
-                // Also check if user is the supervisor
-                if (!isAuthorized && project.supervisor && project.supervisor.userId) {
-                    isAuthorized = (project.supervisor.userId.$oid === currentUser) || 
-                                  (project.supervisor.userId === currentUser);
-                }
-            }
-            
-            // Only show edit button if user is a team member or supervisor
-            const editBtn = isAuthorized ? `
-                <button id="editProjectBtn" class="btn btn-outline-primary ms-2" data-project-id="${project._id.$oid}">
-                    <i class="bi bi-pencil-square"></i>Edit Project
-                </button>
-            ` : '';
-            
             headerEl.innerHTML = `
-                <div class="d-flex justify-content-between align-items-start position-relative z-1">
-                    <div>
-                        <h1 class="float-animation display-4">${project.title}</h1>
-                        <div class="mb-3 d-flex align-items-center mt-3">
-                            ${editBtn}
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="divider"></div>
-                
-                <div class="row section-row">
-                    <div class="col-md-6">
-                        <div class="meta-item">
-                            <i class="bi bi-mortarboard-fill"></i>
-                            <div><strong>Field:</strong> ${project.field || 'Not specified'}</div>
-                    </div>
-                        <div class="meta-item">
-                            <i class="bi bi-building"></i>
-                            <div><strong>Institution:</strong> ${project.institution || 'United International University'}</div>
-                        </div>
-                        ${supervisorInfo}
-                    </div>
-                    <div class="col-md-6">
-                        <div class="meta-item">
-                            <i class="bi bi-calendar-plus"></i>
-                            <div><strong>Created:</strong> ${formatDate(project.createdAt)}</div>
-                        </div>
-                        <div class="meta-item">
-                            <i class="bi bi-calendar-check"></i>
-                            <div><strong>Last Updated:</strong> ${formatDate(project.updatedAt)}</div>
-                        </div>
-                        <div class="meta-item">
-                            <i class="bi bi-eye"></i>
-                            <div><strong>Views:</strong> ${project.stats?.views || '0'}</div>
-                        </div>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="project-title">${project.title}</h1>
+                    <div class="d-flex">
+                        <button id="literatureMatrixBtn" class="btn btn-outline-primary me-2" data-project-id="${project._id.$oid}">
+                            <i class="bi bi-journal-text"></i> Literature Matrix
+                        </button>
+                        <button id="paperBtn" class="btn btn-outline-success me-2" data-project-id="${project._id.$oid}">
+                            <i class="bi bi-file-earmark-text"></i> Paper
+                        </button>
+                        <button id="editProjectBtn" class="btn btn-outline-primary" data-project-id="${project._id.$oid}">
+                            <i class="bi bi-pencil-square"></i> Edit Project
+                        </button>
                     </div>
                 </div>
             `;
-            
-            // Add event listener for the edit button
+
+            // Add event listeners
+            const litMatrixButton = document.getElementById('literatureMatrixBtn');
+            if (litMatrixButton) {
+                litMatrixButton.addEventListener('click', function() {
+                    const projectId = this.getAttribute('data-project-id');
+                    window.location.href = `literature_matrix.php?id=${projectId}`;
+                });
+                litMatrixButton.addEventListener('mousedown', createRipple);
+            }
+
+            const paperButton = document.getElementById('paperBtn');
+            if (paperButton) {
+                paperButton.addEventListener('click', async function() {
+                    const projectId = this.getAttribute('data-project-id');
+                    try {
+                        const response = await fetch('src/model/create_etherpad.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                projectId: projectId
+                            })
+                        });
+
+                        const data = await response.json();
+                        if (data.success) {
+                            // Create modal for Etherpad
+                            const modalHtml = `
+                                <div class="modal fade" id="etherpadModal" tabindex="-1" aria-labelledby="etherpadModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-fullscreen-lg-down">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="etherpadModalLabel">Collaborative Paper Writing</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body p-0">
+                                                <iframe src="${data.embedUrl}" style="width: 100%; height: 80vh; border: none;"></iframe>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            // Add modal to body if it doesn't exist
+                            if (!document.getElementById('etherpadModal')) {
+                                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                            }
+                            
+                            // Show the modal
+                            const modal = new bootstrap.Modal(document.getElementById('etherpadModal'));
+                            modal.show();
+                        } else {
+                            throw new Error(data.message || 'Failed to create paper pad');
+                        }
+                    } catch (error) {
+                        console.error('Error opening paper pad:', error);
+                        alert('Failed to open paper pad. Please try again.');
+                    }
+                });
+                paperButton.addEventListener('mousedown', createRipple);
+            }
+
             const editButton = document.getElementById('editProjectBtn');
             if (editButton) {
                 editButton.addEventListener('click', function() {
                     const projectId = this.getAttribute('data-project-id');
                     window.location.href = `edit_project.php?id=${projectId}`;
                 });
-                
-                // Add ripple effect to the button
                 editButton.addEventListener('mousedown', createRipple);
             }
-            
-            // Show/hide timeline edit button based on authorization
-            const timelineEditBtn = document.getElementById('editTimelineBtn');
-            if (timelineEditBtn) {
-                if (isAuthorized) {
-                    timelineEditBtn.style.display = 'inline-block';
-                    timelineEditBtn.addEventListener('click', function() {
-                        // Redirect to edit_project.php with project ID and scroll to timeline section
-                        window.location.href = `edit_project.php?id=${project._id.$oid}#timeline-section`;
-                    });
-                    
-                    // Add ripple effect to the timeline edit button
-                    timelineEditBtn.addEventListener('mousedown', createRipple);
-                } else {
-                    timelineEditBtn.style.display = 'none';
-                }
-            }
-            
-            // Update page title
-            document.title = `${project.title} | UIU Research Platform`;
-            
-            // Add animation for the title to make it stand out
-            animateProjectTitle();
         }
         
         function renderProjectAbstract(project) {

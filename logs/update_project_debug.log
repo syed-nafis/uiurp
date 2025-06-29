@@ -1586,3 +1586,85 @@
 (
 )
 
+2025-06-05 13:10:46 - POST data: Array
+(
+    [project_id] => 683749cb11c7b33a5403b378
+    [title] => test 3
+    [abstract] => test3
+    [description] => test3
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => ["Blockchain"]
+    [created_date] => 2025-05-27
+    [updated_date] => 2025-05-26
+    [github_url] => https://github.com/example/project14
+    [project_url] => https://blockchain-supply-chain.example.com
+    [paper_url] => https://example.com/papers/blockchain-supply-chain.pdf
+    [doi] => https://doi.org/example/project14
+    [youtube_url] => https://youtube.com/watch?v=example14
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"","contribution":0,"userId":null},{"name":"Sadia Akter","role":"","contribution":0,"userId":null},{"name":"Imran Hasan","role":"","contribution":0,"userId":null},{"name":"Zayan Ahmed","role":"","contribution":0,"userId":null}]
+    [timeline] => [{"title":"test3wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww","description":"test3","date":{"$date":"2025-05-28T00:00:00.000Z"},"status":"Planned"},{"title":"test3","description":"test3","date":"2025-05-28","status":"Planned"},{"title":"test3","description":"test3","date":"2025-05-28","status":"Planned"},{"title":"test3","description":"test3","date":"2025-05-28","status":"Planned"},{"title":"test3","description":"test3","date":"2025-05-28","status":"Planned"},{"title":"test3","description":"test3","date":"2025-05-28","status":"Planned"}]
+    [references] => [{"title":"test3","link":"https://github.com/example/project14"}]
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-05 13:10:46 - Privacy field: value='0', type=string
+2025-06-05 13:10:47 - References parsed as JSON: Array
+(
+    [0] => Array
+        (
+            [title] => test3
+            [link] => https://github.com/example/project14
+        )
+
+)
+
+2025-06-05 13:10:47 - Final references data: Array
+(
+    [0] => Array
+        (
+            [title] => test3
+            [link] => https://github.com/example/project14
+        )
+
+)
+
+2025-06-05 14:11:53 - POST data: Array
+(
+    [project_id] => 6839534eb7804646190966c4
+    [title] => teset
+    [abstract] => tsetsetse
+    [description] => estsetsetst
+    [field] => Computer Science
+    [institution] => United International University
+    [privacy] => 0
+    [keywords] => ["Blockchain"]
+    [created_date] => 2025-05-28
+    [updated_date] => 2025-05-31
+    [github_url] => https://github.com/example/project14
+    [project_url] => https://blockchain-supply-chain.example.com
+    [paper_url] => https://example.com/papers/blockchain-supply-chain.pdf
+    [doi] => https://doi.org/example/project14
+    [youtube_url] => https://youtube.com/watch?v=example14
+    [supervisor] => Dr. Md. Nomani Kabir
+    [team_members] => [{"name":"Samin yeaser khan","role":"Creator","contribution":100,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Imran Hasan","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c9"}}]
+    [timeline] => [{"title":"test","description":"test","date":{"$date":"2025-06-03T00:00:00.000Z"},"status":"Planned"},{"title":"test","description":"test","date":{"$date":"2025-06-03T00:00:00.000Z"},"status":"Planned"}]
+    [references] => []
+    [views] => 1
+    [downloads] => 0
+    [favorites] => 0
+    [comments] => []
+)
+2025-06-05 14:11:53 - Privacy field: value='0', type=string
+2025-06-05 14:11:53 - References parsed as JSON: Array
+(
+)
+
+2025-06-05 14:11:53 - Final references data: Array
+(
+)
+

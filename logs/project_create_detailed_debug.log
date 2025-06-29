@@ -909,3 +909,1888 @@
     [projectId] => 683998a151fcf55cdb026af4
 )
 
+2025-06-05 13:14:17 - === NEW PROJECT CREATION REQUEST ===
+2025-06-05 13:14:17 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Sadia Akter
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => sadia.bscse@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Sadia Akter
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => sadia.bscse@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Science in Computer Science & Engineering
+                            [program_code] => 011
+                            [admission_year] => 23
+                            [admission_trimester] => 3
+                            [serial_number] => 0022
+                        )
+
+                    [student_id] => 0112330022
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1693526400000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1819756800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 2nd Year, Fall Trimester
+                    [cgpa] => 3.8
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Software Engineering
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1693526400000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Software Development
+                            [1] => Web Technologies
+                            [2] => AI Ethics
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => React
+                            [2] => Node.js
+                            [3] => MongoDB
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1693180800000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1746057600000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2c8
+)
+
+2025-06-05 13:14:17 - POST: Array
+(
+    [projectId] => 
+    [title] => test6
+    [abstract] => test6
+    [description] => test
+    [field] => Science
+    [institution] => United International University
+    [keywords] => 
+    [privacy] => 0
+    [createdAt] => 
+    [updatedAt] => 
+    [github] => 
+    [website] => 
+    [paper] => 
+    [doi] => 
+    [youtube] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [supervisorId] => [object Object]
+    [references] => 
+    [viewsCount] => 73
+    [downloadsCount] => 514
+    [favoritesCount] => 808
+    [commentsArray] => []
+    [members] => [{"name":"Sadia Akter","role":"Creator","contribution":100,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}},{"name":"Samin yeaser khan","role":"Author","contribution":0,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Imran Hasan","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c9"}}]
+    [timeline] => []
+    [links] => {"github":"","website":"","paper":"","doi":"","youtube":""}
+)
+
+2025-06-05 13:14:17 - FILES: Array
+(
+    [coverImage] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+    [projectFiles] => Array
+        (
+            [name] => Array
+                (
+                    [0] => 
+                )
+
+            [full_path] => Array
+                (
+                    [0] => 
+                )
+
+            [type] => Array
+                (
+                    [0] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => 
+                )
+
+            [error] => Array
+                (
+                    [0] => 4
+                )
+
+            [size] => Array
+                (
+                    [0] => 0
+                )
+
+        )
+
+    [mediaFiles] => Array
+        (
+            [name] => Array
+                (
+                    [0] => 
+                )
+
+            [full_path] => Array
+                (
+                    [0] => 
+                )
+
+            [type] => Array
+                (
+                    [0] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => 
+                )
+
+            [error] => Array
+                (
+                    [0] => 4
+                )
+
+            [size] => Array
+                (
+                    [0] => 0
+                )
+
+        )
+
+)
+
+2025-06-05 13:14:17 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2c8, Username: Sadia Akter
+2025-06-05 13:14:17 - Processed members: Array
+(
+    [0] => Array
+        (
+            [name] => Sadia Akter
+            [role] => Creator
+            [contribution] => 100
+            [userId] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+        )
+
+    [1] => Array
+        (
+            [name] => Samin yeaser khan
+            [role] => Author
+            [contribution] => 0
+            [userId] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+        )
+
+    [2] => Array
+        (
+            [name] => Imran Hasan
+            [role] => Author
+            [contribution] => 0
+            [userId] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                )
+
+        )
+
+)
+
+2025-06-05 13:14:17 - Processing supervisor - Name: Dr. Md. Nomani Kabir, ID: [object Object]
+2025-06-05 13:14:17 - Error looking up faculty supervisor: Error parsing ObjectId string: [object Object]
+2025-06-05 13:14:17 - Final supervisor data: Array
+(
+    [name] => Dr. Md. Nomani Kabir
+    [role] => Supervisor
+)
+
+2025-06-05 13:14:17 - Project document to insert: Array
+(
+    [title] => test6
+    [abstract] => test6
+    [description] => test
+    [field] => Science
+    [keywords] => Array
+        (
+        )
+
+    [institution] => United International University
+    [createdAt] => MongoDB\BSON\UTCDateTime Object
+        (
+            [milliseconds] => 1749122057837
+        )
+
+    [updatedAt] => MongoDB\BSON\UTCDateTime Object
+        (
+            [milliseconds] => 1749122057837
+        )
+
+    [privacy] => 0
+    [members] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Sadia Akter
+                    [role] => Creator
+                    [contribution] => 100
+                    [userId] => Array
+                        (
+                            [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [role] => Author
+                    [contribution] => 0
+                    [userId] => Array
+                        (
+                            [$oid] => 6833436be5c16779b409aa42
+                        )
+
+                )
+
+            [2] => Array
+                (
+                    [name] => Imran Hasan
+                    [role] => Author
+                    [contribution] => 0
+                    [userId] => Array
+                        (
+                            [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                        )
+
+                )
+
+        )
+
+    [timeline] => Array
+        (
+        )
+
+    [supervisor] => Array
+        (
+            [name] => Dr. Md. Nomani Kabir
+            [role] => Supervisor
+        )
+
+    [links] => Array
+        (
+            [github] => 
+            [website] => 
+            [paper] => 
+            [doi] => 
+            [youtube] => 
+        )
+
+    [stats] => Array
+        (
+            [views] => 0
+            [downloads] => 0
+            [favorites] => 0
+        )
+
+    [comments] => Array
+        (
+        )
+
+    [createdBy] => 6656d4b4f7e5b8c9a0a1b2c8
+)
+
+2025-06-05 13:14:17 - Connected to MongoDB successfully
+2025-06-05 13:14:18 - Insert result: MongoDB\InsertOneResult Object
+(
+    [writeResult:MongoDB\InsertOneResult:private] => MongoDB\Driver\WriteResult Object
+        (
+            [nInserted] => 1
+            [nMatched] => 0
+            [nModified] => 0
+            [nRemoved] => 0
+            [nUpserted] => 0
+            [upsertedIds] => Array
+                (
+                )
+
+            [writeErrors] => Array
+                (
+                )
+
+            [writeConcernError] => 
+            [writeConcern] => MongoDB\Driver\WriteConcern Object
+                (
+                )
+
+            [errorReplies] => Array
+                (
+                )
+
+        )
+
+    [insertedId:MongoDB\InsertOneResult:private] => MongoDB\BSON\ObjectId Object
+        (
+            [oid] => 68417c09067d8c496f07f704
+        )
+
+    [isAcknowledged:MongoDB\InsertOneResult:private] => 1
+)
+
+2025-06-05 13:14:18 - SUCCESS: Array
+(
+    [success] => 1
+    [message] => Project created successfully
+    [projectId] => 68417c09067d8c496f07f704
+)
+
+2025-06-05 13:45:37 - === NEW PROJECT CREATION REQUEST ===
+2025-06-05 13:45:37 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Sadia Akter
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => sadia.bscse@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Sadia Akter
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => sadia.bscse@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Science in Computer Science & Engineering
+                            [program_code] => 011
+                            [admission_year] => 23
+                            [admission_trimester] => 3
+                            [serial_number] => 0022
+                        )
+
+                    [student_id] => 0112330022
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1693526400000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1819756800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 2nd Year, Fall Trimester
+                    [cgpa] => 3.8
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Software Engineering
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1693526400000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Software Development
+                            [1] => Web Technologies
+                            [2] => AI Ethics
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => React
+                            [2] => Node.js
+                            [3] => MongoDB
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1693180800000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1746057600000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2c8
+)
+
+2025-06-05 13:45:37 - POST: Array
+(
+    [projectId] => 
+    [title] => test 6
+    [abstract] => test 6
+    [description] => test 6
+    [field] => Science
+    [institution] => United International University
+    [keywords] => 
+    [privacy] => 0
+    [createdAt] => 
+    [updatedAt] => 
+    [github] => 
+    [website] => 
+    [paper] => 
+    [doi] => 
+    [youtube] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [supervisorId] => [object Object]
+    [references] => 
+    [viewsCount] => 151
+    [downloadsCount] => 845
+    [favoritesCount] => 899
+    [commentsArray] => []
+    [members] => [{"name":"Sadia Akter","role":"Creator","contribution":100,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}},{"name":"Samin yeaser khan","role":"Author","contribution":0,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Imran Hasan","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c9"}}]
+    [timeline] => []
+    [links] => {"github":"","website":"","paper":"","doi":"","youtube":""}
+)
+
+2025-06-05 13:45:37 - FILES: Array
+(
+    [coverImage] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+    [projectFiles] => Array
+        (
+            [name] => Array
+                (
+                    [0] => 
+                )
+
+            [full_path] => Array
+                (
+                    [0] => 
+                )
+
+            [type] => Array
+                (
+                    [0] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => 
+                )
+
+            [error] => Array
+                (
+                    [0] => 4
+                )
+
+            [size] => Array
+                (
+                    [0] => 0
+                )
+
+        )
+
+    [mediaFiles] => Array
+        (
+            [name] => Array
+                (
+                    [0] => 
+                )
+
+            [full_path] => Array
+                (
+                    [0] => 
+                )
+
+            [type] => Array
+                (
+                    [0] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => 
+                )
+
+            [error] => Array
+                (
+                    [0] => 4
+                )
+
+            [size] => Array
+                (
+                    [0] => 0
+                )
+
+        )
+
+)
+
+2025-06-05 13:45:37 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2c8, Username: Sadia Akter
+2025-06-05 13:45:37 - Processed members: Array
+(
+    [0] => Array
+        (
+            [name] => Sadia Akter
+            [role] => Creator
+            [contribution] => 100
+            [userId] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+        )
+
+    [1] => Array
+        (
+            [name] => Samin yeaser khan
+            [role] => Author
+            [contribution] => 0
+            [userId] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+        )
+
+    [2] => Array
+        (
+            [name] => Imran Hasan
+            [role] => Author
+            [contribution] => 0
+            [userId] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                )
+
+        )
+
+)
+
+2025-06-05 13:45:37 - Processing supervisor - Name: Dr. Md. Nomani Kabir, ID: [object Object]
+2025-06-05 13:45:37 - Error looking up faculty supervisor: Error parsing ObjectId string: [object Object]
+2025-06-05 13:45:37 - Final supervisor data: Array
+(
+    [name] => Dr. Md. Nomani Kabir
+    [role] => Supervisor
+)
+
+2025-06-05 13:45:37 - Project document to insert: Array
+(
+    [title] => test 6
+    [abstract] => test 6
+    [description] => test 6
+    [field] => Science
+    [keywords] => Array
+        (
+        )
+
+    [institution] => United International University
+    [createdAt] => MongoDB\BSON\UTCDateTime Object
+        (
+            [milliseconds] => 1749123937522
+        )
+
+    [updatedAt] => MongoDB\BSON\UTCDateTime Object
+        (
+            [milliseconds] => 1749123937522
+        )
+
+    [privacy] => 0
+    [members] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Sadia Akter
+                    [role] => Creator
+                    [contribution] => 100
+                    [userId] => Array
+                        (
+                            [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [role] => Author
+                    [contribution] => 0
+                    [userId] => Array
+                        (
+                            [$oid] => 6833436be5c16779b409aa42
+                        )
+
+                )
+
+            [2] => Array
+                (
+                    [name] => Imran Hasan
+                    [role] => Author
+                    [contribution] => 0
+                    [userId] => Array
+                        (
+                            [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                        )
+
+                )
+
+        )
+
+    [timeline] => Array
+        (
+        )
+
+    [supervisor] => Array
+        (
+            [name] => Dr. Md. Nomani Kabir
+            [role] => Supervisor
+        )
+
+    [links] => Array
+        (
+            [github] => 
+            [website] => 
+            [paper] => 
+            [doi] => 
+            [youtube] => 
+        )
+
+    [stats] => Array
+        (
+            [views] => 0
+            [downloads] => 0
+            [favorites] => 0
+        )
+
+    [comments] => Array
+        (
+        )
+
+    [createdBy] => 6656d4b4f7e5b8c9a0a1b2c8
+)
+
+2025-06-05 13:45:37 - Connected to MongoDB successfully
+2025-06-05 13:45:37 - Insert result: MongoDB\InsertOneResult Object
+(
+    [writeResult:MongoDB\InsertOneResult:private] => MongoDB\Driver\WriteResult Object
+        (
+            [nInserted] => 1
+            [nMatched] => 0
+            [nModified] => 0
+            [nRemoved] => 0
+            [nUpserted] => 0
+            [upsertedIds] => Array
+                (
+                )
+
+            [writeErrors] => Array
+                (
+                )
+
+            [writeConcernError] => 
+            [writeConcern] => MongoDB\Driver\WriteConcern Object
+                (
+                )
+
+            [errorReplies] => Array
+                (
+                )
+
+        )
+
+    [insertedId:MongoDB\InsertOneResult:private] => MongoDB\BSON\ObjectId Object
+        (
+            [oid] => 68418361067d8c496f07f705
+        )
+
+    [isAcknowledged:MongoDB\InsertOneResult:private] => 1
+)
+
+2025-06-05 13:45:37 - SUCCESS: Array
+(
+    [success] => 1
+    [message] => Project created successfully
+    [projectId] => 68418361067d8c496f07f705
+)
+
+2025-06-05 13:49:20 - === NEW PROJECT CREATION REQUEST ===
+2025-06-05 13:49:20 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Sadia Akter
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => sadia.bscse@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Sadia Akter
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => sadia.bscse@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Science in Computer Science & Engineering
+                            [program_code] => 011
+                            [admission_year] => 23
+                            [admission_trimester] => 3
+                            [serial_number] => 0022
+                        )
+
+                    [student_id] => 0112330022
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1693526400000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1819756800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 2nd Year, Fall Trimester
+                    [cgpa] => 3.8
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Software Engineering
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1693526400000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Software Development
+                            [1] => Web Technologies
+                            [2] => AI Ethics
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => React
+                            [2] => Node.js
+                            [3] => MongoDB
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1693180800000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1746057600000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2c8
+)
+
+2025-06-05 13:49:20 - POST: Array
+(
+    [projectId] => 
+    [title] => test 6
+    [abstract] => test 6
+    [description] => test 6
+    [field] => Science
+    [institution] => United International University
+    [keywords] => 
+    [privacy] => 0
+    [createdAt] => 
+    [updatedAt] => 
+    [github] => 
+    [website] => 
+    [paper] => 
+    [doi] => 
+    [youtube] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [supervisorId] => [object Object]
+    [references] => 
+    [viewsCount] => 701
+    [downloadsCount] => 606
+    [favoritesCount] => 866
+    [commentsArray] => []
+    [members] => [{"name":"Sadia Akter","role":"Creator","contribution":100,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}},{"name":"Samin yeaser khan","role":"Author","contribution":0,"userId":{"$oid":"6833436be5c16779b409aa42"}}]
+    [timeline] => []
+    [links] => {"github":"","website":"","paper":"","doi":"","youtube":""}
+)
+
+2025-06-05 13:49:20 - FILES: Array
+(
+    [coverImage] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+    [projectFiles] => Array
+        (
+            [name] => Array
+                (
+                    [0] => 
+                )
+
+            [full_path] => Array
+                (
+                    [0] => 
+                )
+
+            [type] => Array
+                (
+                    [0] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => 
+                )
+
+            [error] => Array
+                (
+                    [0] => 4
+                )
+
+            [size] => Array
+                (
+                    [0] => 0
+                )
+
+        )
+
+    [mediaFiles] => Array
+        (
+            [name] => Array
+                (
+                    [0] => 
+                )
+
+            [full_path] => Array
+                (
+                    [0] => 
+                )
+
+            [type] => Array
+                (
+                    [0] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => 
+                )
+
+            [error] => Array
+                (
+                    [0] => 4
+                )
+
+            [size] => Array
+                (
+                    [0] => 0
+                )
+
+        )
+
+)
+
+2025-06-05 13:49:20 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2c8, Username: Sadia Akter
+2025-06-05 13:49:20 - Processed members: Array
+(
+    [0] => Array
+        (
+            [name] => Sadia Akter
+            [role] => Creator
+            [contribution] => 100
+            [userId] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+        )
+
+    [1] => Array
+        (
+            [name] => Samin yeaser khan
+            [role] => Author
+            [contribution] => 0
+            [userId] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+        )
+
+)
+
+2025-06-05 13:49:20 - Processing supervisor - Name: Dr. Md. Nomani Kabir, ID: [object Object]
+2025-06-05 13:49:20 - Error looking up faculty supervisor: Error parsing ObjectId string: [object Object]
+2025-06-05 13:49:20 - Final supervisor data: Array
+(
+    [name] => Dr. Md. Nomani Kabir
+    [role] => Supervisor
+)
+
+2025-06-05 13:49:20 - Project document to insert: Array
+(
+    [title] => test 6
+    [abstract] => test 6
+    [description] => test 6
+    [field] => Science
+    [keywords] => Array
+        (
+        )
+
+    [institution] => United International University
+    [createdAt] => MongoDB\BSON\UTCDateTime Object
+        (
+            [milliseconds] => 1749124160245
+        )
+
+    [updatedAt] => MongoDB\BSON\UTCDateTime Object
+        (
+            [milliseconds] => 1749124160245
+        )
+
+    [privacy] => 0
+    [members] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Sadia Akter
+                    [role] => Creator
+                    [contribution] => 100
+                    [userId] => Array
+                        (
+                            [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [role] => Author
+                    [contribution] => 0
+                    [userId] => Array
+                        (
+                            [$oid] => 6833436be5c16779b409aa42
+                        )
+
+                )
+
+        )
+
+    [timeline] => Array
+        (
+        )
+
+    [supervisor] => Array
+        (
+            [name] => Dr. Md. Nomani Kabir
+            [role] => Supervisor
+        )
+
+    [links] => Array
+        (
+            [github] => 
+            [website] => 
+            [paper] => 
+            [doi] => 
+            [youtube] => 
+        )
+
+    [stats] => Array
+        (
+            [views] => 0
+            [downloads] => 0
+            [favorites] => 0
+        )
+
+    [comments] => Array
+        (
+        )
+
+    [createdBy] => 6656d4b4f7e5b8c9a0a1b2c8
+)
+
+2025-06-05 13:49:20 - Connected to MongoDB successfully
+2025-06-05 13:49:20 - Insert result: MongoDB\InsertOneResult Object
+(
+    [writeResult:MongoDB\InsertOneResult:private] => MongoDB\Driver\WriteResult Object
+        (
+            [nInserted] => 1
+            [nMatched] => 0
+            [nModified] => 0
+            [nRemoved] => 0
+            [nUpserted] => 0
+            [upsertedIds] => Array
+                (
+                )
+
+            [writeErrors] => Array
+                (
+                )
+
+            [writeConcernError] => 
+            [writeConcern] => MongoDB\Driver\WriteConcern Object
+                (
+                )
+
+            [errorReplies] => Array
+                (
+                )
+
+        )
+
+    [insertedId:MongoDB\InsertOneResult:private] => MongoDB\BSON\ObjectId Object
+        (
+            [oid] => 68418440067d8c496f07f706
+        )
+
+    [isAcknowledged:MongoDB\InsertOneResult:private] => 1
+)
+
+2025-06-05 13:49:20 - SUCCESS: Array
+(
+    [success] => 1
+    [message] => Project created successfully
+    [projectId] => 68418440067d8c496f07f706
+)
+
+2025-06-05 13:52:23 - === NEW PROJECT CREATION REQUEST ===
+2025-06-05 13:52:23 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Sadia Akter
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => sadia.bscse@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Sadia Akter
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => sadia.bscse@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Science in Computer Science & Engineering
+                            [program_code] => 011
+                            [admission_year] => 23
+                            [admission_trimester] => 3
+                            [serial_number] => 0022
+                        )
+
+                    [student_id] => 0112330022
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1693526400000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1819756800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 2nd Year, Fall Trimester
+                    [cgpa] => 3.8
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Software Engineering
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1693526400000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Software Development
+                            [1] => Web Technologies
+                            [2] => AI Ethics
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => React
+                            [2] => Node.js
+                            [3] => MongoDB
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1693180800000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1746057600000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2c8
+)
+
+2025-06-05 13:52:23 - POST: Array
+(
+)
+
+2025-06-05 13:52:23 - FILES: Array
+(
+)
+
+2025-06-05 13:52:23 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2c8, Username: Sadia Akter
+2025-06-05 13:52:23 - Missing required fields: title, abstract, field
+2025-06-05 14:09:27 - === NEW PROJECT CREATION REQUEST ===
+2025-06-05 14:09:27 - SESSION: Array
+(
+    [logged_in] => 1
+    [user_type] => student
+    [username] => Sadia Akter
+    [profile_pic] => uploads\profile_images\user_avater.png
+    [email] => sadia.bscse@university.edu
+    [user_data] => Array
+        (
+            [_id] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+            [basic_info] => Array
+                (
+                    [name] => Sadia Akter
+                    [profile_image_url] => uploads\profile_images\user_avater.png
+                )
+
+            [contact_info] => Array
+                (
+                    [primary_email] => sadia.bscse@university.edu
+                )
+
+            [academic_info] => Array
+                (
+                    [student_id_components] => Array
+                        (
+                            [program_name] => Bachelor of Science in Computer Science & Engineering
+                            [program_code] => 011
+                            [admission_year] => 23
+                            [admission_trimester] => 3
+                            [serial_number] => 0022
+                        )
+
+                    [student_id] => 0112330022
+                    [department] => Computer Science and Engineering
+                    [faculty] => School of Science & Engineering
+                    [current_status] => Active
+                    [enrollment_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1693526400000
+                                )
+
+                        )
+
+                    [expected_graduation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1819756800000
+                                )
+
+                        )
+
+                    [current_year_trimester] => 2nd Year, Fall Trimester
+                    [cgpa] => 3.8
+                    [current_degree_info] => Array
+                        (
+                            [degree_level] => Bachelor's
+                            [degree_name] => B.Sc. in Computer Science and Engineering
+                            [institution_name] => United International University
+                            [major_field_of_study] => Software Engineering
+                            [start_date] => Array
+                                (
+                                    [$date] => Array
+                                        (
+                                            [$numberLong] => 1693526400000
+                                        )
+
+                                )
+
+                        )
+
+                    [thesis_info] => 
+                )
+
+            [university_research_profile] => Array
+                (
+                    [research_interests] => Array
+                        (
+                            [0] => Software Development
+                            [1] => Web Technologies
+                            [2] => AI Ethics
+                        )
+
+                    [skills_expertise] => Array
+                        (
+                            [0] => JavaScript
+                            [1] => React
+                            [2] => Node.js
+                            [3] => MongoDB
+                        )
+
+                    [university_publications] => Array
+                        (
+                        )
+
+                    [university_projects] => Array
+                        (
+                        )
+
+                )
+
+            [platform_settings] => Array
+                (
+                    [user_role] => student
+                    [account_creation_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1693180800000
+                                )
+
+                        )
+
+                    [last_updated_date] => Array
+                        (
+                            [$date] => Array
+                                (
+                                    [$numberLong] => 1746057600000
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [user_id] => 6656d4b4f7e5b8c9a0a1b2c8
+)
+
+2025-06-05 14:09:27 - POST: Array
+(
+    [projectId] => 
+    [title] => test 6
+    [abstract] => test 6
+    [description] => test 6
+    [field] => Science
+    [institution] => United International University
+    [keywords] => 
+    [privacy] => 0
+    [createdAt] => 
+    [updatedAt] => 
+    [github] => 
+    [website] => 
+    [paper] => 
+    [doi] => 
+    [youtube] => 
+    [supervisor] => Dr. Md. Nomani Kabir
+    [supervisorId] => 67e1a9f6ebb89e49e04ddf35
+    [references] => 
+    [viewsCount] => 131
+    [downloadsCount] => 406
+    [favoritesCount] => 821
+    [commentsArray] => []
+    [members] => [{"name":"Sadia Akter","role":"Creator","contribution":100,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c8"}},{"name":"Samin yeaser khan","role":"Author","contribution":0,"userId":{"$oid":"6833436be5c16779b409aa42"}},{"name":"Imran Hasan","role":"Author","contribution":0,"userId":{"$oid":"6656d4b4f7e5b8c9a0a1b2c9"}}]
+    [timeline] => []
+    [links] => {"github":"","website":"","paper":"","doi":"","youtube":""}
+)
+
+2025-06-05 14:09:27 - FILES: Array
+(
+    [coverImage] => Array
+        (
+            [name] => 
+            [full_path] => 
+            [type] => 
+            [tmp_name] => 
+            [error] => 4
+            [size] => 0
+        )
+
+    [projectFiles] => Array
+        (
+            [name] => Array
+                (
+                    [0] => 
+                )
+
+            [full_path] => Array
+                (
+                    [0] => 
+                )
+
+            [type] => Array
+                (
+                    [0] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => 
+                )
+
+            [error] => Array
+                (
+                    [0] => 4
+                )
+
+            [size] => Array
+                (
+                    [0] => 0
+                )
+
+        )
+
+    [mediaFiles] => Array
+        (
+            [name] => Array
+                (
+                    [0] => 
+                )
+
+            [full_path] => Array
+                (
+                    [0] => 
+                )
+
+            [type] => Array
+                (
+                    [0] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => 
+                )
+
+            [error] => Array
+                (
+                    [0] => 4
+                )
+
+            [size] => Array
+                (
+                    [0] => 0
+                )
+
+        )
+
+)
+
+2025-06-05 14:09:27 - UserId extracted: 6656d4b4f7e5b8c9a0a1b2c8, Username: Sadia Akter
+2025-06-05 14:09:27 - Processed members: Array
+(
+    [0] => Array
+        (
+            [name] => Sadia Akter
+            [role] => Creator
+            [contribution] => 100
+            [userId] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                )
+
+        )
+
+    [1] => Array
+        (
+            [name] => Samin yeaser khan
+            [role] => Author
+            [contribution] => 0
+            [userId] => Array
+                (
+                    [$oid] => 6833436be5c16779b409aa42
+                )
+
+        )
+
+    [2] => Array
+        (
+            [name] => Imran Hasan
+            [role] => Author
+            [contribution] => 0
+            [userId] => Array
+                (
+                    [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                )
+
+        )
+
+)
+
+2025-06-05 14:09:27 - Processing supervisor - Name: Dr. Md. Nomani Kabir, ID: 67e1a9f6ebb89e49e04ddf35
+2025-06-05 14:09:27 - Found faculty supervisor: Array
+(
+    [userId] => Array
+        (
+            [$oid] => 67e1a9f6ebb89e49e04ddf35
+        )
+
+    [name] => Dr. Md. Nomani Kabir
+    [role] => Supervisor
+    [email] => kabir@cse.uiu.ac.bd
+)
+
+2025-06-05 14:09:27 - Final supervisor data: Array
+(
+    [userId] => Array
+        (
+            [$oid] => 67e1a9f6ebb89e49e04ddf35
+        )
+
+    [name] => Dr. Md. Nomani Kabir
+    [role] => Supervisor
+    [email] => kabir@cse.uiu.ac.bd
+)
+
+2025-06-05 14:09:27 - Project document to insert: Array
+(
+    [title] => test 6
+    [abstract] => test 6
+    [description] => test 6
+    [field] => Science
+    [keywords] => Array
+        (
+        )
+
+    [institution] => United International University
+    [createdAt] => MongoDB\BSON\UTCDateTime Object
+        (
+            [milliseconds] => 1749125367369
+        )
+
+    [updatedAt] => MongoDB\BSON\UTCDateTime Object
+        (
+            [milliseconds] => 1749125367369
+        )
+
+    [privacy] => 0
+    [members] => Array
+        (
+            [0] => Array
+                (
+                    [name] => Sadia Akter
+                    [role] => Creator
+                    [contribution] => 100
+                    [userId] => Array
+                        (
+                            [$oid] => 6656d4b4f7e5b8c9a0a1b2c8
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [name] => Samin yeaser khan
+                    [role] => Author
+                    [contribution] => 0
+                    [userId] => Array
+                        (
+                            [$oid] => 6833436be5c16779b409aa42
+                        )
+
+                )
+
+            [2] => Array
+                (
+                    [name] => Imran Hasan
+                    [role] => Author
+                    [contribution] => 0
+                    [userId] => Array
+                        (
+                            [$oid] => 6656d4b4f7e5b8c9a0a1b2c9
+                        )
+
+                )
+
+        )
+
+    [timeline] => Array
+        (
+        )
+
+    [supervisor] => Array
+        (
+            [userId] => Array
+                (
+                    [$oid] => 67e1a9f6ebb89e49e04ddf35
+                )
+
+            [name] => Dr. Md. Nomani Kabir
+            [role] => Supervisor
+            [email] => kabir@cse.uiu.ac.bd
+        )
+
+    [links] => Array
+        (
+            [github] => 
+            [website] => 
+            [paper] => 
+            [doi] => 
+            [youtube] => 
+        )
+
+    [stats] => Array
+        (
+            [views] => 0
+            [downloads] => 0
+            [favorites] => 0
+        )
+
+    [comments] => Array
+        (
+        )
+
+    [createdBy] => 6656d4b4f7e5b8c9a0a1b2c8
+)
+
+2025-06-05 14:09:27 - Connected to MongoDB successfully
+2025-06-05 14:09:27 - Insert result: MongoDB\InsertOneResult Object
+(
+    [writeResult:MongoDB\InsertOneResult:private] => MongoDB\Driver\WriteResult Object
+        (
+            [nInserted] => 1
+            [nMatched] => 0
+            [nModified] => 0
+            [nRemoved] => 0
+            [nUpserted] => 0
+            [upsertedIds] => Array
+                (
+                )
+
+            [writeErrors] => Array
+                (
+                )
+
+            [writeConcernError] => 
+            [writeConcern] => MongoDB\Driver\WriteConcern Object
+                (
+                )
+
+            [errorReplies] => Array
+                (
+                )
+
+        )
+
+    [insertedId:MongoDB\InsertOneResult:private] => MongoDB\BSON\ObjectId Object
+        (
+            [oid] => 684188f7067d8c496f07f707
+        )
+
+    [isAcknowledged:MongoDB\InsertOneResult:private] => 1
+)
+
+2025-06-05 14:09:27 - SUCCESS: Array
+(
+    [success] => 1
+    [message] => Project created successfully
+    [projectId] => 684188f7067d8c496f07f707
+)
+
