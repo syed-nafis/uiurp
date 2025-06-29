@@ -2,6 +2,11 @@
 require __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/src/model/db_connect.php';
 
+// Import MongoDB classes
+use MongoDB\BSON\ObjectId;
+use MongoDB\Model\BSONArray;
+use MongoDB\Model\BSONDocument;
+
 session_start();
 
 // Redirect if not logged in
@@ -36,6 +41,20 @@ if (!$post || $post['user_id'] !== $_SESSION['user_id']) {
 // Convert BSON arrays to PHP arrays
 if (isset($post['tags']) && $post['tags'] instanceof MongoDB\Model\BSONArray) {
     $post['tags'] = $post['tags']->getArrayCopy();
+}
+
+// Convert attachments from BSON to PHP arrays if needed
+if (isset($post['attachments'])) {
+    if ($post['attachments'] instanceof MongoDB\Model\BSONArray) {
+        $post['attachments'] = $post['attachments']->getArrayCopy();
+        
+        // Also convert each attachment document
+        foreach ($post['attachments'] as $key => $attachment) {
+            if ($attachment instanceof MongoDB\Model\BSONDocument) {
+                $post['attachments'][$key] = $attachment->getArrayCopy();
+            }
+        }
+    }
 }
 
 // Get all available tags
@@ -690,6 +709,29 @@ $tags = $tagCollection->find()->toArray();
             object-fit: cover;
             border-radius: 0.5rem;
         }
+        
+        /* Video styling in previews */
+        .preview-item video {
+            width: 100%;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 0.5rem;
+            background-color: #000;
+        }
+        
+        /* File format indicator */
+        .file-format {
+            background: var(--modern-blue);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            position: absolute;
+            top: 5px;
+            right: 30px;
+            font-weight: bold;
+            z-index: 10;
+        }
 
         .preview-item .remove-file {
             position: absolute;
@@ -815,17 +857,24 @@ $tags = $tagCollection->find()->toArray();
                                     <label class="form-label">Current Attachments</label>
                                     <div class="current-attachments">
                                         <?php foreach ($post['attachments'] as $index => $attachment): ?>
-                                            <?php $isImage = strpos($attachment['file_type'], 'image/') === 0; ?>
-                                            <div class="attachment-item" data-index="<?= $index ?>">
+                                            <?php 
+                                                $isImage = strpos($attachment['file_type'], 'image/') === 0;
+                                                $isVideo = strpos($attachment['file_type'], 'video/') === 0;
+                                                $fileExt = strtoupper(pathinfo($attachment['original_name'], PATHINFO_EXTENSION));
+                                            ?>
+                                            <div class="attachment-item" data-index="<?= (string)$index ?>" data-debug="Index type: <?= gettype($index) ?>" data-original-name="<?= htmlspecialchars($attachment['original_name']) ?>">
                                                 <div class="attachment-content">
                                                     <?php if ($isImage): ?>
                                                         <img src="<?= $attachment['file_path'] ?>" alt="Attachment">
+                                                    <?php elseif ($isVideo): ?>
+                                                        <video src="<?= $attachment['file_path'] ?>" controls muted style="max-width: 100%; max-height: 120px;"></video>
+                                                        <div class="file-format"><?= $fileExt ?></div>
                                                     <?php else: ?>
                                                         <div class="file-icon">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">
                                                                 <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
                                                             </svg>
-                                                            <div class="file-type"><?= strtoupper(pathinfo($attachment['original_name'], PATHINFO_EXTENSION)) ?></div>
+                                                            <div class="file-type"><?= $fileExt ?></div>
                                                         </div>
                                                     <?php endif; ?>
                                                 </div>
@@ -868,7 +917,7 @@ $tags = $tagCollection->find()->toArray();
             const form = document.getElementById('edit-post-form');
             const fileInput = document.getElementById('attachments');
             const previewContainer = document.getElementById('preview-container');
-            const maxFileSize = 5 * 1024 * 1024; // 5MB
+            const maxFileSize = 100 * 1024 * 1024; // 100MB
             let files = [];
             let deleteAttachments = [];
             
@@ -883,7 +932,7 @@ $tags = $tagCollection->find()->toArray();
                 selectedFiles.forEach(file => {
                     // Check file size
                     if (file.size > maxFileSize) {
-                        alert(`File ${file.name} is too large. Maximum size is 5MB.`);
+                        alert(`File ${file.name} is too large. Maximum size is 100MB.`);
                         return;
                     }
                     
@@ -896,6 +945,20 @@ $tags = $tagCollection->find()->toArray();
                         const img = document.createElement('img');
                         img.src = URL.createObjectURL(file);
                         previewItem.appendChild(img);
+                    } else if (file.type.startsWith('video/')) {
+                        const video = document.createElement('video');
+                        video.src = URL.createObjectURL(file);
+                        video.controls = true;
+                        video.muted = true;
+                        video.style.maxWidth = '100%';
+                        video.style.maxHeight = '150px';
+                        previewItem.appendChild(video);
+                        
+                        // Add video format indicator
+                        const format = document.createElement('div');
+                        format.className = 'file-format';
+                        format.textContent = file.type.split('/')[1].toUpperCase();
+                        previewItem.appendChild(format);
                     } else {
                         const icon = document.createElement('div');
                         icon.className = 'file-icon';
@@ -925,13 +988,16 @@ $tags = $tagCollection->find()->toArray();
             document.querySelectorAll('.remove-attachment').forEach(button => {
                 button.addEventListener('click', function() {
                     const attachmentItem = this.closest('.attachment-item');
-                    const index = parseInt(attachmentItem.getAttribute('data-index'));
+                    const index = attachmentItem.getAttribute('data-index');
                     
-                    // Add to delete list
-                    deleteAttachments.push(index);
+                    // Add to delete list - ensure consistent string format
+                    deleteAttachments.push(String(index));
                     
                     // Hide from UI
                     attachmentItem.remove();
+                    
+                    console.log('Marked attachment for deletion:', index);
+                    console.log('Current deleteAttachments array:', deleteAttachments);
                 });
             });
             
@@ -959,9 +1025,16 @@ $tags = $tagCollection->find()->toArray();
                 
                 // Add files to be deleted
                 if (deleteAttachments.length > 0) {
+                    console.log('Submitting deleteAttachments:', deleteAttachments);
                     deleteAttachments.forEach(index => {
                         formData.append('delete_attachments[]', index);
                     });
+                }
+                
+                // For debugging - log the formData contents
+                console.log('FormData entries:');
+                for (let pair of formData.entries()) {
+                    console.log(pair[0] + ': ' + pair[1]);
                 }
                 
                 // Add new files
@@ -977,7 +1050,7 @@ $tags = $tagCollection->find()->toArray();
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        window.location.href = 'view_posts.php';
+                        window.location.href = 'post_details.php?id=' + document.getElementById('postId').value;
                     } else {
                         alert('Error: ' + (data.message || 'Unknown error occurred'));
                     }
