@@ -119,6 +119,15 @@ $tags = $tagCollection->find()->toArray();
             --text-link: #2563eb;
         }
 
+        ::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+        }
+
+        * {
+            -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+            scrollbar-width: none;  /* Hide scrollbar for Firefox */
+        }
+
         body {
             background: var(--bg-gradient);
             font-family: 'Inter', 'Segoe UI', sans-serif;
