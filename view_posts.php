@@ -1046,7 +1046,273 @@ try {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* PDF Preview Modal Styles */
+        .pdf-preview-modal .modal-dialog {
+            max-width: 90%;
+            height: 90vh;
+            margin: 1.75rem auto;
+        }
+
+        .pdf-preview-modal .modal-content {
+            height: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+
+        .pdf-preview-modal .modal-body {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 120px); /* Adjust for header and footer */
+        }
+
+        .pdf-preview-container {
+            flex: 1;
+            overflow: auto;
+            background: var(--surface-1);
+            border-radius: 0.5rem;
+            margin: 1rem;
+            position: relative;
+        }
+
+        #pdf-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .pdf-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--surface-2);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .pdf-page-info {
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pdf-error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--text-primary);
+            background: var(--glass-bg);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            max-width: 80%;
+        }
+
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .pdf-preview-modal .btn-close {
+            filter: invert(var(--text-primary-invert, 0));
+        }
+
+        /* Ensure PDF preview modal works well in both themes */
+        [data-theme="light"] .pdf-preview-modal .modal-content {
+            background: var(--glass-bg);
+        }
+
+        [data-theme="light"] .pdf-preview-container {
+            background: var(--surface-1);
+        }
+
+        [data-theme="light"] .pdf-controls {
+            background: var(--surface-2);
+        }
+
+        [data-theme="light"] .pdf-error {
+            background: var(--glass-bg);
+        }
+
+        /* Document Preview Modal Styles */
+        .document-preview-modal .modal-dialog {
+            max-width: 90%;
+            height: 90vh;
+            margin: 1.75rem auto;
+        }
+
+        .document-preview-modal .modal-content {
+            height: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+
+        .document-preview-modal .modal-body {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 120px); /* Adjust for header and footer */
+        }
+
+        .document-preview-container {
+            flex: 1;
+            overflow: auto;
+            background: var(--surface-1);
+            border-radius: 0.5rem;
+            margin: 1rem;
+            position: relative;
+        }
+
+        #pdf-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .text-viewer {
+            width: 100%;
+            height: 100%;
+            padding: 1.5rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            color: var(--text-primary);
+            background: transparent;
+            border: none;
+            overflow: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .document-icon {
+            font-size: 5rem;
+            color: var(--modern-blue);
+        }
+
+        .document-info {
+            color: var(--text-primary);
+            padding: 2rem;
+        }
+
+        .document-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--surface-2);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .pdf-page-info {
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pdf-error, .document-error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--text-primary);
+            background: var(--glass-bg);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            max-width: 80%;
+        }
+
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .document-preview-modal .btn-close {
+            filter: invert(var(--text-primary-invert, 0));
+        }
+
+        /* File type specific icons */
+        .doc-icon { color: #2b579a; } /* Word blue */
+        .ppt-icon { color: #d24726; } /* PowerPoint orange */
+        .txt-icon { color: #4caf50; } /* Green for text */
+        .pdf-icon { color: #f44336; } /* Red for PDF */
+        .file-icon { color: var(--modern-blue); } /* Default */
+
+        /* Ensure document preview modal works well in both themes */
+        [data-theme="light"] .document-preview-modal .modal-content {
+            background: var(--glass-bg);
+        }
+
+        [data-theme="light"] .document-preview-container {
+            background: var(--surface-1);
+        }
+
+        [data-theme="light"] .document-controls {
+            background: var(--surface-2);
+        }
+
+        [data-theme="light"] .document-error {
+            background: var(--glass-bg);
+        }
+
+        /* Comment form styling */
+        .add-comment-form .position-relative {
+            display: flex;
+            align-items: center;
+        }
+
+        .add-comment-form textarea {
+            padding: 0.75rem 3rem 0.75rem 1rem;
+            resize: none;
+            min-height: 40px;
+            max-height: 120px;
+            border-radius: 20px;
+            line-height: 1.5;
+            background: var(--surface-1);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .add-comment-form textarea:focus {
+            background: var(--surface-2);
+            border-color: var(--modern-blue);
+            box-shadow: 0 0 0 0.2rem var(--border-glow);
+        }
+
+        .add-comment-form .btn-link {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--modern-blue);
+            padding: 0.25rem 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .add-comment-form .btn-link:hover {
+            color: var(--modern-purple);
+            transform: translateY(-50%) scale(1.1);
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Set worker path for PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
 </head>
 <body>
     <?php include 'src/includes/navbar.php'; ?>
@@ -1352,8 +1618,8 @@ try {
                                          alt="Your Avatar" class="author-avatar" style="width: 32px; height: 32px;">
                                     <div class="flex-grow-1 ms-2">
                                         <div class="position-relative">
-                                            <textarea class="form-control rounded-pill" placeholder="Write a comment..." required></textarea>
-                                            <button type="submit" class="btn btn-link position-absolute end-0 top-50 translate-middle-y">
+                                            <textarea class="form-control" style="padding: 0.75rem 3rem 0.75rem 1rem; resize: none; min-height: 40px; max-height: 120px; border-radius: 20px; line-height: 1.5; background: var(--surface-1); border: 1px solid var(--border-color); color: var(--text-primary);" placeholder="Write a comment..." required></textarea>
+                                            <button type="submit" class="btn btn-link" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--modern-blue); padding: 0.25rem 0.5rem;">
                                                 <i class="bi bi-send-fill"></i>
                                             </button>
                                         </div>
@@ -1392,503 +1658,876 @@ try {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            once: true
-        });
-        
-        // Debug flag - set to true to see console messages
-        const DEBUG = true;
-        
-        function debug(message) {
-            if (DEBUG) {
-                console.log(message);
-            }
+    // Initialize AOS
+    AOS.init({
+        duration: 800,
+        once: true
+    });
+    
+    // Debug flag - set to true to see console messages
+    const DEBUG = true;
+    
+    function debug(message) {
+        if (DEBUG) {
+            console.log(message);
         }
-        
-        // Initialize Bootstrap components
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
+    }
+    
+    // Initialize Bootstrap components
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    
+    const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+    let deleteTarget = null;
+    let deleteType = '';
+    
+    // Toggle comments visibility
+    document.querySelectorAll('.toggle-comments-btn').forEach(btn => {
+        debug('Initializing comment toggle for button: ' + btn.getAttribute('data-post-id'));
+        btn.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            
+            if (commentsSection) {
+                if (commentsSection.style.display === 'none') {
+                    commentsSection.style.display = 'block';
+                    this.classList.add('text-primary');
+                    this.classList.remove('text-muted');
+                } else {
+                    commentsSection.style.display = 'none';
+                    this.classList.add('text-muted');
+                    this.classList.remove('text-primary');
+                }
+            } else {
+                console.error(`Comments section not found for post ${postId}`);
+            }
         });
-        
-        const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
-        let deleteTarget = null;
-        let deleteType = '';
-        
-        // Toggle comments visibility
-        document.querySelectorAll('.toggle-comments-btn').forEach(btn => {
-            debug('Initializing comment toggle for button: ' + btn.getAttribute('data-post-id'));
-            btn.addEventListener('click', function() {
-                const postId = this.getAttribute('data-post-id');
-                const commentsSection = document.getElementById(`comments-${postId}`);
-                
-                if (commentsSection) {
-                    if (commentsSection.style.display === 'none') {
-                        commentsSection.style.display = 'block';
-                        this.classList.add('text-primary');
-                        this.classList.remove('text-muted');
+    });
+    
+    // Handle upvotes
+    document.querySelectorAll('.upvote-btn').forEach(btn => {
+        debug('Initializing upvote for button: ' + btn.getAttribute('data-post-id'));
+        btn.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+            const button = this;
+            
+            fetch('src/controller/update_votes.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postId: postId })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Update UI
+                    const countElements = document.querySelectorAll(`.upvote-count[data-post-id="${postId}"], .upvote-btn[data-post-id="${postId}"] .upvote-count`);
+                    countElements.forEach(el => {
+                        el.textContent = data.upvotes;
+                    });
+                    
+                    if (data.upvoted) {
+                        button.classList.add('text-primary', 'fw-bold');
+                        button.classList.remove('text-muted');
                     } else {
-                        commentsSection.style.display = 'none';
-                        this.classList.add('text-muted');
-                        this.classList.remove('text-primary');
+                        button.classList.add('text-muted');
+                        button.classList.remove('text-primary', 'fw-bold');
                     }
                 } else {
-                    console.error(`Comments section not found for post ${postId}`);
+                    throw new Error(data.message || 'Failed to update vote');
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating vote: ' + error.message);
             });
         });
+    });
+    
+    // Auto-resize textarea for comments
+    document.querySelectorAll('.add-comment-form textarea').forEach(textarea => {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
         
-        // Handle upvotes
-        document.querySelectorAll('.upvote-btn').forEach(btn => {
-            debug('Initializing upvote for button: ' + btn.getAttribute('data-post-id'));
-            btn.addEventListener('click', function() {
-                const postId = this.getAttribute('data-post-id');
-                const button = this;
-                
-                fetch('src/controller/update_votes.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ postId: postId })
+        // Focus event to expand textarea
+        textarea.addEventListener('focus', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.max(80, this.scrollHeight) + 'px';
+        });
+        
+        // Blur event to collapse textarea if empty
+        textarea.addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+                this.style.height = '40px';
+            }
+        });
+    });
+    
+    // Add comment
+    document.querySelectorAll('.add-comment-form').forEach(form => {
+        debug('Initializing comment form for post: ' + form.getAttribute('data-post-id'));
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const postId = this.getAttribute('data-post-id');
+            const textarea = this.querySelector('textarea');
+            const submitButton = this.querySelector('button[type="submit"]');
+            
+            if (!textarea || !submitButton) {
+                console.error('Required form elements not found');
+                return;
+            }
+            
+            const commentText = textarea.value.trim();
+            if (!commentText) {
+                alert('Please enter a comment');
+                return;
+            }
+            
+            // Disable form while submitting
+            textarea.disabled = true;
+            submitButton.disabled = true;
+            
+            fetch('src/controller/add_comment.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    postId: postId,
+                    comment: commentText
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json().catch(error => {
+                    throw new Error('Invalid JSON response from server');
+                });
+            })
+            .then(data => {
+                if (data.success) {
+                    // Reload the page to show the new comment
+                    location.reload();
+                } else {
+                    throw new Error(data.message || 'Failed to add comment');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error adding comment: ' + error.message);
+                // Re-enable form
+                textarea.disabled = false;
+                submitButton.disabled = false;
+            });
+        });
+    });
+    
+    // Handle delete post button
+    document.querySelectorAll('.delete-post-btn').forEach(btn => {
+        debug('Initializing delete button for post: ' + btn.getAttribute('data-post-id'));
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            deleteTarget = this.getAttribute('data-post-id');
+            deleteType = 'post';
+            
+            document.getElementById('confirmation-message').textContent = 
+                'Are you sure you want to delete this post? This action cannot be undone.';
+            confirmationModal.show();
+        });
+    });
+    
+    // Handle delete comment button
+    document.querySelectorAll('.delete-comment-btn').forEach(btn => {
+        debug('Initializing delete button for comment');
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            deleteTarget = {
+                postId: this.getAttribute('data-post-id'),
+                commentIndex: this.getAttribute('data-comment-index')
+            };
+            deleteType = 'comment';
+            
+            document.getElementById('confirmation-message').textContent = 
+                'Are you sure you want to delete this comment? This action cannot be undone.';
+            confirmationModal.show();
+        });
+    });
+    
+    // Handle confirm delete button
+    const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function() {
+            if (!deleteTarget || !deleteType) {
+                console.error('Delete target or type not set');
+                return;
+            }
+            
+            let url = deleteType === 'post' ? 'src/controller/delete_post.php' : 'src/controller/delete_comment.php';
+            let data = deleteType === 'post' ? { postId: deleteTarget } : deleteTarget;
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    if (deleteType === 'post') {
+                        const postElement = document.getElementById(`post-${deleteTarget}`);
+                        if (postElement) {
+                            postElement.remove();
+                        }
+                    } else {
+                        const commentElement = document.getElementById(
+                            `comment-${deleteTarget.postId}-${deleteTarget.commentIndex}`
+                        );
+                        if (commentElement) {
+                            commentElement.remove();
+                        }
                     }
-                    return response.json();
+                    confirmationModal.hide();
+                } else {
+                    throw new Error(data.message || 'Failed to delete');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            });
+        });
+    }
+    
+    // Handle edit comment
+    document.querySelectorAll('.edit-comment-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const postId = this.getAttribute('data-post-id');
+            const commentIndex = this.getAttribute('data-comment-index');
+            const commentText = this.getAttribute('data-comment-text');
+            const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
+                const contentElement = commentElement.querySelector('.comment-content');
+            
+            if (!contentElement) return;
+            
+            // Create edit form
+            const editForm = document.createElement('div');
+            editForm.className = 'edit-form mt-2';
+            editForm.innerHTML = `
+                <textarea class="form-control mb-2">${commentText}</textarea>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-primary save-edit-btn">Save</button>
+                    <button class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
+                </div>
+            `;
+            
+            // Store original content
+            const originalContent = contentElement.innerHTML;
+            
+            // Replace content with edit form
+            contentElement.innerHTML = '';
+            contentElement.appendChild(editForm);
+            
+            // Focus textarea
+            const textarea = editForm.querySelector('textarea');
+            textarea.focus();
+            
+            // Handle save
+            editForm.querySelector('.save-edit-btn').addEventListener('click', async () => {
+            const newText = textarea.value.trim();
+            if (!newText) {
+                alert('Please enter a comment');
+                return;
+            }
+            
+                try {
+                    const response = await fetch('src/controller/edit_comment.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    postId: postId,
+                    commentIndex: parseInt(commentIndex),
+                    text: newText
                 })
-                .then(data => {
-                    if (data.success) {
-                        // Update UI
-                        const countElements = document.querySelectorAll(`.upvote-count[data-post-id="${postId}"], .upvote-btn[data-post-id="${postId}"] .upvote-count`);
-                        countElements.forEach(el => {
-                            el.textContent = data.upvotes;
-                        });
+                    });
+                    
+                    const data = await response.json();
+                if (data.success) {
+                        contentElement.innerHTML = nl2br(newText);
                         
-                        if (data.upvoted) {
-                            button.classList.add('text-primary', 'fw-bold');
-                            button.classList.remove('text-muted');
-                        } else {
-                            button.classList.add('text-muted');
-                            button.classList.remove('text-primary', 'fw-bold');
-                        }
-                    } else {
-                        throw new Error(data.message || 'Failed to update vote');
+                        // Update the data-comment-text attribute
+                        this.setAttribute('data-comment-text', newText);
+                        
+                        // Add edited indicator if not present
+                        const timeElement = commentElement.querySelector('.comment-time');
+                        if (timeElement && !timeElement.textContent.includes('(edited)')) {
+                            timeElement.textContent += ' (edited)';
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error updating vote: ' + error.message);
-                });
-            });
-        });
-        
-        // Auto-resize textarea for comments
-        document.querySelectorAll('.add-comment-form textarea').forEach(textarea => {
-            textarea.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
+                } else {
+                    throw new Error(data.message || 'Failed to update comment');
+                }
+                } catch (error) {
+                console.error('Error:', error);
+                alert('Error updating comment: ' + error.message);
+                    contentElement.innerHTML = originalContent;
+                }
             });
             
-            // Focus event to expand textarea
-            textarea.addEventListener('focus', function() {
-                this.style.height = 'auto';
-                this.style.height = Math.max(80, this.scrollHeight) + 'px';
+            // Handle cancel
+            editForm.querySelector('.cancel-edit-btn').addEventListener('click', () => {
+                contentElement.innerHTML = originalContent;
             });
+        });
+    });
+    
+    // Helper function to convert newlines to <br> tags
+    function nl2br(str) {
+        return str.replace(/\n/g, '<br>');
+    }
+    
+    // Handle delete comment
+    document.querySelectorAll('.delete-comment-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             
-            // Blur event to collapse textarea if empty
-            textarea.addEventListener('blur', function() {
-                if (this.value.trim() === '') {
-                    this.style.height = '40px';
-                }
-            });
-        });
-        
-        // Add comment
-        document.querySelectorAll('.add-comment-form').forEach(form => {
-            debug('Initializing comment form for post: ' + form.getAttribute('data-post-id'));
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const postId = this.getAttribute('data-post-id');
-                const textarea = this.querySelector('textarea');
-                const submitButton = this.querySelector('button[type="submit"]');
-                
-                if (!textarea || !submitButton) {
-                    console.error('Required form elements not found');
-                    return;
-                }
-                
-                const commentText = textarea.value.trim();
-                if (!commentText) {
-                    alert('Please enter a comment');
-                    return;
-                }
-                
-                // Disable form while submitting
-                textarea.disabled = true;
-                submitButton.disabled = true;
-                
-                fetch('src/controller/add_comment.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        postId: postId,
-                        comment: commentText
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        // Reload the page to show the new comment
-                        location.reload();
-                    } else {
-                        throw new Error(data.message || 'Failed to add comment');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error adding comment: ' + error.message);
-                })
-                .finally(() => {
-                    // Re-enable form
-                    textarea.disabled = false;
-                    submitButton.disabled = false;
-                });
-            });
-        });
-        
-        // Handle delete post button
-        document.querySelectorAll('.delete-post-btn').forEach(btn => {
-            debug('Initializing delete button for post: ' + btn.getAttribute('data-post-id'));
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                deleteTarget = this.getAttribute('data-post-id');
-                deleteType = 'post';
-                
-                document.getElementById('confirmation-message').textContent = 
-                    'Are you sure you want to delete this post? This action cannot be undone.';
-                confirmationModal.show();
-            });
-        });
-        
-        // Handle delete comment button
-        document.querySelectorAll('.delete-comment-btn').forEach(btn => {
-            debug('Initializing delete button for comment');
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                deleteTarget = {
-                    postId: this.getAttribute('data-post-id'),
-                    commentIndex: this.getAttribute('data-comment-index')
-                };
-                deleteType = 'comment';
-                
-                document.getElementById('confirmation-message').textContent = 
-                    'Are you sure you want to delete this comment? This action cannot be undone.';
-                confirmationModal.show();
-            });
-        });
-        
-        // Handle confirm delete button
-        const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
-        if (confirmDeleteBtn) {
-            confirmDeleteBtn.addEventListener('click', function() {
-                if (!deleteTarget || !deleteType) {
-                    console.error('Delete target or type not set');
-                    return;
-                }
-                
-                let url = deleteType === 'post' ? 'src/controller/delete_post.php' : 'src/controller/delete_comment.php';
-                let data = deleteType === 'post' ? { postId: deleteTarget } : deleteTarget;
-                
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        if (deleteType === 'post') {
-                            const postElement = document.getElementById(`post-${deleteTarget}`);
-                            if (postElement) {
-                                postElement.remove();
-                            }
-                        } else {
-                            const commentElement = document.getElementById(
-                                `comment-${deleteTarget.postId}-${deleteTarget.commentIndex}`
-                            );
-                            if (commentElement) {
-                                commentElement.remove();
-                            }
-                        }
-                        confirmationModal.hide();
-                    } else {
-                        throw new Error(data.message || 'Failed to delete');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error: ' + error.message);
-                });
-            });
-        }
-        
-        // Handle edit comment
-        document.querySelectorAll('.edit-comment-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const postId = this.getAttribute('data-post-id');
-                const commentIndex = this.getAttribute('data-comment-index');
-                const commentText = this.getAttribute('data-comment-text');
-                const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
-                    const contentElement = commentElement.querySelector('.comment-content');
-                
-                if (!contentElement) return;
-                
-                // Create edit form
-                const editForm = document.createElement('div');
-                editForm.className = 'edit-form mt-2';
-                editForm.innerHTML = `
-                    <textarea class="form-control mb-2">${commentText}</textarea>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-primary save-edit-btn">Save</button>
-                        <button class="btn btn-sm btn-secondary cancel-edit-btn">Cancel</button>
-                    </div>
-                `;
-                
-                // Store original content
-                const originalContent = contentElement.innerHTML;
-                
-                // Replace content with edit form
-                contentElement.innerHTML = '';
-                contentElement.appendChild(editForm);
-                
-                // Focus textarea
-                const textarea = editForm.querySelector('textarea');
-                textarea.focus();
-                
-                // Handle save
-                editForm.querySelector('.save-edit-btn').addEventListener('click', async () => {
-                const newText = textarea.value.trim();
-                if (!newText) {
-                    alert('Please enter a comment');
-                    return;
-                }
-                
-                    try {
-                        const response = await fetch('src/controller/edit_comment.php', {
+            const postId = this.getAttribute('data-post-id');
+            const commentIndex = this.getAttribute('data-comment-index');
+            
+            if (confirm('Are you sure you want to delete this comment? This action cannot be undone.')) {
+                fetch('src/controller/delete_comment.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         postId: postId,
-                        commentIndex: parseInt(commentIndex),
-                        text: newText
+                        commentIndex: parseInt(commentIndex)
                     })
-                        });
-                        
-                        const data = await response.json();
+                })
+                .then(response => response.json())
+                .then(data => {
                     if (data.success) {
-                            contentElement.innerHTML = nl2br(newText);
-                            
-                            // Update the data-comment-text attribute
-                            this.setAttribute('data-comment-text', newText);
-                            
-                            // Add edited indicator if not present
-                            const timeElement = commentElement.querySelector('.comment-time');
-                            if (timeElement && !timeElement.textContent.includes('(edited)')) {
-                                timeElement.textContent += ' (edited)';
+                        const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
+                        if (commentElement) {
+                            commentElement.remove();
                         }
                     } else {
-                        throw new Error(data.message || 'Failed to update comment');
+                        throw new Error(data.message || 'Failed to delete comment');
                     }
-                    } catch (error) {
+                })
+                .catch(error => {
                     console.error('Error:', error);
-                    alert('Error updating comment: ' + error.message);
-                        contentElement.innerHTML = originalContent;
-                    }
+                    alert('Error deleting comment: ' + error.message);
                 });
-                
-                // Handle cancel
-                editForm.querySelector('.cancel-edit-btn').addEventListener('click', () => {
-                    contentElement.innerHTML = originalContent;
-                });
-            });
+            }
         });
+    });
+    
+    debug('All event listeners initialized');
+    
+    // Make entire posts clickable
+    document.querySelectorAll('.forum-post').forEach(post => {
+        const postId = post.id.replace('post-', '');
         
-        // Helper function to convert newlines to <br> tags
-        function nl2br(str) {
-            return str.replace(/\n/g, '<br>');
-        }
-        
-        // Handle delete comment
-        document.querySelectorAll('.delete-comment-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const postId = this.getAttribute('data-post-id');
-                const commentIndex = this.getAttribute('data-comment-index');
-                
-                if (confirm('Are you sure you want to delete this comment? This action cannot be undone.')) {
-                    fetch('src/controller/delete_comment.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            postId: postId,
-                            commentIndex: parseInt(commentIndex)
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            const commentElement = document.getElementById(`comment-${postId}-${commentIndex}`);
-                            if (commentElement) {
-                                commentElement.remove();
-                            }
-                        } else {
-                            throw new Error(data.message || 'Failed to delete comment');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error deleting comment: ' + error.message);
-                    });
-                }
-            });
-        });
-        
-        debug('All event listeners initialized');
-        
-        // Make entire posts clickable
-        document.querySelectorAll('.forum-post').forEach(post => {
-            const postId = post.id.replace('post-', '');
+        post.addEventListener('click', function(e) {
+            // Don't navigate if clicking on interactive elements
+            const interactiveElements = [
+                'button', 'a', 'input', 'textarea', 'select', 
+                '.btn', '.dropdown-toggle', '.dropdown-item',
+                '.upvote-btn', '.toggle-comments-btn', '.share-btn',
+                '.edit-post-btn', '.delete-post-btn', '.edit-comment-btn', '.delete-comment-btn'
+            ];
             
-            post.addEventListener('click', function(e) {
-                // Don't navigate if clicking on interactive elements
-                const interactiveElements = [
-                    'button', 'a', 'input', 'textarea', 'select', 
-                    '.btn', '.dropdown-toggle', '.dropdown-item',
-                    '.upvote-btn', '.toggle-comments-btn', '.share-btn',
-                    '.edit-post-btn', '.delete-post-btn', '.edit-comment-btn', '.delete-comment-btn'
-                ];
-                
-                // Check if the clicked element or its parents are interactive
-                let isInteractive = false;
-                for (let selector of interactiveElements) {
-                    if (e.target.matches(selector) || e.target.closest(selector)) {
-                        isInteractive = true;
-                        break;
-                    }
-                }
-                
-                // Also check if we're in a form or comment section that's being edited
-                if (e.target.closest('.add-comment-form') || 
-                    e.target.closest('.edit-comment-form') || 
-                    e.target.closest('.comment-section')) {
+            // Check if the clicked element or its parents are interactive
+            let isInteractive = false;
+            for (let selector of interactiveElements) {
+                if (e.target.matches(selector) || e.target.closest(selector)) {
                     isInteractive = true;
-                }
-                
-                // Navigate to post details if not clicking on interactive elements
-                if (!isInteractive) {
-                    window.location.href = `post_details.php?id=${postId}`;
-                }
-            });
-            
-            // Add visual feedback for clickability
-            post.addEventListener('mouseenter', function(e) {
-                // Don't show pointer cursor on interactive elements
-                if (!e.target.matches('button, a, input, textarea, select, .btn')) {
-                    this.style.cursor = 'pointer';
-                }
-            });
-        });
-        
-        // Theme handling - Listen for theme changes from navbar
-        document.addEventListener('themeChanged', function(e) {
-            debug('Theme changed to: ' + e.detail.theme);
-            
-            // Update modal close button filter for theme
-            const closeButton = document.querySelector('.modal .btn-close');
-            if (closeButton) {
-                if (e.detail.theme === 'light') {
-                    closeButton.style.filter = 'invert(0)';
-                } else {
-                    closeButton.style.filter = 'invert(1)';
+                    break;
                 }
             }
             
-            // Force repaint for smooth transitions
-            document.body.style.transform = 'translateZ(0)';
-            setTimeout(() => {
-                document.body.style.transform = '';
-            }, 50);
+            // Also check if we're in a form or comment section that's being edited
+            if (e.target.closest('.add-comment-form') || 
+                e.target.closest('.edit-comment-form') || 
+                e.target.closest('.comment-section')) {
+                isInteractive = true;
+            }
+            
+            // Navigate to post details if not clicking on interactive elements
+            if (!isInteractive) {
+                window.location.href = `post_details.php?id=${postId}`;
+            }
         });
         
-        // Initialize theme on page load
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        // Add visual feedback for clickability
+        post.addEventListener('mouseenter', function(e) {
+            // Don't show pointer cursor on interactive elements
+            if (!e.target.matches('button, a, input, textarea, select, .btn')) {
+                this.style.cursor = 'pointer';
+            }
+        });
+    });
+    
+    // Theme handling - Listen for theme changes from navbar
+    document.addEventListener('themeChanged', function(e) {
+        debug('Theme changed to: ' + e.detail.theme);
+        
+        // Update modal close button filter for theme
         const closeButton = document.querySelector('.modal .btn-close');
         if (closeButton) {
-            if (currentTheme === 'light') {
+            if (e.detail.theme === 'light') {
                 closeButton.style.filter = 'invert(0)';
             } else {
                 closeButton.style.filter = 'invert(1)';
             }
         }
         
-        // Handle share button clicks
-        document.querySelectorAll('.share-btn').forEach(btn => {
-            btn.addEventListener('click', async function() {
-                const postUrl = this.getAttribute('data-post-url');
-                try {
-                    await navigator.clipboard.writeText(postUrl);
-                    // Show a temporary tooltip
-                    const tooltip = document.createElement('div');
-                    tooltip.textContent = 'Link copied!';
-                    tooltip.style.cssText = `
-                        position: fixed;
-                        background: rgba(0,0,0,0.8);
-                        color: white;
-                        padding: 8px 16px;
-                        border-radius: 4px;
-                        z-index: 1000;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                    `;
-                    document.body.appendChild(tooltip);
-                    setTimeout(() => tooltip.remove(), 2000);
-                } catch (err) {
-                    console.error('Failed to copy:', err);
-                    alert('Failed to copy link. Please try again.');
+        // Force repaint for smooth transitions
+        document.body.style.transform = 'translateZ(0)';
+        setTimeout(() => {
+            document.body.style.transform = '';
+        }, 50);
+    });
+    
+    // Initialize theme on page load
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const closeButton = document.querySelector('.modal .btn-close');
+    if (closeButton) {
+        if (currentTheme === 'light') {
+            closeButton.style.filter = 'invert(0)';
+        } else {
+            closeButton.style.filter = 'invert(1)';
+        }
+    }
+    
+    // Handle share button clicks
+    document.querySelectorAll('.share-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const postUrl = this.getAttribute('data-post-url');
+            try {
+                await navigator.clipboard.writeText(postUrl);
+                // Show a temporary tooltip
+                const tooltip = document.createElement('div');
+                tooltip.textContent = 'Link copied!';
+                tooltip.style.cssText = `
+                    position: fixed;
+                    background: rgba(0,0,0,0.8);
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                    z-index: 1000;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                `;
+                document.body.appendChild(tooltip);
+                setTimeout(() => tooltip.remove(), 2000);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy link. Please try again.');
+            }
+        });
+    });
+    </script>
+    
+    <!-- Document Preview Modal -->
+    <div class="modal fade document-preview-modal" id="documentPreviewModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="documentPreviewTitle">Document Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- PDF Viewer Container -->
+                    <div class="document-preview-container pdf-container">
+                        <canvas id="pdf-viewer"></canvas>
+                        <div class="loading-spinner d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Text Viewer Container -->
+                    <div class="document-preview-container text-container d-none">
+                        <pre id="text-viewer" class="text-viewer"></pre>
+                    </div>
+                    
+                    <!-- Document Info Container (for DOC, PPT, etc.) -->
+                    <div class="document-preview-container doc-container d-none">
+                        <div class="document-info text-center p-4">
+                            <i class="bi bi-file-earmark-fill document-icon"></i>
+                            <h4 class="mt-3" id="doc-name">Document Name</h4>
+                            <p class="text-muted" id="doc-info">File information will appear here</p>
+                            <div class="mt-4">
+                                <a href="#" class="btn btn-primary" id="downloadDoc" download>
+                                    <i class="bi bi-download"></i> Download Document
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PDF Navigation Controls -->
+                    <div class="document-controls pdf-controls d-none">
+                        <button class="btn btn-primary" id="prevPage">
+                            <i class="bi bi-chevron-left"></i> Previous
+                        </button>
+                        <div class="pdf-page-info">
+                            Page <span id="currentPage">0</span> of <span id="totalPages">0</span>
+                        </div>
+                        <button class="btn btn-primary" id="nextPage">
+                            Next <i class="bi bi-chevron-right"></i>
+                        </button>
+                        <a href="#" class="btn btn-secondary" id="downloadPdf" download>
+                            <i class="bi bi-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    // Document Preview Functionality
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageRendering = false;
+    let pageNumPending = null;
+    let scale = 1.5;
+    const canvas = document.getElementById('pdf-viewer');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    const documentModal = new bootstrap.Modal(document.getElementById('documentPreviewModal'));
+    
+    // Show error message in document container
+    function showDocumentError(message, containerSelector = '.pdf-container') {
+        const container = document.querySelector(containerSelector);
+        if (!container) return;
+        
+        const error = document.createElement('div');
+        error.className = 'document-error';
+        error.innerHTML = `
+            <i class="bi bi-exclamation-circle text-danger fs-1"></i>
+            <h4 class="mt-3">Error</h4>
+            <p>${message}</p>
+        `;
+        container.appendChild(error);
+    }
+
+    function showLoading() {
+        const spinner = document.querySelector('.loading-spinner');
+        if (spinner) spinner.classList.remove('d-none');
+    }
+
+    function hideLoading() {
+        const spinner = document.querySelector('.loading-spinner');
+        if (spinner) spinner.classList.add('d-none');
+    }
+
+    // Reset all document containers
+    function resetDocumentContainers() {
+        // Hide all containers
+        document.querySelectorAll('.document-preview-container').forEach(container => {
+            container.classList.add('d-none');
+        });
+        
+        // Hide PDF controls
+        document.querySelector('.pdf-controls').classList.add('d-none');
+        
+        // Remove any existing error messages
+        document.querySelectorAll('.document-error, .pdf-error').forEach(error => {
+            error.remove();
+        });
+    }
+    
+    // Show the appropriate container based on file type
+    function showDocumentContainer(fileType) {
+        resetDocumentContainers();
+        
+        switch (fileType) {
+            case 'pdf':
+                document.querySelector('.pdf-container').classList.remove('d-none');
+                document.querySelector('.pdf-controls').classList.remove('d-none');
+                break;
+            case 'txt':
+                document.querySelector('.text-container').classList.remove('d-none');
+                break;
+            case 'doc':
+            case 'docx':
+            case 'ppt':
+            case 'pptx':
+                document.querySelector('.doc-container').classList.remove('d-none');
+                
+                // Set the appropriate icon based on file type
+                const docIcon = document.querySelector('.document-icon');
+                if (docIcon) {
+                    docIcon.className = 'bi document-icon';
+                    if (fileType === 'doc' || fileType === 'docx') {
+                        docIcon.classList.add('bi-file-earmark-word', 'doc-icon');
+                    } else if (fileType === 'ppt' || fileType === 'pptx') {
+                        docIcon.classList.add('bi-file-earmark-ppt', 'ppt-icon');
+                    } else if (fileType === 'txt') {
+                        docIcon.classList.add('bi-file-earmark-text', 'txt-icon');
+                    } else {
+                        docIcon.classList.add('bi-file-earmark', 'file-icon');
+                    }
+                }
+                break;
+        }
+    }
+    
+    // PDF Handling Functions
+    async function renderPdfPage(num) {
+        pageRendering = true;
+        try {
+            const page = await pdfDoc.getPage(num);
+            const viewport = page.getViewport({ scale });
+            if (canvas) {
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                
+                const renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+                
+                await page.render(renderContext).promise;
+                pageRendering = false;
+                
+                if (pageNumPending !== null) {
+                    renderPdfPage(pageNumPending);
+                    pageNumPending = null;
+                }
+                
+                // Update page counters
+                const currentPageEl = document.getElementById('currentPage');
+                if (currentPageEl) {
+                    currentPageEl.textContent = num;
+                }
+            }
+        } catch (error) {
+            console.error('Error rendering PDF page:', error);
+            showDocumentError('Failed to render PDF page. Please try downloading the file instead.');
+            hideLoading();
+        }
+    }
+
+    function queueRenderPage(num) {
+        if (pageRendering) {
+            pageNumPending = num;
+        } else {
+            renderPdfPage(num);
+        }
+    }
+
+    async function loadPdf(url) {
+        try {
+            showLoading();
+            const loadingTask = pdfjsLib.getDocument(url);
+            pdfDoc = await loadingTask.promise;
+            const totalPagesEl = document.getElementById('totalPages');
+            if (totalPagesEl) {
+                totalPagesEl.textContent = pdfDoc.numPages;
+            }
+            renderPdfPage(1);
+            hideLoading();
+        } catch (error) {
+            console.error('Error loading PDF:', error);
+            showDocumentError('Failed to load PDF. The file might be corrupted or inaccessible.');
+            hideLoading();
+        }
+    }
+    
+    // Text File Handling
+    async function loadTextFile(url) {
+        try {
+            showLoading();
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const text = await response.text();
+            const textViewer = document.getElementById('text-viewer');
+            if (textViewer) {
+                textViewer.textContent = text;
+            }
+            hideLoading();
+        } catch (error) {
+            console.error('Error loading text file:', error);
+            showDocumentError('Failed to load text file. Please try downloading it instead.', '.text-container');
+            hideLoading();
+        }
+    }
+    
+    // Load document based on file type
+    function loadDocument(url, fileName, fileExt) {
+        // Update modal title
+        const titleEl = document.getElementById('documentPreviewTitle');
+        if (titleEl) {
+            titleEl.textContent = fileName;
+        }
+        
+        // Reset state and show appropriate container
+        showDocumentContainer(fileExt);
+        
+        // Handle different file types
+        switch (fileExt) {
+            case 'pdf':
+                // Reset PDF viewer state
+                pageNum = 1;
+                pdfDoc = null;
+                if (ctx) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+                
+                const currentPageEl = document.getElementById('currentPage');
+                const totalPagesEl = document.getElementById('totalPages');
+                if (currentPageEl) currentPageEl.textContent = '0';
+                if (totalPagesEl) totalPagesEl.textContent = '0';
+                
+                // Update download link
+                const downloadPdfBtn = document.getElementById('downloadPdf');
+                if (downloadPdfBtn) {
+                    downloadPdfBtn.href = url;
+                    downloadPdfBtn.setAttribute('download', fileName);
+                }
+                
+                loadPdf(url);
+                break;
+                
+            case 'txt':
+                loadTextFile(url);
+                break;
+                
+            case 'doc':
+            case 'docx':
+            case 'ppt':
+            case 'pptx':
+                // Update document info
+                const docNameEl = document.getElementById('doc-name');
+                const docInfoEl = document.getElementById('doc-info');
+                const downloadDocBtn = document.getElementById('downloadDoc');
+                
+                if (docNameEl) docNameEl.textContent = fileName;
+                
+                if (docInfoEl) {
+                    let fileTypeText = 'Document';
+                    if (fileExt === 'doc' || fileExt === 'docx') {
+                        fileTypeText = 'Word Document';
+                    } else if (fileExt === 'ppt' || fileExt === 'pptx') {
+                        fileTypeText = 'PowerPoint Presentation';
+                    }
+                    docInfoEl.textContent = `${fileTypeText} - This file cannot be previewed. Please download to view.`;
+                }
+                
+                if (downloadDocBtn) {
+                    downloadDocBtn.href = url;
+                    downloadDocBtn.setAttribute('download', fileName);
+                }
+                break;
+        }
+    }
+
+    // Event listeners for PDF controls
+    const prevPageBtn = document.getElementById('prevPage');
+    if (prevPageBtn) {
+        prevPageBtn.addEventListener('click', () => {
+            if (pageNum <= 1) return;
+            pageNum--;
+            queueRenderPage(pageNum);
+        });
+    }
+    
+    const nextPageBtn = document.getElementById('nextPage');
+    if (nextPageBtn) {
+        nextPageBtn.addEventListener('click', () => {
+            if (pageNum >= pdfDoc?.numPages) return;
+            pageNum++;
+            queueRenderPage(pageNum);
+        });
+    }
+
+    // Handle attachment clicks for document files
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find all attachment links across all posts
+        document.querySelectorAll('.attachment-file, .attachment-item a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const filePath = this.getAttribute('href');
+                if (!filePath) return;
+                
+                // Extract filename and extension
+                let fileName = '';
+                const fileNameElement = this.querySelector('span');
+                if (fileNameElement) {
+                    fileName = fileNameElement.textContent.trim();
+                } else {
+                    fileName = filePath.split('/').pop();
+                }
+                
+                const fileExt = fileName.split('.').pop().toLowerCase();
+                const supportedFormats = ['pdf', 'txt', 'doc', 'docx', 'ppt', 'pptx'];
+                
+                if (supportedFormats.includes(fileExt)) {
+                    e.preventDefault();
+                    
+                    // Show modal and load document
+                    documentModal.show();
+                    loadDocument(filePath, fileName, fileExt);
                 }
             });
+        });
     });
+        
+    // Handle modal close
+    const documentModalEl = document.getElementById('documentPreviewModal');
+    if (documentModalEl) {
+        documentModalEl.addEventListener('hidden.bs.modal', function () {
+            // Clean up document viewer state
+            pdfDoc = null;
+            pageNum = 1;
+            if (ctx) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            // Clear text viewer
+            const textViewer = document.getElementById('text-viewer');
+            if (textViewer) {
+                textViewer.textContent = '';
+            }
+            
+            // Remove any existing error messages
+            document.querySelectorAll('.document-error, .pdf-error').forEach(error => {
+                error.remove();
+            });
+        });
+    }
     </script>
 </body>
 </html>

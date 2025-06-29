@@ -5,6 +5,9 @@ require_once __DIR__ . '/../model/db_connect.php';
 // Import MongoDB classes
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\BSON\ObjectId;
+use MongoDB\Client;
+use MongoDB\Collection;
+use MongoDB\Driver\Exception\ConnectionException;
 
 // Set headers
 header('Content-Type: application/json');
@@ -32,12 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if ($data) {
         // JSON request
-        $postId = $data['postId'] ?? null;
-        $comment = $data['comment'] ?? null;
+        $postId = $data['postId'] ?? $data['post_id'] ?? null;
+        $comment = $data['comment'] ?? $data['text'] ?? null;
     } else {
         // Form request
-        $postId = $_POST['postId'] ?? null;
-        $comment = $_POST['comment'] ?? null;
+        $postId = $_POST['post_id'] ?? $_POST['postId'] ?? null;
+        $comment = $_POST['text'] ?? $_POST['comment'] ?? null;
     }
 
     // Validate input
@@ -87,7 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($result->getModifiedCount() === 1) {
-            echo json_encode(['success' => true, 'message' => 'Comment added successfully']);
+            // Return JSON response instead of redirecting
+            echo json_encode([
+                'success' => true,
+                'message' => 'Comment added successfully'
+            ]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to add comment. Post may not exist.']);
         }
