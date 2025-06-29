@@ -3074,6 +3074,9 @@ if (isset($_SESSION['user_id'])) {
             position: relative;
             overflow: hidden;
             z-index: 100 !important;
+            margin-left: 4rem;
+            margin-top: 4rem;
+            transform: translateX(20px);
         }
 
         .bulletin-board-container::before {
@@ -3157,6 +3160,21 @@ if (isset($_SESSION['user_id'])) {
             min-height: 120px;
             display: flex;
             flex-direction: column;
+        }
+
+        .bulletin-item.recommended {
+            border-color: rgba(76, 201, 240, 0.4);
+            background: rgba(15, 23, 42, 0.9) !important;
+        }
+
+        .bulletin-item.recommended::after {
+            content: "★";
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            color: var(--neo-blue);
+            font-size: 0.8rem;
+            z-index: 130;
         }
 
         .bulletin-item:hover {
@@ -3622,11 +3640,20 @@ if (isset($_SESSION['user_id'])) {
                 
                 <!-- Bulletin Board -->
                 <div class="col-lg-6 position-relative d-none d-lg-block">
-                    <div class="bulletin-board-container">
+                    <div class="bulletin-board-container" style="margin-left: 2rem; margin-top: 2rem; transform: translateX(20px);">
                         <div class="bulletin-board-header">
                             <div class="board-title">
                                 <i class="bi bi-pin-angle-fill"></i>
-                                <span>Bulletin Board</span>
+                                <span>
+                                    <?php if ($isPersonalized): ?>
+                                        Bulletin Board
+                                        <span class="personalized-badge" style="color: var(--neo-blue); font-size: 0.7rem; margin-left: 0.5rem;">
+                                            <i class="bi bi-stars"></i>
+                                        </span>
+                                    <?php else: ?>
+                                        Bulletin Board
+                                    <?php endif; ?>
+                                </span>
                             </div>
                         </div>
                         
@@ -3638,8 +3665,9 @@ if (isset($_SESSION['user_id'])) {
                                 for ($i = 0; $i < $displayCount; $i++): 
                                     $item = $combinedRecommendations[$i];
                                     $contentType = $item['content_type'];
+                                    $hasRelevanceScore = isset($item['relevance_score']) && $item['relevance_score'] > 0;
                                 ?>
-                                    <div class="bulletin-item" data-item-type="<?= $contentType ?>" data-item-id="<?= $item['_id'] ?>">
+                                    <div class="bulletin-item<?= $hasRelevanceScore ? ' recommended' : '' ?>" data-item-type="<?= $contentType ?>" data-item-id="<?= $item['_id'] ?>">
                                         <?php if ($contentType === 'project'): ?>
                                         <a href="Project_details.php?id=<?= $item['_id'] ?>" class="bulletin-link">
                                             <div class="bulletin-content-badge project">Project</div>
