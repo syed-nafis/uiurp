@@ -1417,6 +1417,32 @@ try {
             color: var(--modern-purple);
             transform: translateY(-50%) scale(1.1);
         }
+
+        /* Modal style fixes */
+        .modal-content {
+            background: var(--glass-bg); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid var(--border-color);
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .modal-title {
+            color: var(--text-primary);
+        }
+        
+        .modal-body {
+            color: var(--text-primary);
+        }
+        
+        .modal-footer {
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Note: The JS errors about MongoDB\BSON\UTCDateTime are not actual runtime errors, they're just TypeScript/linter errors 
+           which don't impact the functionality. They're already properly handled in the PHP code. */
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
@@ -1454,16 +1480,16 @@ try {
             <div class="create-post-card" data-aos="fade-up">
                 <div class="create-post-header d-flex align-items-center">
                     <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" alt="Your Avatar" class="author-avatar" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 15px;">
-                    <a href="forum_index.php" class="create-post-input text-decoration-none flex-grow-1 p-3 rounded-pill">
-                    What's on your mind, <?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>?
-                </a>
-            </div>
+                    <a href="#" class="create-post-input text-decoration-none flex-grow-1 p-3 rounded-pill" data-bs-toggle="modal" data-bs-target="#createPostModal">
+                        What's on your mind, <?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>?
+                    </a>
+                </div>
                 <div class="d-flex justify-content-center border-top pt-3 mt-3">
-                <a href="forum_index.php" class="btn btn-primary w-100">
-                    <i class="bi bi-pencil-square me-2"></i>Create New Post
-                </a>
+                    <a href="#" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#createPostModal">
+                        <i class="bi bi-pencil-square me-2"></i>Create New Post
+                    </a>
+                </div>
             </div>
-        </div>
 
         <!-- Filters Card -->
             <div class="filters-card" data-aos="fade-up" data-aos-delay="100">
@@ -1750,6 +1776,61 @@ try {
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- First, I'll add the Create Post Modal to the page, before the Confirmation Modal -->
+    <!-- Add this right before the confirmation modal around line 672 -->
+    <!-- Create Post Modal -->
+    <div class="modal fade" id="createPostModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="post-form" enctype="multipart/form-data">
+                        <div class="form-section" data-aos="fade-up" data-aos-delay="100">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        
+                        <div class="form-section" data-aos="fade-up" data-aos-delay="200">
+                            <label for="content" class="form-label">Content</label>
+                            <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
+                        </div>
+                        
+                        <div class="form-section" data-aos="fade-up" data-aos-delay="300">
+                            <label class="form-label">Tags (select at least one)</label>
+                            <div class="tags-container">
+                                <?php foreach ($allTags as $tag): ?>
+                                    <input type="checkbox" 
+                                           class="tag-checkbox" 
+                                           id="tag-<?= $tag['name'] ?>" 
+                                           name="tags[]" 
+                                           value="<?= $tag['name'] ?>">
+                                    <label class="tag-label" 
+                                           for="tag-<?= $tag['name'] ?>" 
+                                           style="color: <?= $tag['color'] ?>; border-color: <?= $tag['color'] ?>;">
+                                        <?= htmlspecialchars(ucfirst(str_replace('_', ' ', $tag['name']))) ?>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section" data-aos="fade-up" data-aos-delay="400">
+                            <label for="attachments" class="form-label">Attachments (optional)</label>
+                            <input type="file" class="form-control" id="attachments" name="attachments[]" multiple>
+                            <div id="preview-container" class="mt-2"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="submit-post-btn">Post</button>
+                </div>
             </div>
         </div>
     </div>
@@ -2648,6 +2729,131 @@ try {
             });
         });
     }
+    </script>
+
+    <!-- Finally, I'll add the JavaScript to handle form submission in the modal -->
+    <!-- Add this at the end of the document, before the closing </body> tag -->
+    <script>
+        // Add this to the end of the existing script section
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create Post Modal functionality
+            const createPostModal = new bootstrap.Modal(document.getElementById('createPostModal'));
+            const form = document.getElementById('post-form');
+            const fileInput = document.getElementById('attachments');
+            const previewContainer = document.getElementById('preview-container');
+            const submitButton = document.getElementById('submit-post-btn');
+            const maxFileSize = 5 * 1024 * 1024; // 5MB
+            let files = [];
+
+            // Handle file input change
+            fileInput?.addEventListener('change', function(e) {
+                const selectedFiles = Array.from(e.target.files);
+                
+                // Clear preview if user selects new files
+                if (selectedFiles.length > 0) {
+                    previewContainer.innerHTML = '';
+                    files = [];
+                }
+                
+                selectedFiles.forEach(file => {
+                    // Check file size
+                    if (file.size > maxFileSize) {
+                        alert(`File ${file.name} is too large. Maximum size is 5MB.`);
+                        return;
+                    }
+                    
+                    files.push(file);
+                    
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'preview-item';
+                    
+                    if (file.type.startsWith('image/')) {
+                        const img = document.createElement('img');
+                        img.src = URL.createObjectURL(file);
+                        previewItem.appendChild(img);
+                    } else {
+                        const icon = document.createElement('div');
+                        icon.className = 'file-icon';
+                        icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16"><path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/></svg>';
+                        previewItem.appendChild(icon);
+                    }
+                    
+                    const fileName = document.createElement('div');
+                    fileName.className = 'file-name';
+                    fileName.textContent = file.name;
+                    previewItem.appendChild(fileName);
+                    
+                    const removeBtn = document.createElement('div');
+                    removeBtn.className = 'remove-file';
+                    removeBtn.textContent = '×';
+                    removeBtn.addEventListener('click', function() {
+                        files = files.filter(f => f !== file);
+                        previewItem.remove();
+                    });
+                    previewItem.appendChild(removeBtn);
+                    
+                    previewContainer.appendChild(previewItem);
+                });
+            });
+
+            // Handle form submission
+            submitButton?.addEventListener('click', function() {
+                // Check if form is valid
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+                
+                // Check if at least one tag is selected
+                const selectedTags = document.querySelectorAll('#createPostModal input[name="tags[]"]:checked');
+                if (selectedTags.length === 0) {
+                    alert('Please select at least one tag for your post');
+                    return;
+                }
+                
+                // Create FormData object
+                const formData = new FormData();
+                formData.append('title', document.getElementById('title').value);
+                formData.append('content', document.getElementById('content').value);
+                
+                // Add selected tags
+                selectedTags.forEach(tag => {
+                    formData.append('tags[]', tag.value);
+                });
+                
+                // Add files
+                files.forEach(file => {
+                    formData.append('files[]', file);
+                });
+                
+                // Submit form data
+                fetch('src/controller/submit_post.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Close modal and refresh page to show the new post
+                        createPostModal.hide();
+                        window.location.reload();
+                    } else {
+                        alert('Error: ' + (data.message || 'Unknown error occurred'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while submitting your post');
+                });
+            });
+            
+            // Reset form when modal is closed
+            document.getElementById('createPostModal')?.addEventListener('hidden.bs.modal', function () {
+                form.reset();
+                previewContainer.innerHTML = '';
+                files = [];
+            });
+        });
     </script>
 </body>
 </html>

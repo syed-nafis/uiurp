@@ -1921,6 +1921,7 @@ function createProfileLink($name, $userId, $userType = null) {
         .glow-effect {
             position: relative;
             overflow: hidden;
+            margin-top: 0;
         }
         
         .glow-effect::after {
@@ -6289,7 +6290,6 @@ function createProfileLink($name, $userId, $userType = null) {
             -webkit-backdrop-filter: blur(20px);
             padding: var(--spacing-xl);
             margin-bottom: var(--spacing-xl) !important; /* Increased from spacing-lg */
-            margin-top: var(--spacing-xl) !important; /* Added top spacing */
             border-radius: var(--border-radius-lg);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: var(--card-shadow);
@@ -6307,12 +6307,18 @@ function createProfileLink($name, $userId, $userType = null) {
         /* First section should have reduced top margin to avoid too much space from top */
         .metadata-card:first-child,
         .col-lg-4 .card.mb-4:first-child {
-            margin-top: var(--spacing-lg) !important;
+            margin-top: 0 !important;
         }
         
         /* Last section should have additional bottom spacing */
         .col-lg-4 .card.mb-4:last-child {
             margin-bottom: var(--spacing-2xl) !important;
+        }
+        
+        /* Override specifically for Project Information card */
+        .col-lg-4 .metadata-card.mb-4.mt-0 {
+            margin-top: 0 !important;
+            padding-top: var(--spacing-lg);
         }
         
         .metadata-card::before {
@@ -6503,8 +6509,8 @@ function createProfileLink($name, $userId, $userType = null) {
                 </div>
                 
                 <!-- Right column: Metadata and sidebar info -->
-                <div class="col-lg-4">
-                    <div class="metadata-card mb-4" data-aos="fade-left" data-aos-delay="100">
+                <div class="col-lg-4" style="padding-top: 0;">
+                    <div class="metadata-card mb-4 mt-0" style="margin-top: 0 !important;" data-aos="fade-left" data-aos-delay="100">
                         <h4 class="mb-3">Project Information</h4>
                         <div id="project-info">
                             <!-- Project info will be loaded here -->
