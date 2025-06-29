@@ -726,6 +726,16 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             height: 100%;
+            display: block;
+        }
+        
+        .project-card > a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
         }
         
         .project-card::before {
@@ -1498,11 +1508,14 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
           </div>
         </div>
                         
-                        <div class="text-center mt-3">
+                        <div class="text-center mt-3 d-flex justify-content-center gap-3">
                             <button class="toggle-btn-compact" id="toggle-projects">
-          <i class="fas fa-filter me-2"></i>Show All Projects
-        </button>
-      </div>
+                                <i class="fas fa-filter me-2"></i>Show All Projects
+                            </button>
+                            <button class="toggle-btn-compact" id="toggle-sort">
+                                <i class="fas fa-sort me-2"></i>Sort by Views
+                            </button>
+                        </div>
     </div>
   </div>
     </div>
@@ -1835,11 +1848,13 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
       const searchBar = document.getElementById('search-bar');
       const searchButton = document.getElementById('search-bttn');
       const toggleButton = document.getElementById('toggle-projects');
+      const toggleSortButton = document.getElementById('toggle-sort');
       const loader = document.getElementById('loader');
-        const exploreBtn = document.querySelector('.hero-actions .btn-primary');
+      const exploreBtn = document.querySelector('.hero-actions .btn-primary');
       
       let showAllProjects = false;
-        let searchTimeout;
+      let sortByClicks = true;
+      let searchTimeout;
 
         // Explore Projects button functionality
         if (exploreBtn) {
@@ -1905,12 +1920,12 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 
         // Enhanced toggle functionality
         if (toggleButton) {
-      toggleButton.addEventListener('click', function() {
-          showAllProjects = !showAllProjects;
-          
+            toggleButton.addEventListener('click', function() {
+                showAllProjects = !showAllProjects;
+                
                 // Update button text with animation
                 this.style.transform = 'scale(0.95)';
-                  setTimeout(() => {
+                setTimeout(() => {
                     this.innerHTML = showAllProjects ? 
                         '<i class="fas fa-filter me-2"></i>Show Public Projects Only' : 
                         '<i class="fas fa-filter me-2"></i>Show All Projects';
@@ -1923,8 +1938,31 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
                 }
                 
                 const endpoint = 'src/model/fetch_projects.php?limit=15';
+                loadProjects(endpoint, sortByClicks);
+            });
+        }
+
+        // Sort toggle functionality
+        if (toggleSortButton) {
+            toggleSortButton.addEventListener('click', function() {
+                sortByClicks = !sortByClicks;
                 
-                loadProjects(endpoint);
+                // Update button text with animation
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.innerHTML = sortByClicks ? 
+                        '<i class="fas fa-sort me-2"></i>Sort by Views' : 
+                        '<i class="fas fa-sort me-2"></i>Sort by Relevance';
+                    this.style.transform = 'scale(1)';
+                }, 150);
+                
+                // Clear search input and reload projects with new sorting
+                if (searchBar) {
+                    searchBar.value = '';
+                }
+                
+                const endpoint = 'src/model/fetch_projects.php?limit=15';
+                loadProjects(endpoint, sortByClicks);
             });
         }
       
@@ -2005,7 +2043,7 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
             });
         }
 
-        function loadProjects(url) {
+        function loadProjects(url, sortByClicks = false) {
             // Clear search parameter from URL when loading default projects
             const newUrl = new URL(window.location);
             newUrl.searchParams.delete('search');
@@ -2013,7 +2051,10 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
             
             showLoader();
             
-            fetch(url)
+            // Use the clicks-based endpoint if sortByClicks is true
+            const finalUrl = sortByClicks ? 'src/model/fetch_projects_by_clicks.php' : url;
+            
+            fetch(finalUrl)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -2124,34 +2165,33 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
                 <a href="Project_details.php?id=${projectId}" class="text-decoration-none" 
                    data-item-type="project" 
                    data-item-id="${projectId}"
-                   data-tracking-metadata='${JSON.stringify(trackingData)}'>
-                    <div class="card-image">
-                        <img src="${imageSrc}" alt="${project.title}" loading="lazy" onerror="this.src='assets/resources/research_picture/pub_1.jpg'">
-                  </div>
-                    <div class="card-content">
-                        <div class="project-badge ${badgeInfo.class}">${badgeInfo.text}</div>
-                        <h3 class="card-title">${project.title}</h3>
-                        <p class="card-description">${truncateText(project.abstract || project.description || 'No description available', 120)}</p>
-                        <div class="project-meta">
-                            <div class="meta-item">
-                                <i class="meta-icon far fa-calendar-alt"></i>
-                                <span>${formattedDate}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="meta-icon fas fa-chalkboard-teacher"></i>
-                                <span>Supervisor: ${supervisorName}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="meta-icon fas fa-users"></i>
-                                <span>${authorsList}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="meta-icon fas fa-graduation-cap"></i>
-                                <span>${project.field || 'Research'}</span>
-                            </div>
+                   data-tracking-metadata='${JSON.stringify(trackingData)}'></a>
+                <div class="card-image">
+                    <img src="${imageSrc}" alt="${project.title}" loading="lazy" onerror="this.src='assets/resources/research_picture/pub_1.jpg'">
+                </div>
+                <div class="card-content">
+                    <div class="project-badge ${badgeInfo.class}">${badgeInfo.text}</div>
+                    <h3 class="card-title">${project.title}</h3>
+                    <p class="card-description">${truncateText(project.abstract || project.description || 'No description available', 120)}</p>
+                    <div class="project-meta">
+                        <div class="meta-item">
+                            <i class="meta-icon far fa-calendar-alt"></i>
+                            <span>${formattedDate}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="meta-icon fas fa-chalkboard-teacher"></i>
+                            <span>Supervisor: ${supervisorName}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="meta-icon fas fa-users"></i>
+                            <span>${authorsList}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="meta-icon fas fa-graduation-cap"></i>
+                            <span>${project.field || 'Research'}</span>
                         </div>
                     </div>
-                </a>
+                </div>
             `;
             
             return card;
@@ -2250,8 +2290,8 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
                 performSearch(urlSearchQuery.trim());
             }, 100);
         } else {
-            // Load default projects
-            loadProjects('src/model/fetch_projects.php?limit=15');
+            // Load default projects with relevance sorting
+            loadProjects('src/model/fetch_projects.php?limit=15', true);
         }
     }
 

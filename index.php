@@ -3059,6 +3059,323 @@ if (isset($_SESSION['user_id'])) {
             }
         }
 
+        /* Enhanced Bulletin Board Styles */
+        .bulletin-board-container {
+            background: rgba(30, 41, 59, 0.95) !important;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(76, 201, 240, 0.3);
+            padding: 1.5rem;
+            height: 650px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(76, 201, 240, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 100 !important;
+        }
+
+        .bulletin-board-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(76, 201, 240, 0.08) 0%, rgba(114, 9, 183, 0.08) 100%);
+            border-radius: 20px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .bulletin-board-header {
+            position: relative;
+            z-index: 110 !important;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(76, 201, 240, 0.3);
+        }
+
+        .board-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f8fafc !important;
+        }
+
+        .board-title i {
+            color: #4cc9f0 !important;
+            font-size: 1.2rem;
+        }
+
+
+
+        .bulletin-board-content {
+            position: relative;
+            z-index: 110 !important;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            padding-right: 0.5rem;
+            scroll-behavior: smooth;
+            max-height: calc(100% - 80px);
+        }
+
+        .bulletin-board-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .bulletin-board-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+        }
+
+        .bulletin-board-content::-webkit-scrollbar-thumb {
+            background: #4cc9f0;
+            border-radius: 3px;
+        }
+
+        .bulletin-board-content::-webkit-scrollbar-thumb:hover {
+            background: #5ed4fd;
+        }
+
+        .bulletin-item {
+            background: rgba(15, 23, 42, 0.8) !important;
+            border-radius: 12px;
+            padding: 0.75rem;
+            border: 1px solid rgba(76, 201, 240, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            z-index: 120 !important;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bulletin-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(76, 201, 240, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background: rgba(15, 23, 42, 0.9) !important;
+        }
+
+        .bulletin-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(45deg, #4cc9f0, #7209b7);
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .bulletin-item:hover::before {
+            opacity: 1;
+        }
+
+        .bulletin-link {
+            text-decoration: none !important;
+            color: inherit !important;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            cursor: pointer;
+            z-index: 130 !important;
+            position: relative;
+        }
+
+        .bulletin-link:hover {
+            text-decoration: none !important;
+            color: inherit !important;
+        }
+
+        .bulletin-content-badge {
+            display: inline-block !important;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 15px;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: fit-content;
+        }
+
+        .bulletin-content-badge.project {
+            background: rgba(76, 201, 240, 0.25) !important;
+            color: #4cc9f0 !important;
+        }
+
+        .bulletin-content-badge.event {
+            background: rgba(247, 37, 133, 0.25) !important;
+            color: #f72585 !important;
+        }
+
+        .bulletin-content-badge.discussion {
+            background: rgba(67, 97, 238, 0.25) !important;
+            color: #4361ee !important;
+        }
+
+        .bulletin-content-badge.faculty {
+            background: rgba(52, 211, 153, 0.25) !important;
+            color: #34d399 !important;
+        }
+
+        .bulletin-title {
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            color: #f8fafc !important;
+            line-height: 1.3;
+            margin-bottom: 0.4rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .bulletin-description {
+            font-size: 0.75rem !important;
+            color: #cbd5e1 !important;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.8em;
+        }
+
+        .bulletin-tags {
+            display: flex !important;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .bulletin-tag {
+            display: inline-block !important;
+            background: rgba(76, 201, 240, 0.15) !important;
+            color: #4cc9f0 !important;
+            padding: 0.15rem 0.4rem;
+            border-radius: 10px;
+            font-size: 0.6rem !important;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .bulletin-meta {
+            display: flex !important;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.65rem !important;
+            color: #94a3b8 !important;
+            margin-top: auto;
+        }
+
+        .bulletin-meta-item {
+            display: flex !important;
+            align-items: center;
+            gap: 0.2rem;
+            white-space: nowrap;
+        }
+
+        .bulletin-meta i {
+            font-size: 0.65rem !important;
+            color: #4cc9f0 !important;
+        }
+
+        .bulletin-status-badge {
+            display: inline-block !important;
+            padding: 0.15rem 0.4rem;
+            border-radius: 10px;
+            font-size: 0.6rem !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .bulletin-status-upcoming {
+            background: rgba(76, 201, 240, 0.2) !important;
+            color: #4cc9f0 !important;
+        }
+
+        .bulletin-status-ongoing {
+            background: rgba(34, 197, 94, 0.2) !important;
+            color: #22c55e !important;
+        }
+
+        .bulletin-status-completed {
+            background: rgba(156, 163, 175, 0.2) !important;
+            color: #9ca3af !important;
+        }
+
+        /* Responsive bulletin board */
+        @media (max-width: 1200px) {
+            .bulletin-board-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .bulletin-board-container {
+                height: 550px;
+            }
+        }
+
+        @media (max-width: 991px) {
+            .bulletin-board-container {
+                height: 500px;
+                padding: 1rem;
+            }
+            
+            .bulletin-title {
+                font-size: 0.8rem !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .bulletin-board-container {
+                height: 450px;
+                padding: 0.75rem;
+            }
+            
+            .bulletin-item {
+                padding: 0.6rem;
+                min-height: 110px;
+            }
+            
+            .bulletin-title {
+                font-size: 0.75rem !important;
+            }
+            
+            .bulletin-description {
+                font-size: 0.7rem !important;
+                line-height: 1.2;
+            }
+            
+            .bulletin-tag {
+                font-size: 0.55rem !important;
+                padding: 0.1rem 0.3rem;
+            }
+            
+            .bulletin-meta {
+                font-size: 0.6rem !important;
+            }
+            
+            .bulletin-meta-item {
+                gap: 0.15rem;
+            }
+        }
+
         /* Futuristic Search Section Styles */
         .search-section {
             background: linear-gradient(135deg, #121729 0%, #1a2151 100%);
@@ -3135,7 +3452,6 @@ if (isset($_SESSION['user_id'])) {
     <div class="scroll-navigation">
         <div class="scroll-dot" data-section="Search" data-index="0"></div>
         <div class="scroll-dot" data-section="Hero" data-index="1"></div>
-        <div class="scroll-dot" data-section="For You" data-index="2"></div>
         <div class="scroll-dot" data-section="Featured Research" data-index="3"></div>
         <div class="scroll-dot" data-section="Faculty Spotlight" data-index="4"></div>
         <div class="scroll-dot" data-section="Research Events" data-index="5"></div>
@@ -3304,46 +3620,322 @@ if (isset($_SESSION['user_id'])) {
                     </div>
                 </div>
                 
-                <!-- Visual Content -->
+                <!-- Bulletin Board -->
                 <div class="col-lg-6 position-relative d-none d-lg-block">
-                    <div class="neo-hero-visual">
-                        <div class="visual-container">
-                            
-                            <div class="floating-elements">
-                                <div class="float-element element-1">
-                                    <div class="element-content">
-                                        <i class="bi bi-cpu"></i>
-                                        <span>AI</span>
-                                    </div>
-                                </div>
-                                <div class="float-element element-2">
-                                    <div class="element-content">
-                                        <i class="bi bi-graph-up"></i>
-                                        <span>Data</span>
-                                    </div>
-                                </div>
-                                <div class="float-element element-3">
-                                    <div class="element-content">
-                                        <i class="bi bi-lightbulb"></i>
-                                        <span>Innovation</span>
-                                    </div>
-                                </div>
-                                <div class="float-element element-4">
-                                    <div class="element-content">
-                                        <i class="bi bi-code-slash"></i>
-                                        <span>Tech</span>
-                                    </div>
-                                </div>
+                    <div class="bulletin-board-container">
+                        <div class="bulletin-board-header">
+                            <div class="board-title">
+                                <i class="bi bi-pin-angle-fill"></i>
+                                <span>Bulletin Board</span>
                             </div>
-                            
-                            <div class="connection-lines">
-                                <svg class="connections" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                                    <path class="connection-path path1" d="M250,250 L100,150" stroke="#4cc9f0" stroke-width="2"></path>
-                                    <path class="connection-path path2" d="M250,250 L400,150" stroke="#7209b7" stroke-width="2"></path>
-                                    <path class="connection-path path3" d="M250,250 L100,350" stroke="#4361ee" stroke-width="2"></path>
-                                    <path class="connection-path path4" d="M250,250 L400,350" stroke="#f72585" stroke-width="2"></path>
-                                </svg>
-                            </div>
+                        </div>
+                        
+                        <div class="bulletin-board-content">
+                            <?php if (isset($_SESSION['user_id']) && !empty($combinedRecommendations)): ?>
+                                <!-- Display personalized content -->
+                                <?php 
+                                $displayCount = min(count($combinedRecommendations), 20); // Show up to 20 items
+                                for ($i = 0; $i < $displayCount; $i++): 
+                                    $item = $combinedRecommendations[$i];
+                                    $contentType = $item['content_type'];
+                                ?>
+                                    <div class="bulletin-item" data-item-type="<?= $contentType ?>" data-item-id="<?= $item['_id'] ?>">
+                                        <?php if ($contentType === 'project'): ?>
+                                        <a href="Project_details.php?id=<?= $item['_id'] ?>" class="bulletin-link">
+                                            <div class="bulletin-content-badge project">Project</div>
+                                            <div class="bulletin-title"><?= htmlspecialchars(substr($item['title'] ?? 'Untitled Project', 0, 40)) ?><?= strlen($item['title'] ?? '') > 40 ? '...' : '' ?></div>
+                                            <div class="bulletin-description"><?= htmlspecialchars(substr($item['description'] ?? 'No description available', 0, 80)) ?><?= strlen($item['description'] ?? '') > 80 ? '...' : '' ?></div>
+                                            
+                                            <?php if (isset($item['tags']) && is_array($item['tags']) && !empty($item['tags'])): ?>
+                                            <div class="bulletin-tags">
+                                                <?php foreach (array_slice($item['tags'], 0, 2) as $tag): ?>
+                                                <span class="bulletin-tag"><?= htmlspecialchars($tag) ?></span>
+                                                <?php endforeach; ?>
+                                            </div>
+                                            <?php endif; ?>
+                                            
+                                            <div class="bulletin-meta">
+                                                <div class="bulletin-meta-item">
+                                                    <i class="bi bi-calendar3"></i>
+                                                    <?php 
+                                                    if (isset($item['createdAt'])) {
+                                                        if (is_object($item['createdAt']) && method_exists($item['createdAt'], 'toDateTime')) {
+                                                            echo $item['createdAt']->toDateTime()->format('M j');
+                                                        } else {
+                                                            echo 'Recent';
+                                                        }
+                                                    } else {
+                                                        echo 'Recent';
+                                                    }
+                                                    ?>
+                                                </div>
+                                                <div class="bulletin-meta-item">
+                                                    <i class="bi bi-people"></i>
+                                                    <?= isset($item['members']) ? count($item['members']) : '1' ?> members
+                                                </div>
+                                            </div>
+                                        </a>
+                                        
+                                        <?php elseif ($contentType === 'event'): ?>
+                                        <a href="events.php#event-<?= $item['_id'] ?>" class="bulletin-link">
+                                            <div class="bulletin-content-badge event">Event</div>
+                                            <div class="bulletin-title"><?= htmlspecialchars(substr($item['title'] ?? 'Untitled Event', 0, 40)) ?><?= strlen($item['title'] ?? '') > 40 ? '...' : '' ?></div>
+                                            <div class="bulletin-description"><?= htmlspecialchars(substr($item['description'] ?? 'No description available', 0, 80)) ?><?= strlen($item['description'] ?? '') > 80 ? '...' : '' ?></div>
+                                            
+                                            <div class="bulletin-meta">
+                                                <div class="bulletin-meta-item">
+                                                    <i class="bi bi-calendar3"></i>
+                                                    <?php 
+                                                    if (isset($item['eventDate'])) {
+                                                        if (is_array($item['eventDate']) && isset($item['eventDate']['$date'])) {
+                                                            $timestamp = $item['eventDate']['$date']['$numberLong'] ?? $item['eventDate']['$date'];
+                                                            echo date('M j, Y', $timestamp / 1000);
+                                                        } else {
+                                                            echo 'TBD';
+                                                        }
+                                                    } else {
+                                                        echo 'TBD';
+                                                    }
+                                                    ?>
+                                                </div>
+                                                <?php if (isset($item['location']) && !empty($item['location'])): ?>
+                                                <div class="bulletin-meta-item">
+                                                    <i class="bi bi-geo-alt"></i>
+                                                    <?= htmlspecialchars(substr($item['location'], 0, 15)) ?>
+                                                </div>
+                                                <?php endif; ?>
+                                                <div class="bulletin-status-badge bulletin-status-<?= strtolower($item['status'] ?? 'upcoming') ?>">
+                                                    <?= htmlspecialchars($item['status'] ?? 'Upcoming') ?>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        
+                                        <?php elseif ($contentType === 'forum_post'): ?>
+                                        <a href="post_details.php?id=<?= $item['_id'] ?>" class="bulletin-link">
+                                            <div class="bulletin-content-badge discussion">Discussion</div>
+                                            <div class="bulletin-title"><?= htmlspecialchars(substr($item['title'] ?? 'Untitled Post', 0, 40)) ?><?= strlen($item['title'] ?? '') > 40 ? '...' : '' ?></div>
+                                            <div class="bulletin-description"><?= htmlspecialchars(substr(strip_tags($item['content'] ?? 'No content available'), 0, 80)) ?><?= strlen(strip_tags($item['content'] ?? '')) > 80 ? '...' : '' ?></div>
+                                            
+                                            <?php if (isset($item['tags']) && is_array($item['tags']) && !empty($item['tags'])): ?>
+                                            <div class="bulletin-tags">
+                                                <?php foreach (array_slice($item['tags'], 0, 2) as $tag): ?>
+                                                <span class="bulletin-tag"><?= htmlspecialchars($tag) ?></span>
+                                                <?php endforeach; ?>
+                                            </div>
+                                            <?php endif; ?>
+                                            
+                                            <div class="bulletin-meta">
+                                                <div class="bulletin-meta-item">
+                                                    <i class="bi bi-person"></i>
+                                                    <?= htmlspecialchars(substr($item['user_name'] ?? 'Anonymous', 0, 12)) ?>
+                                                </div>
+                                                <div class="bulletin-meta-item">
+                                                    <i class="bi bi-arrow-up"></i>
+                                                    <?= $item['upvotes'] ?? 0 ?>
+                                                </div>
+                                                <div class="bulletin-meta-item">
+                                                    <i class="bi bi-chat"></i>
+                                                    <?= isset($item['comments']) ? count($item['comments']) : 0 ?>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        
+                                        <?php elseif ($contentType === 'faculty'): ?>
+                                        <a href="Faculty_Profile.php?id=<?= $item['_id'] ?>" class="bulletin-link">
+                                            <div class="bulletin-content-badge faculty">Faculty</div>
+                                            <div class="bulletin-title"><?= htmlspecialchars(substr($item['name'] ?? 'Faculty Member', 0, 35)) ?><?= strlen($item['name'] ?? '') > 35 ? '...' : '' ?></div>
+                                            <div class="bulletin-description"><?= htmlspecialchars(substr($item['bio'] ?? $item['about'] ?? 'Faculty member at UIU', 0, 75)) ?><?= strlen($item['bio'] ?? $item['about'] ?? '') > 75 ? '...' : '' ?></div>
+                                            
+                                            <?php if (isset($item['research_interests']) && is_array($item['research_interests']) && !empty($item['research_interests'])): ?>
+                                            <div class="bulletin-tags">
+                                                <?php foreach (array_slice($item['research_interests'], 0, 2) as $interest): ?>
+                                                <span class="bulletin-tag"><?= htmlspecialchars($interest) ?></span>
+                                                <?php endforeach; ?>
+                                            </div>
+                                            <?php elseif (isset($item['specialty']) && !empty($item['specialty'])): ?>
+                                            <div class="bulletin-tags">
+                                                <span class="bulletin-tag"><?= htmlspecialchars($item['specialty']) ?></span>
+                                            </div>
+                                            <?php endif; ?>
+                                            
+                                            <div class="bulletin-meta">
+                                                <div class="bulletin-meta-item">
+                                                    <i class="bi bi-mortarboard"></i>
+                                                    <?= htmlspecialchars($item['designation'] ?? $item['position'] ?? 'Faculty') ?>
+                                                </div>
+                                                <?php if (isset($item['department']) && !empty($item['department'])): ?>
+                                                <div class="bulletin-meta-item">
+                                                    <i class="bi bi-building"></i>
+                                                    <?= htmlspecialchars(substr($item['department'], 0, 12)) ?>
+                                                </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </a>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endfor; ?>
+                            <?php else: ?>
+                                <!-- Default content for non-logged-in users -->
+                                <div class="bulletin-item">
+                                    <a href="Research_page.php" class="bulletin-link">
+                                        <div class="bulletin-content-badge project">Project</div>
+                                        <div class="bulletin-title">Explore Research Projects</div>
+                                        <div class="bulletin-description">Browse through innovative research projects from UIU students and faculty members</div>
+                                        <div class="bulletin-meta">
+                                            <div class="bulletin-meta-item">
+                                                <i class="bi bi-search"></i>
+                                                Discover
+                                            </div>
+                                            <div class="bulletin-meta-item">
+                                                <i class="bi bi-collection"></i>
+                                                250+ Projects
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="bulletin-item">
+                                    <a href="events.php" class="bulletin-link">
+                                        <div class="bulletin-content-badge event">Event</div>
+                                        <div class="bulletin-title">Upcoming Events</div>
+                                        <div class="bulletin-description">Stay updated with research conferences, seminars, and academic events</div>
+                                        <div class="bulletin-meta">
+                                            <div class="bulletin-meta-item">
+                                                <i class="bi bi-calendar3"></i>
+                                                Schedule
+                                            </div>
+                                            <div class="bulletin-meta-item">
+                                                <i class="bi bi-clock"></i>
+                                                Live Events
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="bulletin-item">
+                                    <a href="forum_index.php" class="bulletin-link">
+                                        <div class="bulletin-content-badge discussion">Discussion</div>
+                                        <div class="bulletin-title">Join Discussions</div>
+                                        <div class="bulletin-description">Engage with the research community through discussions and Q&A</div>
+                                        <div class="bulletin-meta">
+                                            <div class="bulletin-meta-item">
+                                                <i class="bi bi-chat-dots"></i>
+                                                Participate
+                                            </div>
+                                            <div class="bulletin-meta-item">
+                                                <i class="bi bi-people"></i>
+                                                Active Community
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="bulletin-item">
+                                    <a href="Faculty_Page.php" class="bulletin-link">
+                                        <div class="bulletin-content-badge faculty">Faculty</div>
+                                        <div class="bulletin-title">Meet Our Faculty</div>
+                                        <div class="bulletin-description">Connect with expert faculty members and research supervisors</div>
+                                        <div class="bulletin-meta">
+                                            <div class="bulletin-meta-item">
+                                                <i class="bi bi-people"></i>
+                                                Connect
+                                            </div>
+                                            <div class="bulletin-meta-item">
+                                                <i class="bi bi-mortarboard"></i>
+                                                120+ Faculty
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="bulletin-item">
+                                    <a href="project_management.php" class="bulletin-link">
+                                        <div class="bulletin-content-badge project">Project</div>
+                                        <div class="bulletin-title">Start Your Research</div>
+                                        <div class="bulletin-meta">
+                                            <i class="bi bi-plus-circle"></i>
+                                            Create
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="bulletin-item">
+                                    <a href="login.php" class="bulletin-link">
+                                        <div class="bulletin-content-badge discussion">Login</div>
+                                        <div class="bulletin-title">Join the Community</div>
+                                        <div class="bulletin-meta">
+                                            <i class="bi bi-box-arrow-in-right"></i>
+                                            Sign In
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="bulletin-item">
+                                    <a href="Research_page.php" class="bulletin-link">
+                                        <div class="bulletin-content-badge project">Project</div>
+                                        <div class="bulletin-title">Machine Learning Research</div>
+                                        <div class="bulletin-description">Cutting-edge AI and machine learning research projects for modern applications</div>
+                                        <div class="bulletin-tags">
+                                            <span class="bulletin-tag">AI</span>
+                                            <span class="bulletin-tag">ML</span>
+                                        </div>
+                                        <div class="bulletin-meta">
+                                            <div class="bulletin-meta-item">
+                                                <i class="bi bi-cpu"></i>
+                                                AI & ML
+                                            </div>
+                                            <div class="bulletin-meta-item">
+                                                <i class="bi bi-people"></i>
+                                                15+ Projects
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="bulletin-item">
+                                    <a href="Research_page.php" class="bulletin-link">
+                                        <div class="bulletin-content-badge project">Project</div>
+                                        <div class="bulletin-title">Cybersecurity Studies</div>
+                                        <div class="bulletin-meta">
+                                            <i class="bi bi-shield-check"></i>
+                                            Security
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="bulletin-item">
+                                    <a href="literature_matrix.php" class="bulletin-link">
+                                        <div class="bulletin-content-badge discussion">Tools</div>
+                                        <div class="bulletin-title">Literature Matrix</div>
+                                        <div class="bulletin-meta">
+                                            <i class="bi bi-grid-3x3"></i>
+                                            Research Tool
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="bulletin-item">
+                                    <a href="Research_page.php" class="bulletin-link">
+                                        <div class="bulletin-content-badge project">Project</div>
+                                        <div class="bulletin-title">Blockchain Technology</div>
+                                        <div class="bulletin-meta">
+                                            <i class="bi bi-link-45deg"></i>
+                                            Blockchain
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="bulletin-item">
+                                    <a href="Research_page.php" class="bulletin-link">
+                                        <div class="bulletin-content-badge project">Project</div>
+                                        <div class="bulletin-title">Data Science Research</div>
+                                        <div class="bulletin-meta">
+                                            <i class="bi bi-bar-chart"></i>
+                                            Data Science
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="bulletin-item">
+                                    <a href="Research_page.php" class="bulletin-link">
+                                        <div class="bulletin-content-badge project">Project</div>
+                                        <div class="bulletin-title">IoT & Smart Systems</div>
+                                        <div class="bulletin-meta">
+                                            <i class="bi bi-wifi"></i>
+                                            IoT
+                                        </div>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -3814,352 +4406,7 @@ if (isset($_SESSION['user_id'])) {
     });
     </script>
 
-    <!-- For You Section - Enhanced from Dashboard -->
-    <?php if (isset($_SESSION['user_id']) && $isPersonalized): ?>
-    <section class="for-you-section section-padding vh-100 position-relative">
-        <div class="container position-relative">
-            <div class="text-center mb-5" data-aos="fade-up">
-                <div class="section-header">
-                    <span class="futuristic-badge"><i class="bi bi-lightning-charge-fill me-2"></i>Personalized</span>
-                    <h2 class="section-title futuristic-title">For <span class="text-gradient">You</span>
-                        <span class="personalized-badge" style="color: var(--neo-magenta);">
-                            <i class="bi bi-stars"></i>
-                        </span>
-                    </h2>
-                    <p class="section-subtitle">Content tailored to your interests and research preferences</p>
-                    <div class="d-flex justify-content-center mt-3">
-                        <div class="title-underline"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Enhanced Vertical list container for "For You" section -->
-            <div class="enhanced-cards-list">
-                <?php 
-                // Display more items from combined recommendations (at least 20)
-                $displayCount = min(count($combinedRecommendations), 25); // Show up to 25 items
-                for ($i = 0; $i < $displayCount; $i++): 
-                    $item = $combinedRecommendations[$i];
-                    $contentType = $item['content_type'];
-                ?>
-                    <?php if ($contentType === 'project'): ?>
-                    <a href="Project_details.php?id=<?= $item['_id'] ?>" class="enhanced-card recommended" data-item-type="project" data-item-id="<?= $item['_id'] ?>">
-                        <div class="content-type-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(76, 201, 240, 0.1); color: var(--neo-blue); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">Project</div>
-                        <h3 class="enhanced-card-title"><?= htmlspecialchars($item['title'] ?? 'Untitled Project') ?></h3>
-                        <p class="enhanced-card-content"><?= htmlspecialchars(substr($item['description'] ?? 'No description available', 0, 120)) ?>...</p>
-                        
-                        <?php if (isset($item['tags']) && is_array($item['tags']) && !empty($item['tags'])): ?>
-                        <div class="enhanced-card-tags" style="margin-bottom: 0.5rem;">
-                            <?php foreach (array_slice($item['tags'], 0, 2) as $tag): ?>
-                            <span class="enhanced-tag"><?= htmlspecialchars($tag) ?></span>
-                            <?php endforeach; ?>
-                        </div>
-                        <?php endif; ?>
-                        
-                        <div class="enhanced-card-meta">
-                            <span class="enhanced-card-date">
-                                <i class="bi bi-calendar3"></i>
-                                <?php 
-                                if (isset($item['createdAt'])) {
-                                    if (is_object($item['createdAt']) && method_exists($item['createdAt'], 'toDateTime')) {
-                                        echo $item['createdAt']->toDateTime()->format('M j, Y');
-                                    } else {
-                                        echo 'Recent';
-                                    }
-                                } else {
-                                    echo 'Recent';
-                                }
-                                ?>
-                            </span>
-                        </div>
-                    </a>
-                    
-                    <?php elseif ($contentType === 'event'): ?>
-                    <a href="events.php#event-<?= $item['_id'] ?>" class="enhanced-card recommended" data-item-type="event" data-item-id="<?= $item['_id'] ?>">
-                        <div class="content-type-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(247, 37, 133, 0.1); color: var(--neo-magenta); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">Event</div>
-                        <h3 class="enhanced-card-title"><?= htmlspecialchars($item['title'] ?? 'Untitled Event') ?></h3>
-                        <p class="enhanced-card-content"><?= htmlspecialchars(substr($item['description'] ?? 'No description available', 0, 120)) ?>...</p>
-                        
-                        <div class="enhanced-card-meta">
-                            <span class="enhanced-card-date">
-                                <i class="bi bi-calendar3"></i>
-                                <?php 
-                                if (isset($item['eventDate'])) {
-                                    if (is_array($item['eventDate']) && isset($item['eventDate']['$date'])) {
-                                        $timestamp = $item['eventDate']['$date']['$numberLong'] ?? $item['eventDate']['$date'];
-                                        echo date('M j, Y', $timestamp / 1000);
-                                    } else {
-                                        echo 'TBD';
-                                    }
-                                } else {
-                                    echo 'TBD';
-                                }
-                                ?>
-                            </span>
-                            <span class="enhanced-status-badge enhanced-status-<?= strtolower($item['status'] ?? 'upcoming') ?>">
-                                <?= htmlspecialchars($item['status'] ?? 'Upcoming') ?>
-                            </span>
-                        </div>
-                    </a>
-                    
-                    <?php elseif ($contentType === 'forum_post'): ?>
-                    <a href="post_details.php?id=<?= $item['_id'] ?>" class="enhanced-card recommended" data-item-type="forum_post" data-item-id="<?= $item['_id'] ?>">
-                        <div class="content-type-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(67, 97, 238, 0.1); color: var(--neo-primary); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">Discussion</div>
-                        <h3 class="enhanced-card-title"><?= htmlspecialchars($item['title'] ?? 'Untitled Post') ?></h3>
-                        <p class="enhanced-card-content"><?= htmlspecialchars(substr($item['content'] ?? 'No content available', 0, 120)) ?>...</p>
-                        
-                        <div class="enhanced-card-meta">
-                            <span class="enhanced-card-date">
-                                <i class="bi bi-person"></i>
-                                <?= htmlspecialchars($item['user_name'] ?? 'Anonymous') ?>
-                            </span>
-                            <span class="enhanced-card-stats">
-                                <span class="enhanced-stat-item">
-                                    <i class="bi bi-arrow-up"></i>
-                                    <?= $item['upvotes'] ?? 0 ?>
-                                </span>
-                            </span>
-                        </div>
-                    </a>
-                    
-                    <?php elseif ($contentType === 'faculty'): ?>
-                    <a href="Faculty_Profile.php?id=<?= $item['_id'] ?>" class="enhanced-card enhanced-faculty-card recommended" data-item-type="faculty" data-item-id="<?= $item['_id'] ?>">
-                        <div class="content-type-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(52, 211, 153, 0.1); color: #34D399; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">Faculty</div>
-                        <img src="<?= htmlspecialchars($item['profile_image'] ?? 'assets/resources/user_avater.png') ?>" 
-                             alt="<?= htmlspecialchars($item['name'] ?? 'Faculty Member') ?>" 
-                             class="enhanced-faculty-avatar">
-                        <h3 class="enhanced-faculty-name"><?= htmlspecialchars($item['name'] ?? 'Faculty Member') ?></h3>
-                        <p class="enhanced-faculty-bio"><?= htmlspecialchars(substr($item['bio'] ?? 'No bio available', 0, 100)) ?>...</p>
-                        
-                        <?php if (isset($item['specialty']) || (isset($item['research_interests']) && is_array($item['research_interests']))): ?>
-                        <div class="enhanced-card-tags" style="margin-top: 0.5rem;">
-                            <?php if (isset($item['specialty'])): ?>
-                            <span class="enhanced-tag specialty"><?= htmlspecialchars($item['specialty']) ?></span>
-                            <?php endif; ?>
-                            <?php if (isset($item['research_interests']) && is_array($item['research_interests'])): ?>
-                                <?php foreach (array_slice($item['research_interests'], 0, 1) as $interest): ?>
-                                <span class="enhanced-tag research-interest"><?= htmlspecialchars($interest) ?></span>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </div>
-                        <?php endif; ?>
-                    </a>
-                    <?php endif; ?>
-                <?php endfor; ?>
-            </div>
-        </div>
-    </section>
-    
-    <style>
-    /* Enhanced For You Section Styles */
-    :root {
-        --neo-primary: #4361ee;
-        --neo-blue: #4cc9f0;
-        --neo-magenta: #f72585;
-        --border-color: rgba(76, 201, 240, 0.1);
-        --card-bg: rgba(30, 41, 59, 0.8);
-        --text-primary: #f8fafc;
-        --text-secondary: #cbd5e1;
-        --text-muted: #64748b;
-    }
-    
-    .for-you-section {
-        background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
-        padding: 80px 0;
-        position: relative;
-        overflow: hidden;
-        color: #fff;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-    
-    .enhanced-cards-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        max-height: 80vh;
-        overflow-y: auto;
-        padding-right: 0.25rem;
-    }
-    
-    .enhanced-cards-list::-webkit-scrollbar {
-        width: 6px;
-    }
-    
-    .enhanced-cards-list::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 3px;
-    }
-    
-    .enhanced-cards-list::-webkit-scrollbar-thumb {
-        background: var(--neo-blue);
-        border-radius: 3px;
-    }
-    
-    .enhanced-card {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        padding: 1.5rem;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-        cursor: pointer;
-        text-decoration: none;
-        color: inherit;
-        display: block;
-        position: relative;
-        width: 100%;
-    }
-    
-    .enhanced-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        border-color: var(--neo-blue);
-        text-decoration: none;
-        color: inherit;
-    }
-    
-    .enhanced-card.recommended::before {
-        content: "★";
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        color: var(--neo-magenta);
-        font-size: 0.8rem;
-        z-index: 10;
-    }
-    
-    .enhanced-card-title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--text-primary);
-        margin-bottom: 0.5rem;
-        line-height: 1.3;
-    }
-    
-    .enhanced-card-content {
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-        line-height: 1.5;
-        margin-bottom: 1rem;
-    }
-    
-    .enhanced-card-meta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 0.8rem;
-        color: var(--text-muted);
-    }
-    
-    .enhanced-card-date {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
-    
-    .enhanced-card-stats {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-    
-    .enhanced-stat-item {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
-    
-    .enhanced-faculty-card {
-        text-align: center;
-    }
-    
-    .enhanced-faculty-avatar {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin: 0 auto 1rem;
-        border: 3px solid var(--neo-blue);
-    }
-    
-    .enhanced-faculty-name {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--text-primary);
-        margin-bottom: 0.5rem;
-    }
-    
-    .enhanced-faculty-bio {
-        color: var(--text-secondary);
-        font-size: 0.85rem;
-        line-height: 1.4;
-    }
-    
-    .enhanced-tag {
-        display: inline-block;
-        background: rgba(76, 201, 240, 0.1);
-        color: var(--neo-blue);
-        padding: 0.2rem 0.6rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 500;
-        margin-right: 0.5rem;
-    }
-    
-    .enhanced-status-badge {
-        padding: 0.2rem 0.6rem;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: 500;
-    }
-    
-    .enhanced-status-upcoming {
-        background: rgba(76, 201, 240, 0.1);
-        color: var(--neo-blue);
-    }
-    
-    .enhanced-status-ongoing {
-        background: rgba(34, 197, 94, 0.1);
-        color: #22c55e;
-    }
-    
-    .enhanced-status-completed {
-        background: rgba(156, 163, 175, 0.1);
-        color: #9ca3af;
-    }
-    
-    .personalized-badge {
-        display: inline-flex;
-        align-items: center;
-        font-size: 0.8rem;
-        color: var(--neo-blue);
-        margin-left: 0.5rem;
-        animation: sparkle 2s ease-in-out infinite;
-    }
-    
-    .personalized-badge i {
-        font-size: 0.7rem;
-    }
-    
-    @keyframes sparkle {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.7; transform: scale(1.1); }
-    }
-    
-    @media (max-width: 768px) {
-        .for-you-section {
-            padding: 60px 0;
-        }
-        
-        .enhanced-cards-list {
-            max-height: 60vh;
-        }
-    }
-    </style>
-    <?php endif; ?>
+
 
     <!-- Futuristic Projects Section -->
     <section class="featured-projects section-padding position-relative">
@@ -7470,6 +7717,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let scrollTimeout = null;
             let lastScrollTime = 0;
             let wheelAccumulator = 0;
+            let isHoveringBulletinBoard = false;
             
             // Debounce settings
             const SCROLL_THRESHOLD = 50; // Minimum wheel delta to trigger scroll
@@ -7531,6 +7779,11 @@ document.addEventListener('DOMContentLoaded', function() {
             function handleWheelScroll(e) {
                 // Ignore if modifier keys are pressed
                 if (e.ctrlKey || e.altKey || e.shiftKey) return;
+                
+                // Allow normal scrolling if hovering over bulletin board
+                if (isHoveringBulletinBoard) {
+                    return; // Don't prevent default, allow normal scrolling
+                }
                 
                 // Ignore if currently scrolling
                 if (isScrolling) {
@@ -7614,6 +7867,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Add wheel event listener
             window.addEventListener('wheel', handleWheelScroll, { passive: false });
+
+            // Bulletin board hover detection to disable scroll snapping
+            const bulletinBoard = document.querySelector('.bulletin-board-container');
+            if (bulletinBoard) {
+                bulletinBoard.addEventListener('mouseenter', () => {
+                    isHoveringBulletinBoard = true;
+                    // Also disable CSS scroll snap temporarily
+                    document.documentElement.style.scrollSnapType = 'none';
+                });
+                
+                bulletinBoard.addEventListener('mouseleave', () => {
+                    isHoveringBulletinBoard = false;
+                    // Re-enable CSS scroll snap
+                    document.documentElement.style.scrollSnapType = 'y mandatory';
+                });
+            }
             
             // Handle keyboard navigation
             document.addEventListener('keydown', (e) => {

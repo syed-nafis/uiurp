@@ -153,7 +153,7 @@ foreach ($allEvents as $event) {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at center, rgba(10, 17, 33, 0.95) 0%, rgba(0, 0, 0, 0.98) 100%);
+    background: radial-gradient(circle at center, rgba(10, 17, 33, 0.5) 0%, rgba(0, 0, 0, 0.7) 100%);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
@@ -186,7 +186,7 @@ foreach ($allEvents as $event) {
 
 /* Light Theme Styles for Calendar Overlay */
 [data-theme="light"] .calendar-overlay-bg {
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.97) 0%, rgba(240, 240, 250, 0.95) 100%);
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.5) 0%, rgba(240, 240, 250, 0.7) 100%);
 }
 
 [data-theme="light"] .calendar-overlay-content {
