@@ -2111,8 +2111,20 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
             const imageSrc = getProjectImage(project.coverImage);
             const badgeInfo = getProjectBadge(project.privacy);
             
+            // Add tracking metadata
+            const trackingData = {
+                title: project.title,
+                category: project.category || 'Research',
+                field: project.field || 'Research',
+                keywords: project.keywords || [],
+                tags: [project.category || 'Research', project.field || 'Research'].filter(Boolean)
+            };
+            
             card.innerHTML = `
-                <a href="Project_details.php?id=${projectId}" class="text-decoration-none">
+                <a href="Project_details.php?id=${projectId}" class="text-decoration-none" 
+                   data-item-type="project" 
+                   data-item-id="${projectId}"
+                   data-tracking-metadata='${JSON.stringify(trackingData)}'>
                     <div class="card-image">
                         <img src="${imageSrc}" alt="${project.title}" loading="lazy" onerror="this.src='assets/resources/research_picture/pub_1.jpg'">
                   </div>

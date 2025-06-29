@@ -71,4 +71,11 @@
             </p>
         </div>
     </div>
-</footer> 
+</footer>
+
+<?php
+// Output global preference tracking scripts
+if (function_exists('outputPreferenceTrackingScript')) {
+    outputPreferenceTrackingScript();
+}
+?>

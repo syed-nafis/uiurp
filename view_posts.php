@@ -1112,7 +1112,24 @@ try {
                     <div class="alert alert-info fade-in" data-aos="fade-up">No posts found. Be the first to create a post!</div>
             <?php else: ?>
                     <?php foreach ($allPosts as $index => $post): ?>
-                        <div class="forum-post fade-in" id="post-<?= $post['_id'] ?>" data-aos="fade-up" data-aos-delay="<?= $index * 50 ?>">
+                        <?php
+                        // Prepare tracking metadata for forum posts
+                        $trackingData = [
+                            'title' => $post['title'],
+                            'content_preview' => substr($post['content'], 0, 100),
+                            'tags' => $post['tags'] ?? [],
+                            'author' => $post['user_name'] ?? 'Unknown User',
+                            'upvotes' => $post['upvotes'] ?? 0,
+                            'comment_count' => count($post['comments'] ?? [])
+                        ];
+                        ?>
+                        <div class="forum-post fade-in" 
+                             id="post-<?= $post['_id'] ?>" 
+                             data-aos="fade-up" 
+                             data-aos-delay="<?= $index * 50 ?>"
+                             data-item-type="forum_post" 
+                             data-item-id="<?= $post['_id'] ?>"
+                             data-tracking-metadata='<?= htmlspecialchars(json_encode($trackingData), ENT_QUOTES, 'UTF-8') ?>'>
                         <div class="post-header">
                             <div class="post-meta">
                                 <div class="post-author">

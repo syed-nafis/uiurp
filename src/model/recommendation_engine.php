@@ -151,8 +151,9 @@ class RecommendationEngine {
                     '$addFields' => [
                         'relevance_score' => [
                             '$sum' => array_merge(
-                                $this->buildTagScoring($interests, 'tags'),
-                                $this->buildKeywordScoring($keywords, ['title', 'description'])
+                                $this->buildTagScoring($interests, 'tags'), // Enhanced tag scoring
+                                $this->buildKeywordScoring($keywords, ['title', 'description']),
+                                $this->buildEventTypeScoring($interests, 'eventType') // New event type scoring
                             )
                         ]
                     ]
@@ -177,6 +178,7 @@ class RecommendationEngine {
                     'eventType' => 1,
                     'status' => 1,
                     'tags' => 1,
+                    'organizer' => 1,
                     'relevance_score' => 1
                 ]
             ];
@@ -188,7 +190,8 @@ class RecommendationEngine {
             if (!empty($results)) {
                 foreach (array_slice($results, 0, 3) as $i => $result) {
                     $score = $result['relevance_score'] ?? 0;
-                    error_log("DEBUG Events: #" . ($i+1) . " - '{$result['title']}' (Score: $score)");
+                    $title = $result['title'] ?? 'Unknown';
+                    error_log("DEBUG Events: #" . ($i+1) . " - '$title' (Score: $score)");
                 }
             }
             
@@ -230,10 +233,10 @@ class RecommendationEngine {
                         'relevance_score' => [
                             '$add' => [
                                 ['$sum' => array_merge(
-                                    $this->buildTagScoring($interests, 'tags'),
+                                    $this->buildTagScoring($interests, 'tags'), // Enhanced tag scoring
                                     $this->buildKeywordScoring($keywords, ['title', 'content'])
                                 )],
-                                ['$multiply' => [['$ifNull' => ['$upvotes', 0]], 0.1]]
+                                ['$multiply' => [['$ifNull' => ['$upvotes', 0]], 0.1]] // Engagement boost
                             ]
                         ]
                     ]
@@ -267,7 +270,19 @@ class RecommendationEngine {
                 ]
             ];
             
-            return iterator_to_array($collection->aggregate($pipeline));
+            $results = iterator_to_array($collection->aggregate($pipeline));
+            
+            // Debug logging
+            error_log("DEBUG Forum Posts: User $userId - Found " . count($results) . " results");
+            if (!empty($results)) {
+                foreach (array_slice($results, 0, 3) as $i => $result) {
+                    $score = $result['relevance_score'] ?? 0;
+                    $title = $result['title'] ?? 'Unknown';
+                    error_log("DEBUG Forum Posts: #" . ($i+1) . " - '$title' (Score: $score)");
+                }
+            }
+            
+            return $results;
             
         } catch (Exception $e) {
             error_log("Error getting recommended forum posts: " . $e->getMessage());
@@ -287,46 +302,165 @@ class RecommendationEngine {
             
             $pipeline = [];
             
-            if ($userProfile && !empty($userProfile['keywords'])) {
+            if ($userProfile && (!empty($userProfile['interests']) || !empty($userProfile['keywords']))) {
+                $interests = $userProfile['interests'] ?? [];
                 $keywordsData = $userProfile['keywords'] ?? [];
                 
                 // Convert MongoDB BSONDocument to PHP array
+                if ($interests instanceof MongoDB\Model\BSONDocument) {
+                    $interests = iterator_to_array($interests);
+                }
                 if ($keywordsData instanceof MongoDB\Model\BSONDocument) {
                     $keywordsData = iterator_to_array($keywordsData);
                 }
                 $keywords = is_array($keywordsData) ? array_keys($keywordsData) : [];
                 
-                $pipeline[] = [
-                    '$addFields' => [
-                        'relevance_score' => [
-                            '$sum' => $this->buildKeywordScoring($keywords, ['bio', 'interested_fields_of_research'])
-                        ]
-                    ]
-                ];
+                // Get all faculty documents and score them in PHP rather than MongoDB aggregation
+                // This avoids complex type conversion issues
+                $faculties = iterator_to_array($collection->find());
+                $scoredFaculties = [];
                 
-                $pipeline[] = [
-                    '$sort' => [
-                        'relevance_score' => -1,
-                        'name' => 1
-                    ]
-                ];
+                foreach ($faculties as $faculty) {
+                    $score = 0;
+                    
+                    // Score based on interests
+                    if (!empty($interests)) {
+                        // Check specialty
+                        if (isset($faculty['specialty']) && !empty($faculty['specialty'])) {
+                            foreach ($interests as $interest => $weight) {
+                                if (stripos($faculty['specialty'], $interest) !== false) {
+                                    $score += $weight * 0.5; // High weight for specialty match
+                                }
+                            }
+                        }
+                        
+                        // Check research interests/fields - Fixed to handle both old and new data structures
+                        $researchFields = [];
+                        if (isset($faculty['interested_fields_of_research'])) {
+                            $fieldData = $faculty['interested_fields_of_research'];
+                            
+                            // Handle different data structures
+                            if (is_array($fieldData)) {
+                                foreach ($fieldData as $field) {
+                                    if (is_string($field)) {
+                                        $researchFields[] = $field;
+                                    } elseif (is_array($field) && isset($field['name'])) {
+                                        $researchFields[] = $field['name'];
+                                    } elseif ($field instanceof MongoDB\Model\BSONDocument) {
+                                        $fieldArray = iterator_to_array($field);
+                                        if (isset($fieldArray['name'])) {
+                                            $researchFields[] = $fieldArray['name'];
+                                        }
+                                    }
+                                }
+                            } elseif ($fieldData instanceof MongoDB\Model\BSONArray) {
+                                $fieldArray = iterator_to_array($fieldData);
+                                foreach ($fieldArray as $field) {
+                                    if (is_string($field)) {
+                                        $researchFields[] = $field;
+                                    } elseif (is_array($field) && isset($field['name'])) {
+                                        $researchFields[] = $field['name'];
+                                    }
+                                }
+                            } elseif ($fieldData instanceof MongoDB\Model\BSONDocument) {
+                                // Convert document to array and extract field names
+                                $fieldArray = iterator_to_array($fieldData);
+                                foreach ($fieldArray as $field) {
+                                    if (is_string($field)) {
+                                        $researchFields[] = $field;
+                                    } elseif (is_array($field) && isset($field['name'])) {
+                                        $researchFields[] = $field['name'];
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Score against research fields
+                        foreach ($researchFields as $field) {
+                            if (is_string($field) && !empty($field)) {
+                                foreach ($interests as $interest => $weight) {
+                                    // Exact match (higher score)
+                                    if (strcasecmp($field, $interest) === 0) {
+                                        $score += $weight * 0.4;
+                                    }
+                                    // Partial match (lower score)
+                                    elseif (stripos($field, $interest) !== false || stripos($interest, $field) !== false) {
+                                        $score += $weight * 0.2;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Check bio
+                        if (isset($faculty['bio']) && !empty($faculty['bio'])) {
+                            foreach ($interests as $interest => $weight) {
+                                // Use word boundary matching for more accurate bio matching
+                                if (preg_match('/\b' . preg_quote($interest, '/') . '\b/i', $faculty['bio'])) {
+                                    $score += $weight * 0.15; // Weight for bio match
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Score based on keywords
+                    if (!empty($keywords)) {
+                        $textFields = [
+                            'bio' => 0.15,
+                            'specialty' => 0.25,
+                            'name' => 0.1
+                        ];
+                        
+                        foreach ($textFields as $fieldName => $fieldWeight) {
+                            if (isset($faculty[$fieldName]) && !empty($faculty[$fieldName])) {
+                                foreach ($keywords as $keyword) {
+                                    if (stripos($faculty[$fieldName], $keyword) !== false) {
+                                        $score += $fieldWeight;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Handle research fields for keywords using the same improved logic
+                        foreach ($researchFields as $field) {
+                            if (is_string($field) && !empty($field)) {
+                                foreach ($keywords as $keyword) {
+                                    if (stripos($field, $keyword) !== false) {
+                                        $score += 0.15;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    $faculty['relevance_score'] = $score;
+                    $scoredFaculties[] = $faculty;
+                }
+                
+                // Sort by relevance score and limit results
+                usort($scoredFaculties, function($a, $b) {
+                    $scoreA = $a['relevance_score'] ?? 0;
+                    $scoreB = $b['relevance_score'] ?? 0;
+                    return $scoreB <=> $scoreA; // Descending order
+                });
+                
+                $results = array_slice($scoredFaculties, 0, $limit);
+                
+                // Debug logging
+                error_log("DEBUG Faculties: User $userId - Found " . count($results) . " results");
+                if (!empty($results)) {
+                    foreach (array_slice($results, 0, 3) as $i => $result) {
+                        $score = $result['relevance_score'] ?? 0;
+                        $name = $result['name'] ?? 'Unknown';
+                        error_log("DEBUG Faculties: #" . ($i+1) . " - '$name' (Score: $score)");
+                    }
+                }
+                
+                return $results;
+                
             } else {
-                $pipeline[] = ['$sort' => ['name' => 1]];
+                // Fallback to random faculties if no user profile
+                return $this->getFallbackFaculties($limit);
             }
-            
-            $pipeline[] = ['$limit' => $limit];
-            $pipeline[] = [
-                '$project' => [
-                    'name' => 1,
-                    'bio' => 1,
-                    'profile_image' => 1,
-                    'specialty' => 1,
-                    'research_interests' => 1,
-                    'relevance_score' => 1
-                ]
-            ];
-            
-            return iterator_to_array($collection->aggregate($pipeline));
             
         } catch (Exception $e) {
             error_log("Error getting recommended faculties: " . $e->getMessage());
@@ -335,104 +469,134 @@ class RecommendationEngine {
     }
     
     /**
-     * Build tag scoring for MongoDB aggregation
+     * Build scoring array for tags with enhanced partial matching
      */
     private function buildTagScoring($interests, $field = 'tags') {
         $scoring = [];
-        foreach ($interests as $tag => $weight) {
-            // Exact match
+        
+        if (empty($interests)) {
+            return $scoring;
+        }
+        
+        foreach ($interests as $interest => $weight) {
+            if (empty($interest)) continue;
+            
+            // Exact match (highest score)
             $scoring[] = [
                 '$cond' => [
-                    'if' => ['$in' => [$tag, "\$$field"]],
-                    'then' => $weight * 0.2, // Higher weight for exact matches
+                    'if' => ['$in' => [$interest, ['$ifNull' => ['$' . $field, []]]]],
+                    'then' => $weight * 1.0,
                     'else' => 0
                 ]
             ];
             
-            // Partial match (case-insensitive)
+            // Partial match - case insensitive substring matching
             $scoring[] = [
                 '$cond' => [
                     'if' => [
-                        '$anyElementTrue' => [
-                            [
-                                '$map' => [
-                                    'input' => "\$$field",
-                                    'as' => 'fieldItem',
-                                    'in' => [
+                        '$gt' => [
+                            ['$size' => [
+                                ['$filter' => [
+                                    'input' => ['$ifNull' => ['$' . $field, []]],
+                                    'cond' => [
                                         '$regexMatch' => [
-                                            'input' => '$$fieldItem',
-                                            'regex' => $tag,
+                                            'input' => '$$this',
+                                            'regex' => $interest,
                                             'options' => 'i'
                                         ]
                                     ]
-                                ]
-                            ]
+                                ]]
+                            ]],
+                            0
                         ]
                     ],
-                    'then' => $weight * 0.1, // Lower weight for partial matches
+                    'then' => $weight * 0.5, // Lower score for partial match
                     'else' => 0
                 ]
             ];
         }
+        
         return $scoring;
     }
     
     /**
-     * Build keyword scoring for text fields
+     * Build scoring array for keyword matches in text fields with enhanced matching
      */
     private function buildKeywordScoring($keywords, $fields = ['title', 'description']) {
         $scoring = [];
+        
+        if (empty($keywords) || empty($fields)) {
+            return $scoring;
+        }
+        
         foreach ($keywords as $keyword) {
+            if (empty($keyword)) continue;
+            
             foreach ($fields as $field) {
-                // Handle both string and array fields
+                // Exact word boundary match (highest score)
                 $scoring[] = [
                     '$cond' => [
                         'if' => [
-                            '$or' => [
-                                // For string fields
-                                [
-                                    '$and' => [
-                                        ['$ne' => [['$type' => "\$$field"], 'array']],
-                                        [
-                                            '$regexMatch' => [
-                                                'input' => ['$toString' => "\$$field"],
-                                                'regex' => $keyword,
-                                                'options' => 'i'
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                // For array fields
-                                [
-                                    '$and' => [
-                                        ['$eq' => [['$type' => "\$$field"], 'array']],
-                                        [
-                                            '$anyElementTrue' => [
-                                                [
-                                                    '$map' => [
-                                                        'input' => "\$$field",
-                                                        'as' => 'item',
-                                                        'in' => [
-                                                            '$regexMatch' => [
-                                                                'input' => ['$toString' => '$$item'],
-                                                                'regex' => $keyword,
-                                                                'options' => 'i'
-                                                            ]
-                                                        ]
-                                                    ]
-                                                ]
-                                            ]
-                                        ]
-                                    ]
-                                ]
+                            '$regexMatch' => [
+                                'input' => ['$ifNull' => ['$' . $field, '']],
+                                'regex' => '\\b' . preg_quote($keyword, '/') . '\\b',
+                                'options' => 'i'
                             ]
                         ],
-                        'then' => 2, // Increased weight for keyword matches
+                        'then' => 1.0,
+                        'else' => 0
+                    ]
+                ];
+                
+                // Partial substring match (lower score)
+                $scoring[] = [
+                    '$cond' => [
+                        'if' => [
+                            '$regexMatch' => [
+                                'input' => ['$ifNull' => ['$' . $field, '']],
+                                'regex' => $keyword,
+                                'options' => 'i'
+                            ]
+                        ],
+                        'then' => 0.3,
                         'else' => 0
                     ]
                 ];
             }
         }
+        
+        return $scoring;
+    }
+    
+    /**
+     * Build scoring array for event type matching
+     */
+    private function buildEventTypeScoring($interests, $field = 'eventType') {
+        $scoring = [];
+        
+        if (empty($interests)) {
+            return $scoring;
+        }
+        
+        foreach ($interests as $interest => $weight) {
+            if (empty($interest)) continue;
+            
+            // Direct event type match
+            $scoring[] = [
+                '$cond' => [
+                    'if' => [
+                        '$regexMatch' => [
+                            'input' => ['$ifNull' => ['$' . $field, '']],
+                            'regex' => $interest,
+                            'options' => 'i'
+                        ]
+                    ],
+                    'then' => $weight * 0.3,
+                    'else' => 0
+                ]
+            ];
+        }
+        
         return $scoring;
     }
     
@@ -529,7 +693,14 @@ class RecommendationEngine {
                 [
                     'sort' => ['name' => 1],
                     'limit' => $limit,
-                    'projection' => ['name' => 1, 'bio' => 1, 'profile_image' => 1, 'specialty' => 1]
+                    'projection' => [
+                        'name' => 1, 
+                        'bio' => 1, 
+                        'profile_image' => 1, 
+                        'specialty' => 1,
+                        'interested_fields_of_research' => 1,
+                        'research_interests' => '$interested_fields_of_research' // Alias for compatibility
+                    ]
                 ]
             );
             return iterator_to_array($cursor);

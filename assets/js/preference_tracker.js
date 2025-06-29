@@ -5,7 +5,8 @@
 
 class PreferenceTracker {
     constructor() {
-        this.endpoint = 'src/model/user_preferences.php';
+        // Determine correct endpoint path based on current page location
+        this.endpoint = this.getEndpointPath();
         this.sessionData = {
             startTime: Date.now(),
             pageViews: [],
@@ -17,6 +18,25 @@ class PreferenceTracker {
         this.batchTimeout = 5000; // Send batch every 5 seconds
         
         this.init();
+    }
+    
+    getEndpointPath() {
+        // Get the current page path
+        const currentPath = window.location.pathname;
+        const pathParts = currentPath.split('/').filter(part => part !== '');
+        
+        // For most pages in root directory, use direct path
+        let endpointPath = 'src/model/user_preferences.php';
+        
+        // If we're in a subdirectory, adjust the path
+        if (pathParts.length > 1) {
+            // Count how many directories deep we are (excluding the filename)
+            const depth = pathParts.length - 1;
+            endpointPath = '../'.repeat(depth) + 'src/model/user_preferences.php';
+        }
+        
+        console.log('PreferenceTracker endpoint determined as:', endpointPath);
+        return endpointPath;
     }
     
     init() {
@@ -46,6 +66,9 @@ class PreferenceTracker {
         
         // Track scroll behavior
         this.setupScrollTracking();
+        
+        // Setup automatic click tracking
+        this.setupClickTracking();
     }
     
     handleClick(event) {
@@ -89,8 +112,32 @@ class PreferenceTracker {
             metadata = this.extractMetadata(target);
         }
         
+        // Additional metadata from data attributes
+        const trackingMetadata = target.getAttribute('data-tracking-metadata');
+        if (trackingMetadata) {
+            try {
+                const parsedMetadata = JSON.parse(trackingMetadata);
+                metadata = { ...metadata, ...parsedMetadata };
+            } catch (e) {
+                console.warn('Failed to parse data-tracking-metadata:', trackingMetadata);
+            }
+        }
+        
         if (itemType && itemId) {
+            console.log('🎯 Tracking click interaction:', {
+                itemType,
+                itemId,
+                metadata,
+                element: target
+            });
             this.trackInteraction('click', itemId, itemType, metadata);
+        } else {
+            console.warn('⚠️ Click not tracked - missing itemType or itemId:', {
+                itemType,
+                itemId,
+                href: target.href,
+                element: target
+            });
         }
     }
     
@@ -263,18 +310,39 @@ class PreferenceTracker {
             formData.append(key, data[key]);
         });
         
-        // Use sendBeacon for reliability, fall back to fetch
-        if (navigator.sendBeacon) {
-            navigator.sendBeacon(this.endpoint, formData);
-        } else {
+        // Debug logging
+        console.log('Sending preference data to server:', {
+            endpoint: this.endpoint,
+            data: data,
+            metadata: data.metadata ? JSON.parse(data.metadata) : null
+        });
+        
+        // Use fetch for better error handling (instead of sendBeacon for debugging)
             fetch(this.endpoint, {
                 method: 'POST',
                 body: formData,
                 keepalive: true
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.text();
+        }).then(responseText => {
+            console.log('Server response:', responseText);
+            try {
+                const jsonResponse = JSON.parse(responseText);
+                if (jsonResponse.success) {
+                    console.log('✅ Preference tracking successful');
+                } else {
+                    console.warn('❌ Preference tracking failed:', jsonResponse);
+                }
+            } catch (e) {
+                console.warn('Server response was not valid JSON:', responseText);
+            }
             }).catch(error => {
-                console.warn('Failed to send tracking data:', error);
+            console.error('❌ Failed to send tracking data:', error);
+            console.error('Data that failed to send:', data);
             });
-        }
     }
     
     startTimeTracking() {
@@ -377,14 +445,77 @@ class PreferenceTracker {
             return null;
         }
     }
+    
+    /**
+     * Setup automatic click tracking
+     */
+    setupClickTracking() {
+        // Enhanced click tracking for all tracked elements
+        document.addEventListener('click', (e) => {
+            let target = e.target;
+            
+            // Find the closest element with tracking attributes
+            while (target && target !== document) {
+                if (target.hasAttribute && target.hasAttribute('data-item-type')) {
+                    const itemType = target.getAttribute('data-item-type');
+                    const itemId = target.getAttribute('data-item-id');
+                    const metadataStr = target.getAttribute('data-tracking-metadata');
+                    
+                    if (itemId && itemType) {
+                        let metadata = {};
+                        
+                        // Parse metadata JSON if present
+                        if (metadataStr) {
+                            try {
+                                metadata = JSON.parse(metadataStr);
+                                console.log('Preference Tracker: Parsed metadata:', metadata);
+                            } catch (error) {
+                                console.warn('Preference Tracker: Failed to parse metadata:', error, metadataStr);
+                            }
+                        }
+                        
+                        // Add click timestamp and element info
+                        metadata.click_timestamp = Date.now();
+                        metadata.element_tag = target.tagName.toLowerCase();
+                        metadata.page_url = window.location.pathname;
+                        
+                        // Log the tracking action
+                        console.log(`Preference Tracker: Tracking ${itemType} click:`, {
+                            itemId,
+                            itemType,
+                            metadata
+                        });
+                        
+                        // Track the interaction
+                        this.trackInteraction('click', itemId, itemType, metadata);
+                        
+                        // Stop looking for tracking attributes on parent elements
+                        break;
+                    }
+                }
+                target = target.parentElement;
+            }
+        }, true); // Use capture phase to catch events early
+        
+        console.log('Preference Tracker: Click tracking enabled');
+    }
 }
 
-// Initialize tracking when DOM is ready
+// Initialize tracking when DOM is ready (only if not already initialized globally)
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if already initialized by global preference tracker
+    if (window.preferenceTracker) {
+        console.log('PreferenceTracker already initialized globally, setting up additional helpers');
+    } else {
     // Only initialize if user is logged in (check for session indicators)
     if (document.querySelector('.user-profile') || document.querySelector('[data-user-logged-in]')) {
         window.preferenceTracker = new PreferenceTracker();
+            console.log('PreferenceTracker initialized locally');
+        }
+    }
         
+    // Always set up the helper functions if we have a tracker instance
+    if (window.preferenceTracker) {
         // Make tracker available globally for manual tracking
         window.trackUserAction = {
             like: (id, type) => window.preferenceTracker.trackLike(id, type),
@@ -394,6 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
             download: (id, type, filename) => window.preferenceTracker.trackDownload(id, type, filename),
             search: (query, category) => window.preferenceTracker.trackSearch(query, category)
         };
+        console.log('Preference tracking helper functions initialized');
     }
 });
 

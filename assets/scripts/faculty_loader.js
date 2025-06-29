@@ -29,9 +29,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 specialty = 'Research Faculty';
             }
             
+            // Prepare tracking metadata
+            const trackingData = {
+                title: faculty.name,
+                specialty: specialty,
+                bio: shortBio,
+                researchInterests: faculty.interested_fields_of_research || [],
+                tags: [specialty, 'Faculty'].concat(faculty.interested_fields_of_research || []).filter(Boolean)
+            };
+            
             const facultyCard = `
                 <div class="col-md-6 col-lg-3 mb-4">
-                    <div class="neo-faculty-card" data-faculty-id="${faculty._id}" style="cursor: pointer;">
+                    <div class="neo-faculty-card" 
+                         data-faculty-id="${faculty._id}" 
+                         data-item-type="faculty" 
+                         data-item-id="${faculty._id}"
+                         data-tracking-metadata='${JSON.stringify(trackingData).replace(/'/g, "&apos;").replace(/"/g, "&quot;")}'
+                         style="cursor: pointer;">
                         <div class="card-border"></div>
                         <div class="faculty-img-wrapper">
                             <div class="faculty-img-container" id="img-container-${index}">
@@ -60,13 +74,20 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => {
             const facultyCards = document.querySelectorAll('.neo-faculty-card');
             facultyCards.forEach(card => {
-                card.addEventListener('click', function() {
+                card.addEventListener('click', function(e) {
+                    // Allow the preference tracker to handle the click first
                     const facultyId = this.getAttribute('data-faculty-id');
+                    
                     if (facultyId) {
-                        window.location.href = `Faculty_Profile.php?id=${facultyId}`;
+                        // Small delay to ensure preference tracking completes
+                        setTimeout(() => {
+                            window.location.href = `Faculty_Profile.php?id=${facultyId}`;
+                        }, 100);
                     }
                 });
             });
+            
+            console.log('Faculty Loader: Enhanced click tracking enabled for', facultyCards.length, 'faculty cards');
         }, 500);
     }
     

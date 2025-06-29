@@ -73,10 +73,13 @@ class UserPreferences {
                     'last_updated' => new MongoDB\BSON\UTCDateTime(),
                     'created_at' => new MongoDB\BSON\UTCDateTime()
                 ];
+                error_log("DEBUG: Created new profile for user $userId");
             }
             
             // Update activity score
-            $profile['activity_score'] = ($profile['activity_score'] ?? 0) + $this->getInteractionWeight($interactionType);
+            $weightGain = $this->getInteractionWeight($interactionType);
+            $profile['activity_score'] = ($profile['activity_score'] ?? 0) + $weightGain;
+            error_log("DEBUG: Activity score updated by $weightGain, new total: " . $profile['activity_score']);
             
             // Initialize or fix interests and keywords structures
             $interests = $profile['interests'] ?? [];
@@ -106,18 +109,19 @@ class UserPreferences {
             if (!is_array($interests)) $interests = [];
             if (!is_array($keywords)) $keywords = [];
             
-            $profile['interests'] = $interests;
-            $profile['keywords'] = $keywords;
+            error_log("DEBUG: Initial interests count: " . count($interests));
             
-            // Update interests based on tags
+            // Update interests based on tags (for events, forum posts, projects)
             if (isset($metadata['tags']) && is_array($metadata['tags'])) {
+                error_log("DEBUG: Processing tags: " . json_encode($metadata['tags']));
                 foreach ($metadata['tags'] as $tag) {
                     if (is_string($tag) && !empty(trim($tag))) {
                         $normalizedTag = trim($tag);
                         if (!isset($interests[$normalizedTag])) {
                             $interests[$normalizedTag] = 0;
                         }
-                        $interests[$normalizedTag] += $this->getInteractionWeight($interactionType);
+                        $interests[$normalizedTag] += $weightGain;
+                        error_log("DEBUG: Added/updated interest '$normalizedTag' with weight $weightGain");
                     }
                 }
             }
@@ -125,21 +129,25 @@ class UserPreferences {
             // Update interests based on specialty (for faculty)
             if (isset($metadata['specialty']) && !empty($metadata['specialty'])) {
                 $specialty = trim($metadata['specialty']);
+                error_log("DEBUG: Processing specialty: $specialty");
                 if (!isset($interests[$specialty])) {
                     $interests[$specialty] = 0;
                 }
-                $interests[$specialty] += $this->getInteractionWeight($interactionType);
+                $interests[$specialty] += $weightGain;
+                error_log("DEBUG: Added/updated specialty interest '$specialty' with weight $weightGain");
             }
             
             // Update interests based on research interests (for faculty)
             if (isset($metadata['researchInterests']) && is_array($metadata['researchInterests'])) {
+                error_log("DEBUG: Processing researchInterests: " . json_encode($metadata['researchInterests']));
                 foreach ($metadata['researchInterests'] as $interest) {
                     if (is_string($interest) && !empty(trim($interest))) {
                         $normalizedInterest = trim($interest);
                         if (!isset($interests[$normalizedInterest])) {
                             $interests[$normalizedInterest] = 0;
                         }
-                        $interests[$normalizedInterest] += $this->getInteractionWeight($interactionType);
+                        $interests[$normalizedInterest] += $weightGain;
+                        error_log("DEBUG: Added/updated research interest '$normalizedInterest' with weight $weightGain");
                     }
                 }
             }
@@ -147,10 +155,35 @@ class UserPreferences {
             // Update interests based on event type (for events)
             if (isset($metadata['eventType']) && !empty($metadata['eventType'])) {
                 $eventType = trim($metadata['eventType']);
+                error_log("DEBUG: Processing eventType: $eventType");
                 if (!isset($interests[$eventType])) {
                     $interests[$eventType] = 0;
                 }
-                $interests[$eventType] += $this->getInteractionWeight($interactionType);
+                $interests[$eventType] += $weightGain;
+                error_log("DEBUG: Added/updated eventType interest '$eventType' with weight $weightGain");
+            }
+            
+            // Update interests based on title (for all content types)
+            if (isset($metadata['title']) && !empty($metadata['title'])) {
+                $title = trim($metadata['title']);
+                error_log("DEBUG: Processing title for keywords: $title");
+                // Extract keywords from title (simple word extraction)
+                $titleWords = preg_split('/\s+/', strtolower($title));
+                foreach ($titleWords as $word) {
+                    $word = trim(preg_replace('/[^\w\s]/', '', $word)); // Remove punctuation
+                    if (strlen($word) > 3) { // Only words longer than 3 characters
+                        if (!isset($keywords[$word])) {
+                            $keywords[$word] = 0;
+                        }
+                        $keywords[$word] += 1;
+                        
+                        // Also add as interest with lower weight
+                        if (!isset($interests[$word])) {
+                            $interests[$word] = 0;
+                        }
+                        $interests[$word] += 0.3;
+                    }
+                }
             }
             
             // Update preferred categories
@@ -160,10 +193,12 @@ class UserPreferences {
             if (!isset($profile['preferred_categories'][$itemType])) {
                 $profile['preferred_categories'][$itemType] = 0;
             }
-            $profile['preferred_categories'][$itemType] += $this->getInteractionWeight($interactionType);
+            $profile['preferred_categories'][$itemType] += $weightGain;
+            error_log("DEBUG: Updated category preference for '$itemType' with weight $weightGain");
             
-            // Update keywords from titles and content
+            // Update keywords from explicit keywords metadata
             if (isset($metadata['keywords']) && is_array($metadata['keywords'])) {
+                error_log("DEBUG: Processing explicit keywords: " . json_encode($metadata['keywords']));
                 foreach ($metadata['keywords'] as $keyword) {
                     if (is_string($keyword) && !empty(trim($keyword))) {
                         $normalizedKeyword = trim(strtolower($keyword));
@@ -177,6 +212,7 @@ class UserPreferences {
                             $interests[$normalizedKeyword] = 0;
                         }
                         $interests[$normalizedKeyword] += 0.5;
+                        error_log("DEBUG: Added/updated keyword '$normalizedKeyword' as interest");
                     }
                 }
             }
@@ -187,9 +223,10 @@ class UserPreferences {
             
             $profile['last_updated'] = new MongoDB\BSON\UTCDateTime();
             
-            // Debug: Log interests before saving
-            error_log("DEBUG: Profile interests before save: " . json_encode($profile['interests'] ?? []));
-            error_log("DEBUG: Profile categories before save: " . json_encode($profile['preferred_categories'] ?? []));
+            // Debug: Log interests after processing
+            error_log("DEBUG: Final interests count: " . count($profile['interests'] ?? []));
+            error_log("DEBUG: Final interests (top 5): " . json_encode(array_slice($profile['interests'] ?? [], 0, 5, true)));
+            error_log("DEBUG: Final categories: " . json_encode($profile['preferred_categories'] ?? []));
             
             // Upsert the profile
             $result = $profileCollection->replaceOne(
@@ -201,7 +238,10 @@ class UserPreferences {
             error_log("DEBUG: Profile update result - Modified: " . $result->getModifiedCount() . ", Upserted: " . ($result->getUpsertedId() ? 'Yes' : 'No'));
             
         } catch (Exception $e) {
-            error_log("Error updating user profile: " . $e->getMessage());
+            error_log("ERROR: Exception in updateUserProfile: " . $e->getMessage());
+            error_log("ERROR: Stack trace: " . $e->getTraceAsString());
+            error_log("ERROR: User ID: $userId, InteractionType: $interactionType, ItemType: $itemType");
+            error_log("ERROR: Metadata: " . json_encode($metadata));
         }
     }
     
@@ -442,25 +482,54 @@ class UserPreferences {
 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     session_start();
     
+    // Debug logging
+    error_log("DEBUG: API endpoint called with action: " . ($_POST['action'] ?? 'none'));
+    error_log("DEBUG: POST data: " . json_encode($_POST));
+    
     if (!isset($_SESSION['user_id'])) {
         http_response_code(401);
-        echo json_encode(['error' => 'User not authenticated']);
+        $error = ['error' => 'User not authenticated'];
+        error_log("DEBUG: Authentication failed - no user_id in session");
+        echo json_encode($error);
         exit;
     }
     
     $preferences = new UserPreferences();
     $userId = $_SESSION['user_id'];
     
+    error_log("DEBUG: Processing request for user: $userId");
+    
     switch ($_POST['action']) {
         case 'track':
+            // Parse and validate metadata
+            $rawMetadata = $_POST['metadata'] ?? '{}';
+            $metadata = json_decode($rawMetadata, true);
+            
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                error_log("DEBUG: JSON decode error: " . json_last_error_msg());
+                error_log("DEBUG: Raw metadata: " . $rawMetadata);
+                $metadata = [];
+            }
+            
+            error_log("DEBUG: Tracking interaction with metadata: " . json_encode($metadata));
+            
             $result = $preferences->trackInteraction(
                 $userId,
                 $_POST['interaction_type'] ?? 'view',
                 $_POST['item_id'] ?? '',
                 $_POST['item_type'] ?? '',
-                json_decode($_POST['metadata'] ?? '{}', true)
+                $metadata
             );
-            echo json_encode(['success' => $result]);
+            
+            $response = ['success' => $result];
+            if (!$result) {
+                $response['error'] = 'Failed to track interaction';
+                error_log("DEBUG: Failed to track interaction");
+            } else {
+                error_log("DEBUG: Successfully tracked interaction");
+            }
+            
+            echo json_encode($response);
             break;
             
         case 'track_search':
@@ -475,12 +544,18 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' &
             
         case 'get_profile':
             $profile = $preferences->getUserProfile($userId);
+            error_log("DEBUG: Returning user profile: " . json_encode($profile));
             echo json_encode($profile ?? []);
             break;
             
         default:
             http_response_code(400);
-            echo json_encode(['error' => 'Invalid action']);
+            $error = ['error' => 'Invalid action: ' . ($_POST['action'] ?? 'none')];
+            error_log("DEBUG: Invalid action received");
+            echo json_encode($error);
     }
+} else if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    error_log("DEBUG: POST request received but no action parameter");
+    error_log("DEBUG: Available POST keys: " . implode(', ', array_keys($_POST)));
 }
 ?> 

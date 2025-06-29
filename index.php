@@ -1,6 +1,70 @@
 <?php
-// Remove debug statements and error reporting
 session_start();
+
+// Include autoloader for MongoDB and recommendation engine
+require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/src/model/recommendation_engine.php';
+require_once __DIR__ . '/src/model/user_preferences.php';
+
+// Initialize recommendation engine
+$recommendationEngine = new RecommendationEngine();
+
+// Get personalized recommendations if user is logged in
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+    $recommendations = $recommendationEngine->getDashboardRecommendations($userId);
+    
+    $projects = $recommendations['projects'];
+    $events = $recommendations['events'];
+    $forumPosts = $recommendations['forum_posts'];
+    $faculties = $recommendations['faculties'];
+    
+    $isPersonalized = $recommendations['is_personalized'] ?? false;
+    
+    // Create combined recommendations array for "For You" section
+    $combinedRecommendations = [];
+    
+    // Add projects to combined array with content type
+    foreach ($projects as $item) {
+        $item['content_type'] = 'project';
+        $combinedRecommendations[] = $item;
+    }
+    
+    // Add events to combined array with content type
+    foreach ($events as $item) {
+        $item['content_type'] = 'event';
+        $combinedRecommendations[] = $item;
+    }
+    
+    // Add forum posts to combined array with content type
+    foreach ($forumPosts as $item) {
+        $item['content_type'] = 'forum_post';
+        $combinedRecommendations[] = $item;
+    }
+    
+    // Add faculties to combined array with content type
+    foreach ($faculties as $item) {
+        $item['content_type'] = 'faculty';
+        $combinedRecommendations[] = $item;
+    }
+    
+    // Sort by relevance score if personalized
+    if ($isPersonalized) {
+        usort($combinedRecommendations, function($a, $b) {
+            $scoreA = $a['relevance_score'] ?? 0;
+            $scoreB = $b['relevance_score'] ?? 0;
+            return $scoreB <=> $scoreA; // Sort in descending order
+        });
+    }
+} else {
+    // Fallback to recent content for non-logged-in users
+    $projects = [];
+    $events = [];
+    $forumPosts = [];
+    $faculties = [];
+    $combinedRecommendations = [];
+    $isPersonalized = false;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,9 +104,6 @@ session_start();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- FullCalendar styles and scripts -->
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
     
     <style>
         :root {
@@ -310,73 +371,7 @@ session_start();
             color: var(--text-muted);
         }
 
-        /* Light Theme Research Impact Section */
-        [data-theme="light"] .research-impact {
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-            color: var(--text-primary);
-        }
 
-        [data-theme="light"] .impact-shape-1 {
-            background: radial-gradient(circle, rgba(67, 97, 238, 0.08), transparent);
-        }
-
-        [data-theme="light"] .impact-shape-2 {
-            background: radial-gradient(circle, rgba(114, 9, 183, 0.06), transparent);
-        }
-
-        [data-theme="light"] .grid-overlay {
-            background-image: 
-                linear-gradient(rgba(67, 97, 238, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(67, 97, 238, 0.08) 1px, transparent 1px);
-        }
-
-        [data-theme="light"] .glowing-orb.orb-1 {
-            background: radial-gradient(circle, rgba(67, 97, 238, 0.1), transparent 70%);
-        }
-
-        [data-theme="light"] .glowing-orb.orb-2 {
-            background: radial-gradient(circle, rgba(114, 9, 183, 0.08), transparent 70%);
-        }
-
-        [data-theme="light"] .glowing-orb.orb-3 {
-            background: radial-gradient(circle, rgba(247, 37, 133, 0.06), transparent 70%);
-        }
-
-        [data-theme="light"] .impact-chart-container {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(67, 97, 238, 0.15);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-        }
-
-        [data-theme="light"] .impact-chart-container:hover {
-            background: rgba(255, 255, 255, 0.98);
-            border-color: rgba(67, 97, 238, 0.25);
-            box-shadow: 0 12px 48px rgba(67, 97, 238, 0.12);
-        }
-
-        [data-theme="light"] .chart-wrapper {
-            background: rgba(248, 250, 252, 0.8);
-            border: 1px solid rgba(67, 97, 238, 0.1);
-        }
-
-        [data-theme="light"] .chart-header h4 {
-            background: linear-gradient(135deg, var(--text-primary), var(--neo-primary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        [data-theme="light"] .chart-controls .btn {
-            background: rgba(67, 97, 238, 0.1);
-            border: 1px solid rgba(67, 97, 238, 0.2);
-            color: var(--neo-primary);
-        }
-
-        [data-theme="light"] .chart-controls .btn:hover,
-        [data-theme="light"] .chart-controls .btn.active {
-            background: rgba(67, 97, 238, 0.15);
-            color: var(--neo-primary);
-        }
 
         /* Light Theme Faculty Spotlight Section */
         [data-theme="light"] .faculty-spotlight {
@@ -1741,149 +1736,6 @@ session_start();
             transform: translateX(5px);
         }
         
-        /* Research Impact Section */
-        .impact-bg-elements {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-        }
-        
-        .impact-shape {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.1;
-        }
-        
-        .impact-shape-1 {
-            width: 400px;
-            height: 400px;
-            top: -100px;
-            left: -150px;
-            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-        }
-        
-        .impact-shape-2 {
-            width: 300px;
-            height: 300px;
-            bottom: -50px;
-            right: -100px;
-            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-        }
-        
-        .progress-animated .progress-bar {
-            position: relative;
-            overflow: hidden;
-            background: var(--gradient-primary);
-        }
-        
-        .progress-animated .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: progress-animation 2s ease infinite;
-        }
-        
-        @keyframes progress-animation {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
-        }
-        
-        .progress-title {
-            font-weight: 600;
-            color: #495057;
-        }
-        
-        .progress-value {
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .impact-chart-container {
-            position: relative;
-            height: 400px;
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-md);
-            padding: 20px;
-        }
-        
-        .impact-overlay {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .impact-stat h3 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin: 0;
-            color: var(--accent);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .impact-stat p {
-            font-size: 0.9rem;
-            margin: 0;
-            color: #6c757d;
-        }
-        
-        .impact-highlights {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-        }
-        
-        .highlight-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            border-radius: 10px;
-            background: rgba(248, 249, 250, 0.8);
-            margin: 0 5px;
-        }
-        
-        .highlight-icon {
-            width: 45px;
-            height: 45px;
-            background: var(--gradient-primary);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            color: white;
-            font-size: 1.2rem;
-        }
-        
-        .highlight-content h4 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin: 0;
-            color: var(--dark);
-        }
-        
-        .highlight-content p {
-            font-size: 0.8rem;
-            margin: 0;
-            color: #6c757d;
-        }
-        
         /* Faculty Spotlight Section */
         .faculty-bg-pattern {
             position: absolute;
@@ -2571,564 +2423,7 @@ session_start();
             transform: rotate(30deg);
         }
         
-        /* Research Impact Section Styles */
-        .research-impact {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            color: #f8f9fa;
-        }
-        
-        .impact-bg-elements {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-        
-        .impact-shape {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.1;
-        }
-        
-        .impact-shape-1 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, #4361ee, transparent);
-            top: -250px;
-            left: -100px;
-            filter: blur(60px);
-        }
-        
-        .impact-shape-2 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, #7209b7, transparent);
-            bottom: -300px;
-            right: -150px;
-            filter: blur(80px);
-        }
-        
-        .grid-overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
-            z-index: 1;
-        }
-        
-        .glowing-orb {
-            position: absolute;
-            border-radius: 50%;
-            animation: pulse-glow 5s infinite ease-in-out;
-            filter: blur(20px);
-        }
-        
-        .orb-1 {
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(67, 97, 238, 0.3), transparent 70%);
-            top: 20%;
-            left: 15%;
-            animation-delay: 0s;
-        }
-        
-        .orb-2 {
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(114, 9, 183, 0.3), transparent 70%);
-            bottom: 30%;
-            right: 25%;
-            animation-delay: 1s;
-        }
-        
-        .orb-3 {
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, rgba(247, 37, 133, 0.3), transparent 70%);
-            top: 60%;
-            left: 40%;
-            animation-delay: 2s;
-        }
-        
-        .futuristic-title {
-            font-size: 3rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            margin-bottom: 1.5rem;
-        }
-        
-        .futuristic-badge {
-            display: inline-flex;
-            align-items: center;
-            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50px;
-            padding: 0.5rem 1.25rem;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #f8f9fa;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .text-gradient {
-            background: linear-gradient(135deg, #4361ee, #7209b7);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            position: relative;
-            display: inline-block;
-            padding: 0 5px;
-        }
-        
-        .title-underline {
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(135deg, #4361ee, #7209b7);
-            border-radius: 2px;
-            margin: 0;
-            flex-shrink: 0;
-        }
-        
-        .impact-chart-container {
-            position: relative;
-            height: 450px;
-            padding: 1.75rem;
-            border-radius: var(--border-radius);
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), 0 5px 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-        
-        .impact-chart-container:hover {
-            box-shadow: 0 20px 40px rgba(67, 97, 238, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1);
-            border-color: rgba(76, 201, 240, 0.2);
-        }
-        
-        .impact-chart-container.updating {
-            border-color: rgba(76, 201, 240, 0.4);
-            box-shadow: 0 0 40px rgba(76, 201, 240, 0.2);
-            animation: chart-pulse 0.7s ease-in-out;
-        }
-        
-        @keyframes chart-pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.01); }
-            100% { transform: scale(1); }
-        }
-        
-        .chart-wrapper {
-            position: relative;
-            height: 350px;
-            width: 100%;
-            overflow: hidden;
-            border-radius: 12px;
-            background: rgba(15, 23, 42, 0.3);
-            padding: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .chart-glow-effect {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            background: radial-gradient(circle at 50% 50%, rgba(76, 201, 240, 0.05) 0%, rgba(15, 23, 42, 0) 60%);
-            z-index: 1;
-        }
-        
-        .chart-header {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 1.5rem;
-        }
-        
-        .chart-header h4 {
-            font-size: 1.35rem;
-            font-weight: 700;
-            margin: 0 0 15px 0;
-            background: linear-gradient(135deg, #ffffff, #a6c1ee);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .chart-controls {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .chart-control-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            padding: 6px 15px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-        
-        .chart-control-btn:hover {
-            background: rgba(76, 201, 240, 0.1);
-            border-color: rgba(76, 201, 240, 0.2);
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .chart-control-btn.active {
-            background: rgba(76, 201, 240, 0.2);
-            border-color: rgba(76, 201, 240, 0.3);
-            color: #ffffff;
-            box-shadow: 0 0 15px rgba(76, 201, 240, 0.2);
-        }
-        
-        .chart-legend {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        
-        .chart-legend span {
-            display: flex;
-            align-items: center;
-            font-size: 0.85rem;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 5px 10px;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-        
-        .chart-legend span:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-        
-        .legend-dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 6px;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-        }
-        
-        .publications-dot {
-            background-color: #4361ee;
-            box-shadow: 0 0 8px rgba(67, 97, 238, 0.8);
-        }
-        
-        .citations-dot {
-            background-color: #7209b7;
-            box-shadow: 0 0 8px rgba(114, 9, 183, 0.8);
-        }
-        
-        .funding-dot {
-            background-color: #4cc9f0;
-            box-shadow: 0 0 8px rgba(76, 201, 240, 0.8);
-        }
-        
-        /* Counter styles for the highlight items */
-        .counter-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
-            line-height: 1;
-            margin-bottom: 0.25rem;
-        }
-        
-        .counter-suffix {
-            display: inline-block;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #4cc9f0;
-            text-shadow: 0 0 8px rgba(76, 201, 240, 0.6);
-            margin-left: 2px;
-            vertical-align: text-top;
-        }
-        
-        .impact-highlights {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-            position: relative;
-            width: 100%;
-        }
-        
-        .highlight-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1.5rem 1.25rem;
-            border-radius: var(--border-radius);
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            height: 100%;
-        }
-        
-        .highlight-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.3);
-            background: rgba(25, 33, 52, 0.7);
-            border-color: rgba(76, 201, 240, 0.3);
-        }
-        
-        /* Add responsive adjustments */
-        @media (max-width: 767px) {
-            .impact-highlights {
-                grid-template-columns: repeat(2, 1fr);
-                width: 100%;
-                margin: 2rem 0;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .impact-highlights {
-                grid-template-columns: 1fr;
-                width: 100%;
-                margin: 2rem 0;
-            }
-        }
-        
-        .highlight-icon {
-            width: 60px;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #4361ee, #3a0ca3);
-            color: #fff;
-            font-size: 1.6rem;
-            margin-bottom: 1.25rem;
-            position: relative;
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
-            transition: all 0.4s ease;
-        }
-        
-        .highlight-icon::after {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            border-radius: 50%;
-            border: 1px solid rgba(76, 201, 240, 0.3);
-            opacity: 0.5;
-            animation: pulse 2s infinite ease-in-out;
-        }
-        
-        .highlight-item:hover .highlight-icon {
-            transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
-        }
-        
-        .highlight-content {
-            text-align: center;
-        }
-        
-        .highlight-content h4 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-            background: linear-gradient(135deg, #ffffff, #a6c1ee);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-top: 0.5rem;
-        }
-        
-        .highlight-content p {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
-            margin: 0.5rem 0 0;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-        
-        /* Progress bars styling */
-        .progress-item {
-            margin-bottom: 1.5rem;
-        }
-        
-        .progress-title {
-            font-size: 0.95rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-        }
-        
-        .progress-value {
-            font-size: 1rem;
-            font-weight: 700;
-        }
-        
-        .glow-text {
-            text-shadow: 0 0 10px rgba(67, 97, 238, 0.7);
-        }
-        
-        .progress {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 0.5rem;
-        }
-        
-        .progress-glow {
-            background: linear-gradient(90deg, #4361ee, #7209b7);
-            box-shadow: 0 0 20px rgba(67, 97, 238, 0.6);
-        }
-        
-        .glassmorphism {
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        /* Research Stats Design (Hero Section) */
-        .research-stats {
-            position: relative;
-        }
-        
-        .stats-label {
-            display: inline-flex;
-            align-items: center;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        
-        .stats-icon {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #4361ee, #3a0ca3);
-            color: #fff;
-            font-size: 0.7rem;
-            margin-right: 0.5rem;
-        }
-        
-        .pulse-anim {
-            animation: pulse 2s infinite ease-in-out;
-        }
-        
-        .stats-container {
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .stats-grid {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-        
-        .stat-item {
-            flex: 1;
-        }
-        
-        .stat-hexagon {
-            position: relative;
-            width: 100px;
-            height: 110px;
-            margin-bottom: 1rem;
-            background: rgba(15, 23, 42, 0.5);
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-        
-        .hexagon-inner {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 90px;
-            height: 100px;
-            background: linear-gradient(135deg, rgba(67, 97, 238, 0.3), rgba(114, 9, 183, 0.3));
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-        }
-        
-        .stat-icon-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            opacity: 0.15;
-            color: #fff;
-        }
-        
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(67, 97, 238, 0.7);
-            z-index: 1;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-        
-        .stat-item:hover .stat-hexagon {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
-        }
-        
-        /* Button glow effect */
-        .btn-glow {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .btn-glow:hover {
-            box-shadow: 0 0 20px rgba(67, 97, 238, 0.7);
-            transform: translateY(-3px);
-        }
-        
-        .btn-icon-wrapper {
-            display: inline-flex;
-            margin-right: 0.5rem;
-        }
+
 
         /* Futuristic Hero Section Styles */
         .neo-hero-section {
@@ -3840,8 +3135,8 @@ session_start();
     <div class="scroll-navigation">
         <div class="scroll-dot" data-section="Search" data-index="0"></div>
         <div class="scroll-dot" data-section="Hero" data-index="1"></div>
-        <div class="scroll-dot" data-section="Featured Research" data-index="2"></div>
-        <div class="scroll-dot" data-section="Research Impact" data-index="3"></div>
+        <div class="scroll-dot" data-section="For You" data-index="2"></div>
+        <div class="scroll-dot" data-section="Featured Research" data-index="3"></div>
         <div class="scroll-dot" data-section="Faculty Spotlight" data-index="4"></div>
         <div class="scroll-dot" data-section="Research Events" data-index="5"></div>
         <div class="scroll-dot" data-section="Research Guidance" data-index="6"></div>
@@ -4013,10 +3308,6 @@ session_start();
                 <div class="col-lg-6 position-relative d-none d-lg-block">
                     <div class="neo-hero-visual">
                         <div class="visual-container">
-                            <div class="visual-element main-visual">
-                                <img src="assets/resources/hero-research.png" alt="Research Visualization" class="img-fluid">
-                                <div class="glow-effect"></div>
-                            </div>
                             
                             <div class="floating-elements">
                                 <div class="float-element element-1">
@@ -4522,6 +3813,353 @@ session_start();
         }
     });
     </script>
+
+    <!-- For You Section - Enhanced from Dashboard -->
+    <?php if (isset($_SESSION['user_id']) && $isPersonalized): ?>
+    <section class="for-you-section section-padding vh-100 position-relative">
+        <div class="container position-relative">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <div class="section-header">
+                    <span class="futuristic-badge"><i class="bi bi-lightning-charge-fill me-2"></i>Personalized</span>
+                    <h2 class="section-title futuristic-title">For <span class="text-gradient">You</span>
+                        <span class="personalized-badge" style="color: var(--neo-magenta);">
+                            <i class="bi bi-stars"></i>
+                        </span>
+                    </h2>
+                    <p class="section-subtitle">Content tailored to your interests and research preferences</p>
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="title-underline"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Enhanced Vertical list container for "For You" section -->
+            <div class="enhanced-cards-list">
+                <?php 
+                // Display more items from combined recommendations (at least 20)
+                $displayCount = min(count($combinedRecommendations), 25); // Show up to 25 items
+                for ($i = 0; $i < $displayCount; $i++): 
+                    $item = $combinedRecommendations[$i];
+                    $contentType = $item['content_type'];
+                ?>
+                    <?php if ($contentType === 'project'): ?>
+                    <a href="Project_details.php?id=<?= $item['_id'] ?>" class="enhanced-card recommended" data-item-type="project" data-item-id="<?= $item['_id'] ?>">
+                        <div class="content-type-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(76, 201, 240, 0.1); color: var(--neo-blue); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">Project</div>
+                        <h3 class="enhanced-card-title"><?= htmlspecialchars($item['title'] ?? 'Untitled Project') ?></h3>
+                        <p class="enhanced-card-content"><?= htmlspecialchars(substr($item['description'] ?? 'No description available', 0, 120)) ?>...</p>
+                        
+                        <?php if (isset($item['tags']) && is_array($item['tags']) && !empty($item['tags'])): ?>
+                        <div class="enhanced-card-tags" style="margin-bottom: 0.5rem;">
+                            <?php foreach (array_slice($item['tags'], 0, 2) as $tag): ?>
+                            <span class="enhanced-tag"><?= htmlspecialchars($tag) ?></span>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php endif; ?>
+                        
+                        <div class="enhanced-card-meta">
+                            <span class="enhanced-card-date">
+                                <i class="bi bi-calendar3"></i>
+                                <?php 
+                                if (isset($item['createdAt'])) {
+                                    if (is_object($item['createdAt']) && method_exists($item['createdAt'], 'toDateTime')) {
+                                        echo $item['createdAt']->toDateTime()->format('M j, Y');
+                                    } else {
+                                        echo 'Recent';
+                                    }
+                                } else {
+                                    echo 'Recent';
+                                }
+                                ?>
+                            </span>
+                        </div>
+                    </a>
+                    
+                    <?php elseif ($contentType === 'event'): ?>
+                    <a href="events.php#event-<?= $item['_id'] ?>" class="enhanced-card recommended" data-item-type="event" data-item-id="<?= $item['_id'] ?>">
+                        <div class="content-type-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(247, 37, 133, 0.1); color: var(--neo-magenta); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">Event</div>
+                        <h3 class="enhanced-card-title"><?= htmlspecialchars($item['title'] ?? 'Untitled Event') ?></h3>
+                        <p class="enhanced-card-content"><?= htmlspecialchars(substr($item['description'] ?? 'No description available', 0, 120)) ?>...</p>
+                        
+                        <div class="enhanced-card-meta">
+                            <span class="enhanced-card-date">
+                                <i class="bi bi-calendar3"></i>
+                                <?php 
+                                if (isset($item['eventDate'])) {
+                                    if (is_array($item['eventDate']) && isset($item['eventDate']['$date'])) {
+                                        $timestamp = $item['eventDate']['$date']['$numberLong'] ?? $item['eventDate']['$date'];
+                                        echo date('M j, Y', $timestamp / 1000);
+                                    } else {
+                                        echo 'TBD';
+                                    }
+                                } else {
+                                    echo 'TBD';
+                                }
+                                ?>
+                            </span>
+                            <span class="enhanced-status-badge enhanced-status-<?= strtolower($item['status'] ?? 'upcoming') ?>">
+                                <?= htmlspecialchars($item['status'] ?? 'Upcoming') ?>
+                            </span>
+                        </div>
+                    </a>
+                    
+                    <?php elseif ($contentType === 'forum_post'): ?>
+                    <a href="post_details.php?id=<?= $item['_id'] ?>" class="enhanced-card recommended" data-item-type="forum_post" data-item-id="<?= $item['_id'] ?>">
+                        <div class="content-type-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(67, 97, 238, 0.1); color: var(--neo-primary); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">Discussion</div>
+                        <h3 class="enhanced-card-title"><?= htmlspecialchars($item['title'] ?? 'Untitled Post') ?></h3>
+                        <p class="enhanced-card-content"><?= htmlspecialchars(substr($item['content'] ?? 'No content available', 0, 120)) ?>...</p>
+                        
+                        <div class="enhanced-card-meta">
+                            <span class="enhanced-card-date">
+                                <i class="bi bi-person"></i>
+                                <?= htmlspecialchars($item['user_name'] ?? 'Anonymous') ?>
+                            </span>
+                            <span class="enhanced-card-stats">
+                                <span class="enhanced-stat-item">
+                                    <i class="bi bi-arrow-up"></i>
+                                    <?= $item['upvotes'] ?? 0 ?>
+                                </span>
+                            </span>
+                        </div>
+                    </a>
+                    
+                    <?php elseif ($contentType === 'faculty'): ?>
+                    <a href="Faculty_Profile.php?id=<?= $item['_id'] ?>" class="enhanced-card enhanced-faculty-card recommended" data-item-type="faculty" data-item-id="<?= $item['_id'] ?>">
+                        <div class="content-type-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(52, 211, 153, 0.1); color: #34D399; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">Faculty</div>
+                        <img src="<?= htmlspecialchars($item['profile_image'] ?? 'assets/resources/user_avater.png') ?>" 
+                             alt="<?= htmlspecialchars($item['name'] ?? 'Faculty Member') ?>" 
+                             class="enhanced-faculty-avatar">
+                        <h3 class="enhanced-faculty-name"><?= htmlspecialchars($item['name'] ?? 'Faculty Member') ?></h3>
+                        <p class="enhanced-faculty-bio"><?= htmlspecialchars(substr($item['bio'] ?? 'No bio available', 0, 100)) ?>...</p>
+                        
+                        <?php if (isset($item['specialty']) || (isset($item['research_interests']) && is_array($item['research_interests']))): ?>
+                        <div class="enhanced-card-tags" style="margin-top: 0.5rem;">
+                            <?php if (isset($item['specialty'])): ?>
+                            <span class="enhanced-tag specialty"><?= htmlspecialchars($item['specialty']) ?></span>
+                            <?php endif; ?>
+                            <?php if (isset($item['research_interests']) && is_array($item['research_interests'])): ?>
+                                <?php foreach (array_slice($item['research_interests'], 0, 1) as $interest): ?>
+                                <span class="enhanced-tag research-interest"><?= htmlspecialchars($interest) ?></span>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+                    </a>
+                    <?php endif; ?>
+                <?php endfor; ?>
+            </div>
+        </div>
+    </section>
+    
+    <style>
+    /* Enhanced For You Section Styles */
+    :root {
+        --neo-primary: #4361ee;
+        --neo-blue: #4cc9f0;
+        --neo-magenta: #f72585;
+        --border-color: rgba(76, 201, 240, 0.1);
+        --card-bg: rgba(30, 41, 59, 0.8);
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --text-muted: #64748b;
+    }
+    
+    .for-you-section {
+        background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .enhanced-cards-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        max-height: 80vh;
+        overflow-y: auto;
+        padding-right: 0.25rem;
+    }
+    
+    .enhanced-cards-list::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .enhanced-cards-list::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+    }
+    
+    .enhanced-cards-list::-webkit-scrollbar-thumb {
+        background: var(--neo-blue);
+        border-radius: 3px;
+    }
+    
+    .enhanced-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        position: relative;
+        width: 100%;
+    }
+    
+    .enhanced-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        border-color: var(--neo-blue);
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .enhanced-card.recommended::before {
+        content: "★";
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        color: var(--neo-magenta);
+        font-size: 0.8rem;
+        z-index: 10;
+    }
+    
+    .enhanced-card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+    }
+    
+    .enhanced-card-content {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+    
+    .enhanced-card-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+    
+    .enhanced-card-date {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .enhanced-card-stats {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .enhanced-stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .enhanced-faculty-card {
+        text-align: center;
+    }
+    
+    .enhanced-faculty-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 1rem;
+        border: 3px solid var(--neo-blue);
+    }
+    
+    .enhanced-faculty-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+    
+    .enhanced-faculty-bio {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+    
+    .enhanced-tag {
+        display: inline-block;
+        background: rgba(76, 201, 240, 0.1);
+        color: var(--neo-blue);
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        margin-right: 0.5rem;
+    }
+    
+    .enhanced-status-badge {
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+    
+    .enhanced-status-upcoming {
+        background: rgba(76, 201, 240, 0.1);
+        color: var(--neo-blue);
+    }
+    
+    .enhanced-status-ongoing {
+        background: rgba(34, 197, 94, 0.1);
+        color: #22c55e;
+    }
+    
+    .enhanced-status-completed {
+        background: rgba(156, 163, 175, 0.1);
+        color: #9ca3af;
+    }
+    
+    .personalized-badge {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.8rem;
+        color: var(--neo-blue);
+        margin-left: 0.5rem;
+        animation: sparkle 2s ease-in-out infinite;
+    }
+    
+    .personalized-badge i {
+        font-size: 0.7rem;
+    }
+    
+    @keyframes sparkle {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.7; transform: scale(1.1); }
+    }
+    
+    @media (max-width: 768px) {
+        .for-you-section {
+            padding: 60px 0;
+        }
+        
+        .enhanced-cards-list {
+            max-height: 60vh;
+        }
+    }
+    </style>
+    <?php endif; ?>
 
     <!-- Futuristic Projects Section -->
     <section class="featured-projects section-padding position-relative">
@@ -5236,104 +4874,7 @@ session_start();
     });
     </script>
 
-    <!-- Research Impact Section -->
-    <section class="research-impact section-padding">
-        <div class="impact-bg-elements">
-            <div class="impact-shape impact-shape-1"></div>
-            <div class="impact-shape impact-shape-2"></div>
-            <div class="grid-overlay"></div>
-            <div class="glowing-orb orb-1"></div>
-            <div class="glowing-orb orb-2"></div>
-            <div class="glowing-orb orb-3"></div>
-        </div>
-        <div class="container position-relative">
-            <div class="row align-items-center">
-                <div class="col-lg-5" data-aos="fade-right">
-                    <div class="section-header">
-                        <span class="futuristic-badge"><i class="bi bi-bar-chart-line-fill me-2"></i>Our Impact</span>
-                        <h2 class="section-title futuristic-title">Research That <span class="text-gradient">Transforms</span></h2>
-                        <p class="section-subtitle">Our cutting-edge research is revolutionizing industries and communities, advancing knowledge and driving innovation for the future.</p>
-                        <div class="title-underline"></div>
-                    </div>
-                    
-                    <div class="impact-progress mt-5">
-                        <div class="progress-item">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="progress-title"><i class="bi bi-journal-text me-2"></i>Academic Publications</span>
-                                <span class="progress-value glow-text">82%</span>
-                            </div>
-                            <div class="progress progress-animated" style="height: 8px;">
-                                <div class="progress-bar progress-glow" role="progressbar" style="width: 82%;" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-item mt-4">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="progress-title"><i class="bi bi-quote me-2"></i>Research Citations</span>
-                                <span class="progress-value glow-text">91%</span>
-                            </div>
-                            <div class="progress progress-animated" style="height: 8px;">
-                                <div class="progress-bar progress-glow" role="progressbar" style="width: 91%;" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-item mt-4">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="progress-title"><i class="bi bi-cash-coin me-2"></i>Research Grants Awarded</span>
-                                <span class="progress-value glow-text">75%</span>
-                            </div>
-                            <div class="progress progress-animated" style="height: 8px;">
-                                <div class="progress-bar progress-glow" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="progress-item mt-4">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="progress-title"><i class="bi bi-building me-2"></i>Industry Partnerships</span>
-                                <span class="progress-value glow-text">88%</span>
-                            </div>
-                            <div class="progress progress-animated" style="height: 8px;">
-                                <div class="progress-bar progress-glow" role="progressbar" style="width: 88%;" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-5">
-                        <a href="Research_page.php" class="btn btn-primary btn-glow">
-                            <span class="btn-icon-wrapper"><i class="bi bi-file-earmark-bar-graph"></i></span>
-                            <span>View Detailed Impact Reports</span>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="col-lg-7" data-aos="fade-left" data-aos-delay="300">
-                    <div class="impact-chart-container glassmorphism" style="height: 600px;">
-                        <div class="chart-header">
-                            <h4>Research Growth Trends</h4>
-                            <div class="chart-controls">
-                                <button class="chart-control-btn active" data-view="all">All Data</button>
-                                <button class="chart-control-btn" data-view="publications">Publications</button>
-                                <button class="chart-control-btn" data-view="citations">Citations</button>
-                                <button class="chart-control-btn" data-view="funding">Funding</button>
-                            </div>
-                            <div class="chart-legend">
-                                <span><i class="legend-dot publications-dot"></i> Publications</span>
-                                <span><i class="legend-dot citations-dot"></i> Citations</span>
-                                <span><i class="legend-dot funding-dot"></i> Funding</span>
-                            </div>
-                        </div>
-                        <div class="chart-wrapper" style="height: calc(100% - 100px);">
-                            <canvas id="researchImpactChart"></canvas>
-                            <div class="chart-glow-effect"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
 
-            </div>
-        </div>
-    </section>
 
     <!-- Faculty Spotlight Section -->
     <section class="faculty-spotlight section-padding position-relative">
@@ -6370,11 +5911,6 @@ session_start();
         </div>
         
         <div class="text-center mt-5" data-aos="fade-up">
-            <!--<a href="javascript:void(0)" class="neo-button primary calendar-button view-calendar-btn me-3">
-                <span class="button-content">View Full Calendar</span>
-                <span class="button-icon"><i class="bi bi-calendar-week"></i></span>
-                <div class="button-glow"></div>
-            </a>-->
             <a href="events.php" class="neo-button secondary">
                 <span class="button-content">Explore All Events</span>
                 <span class="button-icon"><i class="bi bi-arrow-right"></i></span>
@@ -6707,81 +6243,6 @@ session_start();
             max-width: 320px;
             margin: 0 auto;
         }
-    }
-    
-    /* Fix for event card display issues */
-    .events-section .neo-event-card {
-        min-height: 380px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .events-section .event-content {
-        min-height: 260px;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        z-index: 3;
-        padding-top: 1.8rem;
-    }
-    
-    .events-section .event-date-badge {
-        top: 15px;
-        right: 15px;
-    }
-    
-    .events-section .event-title {
-        min-height: 42px;
-        max-height: 60px;
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        margin-right: 60px; /* Create space for the date badge */
-    }
-    
-    .events-section .event-description {
-        flex-grow: 1;
-        overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        max-height: 90px;
-    }
-    
-    .events-section .event-meta {
-        margin-bottom: 12px;
-    }
-    
-    .events-section .meta-item {
-        display: flex;
-        align-items: flex-start;
-        overflow: hidden;
-    }
-    
-    .events-section .meta-item span {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
-    .events-section .neo-button.small {
-        margin-top: auto;
-    }
-    
-    /* Fix specific alignment issues */
-    .events-section .meta-item i {
-        flex-shrink: 0;
-        display: inline-block;
-        width: 20px;
-        margin-right: 8px;
-        text-align: center;
-    }
-    
-    /* Fix indentation in placeholders */
-    .events-section .meta-item span {
-        line-height: 1.4;
     }
 </style>
 
@@ -7968,390 +7429,253 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-    <!-- Enhanced Keyword Highlighting Styles -->
+    <!-- Native CSS Scroll Snap -->
     <style>
-        .keyword-tag.highlighted {
-            background: linear-gradient(135deg, var(--neo-blue), var(--neo-purple)) !important;
-            color: white !important;
-            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
-            transform: translateY(-2px) scale(1.05);
+        html, body {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
         }
-        
-        .keyword-tag {
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .search-section,
+        .neo-hero-section,
+        .for-you-section,
+        .featured-projects,
+        .faculty-spotlight,
+        .events-section,
+        #faq-section,
+        #footer-section {
+            scroll-snap-align: start;
         }
-        
-        .keyword-tag:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(76, 201, 240, 0.3);
-        }
-        
-        .keyword-tag:focus {
-            outline: 2px solid var(--neo-blue);
-            outline-offset: 2px;
+
+        /* Ensure snap always stops at each section */
+        .search-section,
+        .neo-hero-section,
+        .for-you-section,
+        .featured-projects,
+        .faculty-spotlight,
+        .events-section,
+        #faq-section,
+        #footer-section {
+            scroll-snap-stop: always;
         }
     </style>
 
-    <!-- Theme Initialization Script -->
-
-    <!-- Scroll snapping enhancement script -->
+    <!-- Enhanced Scroll Snapping & Navigation Script -->
     <script>
-        // Force scroll to top on page load/reload
-        window.onload = function() {
-            window.scrollTo(0, 0);
-        }
-        
-        // Also use history API to prevent browser from restoring previous scroll position
-        if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            // Ensure we're at the top when DOM is ready
-            window.scrollTo(0, 0);
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = Array.from(document.querySelectorAll('.search-section, .neo-hero-section, .for-you-section, .featured-projects, .faculty-spotlight, .events-section, #faq-section, #footer-section'));
+            const scrollDots = Array.from(document.querySelectorAll('.scroll-dot'));
             
-            // Get all sections that should snap (using more specific selectors)
-            const sections = document.querySelectorAll('.search-section, .neo-hero-section, .featured-projects, .research-impact, .faculty-spotlight, .events-section, #faq-section, #footer-section');
-            const scrollDots = document.querySelectorAll('.scroll-dot');
-            
-            // Variables for controlled scrolling
             let isScrolling = false;
             let currentSectionIndex = 0;
-            let scrollTimeout;
-            const scrollDelay = 800; // Debounce delay in ms
+            let scrollTimeout = null;
+            let lastScrollTime = 0;
+            let wheelAccumulator = 0;
             
-            // Initialize by setting first section as active
-            updateActiveSection(0);
+            // Debounce settings
+            const SCROLL_THRESHOLD = 50; // Minimum wheel delta to trigger scroll
+            const SCROLL_DEBOUNCE = 150; // ms to wait before allowing another scroll
+            const SCROLL_LOCK_TIME = 1000; // ms to lock scrolling during animation
             
-            // Add a flag to allow free scrolling
-            let allowFreeScroll = false;
-            
-            // Add an improved "Go to Footer" button
-            const footerButton = document.createElement('div');
-            footerButton.classList.add('scroll-to-footer');
-            footerButton.innerHTML = '<span>Footer</span><i class="bi bi-arrow-down-circle-fill"></i>';
-            footerButton.title = "Go to Footer";
-            footerButton.style.position = 'fixed';
-            footerButton.style.bottom = '20px';
-            footerButton.style.right = '20px';
-            footerButton.style.backgroundColor = 'rgba(76, 201, 240, 0.3)';
-            footerButton.style.color = '#fff';
-            footerButton.style.padding = '8px 16px';
-            footerButton.style.borderRadius = '50px';
-            footerButton.style.display = 'flex';
-            footerButton.style.alignItems = 'center';
-            footerButton.style.justifyContent = 'center';
-            footerButton.style.gap = '8px';
-            footerButton.style.cursor = 'pointer';
-            footerButton.style.zIndex = '1000';
-            footerButton.style.transition = 'all 0.3s ease';
-            footerButton.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
-            footerButton.style.border = '1px solid rgba(76, 201, 240, 0.5)';
-            footerButton.style.backdropFilter = 'blur(5px)';
-            footerButton.style.fontSize = '14px';
-            footerButton.style.fontWeight = '600';
-            
-            // Style for the text and icon
-            const spanStyle = document.createElement('style');
-            spanStyle.textContent = `
-                .scroll-to-footer span {
-                    transition: all 0.3s ease;
-                }
-                .scroll-to-footer i {
-                    font-size: 18px;
-                    transition: all 0.3s ease;
-                }
-            `;
-            document.head.appendChild(spanStyle);
-            
-            footerButton.addEventListener('mouseover', function() {
-                this.style.backgroundColor = 'rgba(76, 201, 240, 0.5)';
-                this.style.transform = 'scale(1.05) translateY(-2px)';
-                this.style.boxShadow = '0 6px 20px rgba(76, 201, 240, 0.3)';
-            });
-            
-            footerButton.addEventListener('mouseout', function() {
-                this.style.backgroundColor = 'rgba(76, 201, 240, 0.3)';
-                this.style.transform = 'scale(1) translateY(0)';
-                this.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
-            });
-            
-            footerButton.addEventListener('click', function() {
-                // Enable free scrolling
-                allowFreeScroll = true;
+            function setActiveDot(idx) {
+                scrollDots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
+                currentSectionIndex = idx;
+            }
+
+            function scrollToSection(idx) {
+                if (idx < 0 || idx >= sections.length || idx === currentSectionIndex) return;
                 
-                // Scroll to footer using the id to ensure proper targeting
-                const footer = document.getElementById('footer-section');
-                if (footer) {
-                    console.log("Scrolling to footer section");
-                    footer.scrollIntoView({ behavior: 'smooth' });
-                    
-                    // Update active section
-                    updateActiveSection(sections.length - 1);
-                    
-                    // Update the dot navigation
-                    scrollDots.forEach(dot => {
-                        dot.classList.remove('active');
-                        if (dot.getAttribute('data-index') === (sections.length - 1).toString()) {
-                            dot.classList.add('active');
-                        }
-                    });
-                } else {
-                    console.error("Footer section not found");
-                }
-            });
-            
-            document.body.appendChild(footerButton);
-            
-            // Control mouse wheel scrolling
-            window.addEventListener('wheel', function(e) {
-                // If free scroll is enabled, allow normal scrolling
-                if (allowFreeScroll || currentSectionIndex === sections.length - 1) {
-                    return; // Allow default scroll behavior
-                }
+                isScrolling = true;
+                currentSectionIndex = idx;
                 
-                e.preventDefault(); // Prevent default scroll
-                
-                if (!isScrolling) {
-                    isScrolling = true;
-                    
-                    // Determine scroll direction
-                    const direction = e.deltaY > 0 ? 1 : -1;
-                    
-                    // Calculate next section index
-                    let nextIndex = currentSectionIndex + direction;
-                    
-                    // Ensure index is within bounds
-                    if (nextIndex >= 0 && nextIndex < sections.length) {
-                        scrollToSection(nextIndex);
-                        
-                        // If we reach the last section, enable free scrolling
-                        if (nextIndex === sections.length - 1) {
-                            allowFreeScroll = true;
-                        }
-                    } else {
-                        // Reset scrolling state if at bounds
-                        isScrolling = false;
-                    }
-                    
-                    // Debounce to prevent rapid scrolling
+                // Clear any existing timeout
+                if (scrollTimeout) {
                     clearTimeout(scrollTimeout);
-                    scrollTimeout = setTimeout(() => {
-                        isScrolling = false;
-                    }, scrollDelay);
                 }
-            }, { passive: false }); // passive: false is required to use preventDefault
-            
-            // Function to scroll to a specific section
-            function scrollToSection(index) {
-                // Hide scroll indicators while scrolling
-                document.querySelectorAll('.scroll-down-container').forEach(indicator => {
-                    indicator.style.opacity = '0';
+                
+                // Scroll to section
+                sections[idx].scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
                 });
                 
-                // Perform scroll
-                sections[index].scrollIntoView({ behavior: 'smooth' });
+                setActiveDot(idx);
                 
-                // Update active section
-                updateActiveSection(index);
-                
-                // Show scroll indicators after scrolling completes
-                setTimeout(() => {
-                    document.querySelectorAll('.scroll-down-container').forEach(indicator => {
-                        indicator.style.opacity = '1';
-                    });
-                }, scrollDelay);
+                // Lock scrolling for animation duration
+                scrollTimeout = setTimeout(() => {
+                    isScrolling = false;
+                    wheelAccumulator = 0; // Reset accumulator
+                }, SCROLL_LOCK_TIME);
             }
-            
-            // Function to update active section with improved feedback
-            function updateActiveSection(index) {
-                console.log(`Updating active section to index: ${index}`);
+
+            // Improved section detection using viewport center
+            function getCurrentSectionIndex() {
+                const viewportCenter = window.innerHeight / 2;
+                let closestIndex = 0;
+                let closestDistance = Infinity;
                 
-                currentSectionIndex = index;
-                
-                // Update section classes
-                sections.forEach((section, i) => {
-                    section.classList.remove('active-section');
-                    if (i === index) {
-                        console.log(`Setting active section: ${section.id || section.className}`);
-                    }
-                });
-                sections[currentSectionIndex].classList.add('active-section');
-                
-                // Update navigation dots using data-index attribute
-                scrollDots.forEach((dot) => {
-                    dot.classList.remove('active');
-                    const dotIndex = parseInt(dot.getAttribute('data-index'));
-                    if (dotIndex === currentSectionIndex) {
-                        dot.classList.add('active');
-                        console.log(`Activated dot for section: ${dot.getAttribute('data-section')}`);
+                sections.forEach((section, index) => {
+                    const rect = section.getBoundingClientRect();
+                    const sectionCenter = rect.top + (rect.height / 2);
+                    const distance = Math.abs(sectionCenter - viewportCenter);
+                    
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        closestIndex = index;
                     }
                 });
                 
-                // Special handling for footer
-                if (index === sections.length - 1) {
-                    allowFreeScroll = true;
-                    console.log("Footer section activated - free scrolling enabled");
+                return closestIndex;
+            }
+
+            // Enhanced wheel event handler with accumulation and debouncing
+            function handleWheelScroll(e) {
+                // Ignore if modifier keys are pressed
+                if (e.ctrlKey || e.altKey || e.shiftKey) return;
+                
+                // Ignore if currently scrolling
+                if (isScrolling) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                const now = Date.now();
+                
+                // Debounce rapid scroll events
+                if (now - lastScrollTime < SCROLL_DEBOUNCE) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Accumulate wheel delta for better sensitivity control
+                wheelAccumulator += e.deltaY;
+                
+                // Only trigger scroll if accumulated delta exceeds threshold
+                if (Math.abs(wheelAccumulator) < SCROLL_THRESHOLD) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Determine scroll direction
+                const direction = wheelAccumulator > 0 ? 1 : -1;
+                const targetIndex = currentSectionIndex + direction;
+                
+                // Check if target section exists
+                if (targetIndex >= 0 && targetIndex < sections.length) {
+                    e.preventDefault();
+                    lastScrollTime = now;
+                    wheelAccumulator = 0; // Reset accumulator
+                    scrollToSection(targetIndex);
+                } else {
+                    // Reset accumulator if we can't scroll further
+                    wheelAccumulator = 0;
                 }
             }
-            
-            // Add click functionality to scroll dots with improved targeting
-            scrollDots.forEach((dot) => {
-                dot.addEventListener('click', () => {
+
+            // Dot click navigation
+            scrollDots.forEach((dot, i) => {
+                dot.addEventListener('click', (e) => {
+                    e.preventDefault();
                     if (!isScrolling) {
-                        // Use the data-index attribute to get the correct section index
-                        const targetIndex = parseInt(dot.getAttribute('data-index'));
-                        
-                        if (targetIndex >= 0 && targetIndex < sections.length) {
-                            isScrolling = true;
-                            
-                            // Scroll to the target section
-                            scrollToSection(targetIndex);
-                            
-                            // Reset scrolling state after animation
-                            setTimeout(() => {
-                                isScrolling = false;
-                            }, scrollDelay);
-                            
-                            // If clicking on the last dot (footer), enable free scrolling
-                            if (targetIndex === sections.length - 1) {
-                                allowFreeScroll = true;
-                                console.log("Enabling free scroll for footer");
-                            } else {
-                                allowFreeScroll = false;
+                        scrollToSection(i);
+                    }
+                });
+            });
+
+            // Enhanced IntersectionObserver for better section detection
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -20% 0px', // Only trigger when section is well within viewport
+                threshold: [0, 0.25, 0.5, 0.75, 1.0]
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                if (isScrolling) return; // Don't update during programmatic scrolling
+                
+                let mostVisibleSection = null;
+                let maxVisibility = 0;
+                
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && entry.intersectionRatio > maxVisibility) {
+                        maxVisibility = entry.intersectionRatio;
+                        mostVisibleSection = entry.target;
+                    }
+                });
+                
+                if (mostVisibleSection) {
+                    const idx = sections.indexOf(mostVisibleSection);
+                    if (idx !== -1 && idx !== currentSectionIndex) {
+                        setActiveDot(idx);
+                    }
+                }
+            }, observerOptions);
+
+            // Observe all sections
+            sections.forEach((section) => observer.observe(section));
+
+            // Add wheel event listener
+            window.addEventListener('wheel', handleWheelScroll, { passive: false });
+            
+            // Handle keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (isScrolling) return;
+                
+                let targetIndex = -1;
+                
+                switch(e.key) {
+                    case 'ArrowDown':
+                    case 'PageDown':
+                        targetIndex = currentSectionIndex + 1;
+                        break;
+                    case 'ArrowUp':
+                    case 'PageUp':
+                        targetIndex = currentSectionIndex - 1;
+                        break;
+                    case 'Home':
+                        targetIndex = 0;
+                        break;
+                    case 'End':
+                        targetIndex = sections.length - 1;
+                        break;
+                }
+                
+                if (targetIndex >= 0 && targetIndex < sections.length && targetIndex !== currentSectionIndex) {
+                    e.preventDefault();
+                    scrollToSection(targetIndex);
+                }
+            });
+            
+            // Handle browser back/forward navigation
+            window.addEventListener('popstate', () => {
+                if (!isScrolling) {
+                    const hash = window.location.hash;
+                    if (hash) {
+                        const targetSection = document.querySelector(hash);
+                        if (targetSection) {
+                            const idx = sections.indexOf(targetSection);
+                            if (idx !== -1) {
+                                scrollToSection(idx);
                             }
                         }
                     }
-                });
-            });
-            
-            // Enhance scroll down button functionality
-            document.querySelectorAll('.scroll-down-arrow').forEach(arrow => {
-                arrow.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (!isScrolling && currentSectionIndex < sections.length - 1) {
-                        isScrolling = true;
-                        scrollToSection(currentSectionIndex + 1);
-                        
-                        // Reset scrolling state after animation
-                        setTimeout(() => {
-                            isScrolling = false;
-                        }, scrollDelay);
-                        
-                        // If scrolling to the last section (footer), enable free scrolling
-                        if (currentSectionIndex + 1 === sections.length - 1) {
-                            allowFreeScroll = true;
-                        }
-                    }
-                });
-            });
-            
-            // Keyboard navigation
-            document.addEventListener('keydown', (e) => {
-                // Allow normal keyboard navigation if free scrolling is enabled
-                if (isScrolling || allowFreeScroll) return;
-                
-                let nextIndex = currentSectionIndex;
-                
-                // Down arrow or Page Down
-                if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-                    e.preventDefault();
-                    nextIndex = currentSectionIndex + 1;
-                }
-                
-                // Up arrow or Page Up
-                if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-                    e.preventDefault();
-                    nextIndex = currentSectionIndex - 1;
-                }
-                
-                // Ensure index is within bounds and scroll if valid
-                if (nextIndex >= 0 && nextIndex < sections.length && nextIndex !== currentSectionIndex) {
-                    isScrolling = true;
-                    scrollToSection(nextIndex);
-                    
-                    // Reset scrolling state after animation
-                    setTimeout(() => {
-                        isScrolling = false;
-                    }, scrollDelay);
-                    
-                    // If we reach the last section, enable free scrolling
-                    if (nextIndex === sections.length - 1) {
-                        allowFreeScroll = true;
-                    }
                 }
             });
             
-            // Handle touch events for mobile
-            let touchStartY = 0;
-            let touchEndY = 0;
-            const touchThreshold = 50; // Minimum swipe distance
+            // Initialize - detect current section on load
+            setTimeout(() => {
+                const initialIndex = getCurrentSectionIndex();
+                setActiveDot(initialIndex);
+            }, 100);
             
-            document.addEventListener('touchstart', (e) => {
-                // Allow normal touch behavior if free scrolling is enabled
-                if (allowFreeScroll || currentSectionIndex === sections.length - 1) {
-                    return;
-                }
-                
-                touchStartY = e.changedTouches[0].screenY;
-            }, { passive: true });
-            
-            document.addEventListener('touchend', (e) => {
-                // Allow normal touch behavior if free scrolling is enabled
-                if (allowFreeScroll || currentSectionIndex === sections.length - 1) {
-                    return;
-                }
-                
-                touchEndY = e.changedTouches[0].screenY;
-                const touchDiff = touchStartY - touchEndY;
-                
-                // If the swipe is significant enough
-                if (Math.abs(touchDiff) > touchThreshold && !isScrolling) {
-                    isScrolling = true;
-                    
-                    // Determine swipe direction
-                    const direction = touchDiff > 0 ? 1 : -1;
-                    
-                    // Calculate next section index
-                    let nextIndex = currentSectionIndex + direction;
-                    
-                    // Ensure index is within bounds and scroll if valid
-                    if (nextIndex >= 0 && nextIndex < sections.length) {
-                        scrollToSection(nextIndex);
-                        
-                        // If we reach the last section, enable free scrolling
-                        if (nextIndex === sections.length - 1) {
-                            allowFreeScroll = true;
-                        }
+            // Handle window resize - recalculate current section
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    if (!isScrolling) {
+                        const newIndex = getCurrentSectionIndex();
+                        setActiveDot(newIndex);
                     }
-                    
-                    // Reset scrolling state after animation
-                    setTimeout(() => {
-                        isScrolling = false;
-                    }, scrollDelay);
-                }
-            }, { passive: true });
-            
-            // Add a direct way to test footer scrolling - will be useful for debugging
-            window.scrollToFooter = function() {
-                console.log("Direct footer navigation triggered");
-                const footer = document.getElementById('footer-section');
-                if (footer) {
-                    allowFreeScroll = true;
-                    footer.scrollIntoView({ behavior: 'smooth' });
-                    updateActiveSection(sections.length - 1);
-                    console.log("Footer scrolling complete");
-                } else {
-                    console.error("Footer section not found for direct navigation");
-                }
-            };
-            
-            // Add keyboard shortcut (F key) to jump to footer for testing
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'f' || e.key === 'F') {
-                    window.scrollToFooter();
-                }
+                }, 250);
             });
         });
     </script>
@@ -8485,10 +7809,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     </script>
     
-    <!-- Include Calendar Overlay -->
-    <?php include 'calendar-overlay.php'; ?>
-    
     <!-- Include Global Meeting Notifications -->
     <?php include 'src/includes/global-meeting-notifications.php'; ?>
+    
+    <!-- Preference Tracking Script -->
+    <script src="assets/js/preference_tracker.js"></script>
+    
+    <?php if (isset($_SESSION['user_id'])): ?>
+    <!-- User is logged in, enable advanced tracking -->
+    <script>
+        document.body.setAttribute('data-user-logged-in', 'true');
+    </script>
+    <?php endif; ?>
 </body>
 </html>

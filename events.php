@@ -1527,7 +1527,23 @@ function isEventCreator($event) {
                         $hasRegistration = $event['registration']['required'] && !empty($event['registration']['link']);
                         $hasJoinLink = $event['location']['type'] === 'Virtual' && !empty($event['location']['joinLink']);
                     ?>
-                        <div class="event-card" data-aos="fade-up" data-aos-delay="<?= 50 + ($index * 50) ?>">
+                        <?php
+                        // Prepare tracking metadata for events
+                        $trackingData = [
+                            'title' => $event['title'],
+                            'eventType' => $event['eventType'],
+                            'organizer' => $event['organizer'],
+                            'status' => $event['status'],
+                            'tags' => [$event['eventType'], $event['status'], 'Event'],
+                            'speakers' => !empty($event['speakers']) ? array_column($event['speakers'], 'name') : []
+                        ];
+                        ?>
+                        <div class="event-card" 
+                             data-aos="fade-up" 
+                             data-aos-delay="<?= 50 + ($index * 50) ?>"
+                             data-item-type="event" 
+                             data-item-id="<?= $event['_id_string'] ?? $event['_id'] ?>"
+                             data-tracking-metadata='<?= htmlspecialchars(json_encode($trackingData), ENT_QUOTES, 'UTF-8') ?>'>
                             <!-- Card Header -->
                             <div class="card-header">
                                 <div class="event-header">

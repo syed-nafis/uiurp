@@ -6,6 +6,12 @@ $current_path = $_SERVER['PHP_SELF'];
 $path_parts = explode('/', $current_path);
 $depth = count(array_filter($path_parts)) - 1;
 $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
+
+// Initialize global preference tracking
+require_once __DIR__ . '/global-preference-tracker.php';
+
+// Add debug overlay after the navbar
+include_once(__DIR__ . '/debug_overlay.php');
 ?>
 
 <!-- Modern Navbar with Fluid Animations -->

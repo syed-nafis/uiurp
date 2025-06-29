@@ -21,68 +21,43 @@ if (isset($_SESSION['user_id'])) {
     
     $isPersonalized = $recommendations['is_personalized'] ?? false;
     
-    // Debug mode
-    if (isset($_GET['debug']) && $_GET['debug'] == '1') {
-        $userPreferences = new UserPreferences();
-        $profile = $userPreferences->getUserProfile($userId);
-        $interactions = $userPreferences->getUserInteractions($userId, 5);
-        
-        echo "<div style='position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; z-index: 9999; max-width: 300px; font-size: 12px;'>";
-        echo "<h4>Debug Info</h4>";
-        echo "User ID: $userId<br>";
-        echo "Personalized: " . ($isPersonalized ? 'Yes' : 'No') . "<br>";
-        echo "Profile exists: " . ($profile ? 'Yes' : 'No') . "<br>";
-        if ($profile) {
-            $interests = $profile['interests'] ?? [];
-            if ($interests instanceof MongoDB\Model\BSONDocument) {
-                $interests = iterator_to_array($interests);
-            } elseif ($interests instanceof MongoDB\Model\BSONArray) {
-                $interests = iterator_to_array($interests);
-            }
-            
-            echo "Interests: " . count($interests) . "<br>";
-            echo "Activity: " . ($profile['activity_score'] ?? 0) . "<br>";
-            
-            // Show actual interests if they exist and are properly formatted
-            if (!empty($interests) && is_array($interests)) {
-                // Check if it's an associative array (proper format)
-                if (array_keys($interests) !== range(0, count($interests) - 1)) {
-                    echo "<br><strong>Top Interests:</strong><br>";
-                    arsort($interests);
-                    $topInterests = array_slice($interests, 0, 3, true);
-                    foreach ($topInterests as $interest => $score) {
-                        echo "- " . htmlspecialchars($interest) . ": $score<br>";
-                    }
-                } else {
-                    echo "<br><em>Interests are corrupted (indexed array)</em><br>";
-                }
-            }
-        }
-        echo "Recent interactions: " . count($interactions) . "<br>";
-        
-        echo "<br><a href='?reset_profile=1' style='color: yellow;'>Reset Profile</a>";
-        echo "</div>";
+    // Create combined recommendations array for "For You" section
+    $combinedRecommendations = [];
+    
+    // Add projects to combined array with content type
+    foreach ($projects as $item) {
+        $item['content_type'] = 'project';
+        $combinedRecommendations[] = $item;
     }
     
-    // Reset profile for testing
-    if (isset($_GET['reset_profile']) && $_GET['reset_profile'] == '1') {
-        $userPreferences = new UserPreferences();
-        try {
-            $db = new MongoDB\Client("mongodb://localhost:27017");
-            $profileCollection = $db->uiurp->user_preference_profiles;
-            $interactionCollection = $db->uiurp->user_interactions;
-            
-            $profileResult = $profileCollection->deleteOne(['user_id' => $userId]);
-            $interactionResult = $interactionCollection->deleteMany(['user_id' => $userId]);
-            
-            echo "<script>
-                alert('Profile reset successful! Deleted {$profileResult->getDeletedCount()} profile and {$interactionResult->getDeletedCount()} interactions.'); 
-                window.location.href='dashboard.php';
-            </script>";
-        } catch (Exception $e) {
-            echo "<script>alert('Error resetting profile: " . addslashes($e->getMessage()) . "'); window.location.href='dashboard.php';</script>";
-        }
+    // Add events to combined array with content type
+    foreach ($events as $item) {
+        $item['content_type'] = 'event';
+        $combinedRecommendations[] = $item;
     }
+    
+    // Add forum posts to combined array with content type
+    foreach ($forumPosts as $item) {
+        $item['content_type'] = 'forum_post';
+        $combinedRecommendations[] = $item;
+    }
+    
+    // Add faculties to combined array with content type
+    foreach ($faculties as $item) {
+        $item['content_type'] = 'faculty';
+        $combinedRecommendations[] = $item;
+    }
+    
+    // Sort by relevance score if personalized
+    if ($isPersonalized) {
+        usort($combinedRecommendations, function($a, $b) {
+            $scoreA = $a['relevance_score'] ?? 0;
+            $scoreB = $b['relevance_score'] ?? 0;
+            return $scoreB <=> $scoreA; // Sort in descending order
+        });
+    }
+    
+    // Debug overlay is now handled globally via navbar.php
 } else {
     // Fallback to recent content for non-logged-in users
     $projects = $recommendationEngine->getRecommendedProjects('guest');
@@ -384,6 +359,129 @@ if (isset($_SESSION['user_id'])) {
             z-index: 10;
         }
 
+        /* Vertical list container for "For You" section */
+        .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .cards-list .card {
+            width: 100%;
+        }
+
+        /* Scrollable Container Styles for "For You" section */
+        .scrollable-container {
+            position: relative;
+            width: 100%;
+            padding: 1rem 0;
+            overflow: hidden;
+        }
+
+        .scroll-cards-wrapper {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+            padding: 1rem 0.5rem;
+            gap: 1.25rem;
+        }
+
+        .scroll-cards-wrapper::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Edge */
+        }
+
+        .scroll-card {
+            flex: 0 0 auto;
+            width: 280px;
+            min-width: 280px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+        }
+
+        .scroll-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--neo-blue);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .scroll-card.faculty-card {
+            text-align: center;
+        }
+
+        .scroll-indicators {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .scroll-left, .scroll-right {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--neo-primary);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+            margin: 0 1rem;
+        }
+
+        .scroll-left:hover, .scroll-right:hover {
+            opacity: 1;
+        }
+
+        .scroll-left {
+            left: 0;
+        }
+
+        .scroll-right {
+            right: 0;
+        }
+
+        .scroll-card.recommended::before {
+            content: "★";
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            color: var(--neo-magenta);
+            font-size: 0.8rem;
+            z-index: 10;
+        }
+
+        /* For You section scroll container (80vh) */
+        .for-you-section {
+            max-height: 80vh;
+            overflow-y: auto;
+            padding-right: 0.25rem; /* space for scrollbar */
+        }
+
+        .for-you-section::-webkit-scrollbar {
+            width: 6px;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .dashboard-title {
@@ -398,6 +496,11 @@ if (isset($_SESSION['user_id'])) {
             
             .cards-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .scroll-card {
+                width: 260px;
+                min-width: 260px;
             }
         }
     </style>
@@ -431,6 +534,137 @@ if (isset($_SESSION['user_id'])) {
                     <?php endif; ?>
                 </p>
             </div>
+
+            <!-- For You Section - Combined Content Based on User Preferences -->
+            <?php if (isset($_SESSION['user_id']) && $isPersonalized): ?>
+            <div class="section for-you-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="bi bi-lightning-charge-fill section-icon" style="color: var(--neo-magenta);"></i>
+                        For You
+                        <span class="personalized-badge" style="color: var(--neo-magenta);">
+                            <i class="bi bi-stars"></i>
+                        </span>
+                    </h2>
+                    <span class="text-muted" style="font-size: 0.9rem;">Content tailored to your interests</span>
+                </div>
+                
+                <!-- Vertical list container for "For You" section -->
+                <div class="cards-list">
+                    <?php 
+                    // Display more items from combined recommendations (at least 20)
+                    $displayCount = min(count($combinedRecommendations), 25); // Show up to 25 items
+                    for ($i = 0; $i < $displayCount; $i++): 
+                        $item = $combinedRecommendations[$i];
+                        $contentType = $item['content_type'];
+                    ?>
+                        <?php if ($contentType === 'project'): ?>
+                        <a href="Project_details.php?id=<?= $item['_id'] ?>" class="card recommended" data-item-type="project" data-item-id="<?= $item['_id'] ?>">
+                            <div class="content-type-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(76, 201, 240, 0.1); color: var(--neo-blue); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">Project</div>
+                            <h3 class="card-title"><?= htmlspecialchars($item['title'] ?? 'Untitled Project') ?></h3>
+                            <p class="card-content"><?= htmlspecialchars(substr($item['description'] ?? 'No description available', 0, 120)) ?>...</p>
+                            
+                            <?php if (isset($item['tags']) && is_array($item['tags']) && !empty($item['tags'])): ?>
+                            <div class="card-tags" style="margin-bottom: 0.5rem;">
+                                <?php foreach (array_slice($item['tags'], 0, 2) as $tag): ?>
+                                <span class="tag"><?= htmlspecialchars($tag) ?></span>
+                                <?php endforeach; ?>
+                            </div>
+                            <?php endif; ?>
+                            
+                            <div class="card-meta">
+                                <span class="card-date">
+                                    <i class="bi bi-calendar3"></i>
+                                    <?php 
+                                    if (isset($item['createdAt'])) {
+                                        if (is_object($item['createdAt']) && method_exists($item['createdAt'], 'toDateTime')) {
+                                            echo $item['createdAt']->toDateTime()->format('M j, Y');
+                                        } else {
+                                            echo 'Recent';
+                                        }
+                                    } else {
+                                        echo 'Recent';
+                                    }
+                                    ?>
+                                </span>
+                            </div>
+                        </a>
+                        
+                        <?php elseif ($contentType === 'event'): ?>
+                        <a href="events.php#event-<?= $item['_id'] ?>" class="card recommended" data-item-type="event" data-item-id="<?= $item['_id'] ?>">
+                            <div class="content-type-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(247, 37, 133, 0.1); color: var(--neo-magenta); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">Event</div>
+                            <h3 class="card-title"><?= htmlspecialchars($item['title'] ?? 'Untitled Event') ?></h3>
+                            <p class="card-content"><?= htmlspecialchars(substr($item['description'] ?? 'No description available', 0, 120)) ?>...</p>
+                            
+                            <div class="card-meta">
+                                <span class="card-date">
+                                    <i class="bi bi-calendar3"></i>
+                                    <?php 
+                                    if (isset($item['eventDate'])) {
+                                        if (is_array($item['eventDate']) && isset($item['eventDate']['$date'])) {
+                                            $timestamp = $item['eventDate']['$date']['$numberLong'] ?? $item['eventDate']['$date'];
+                                            echo date('M j, Y', $timestamp / 1000);
+                                        } else {
+                                            echo 'TBD';
+                                        }
+                                    } else {
+                                        echo 'TBD';
+                                    }
+                                    ?>
+                                </span>
+                                <span class="status-badge status-<?= strtolower($item['status'] ?? 'upcoming') ?>">
+                                    <?= htmlspecialchars($item['status'] ?? 'Upcoming') ?>
+                                </span>
+                            </div>
+                        </a>
+                        
+                        <?php elseif ($contentType === 'forum_post'): ?>
+                        <a href="post_details.php?id=<?= $item['_id'] ?>" class="card recommended" data-item-type="forum_post" data-item-id="<?= $item['_id'] ?>">
+                            <div class="content-type-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(67, 97, 238, 0.1); color: var(--neo-primary); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">Discussion</div>
+                            <h3 class="card-title"><?= htmlspecialchars($item['title'] ?? 'Untitled Post') ?></h3>
+                            <p class="card-content"><?= htmlspecialchars(substr($item['content'] ?? 'No content available', 0, 120)) ?>...</p>
+                            
+                            <div class="card-meta">
+                                <span class="card-date">
+                                    <i class="bi bi-person"></i>
+                                    <?= htmlspecialchars($item['user_name'] ?? 'Anonymous') ?>
+                                </span>
+                                <span class="card-stats">
+                                    <span class="stat-item">
+                                        <i class="bi bi-arrow-up"></i>
+                                        <?= $item['upvotes'] ?? 0 ?>
+                                    </span>
+                                </span>
+                            </div>
+                        </a>
+                        
+                        <?php elseif ($contentType === 'faculty'): ?>
+                        <a href="Faculty_Profile.php?id=<?= $item['_id'] ?>" class="card faculty-card recommended" data-item-type="faculty" data-item-id="<?= $item['_id'] ?>">
+                            <div class="content-type-badge" style="position: absolute; top: 0.5rem; left: 0.5rem; background: rgba(52, 211, 153, 0.1); color: #34D399; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem;">Faculty</div>
+                            <img src="<?= htmlspecialchars($item['profile_image'] ?? 'assets/resources/user_avater.png') ?>" 
+                                 alt="<?= htmlspecialchars($item['name'] ?? 'Faculty Member') ?>" 
+                                 class="faculty-avatar">
+                            <h3 class="faculty-name"><?= htmlspecialchars($item['name'] ?? 'Faculty Member') ?></h3>
+                            <p class="faculty-bio"><?= htmlspecialchars(substr($item['bio'] ?? 'No bio available', 0, 100)) ?>...</p>
+                            
+                            <?php if (isset($item['specialty']) || (isset($item['research_interests']) && is_array($item['research_interests']))): ?>
+                            <div class="card-tags" style="margin-top: 0.5rem;">
+                                <?php if (isset($item['specialty'])): ?>
+                                <span class="tag specialty"><?= htmlspecialchars($item['specialty']) ?></span>
+                                <?php endif; ?>
+                                <?php if (isset($item['research_interests']) && is_array($item['research_interests'])): ?>
+                                    <?php foreach (array_slice($item['research_interests'], 0, 1) as $interest): ?>
+                                    <span class="tag research-interest"><?= htmlspecialchars($interest) ?></span>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
+                            <?php endif; ?>
+                        </a>
+                        <?php endif; ?>
+                    <?php endfor; ?>
+                </div>
+            </div>
+            <?php endif; ?>
 
             <!-- Projects Section -->
             <div class="section">
@@ -643,9 +877,6 @@ if (isset($_SESSION['user_id'])) {
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Preference Tracking Script -->
-    <script src="assets/js/preference_tracker.js"></script>
     
     <?php if (isset($_SESSION['user_id'])): ?>
     <!-- User is logged in, enable advanced tracking -->
