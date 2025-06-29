@@ -3898,6 +3898,10 @@ function createProfileLink($name, $userId, $userType = null) {
             box-shadow: 0 2px 6px rgba(30, 64, 175, 0.3) !important;
             text-decoration: none !important;
             font-size: 0.75rem !important;
+            margin-left: auto !important;
+            flex-shrink: 0 !important;
+            justify-content: flex-start !important;
+            min-width: 90px !important;
         }
         
         .download-btn:hover {
@@ -3909,15 +3913,18 @@ function createProfileLink($name, $userId, $userType = null) {
         .download-btn i {
             font-size: 0.8rem !important;
             color: #ffffff !important;
+            margin-right: 0 !important;
         }
         
         .download-btn .btn-text {
             font-size: 0.75rem !important;
             color: #ffffff !important;
+            text-align: left !important;
         }
         
         .file-info {
-            flex: 1;
+            flex: 0 1 auto;
+            margin-right: auto;
         }
         
         .file-name {
@@ -6139,7 +6146,8 @@ function createProfileLink($name, $userId, $userType = null) {
         #resources-container .list-group-item {
             display: flex !important;
             flex-direction: column !important;
-            gap: 12px !important;
+            align-items: flex-start !important;
+            gap: 8px !important;
             padding: 16px !important;
             background: rgba(65, 89, 128, 0) !important;
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -6150,17 +6158,27 @@ function createProfileLink($name, $userId, $userType = null) {
         /* File info and download button container */
         .file-item-container {
             display: flex !important;
-            justify-content: space-between !important;
+            flex-direction: column !important;
             align-items: flex-start !important;
-            gap: 16px !important;
+            gap: 8px !important;
             width: 100% !important;
         }
         
-        /* File info section - allow it to take available space but not overflow */
+        /* File info section */
         .file-info {
-            flex: 1 !important;
-            min-width: 0 !important; /* Allow shrinking */
-            max-width: calc(100% - 120px) !important; /* Reserve space for download button */
+            width: 100% !important;
+        }
+        
+        /* Download button positioning */
+        .download-btn {
+            align-self: flex-start !important;
+            margin: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: var(--spacing-xs) !important;
+            min-width: 90px !important;
+            padding: 6px 12px !important;
         }
         
         /* File name with proper text truncation */
@@ -6183,6 +6201,12 @@ function createProfileLink($name, $userId, $userType = null) {
             min-width: 0 !important;
             word-break: break-word !important;
             overflow-wrap: break-word !important;
+        }
+        
+        /* Download button positioning */
+        .download-btn {
+            margin-left: auto !important;
+            flex-shrink: 0 !important;
         }
         
         /* File details with better spacing */
@@ -7044,20 +7068,20 @@ function createProfileLink($name, $userId, $userType = null) {
                     
                     fadeOut(loadingSpinner, 400, function() {
                         fadeIn(projectDetails, 600);
-                    
-                    // Render project details
-                    renderProjectHeader(project);
-                    renderProjectAbstract(project);
-                    renderProjectDescription(project);
-                    renderProjectInfo(project);
-                    renderTeamMembers(project);
-                    renderKeywords(project);
-                    renderResources(project);
-                    renderExternalLinks(project);
-                    renderTimeline(project);
-                    renderReferences(project);
-                    renderMedia(project);
-                    renderStats(project);
+                        
+                        // Render project details
+                        renderProjectHeader(project);
+                        renderProjectAbstract(project);
+                        renderProjectDescription(project);
+                        renderProjectInfo(project);
+                        renderTeamMembers(project);
+                        renderKeywords(project);
+                        renderResources(project);
+                        renderExternalLinks(project);
+                        renderTimeline(project);
+                        renderReferences(project);
+                        renderMedia(project);
+                        renderStats(project);
                         
                         // Show Edit Timeline button only for project owners or admins
                         const editTimelineBtn = document.getElementById('editTimelineBtn');
@@ -7785,7 +7809,7 @@ function createProfileLink($name, $userId, $userType = null) {
                 const date = formatDate(file.uploadedAt);
                 
                 resourcesHTML += `
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item">
                         <div class="file-info">
                             <div class="file-name">
                                 <i class="${icon} me-2"></i> ${file.name}
@@ -10432,7 +10456,7 @@ function createProfileLink($name, $userId, $userType = null) {
                                     </small>
                                 </div>
                                 <div class="badges">
-                                    <span class="badge bg-${qualityColor} bg-opacity-15 text-${qualityColor} mb-1">
+                                    <span class="badge bg-${qualityColor} bg-opacity-10 text-${qualityColor} mb-1">
                                         ${qualityLabel}
                                     </span>
                                     <br>
