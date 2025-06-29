@@ -1268,6 +1268,45 @@ try {
         [data-theme="light"] .document-error {
             background: var(--glass-bg);
         }
+
+        /* Comment form styling */
+        .add-comment-form .position-relative {
+            display: flex;
+            align-items: center;
+        }
+
+        .add-comment-form textarea {
+            padding: 0.75rem 3rem 0.75rem 1rem;
+            resize: none;
+            min-height: 40px;
+            max-height: 120px;
+            border-radius: 20px;
+            line-height: 1.5;
+            background: var(--surface-1);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .add-comment-form textarea:focus {
+            background: var(--surface-2);
+            border-color: var(--modern-blue);
+            box-shadow: 0 0 0 0.2rem var(--border-glow);
+        }
+
+        .add-comment-form .btn-link {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--modern-blue);
+            padding: 0.25rem 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .add-comment-form .btn-link:hover {
+            color: var(--modern-purple);
+            transform: translateY(-50%) scale(1.1);
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
@@ -1562,8 +1601,8 @@ try {
                                          alt="Your Avatar" class="author-avatar" style="width: 32px; height: 32px;">
                                     <div class="flex-grow-1 ms-2">
                                         <div class="position-relative">
-                                            <textarea class="form-control rounded-pill" placeholder="Write a comment..." required></textarea>
-                                            <button type="submit" class="btn btn-link position-absolute end-0 top-50 translate-middle-y">
+                                            <textarea class="form-control" style="padding: 0.75rem 3rem 0.75rem 1rem; resize: none; min-height: 40px; max-height: 120px; border-radius: 20px; line-height: 1.5; background: var(--surface-1); border: 1px solid var(--border-color); color: var(--text-primary);" placeholder="Write a comment..." required></textarea>
+                                            <button type="submit" class="btn btn-link" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--modern-blue); padding: 0.25rem 0.5rem;">
                                                 <i class="bi bi-send-fill"></i>
                                             </button>
                                         </div>
@@ -1756,7 +1795,9 @@ try {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json();
+                return response.json().catch(error => {
+                    throw new Error('Invalid JSON response from server');
+                });
             })
             .then(data => {
                 if (data.success) {
@@ -1769,8 +1810,6 @@ try {
             .catch(error => {
                 console.error('Error:', error);
                 alert('Error adding comment: ' + error.message);
-            })
-            .finally(() => {
                 // Re-enable form
                 textarea.disabled = false;
                 submitButton.disabled = false;

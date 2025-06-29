@@ -5,6 +5,9 @@ require_once __DIR__ . '/../model/db_connect.php';
 // Import MongoDB classes
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\BSON\ObjectId;
+use MongoDB\Client;
+use MongoDB\Collection;
+use MongoDB\Driver\Exception\ConnectionException;
 
 // Set headers
 header('Content-Type: application/json');
@@ -87,9 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($result->getModifiedCount() === 1) {
-            // Redirect back to post details page
-            header('Location: ../../post_details.php?id=' . $postId);
-            exit;
+            // Return JSON response instead of redirecting
+            echo json_encode([
+                'success' => true,
+                'message' => 'Comment added successfully'
+            ]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to add comment. Post may not exist.']);
         }
