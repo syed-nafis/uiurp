@@ -299,8 +299,8 @@ $targetUserId = $faculty_id;
                 $_SESSION['user_type'] === 'faculty' &&
                 $_SESSION['user_id'] === (string)$faculty['_id']
             ): ?>
-                <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editResearchFieldsModal">
-                    <i class="bi bi-pencil"></i> Edit
+                <button class="btn btn-sm btn-outline-secondary rounded-circle" data-bs-toggle="modal" data-bs-target="#editResearchFieldsModal">
+                    <i class="bi bi-plus"></i>
                 </button>
             <?php endif; ?>
         </div>
@@ -337,8 +337,8 @@ $targetUserId = $faculty_id;
                     $_SESSION['user_type'] === 'faculty' &&
                     $_SESSION['user_id'] === (string)$faculty['_id']
                 ): ?>
-                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editPublicationsModal">
-                        <i class="bi bi-pencil"></i> Edit
+                    <button class="btn btn-sm btn-outline-secondary rounded-circle" data-bs-toggle="modal" data-bs-target="#editPublicationsModal">
+                        <i class="bi bi-plus"></i>
                     </button>
                 <?php endif; ?>
             </div>
@@ -382,8 +382,8 @@ $targetUserId = $faculty_id;
                 <?php if (isset($_SESSION['user_id'], $_SESSION['user_type']) 
                         && $_SESSION['user_type'] === 'faculty' 
                         && $_SESSION['user_id'] === (string)$faculty['_id']): ?>
-                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editPrerequisitesModal">
-                        <i class="bi bi-pencil"></i> Edit
+                    <button class="btn btn-sm btn-outline-secondary rounded-circle" data-bs-toggle="modal" data-bs-target="#editPrerequisitesModal">
+                        <i class="bi bi-plus"></i>
                     </button>
                 <?php endif; ?>
             </div>
@@ -422,8 +422,8 @@ $targetUserId = $faculty_id;
                 $_SESSION['user_type'] === 'faculty' &&
                 $_SESSION['user_id'] === (string)$faculty['_id']
             ): ?>
-                <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editResourcesModal">
-                    <i class="bi bi-pencil"></i> Edit
+                <button class="btn btn-sm btn-outline-secondary rounded-circle" data-bs-toggle="modal" data-bs-target="#editResourcesModal">
+                    <i class="bi bi-plus"></i>
                 </button>
             <?php endif; ?>
         </div>

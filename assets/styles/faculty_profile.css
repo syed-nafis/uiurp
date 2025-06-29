@@ -911,6 +911,16 @@ section h2::after {
     transition: all 0.3s ease;
 }
 
+.btn-outline-secondary.rounded-circle {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50% !important;
+}
+
 .btn-outline-secondary:hover {
     background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
     border-color: var(--accent-purple);
@@ -1273,6 +1283,44 @@ section h2::after {
 
 [data-theme="light"] .resource-card .text-muted {
     color: var(--text-secondary) !important;
+}
+
+/* Ensure badge text is white in both modes */
+[data-theme="light"] .badge.bg-primary,
+.badge.bg-primary {
+    color: white !important;
+}
+
+/* Make schedule icons white */
+#schedule-list .bi-book.me-2,
+#schedule-list .bi-geo-alt.me-2,
+#schedule-list .bi-calendar-event.me-2,
+#schedule-list .bi-flask.me-2,
+#schedule-list .bi-people.me-2,
+#schedule-list .bi-clock.me-2,
+#schedule-list .bi-search.me-2 {
+    color: white !important;
+}
+
+/* Make schedule icons black in light mode */
+[data-theme="light"] #schedule-list .bi-book.me-2,
+[data-theme="light"] #schedule-list .bi-geo-alt.me-2,
+[data-theme="light"] #schedule-list .bi-calendar-event.me-2,
+[data-theme="light"] #schedule-list .bi-flask.me-2,
+[data-theme="light"] #schedule-list .bi-people.me-2,
+[data-theme="light"] #schedule-list .bi-clock.me-2,
+[data-theme="light"] #schedule-list .bi-search.me-2 {
+    color: black !important;
+}
+
+/* Make schedule text white instead of secondary */
+#schedule-list .text-secondary {
+    color: white !important;
+}
+
+/* Make schedule text black in light mode */
+[data-theme="light"] #schedule-list .text-secondary {
+    color: black !important;
 }
 
 [data-theme="light"] .card .text-muted {
