@@ -452,6 +452,62 @@ try {
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+        
+        /* Video attachment styles */
+        .video-container {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+        
+        .video-player {
+            width: 100%;
+            display: block;
+            border-radius: 0.5rem;
+            max-height: 250px;
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .video-info {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 4px;
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .video-format {
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .download-btn {
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .download-btn:hover {
+            color: var(--modern-blue);
+        }
+        
+        /* File format indicator */
+        .file-format {
+            background: var(--modern-blue);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-weight: bold;
+        }
 
         /* Form Controls */
         .form-control {
@@ -613,7 +669,139 @@ try {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Document Preview Modal Styles */
+        .document-preview-modal .modal-dialog {
+            max-width: 90%;
+            height: 90vh;
+            margin: 1.75rem auto;
+        }
+
+        .document-preview-modal .modal-content {
+            height: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+
+        .document-preview-modal .modal-body {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 120px); /* Adjust for header and footer */
+        }
+
+        .document-preview-container {
+            flex: 1;
+            overflow: auto;
+            background: var(--surface-1);
+            border-radius: 0.5rem;
+            margin: 1rem;
+            position: relative;
+        }
+
+        #pdf-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .text-viewer {
+            width: 100%;
+            height: 100%;
+            padding: 1.5rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            color: var(--text-primary);
+            background: transparent;
+            border: none;
+            overflow: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .document-icon {
+            font-size: 5rem;
+            color: var(--modern-blue);
+        }
+
+        .document-info {
+            color: var(--text-primary);
+            padding: 2rem;
+        }
+
+        .document-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--surface-2);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .pdf-page-info {
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pdf-error, .document-error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--text-primary);
+            background: var(--glass-bg);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            max-width: 80%;
+        }
+
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .document-preview-modal .btn-close {
+            filter: invert(var(--text-primary-invert, 0));
+        }
+
+        /* File type specific icons */
+        .doc-icon { color: #2b579a; } /* Word blue */
+        .ppt-icon { color: #d24726; } /* PowerPoint orange */
+        .txt-icon { color: #4caf50; } /* Green for text */
+        .pdf-icon { color: #f44336; } /* Red for PDF */
+        .file-icon { color: var(--modern-blue); } /* Default */
+
+        /* Ensure document preview modal works well in both themes */
+        [data-theme="light"] .document-preview-modal .modal-content {
+            background: var(--glass-bg);
+        }
+
+        [data-theme="light"] .document-preview-container {
+            background: var(--surface-1);
+        }
+
+        [data-theme="light"] .document-controls {
+            background: var(--surface-2);
+        }
+
+        [data-theme="light"] .document-error {
+            background: var(--glass-bg);
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Set worker path for PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
 </head>
 <body>
     <?php include 'src/includes/navbar.php'; ?>
@@ -702,18 +890,33 @@ try {
                         <?php foreach ($post['attachments'] as $attachment): ?>
                             <?php 
                                 $fileExtension = strtolower(pathinfo($attachment['original_name'], PATHINFO_EXTENSION));
-                                $isImage = in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']);
+                                $fileType = $attachment['file_type'] ?? '';
+                                $isImage = in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']) || strpos($fileType, 'image/') === 0;
+                                $isVideo = in_array($fileExtension, ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'flv', 'mkv']) || strpos($fileType, 'video/') === 0;
                             ?>
                             <div class="attachment-item">
-                                <?php if ($isImage): ?>
+                                    <?php if ($isImage): ?>
                                     <a href="<?= htmlspecialchars($attachment['file_path']) ?>" target="_blank">
                                         <img src="<?= htmlspecialchars($attachment['file_path']) ?>" alt="Attachment" class="attachment-img">
                                     </a>
-                                <?php else: ?>
+                                    <?php elseif ($isVideo): ?>
+                                    <div class="video-container">
+                                        <video controls class="video-player">
+                                            <source src="<?= htmlspecialchars($attachment['file_path']) ?>" type="<?= htmlspecialchars($fileType) ?>">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        <div class="video-info">
+                                            <span class="video-format"><?= strtoupper($fileExtension) ?></span>
+                                            <a href="<?= htmlspecialchars($attachment['file_path']) ?>" download class="download-btn">
+                                                <i class="bi bi-download"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <?php else: ?>
                                     <a href="<?= htmlspecialchars($attachment['file_path']) ?>" class="attachment-file" download>
-                                        <i class="bi bi-file-earmark me-2"></i>
+                                            <i class="bi bi-file-earmark me-2"></i>
                                         <span class="text-truncate"><?= htmlspecialchars($attachment['original_name']) ?></span>
-                                    </a>
+                                </a>
                                 <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
@@ -751,11 +954,11 @@ try {
                 <div class="d-flex gap-2">
                     <img src="<?= $_SESSION['profile_pic'] ?? 'uploads/profile_images/user_avater.png' ?>" 
                          alt="Your Avatar" class="author-avatar" style="width: 32px; height: 32px;">
-                    <div class="flex-grow-1">
-                        <textarea name="comment" class="form-control mb-2" rows="3" placeholder="Write a comment..." required></textarea>
-                        <button type="submit" class="btn btn-primary">Post Comment</button>
-                    </div>
-                </div>
+                                <div class="flex-grow-1">
+                                    <textarea name="text" class="form-control mb-2" rows="3" placeholder="Write a comment..." required></textarea>
+            <button type="submit" class="btn btn-primary">Post Comment</button>
+                                                </div>
+                                        </div>
             </form>
 
             <!-- Comments List -->
@@ -957,7 +1160,369 @@ try {
                 console.error('Error:', error);
                 }
             });
+        });
+    </script>
+    <!-- Document Preview Modal -->
+    <div class="modal fade document-preview-modal" id="documentPreviewModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="documentPreviewTitle">Document Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- PDF Viewer Container -->
+                    <div class="document-preview-container pdf-container">
+                        <canvas id="pdf-viewer"></canvas>
+                        <div class="loading-spinner d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Text Viewer Container -->
+                    <div class="document-preview-container text-container d-none">
+                        <pre id="text-viewer" class="text-viewer"></pre>
+                    </div>
+                    
+                    <!-- Document Info Container (for DOC, PPT, etc.) -->
+                    <div class="document-preview-container doc-container d-none">
+                        <div class="document-info text-center p-4">
+                            <i class="bi bi-file-earmark-fill document-icon"></i>
+                            <h4 class="mt-3" id="doc-name">Document Name</h4>
+                            <p class="text-muted" id="doc-info">File information will appear here</p>
+                            <div class="mt-4">
+                                <a href="#" class="btn btn-primary" id="downloadDoc" download>
+                                    <i class="bi bi-download"></i> Download Document
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- PDF Navigation Controls -->
+                    <div class="document-controls pdf-controls d-none">
+                        <button class="btn btn-primary" id="prevPage">
+                            <i class="bi bi-chevron-left"></i> Previous
+                        </button>
+                        <div class="pdf-page-info">
+                            Page <span id="currentPage">0</span> of <span id="totalPages">0</span>
+                        </div>
+                        <button class="btn btn-primary" id="nextPage">
+                            Next <i class="bi bi-chevron-right"></i>
+                        </button>
+                        <a href="#" class="btn btn-secondary" id="downloadPdf" download>
+                            <i class="bi bi-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Document Preview Functionality
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageRendering = false;
+    let pageNumPending = null;
+    let scale = 1.5;
+    const canvas = document.getElementById('pdf-viewer');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+    const documentModal = new bootstrap.Modal(document.getElementById('documentPreviewModal'));
+    
+    // Show error message in document container
+    function showDocumentError(message, containerSelector = '.pdf-container') {
+        const container = document.querySelector(containerSelector);
+        if (!container) return;
+        
+        const error = document.createElement('div');
+        error.className = 'document-error';
+        error.innerHTML = `
+            <i class="bi bi-exclamation-circle text-danger fs-1"></i>
+            <h4 class="mt-3">Error</h4>
+            <p>${message}</p>
+        `;
+        container.appendChild(error);
+    }
+
+    function showLoading() {
+        const spinner = document.querySelector('.loading-spinner');
+        if (spinner) spinner.classList.remove('d-none');
+    }
+
+    function hideLoading() {
+        const spinner = document.querySelector('.loading-spinner');
+        if (spinner) spinner.classList.add('d-none');
+    }
+
+    // Reset all document containers
+    function resetDocumentContainers() {
+        // Hide all containers
+        document.querySelectorAll('.document-preview-container').forEach(container => {
+            container.classList.add('d-none');
+        });
+        
+        // Hide PDF controls
+        document.querySelector('.pdf-controls').classList.add('d-none');
+        
+        // Remove any existing error messages
+        document.querySelectorAll('.document-error, .pdf-error').forEach(error => {
+            error.remove();
+        });
+    }
+    
+    // Show the appropriate container based on file type
+    function showDocumentContainer(fileType) {
+        resetDocumentContainers();
+        
+        switch (fileType) {
+            case 'pdf':
+                document.querySelector('.pdf-container').classList.remove('d-none');
+                document.querySelector('.pdf-controls').classList.remove('d-none');
+                break;
+            case 'txt':
+                document.querySelector('.text-container').classList.remove('d-none');
+                break;
+            case 'doc':
+            case 'docx':
+            case 'ppt':
+            case 'pptx':
+                document.querySelector('.doc-container').classList.remove('d-none');
+                
+                // Set the appropriate icon based on file type
+                const docIcon = document.querySelector('.document-icon');
+                if (docIcon) {
+                    docIcon.className = 'bi document-icon';
+                    if (fileType === 'doc' || fileType === 'docx') {
+                        docIcon.classList.add('bi-file-earmark-word', 'doc-icon');
+                    } else if (fileType === 'ppt' || fileType === 'pptx') {
+                        docIcon.classList.add('bi-file-earmark-ppt', 'ppt-icon');
+                    } else if (fileType === 'txt') {
+                        docIcon.classList.add('bi-file-earmark-text', 'txt-icon');
+                    } else {
+                        docIcon.classList.add('bi-file-earmark', 'file-icon');
+                    }
+                }
+                break;
+        }
+    }
+    
+    // PDF Handling Functions
+    async function renderPdfPage(num) {
+        pageRendering = true;
+        try {
+            const page = await pdfDoc.getPage(num);
+            const viewport = page.getViewport({ scale });
+            if (canvas) {
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                
+                const renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+                
+                await page.render(renderContext).promise;
+                pageRendering = false;
+                
+                if (pageNumPending !== null) {
+                    renderPdfPage(pageNumPending);
+                    pageNumPending = null;
+                }
+                
+                // Update page counters
+                const currentPageEl = document.getElementById('currentPage');
+                if (currentPageEl) {
+                    currentPageEl.textContent = num;
+                }
+            }
+        } catch (error) {
+            console.error('Error rendering PDF page:', error);
+            showDocumentError('Failed to render PDF page. Please try downloading the file instead.');
+            hideLoading();
+        }
+    }
+
+    function queueRenderPage(num) {
+        if (pageRendering) {
+            pageNumPending = num;
+        } else {
+            renderPdfPage(num);
+        }
+    }
+
+    async function loadPdf(url) {
+        try {
+            showLoading();
+            const loadingTask = pdfjsLib.getDocument(url);
+            pdfDoc = await loadingTask.promise;
+            const totalPagesEl = document.getElementById('totalPages');
+            if (totalPagesEl) {
+                totalPagesEl.textContent = pdfDoc.numPages;
+            }
+            renderPdfPage(1);
+            hideLoading();
+        } catch (error) {
+            console.error('Error loading PDF:', error);
+            showDocumentError('Failed to load PDF. The file might be corrupted or inaccessible.');
+            hideLoading();
+        }
+    }
+    
+    // Text File Handling
+    async function loadTextFile(url) {
+        try {
+            showLoading();
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const text = await response.text();
+            const textViewer = document.getElementById('text-viewer');
+            if (textViewer) {
+                textViewer.textContent = text;
+            }
+            hideLoading();
+        } catch (error) {
+            console.error('Error loading text file:', error);
+            showDocumentError('Failed to load text file. Please try downloading it instead.', '.text-container');
+            hideLoading();
+        }
+    }
+    
+    // Load document based on file type
+    function loadDocument(url, fileName, fileExt) {
+        // Update modal title
+        const titleEl = document.getElementById('documentPreviewTitle');
+        if (titleEl) {
+            titleEl.textContent = fileName;
+        }
+        
+        // Reset state and show appropriate container
+        showDocumentContainer(fileExt);
+        
+        // Handle different file types
+        switch (fileExt) {
+            case 'pdf':
+                // Reset PDF viewer state
+                pageNum = 1;
+                pdfDoc = null;
+                if (ctx) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+                
+                const currentPageEl = document.getElementById('currentPage');
+                const totalPagesEl = document.getElementById('totalPages');
+                if (currentPageEl) currentPageEl.textContent = '0';
+                if (totalPagesEl) totalPagesEl.textContent = '0';
+                
+                // Update download link
+                const downloadPdfBtn = document.getElementById('downloadPdf');
+                if (downloadPdfBtn) {
+                    downloadPdfBtn.href = url;
+                    downloadPdfBtn.setAttribute('download', fileName);
+                }
+                
+                loadPdf(url);
+                break;
+                
+            case 'txt':
+                loadTextFile(url);
+                break;
+                
+            case 'doc':
+            case 'docx':
+            case 'ppt':
+            case 'pptx':
+                // Update document info
+                const docNameEl = document.getElementById('doc-name');
+                const docInfoEl = document.getElementById('doc-info');
+                const downloadDocBtn = document.getElementById('downloadDoc');
+                
+                if (docNameEl) docNameEl.textContent = fileName;
+                
+                if (docInfoEl) {
+                    let fileTypeText = 'Document';
+                    if (fileExt === 'doc' || fileExt === 'docx') {
+                        fileTypeText = 'Word Document';
+                    } else if (fileExt === 'ppt' || fileExt === 'pptx') {
+                        fileTypeText = 'PowerPoint Presentation';
+                    }
+                    docInfoEl.textContent = `${fileTypeText} - This file cannot be previewed. Please download to view.`;
+                }
+                
+                if (downloadDocBtn) {
+                    downloadDocBtn.href = url;
+                    downloadDocBtn.setAttribute('download', fileName);
+                }
+                break;
+        }
+    }
+
+    // Event listeners for PDF controls
+    const prevPageBtn = document.getElementById('prevPage');
+    if (prevPageBtn) {
+        prevPageBtn.addEventListener('click', () => {
+            if (pageNum <= 1) return;
+            pageNum--;
+            queueRenderPage(pageNum);
+        });
+    }
+    
+    const nextPageBtn = document.getElementById('nextPage');
+    if (nextPageBtn) {
+        nextPageBtn.addEventListener('click', () => {
+            if (pageNum >= pdfDoc?.numPages) return;
+            pageNum++;
+            queueRenderPage(pageNum);
+        });
+    }
+
+    // Handle attachment clicks for document files
+    document.querySelectorAll('.attachment-file').forEach(link => {
+        link.addEventListener('click', async function(e) {
+            const filePath = this.getAttribute('href');
+            if (!filePath) return;
+            
+            const fileName = this.querySelector('span')?.textContent || filePath.split('/').pop();
+            const fileExt = fileName.split('.').pop().toLowerCase();
+            
+            const supportedFormats = ['pdf', 'txt', 'doc', 'docx', 'ppt', 'pptx'];
+            
+            if (supportedFormats.includes(fileExt)) {
+                e.preventDefault();
+                
+                // Show modal and load document
+                documentModal.show();
+                loadDocument(filePath, fileName, fileExt);
+            }
+        });
     });
+        
+    // Handle modal close
+    const documentModalEl = document.getElementById('documentPreviewModal');
+    if (documentModalEl) {
+        documentModalEl.addEventListener('hidden.bs.modal', function () {
+            // Clean up document viewer state
+            pdfDoc = null;
+            pageNum = 1;
+            if (ctx) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            // Clear text viewer
+            const textViewer = document.getElementById('text-viewer');
+            if (textViewer) {
+                textViewer.textContent = '';
+            }
+            
+            // Remove any existing error messages
+            document.querySelectorAll('.document-error, .pdf-error').forEach(error => {
+                error.remove();
+            });
+        });
+    }
     </script>
 </body>
 </html> 
