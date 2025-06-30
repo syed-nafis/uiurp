@@ -417,11 +417,11 @@ session_start();
                 0 15px 30px rgba(0, 0, 0, 0.2),
                 0 0 20px rgba(37, 99, 235, 0.1);
             animation: fade-in-up 1s ease-out forwards;
-            margin: -60px auto 0;
-            pointer-events: auto;
-            left: 0;
-            right: 0;
-            transform: translateX(0);
+                margin: -100px auto 0;
+    pointer-events: auto;
+    left: 0;
+    right: 0;
+    transform: translateX(0);
         }
         
         .overlay::before {
