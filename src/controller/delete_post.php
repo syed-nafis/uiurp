@@ -13,12 +13,22 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     exit;
 }
 
-// Get JSON data
-$json = file_get_contents('php://input');
-$data = json_decode($json, true);
+// Check for both JSON and POST data
+$data = [];
+if (!empty($_POST)) {
+    // Regular form submission
+    $data = $_POST;
+} else {
+    // JSON API request
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true) ?: [];
+}
+
+// Normalize field names - allow both post_id and postId
+$postId = $data['postId'] ?? $data['post_id'] ?? null;
 
 // Validate input
-if (!isset($data['postId']) || empty($data['postId'])) {
+if (empty($postId)) {
     echo json_encode(['success' => false, 'message' => 'Post ID is required']);
     exit;
 }
@@ -30,21 +40,21 @@ try {
     $forumPostsCollection = $db->forum_posts;
     
     // Try to convert the ID to ObjectId
-    $postId = null;
+    $postIdObj = null;
     try {
-        $postId = new ObjectId($data['postId']);
+        $postIdObj = new ObjectId($postId);
     } catch (Exception $e) {
         // If the ID is not a valid ObjectId, keep it as is (it might be a string ID)
-        $postId = $data['postId'];
+        $postIdObj = $postId;
     }
     
     // Find post
-    $post = $forumPostsCollection->findOne(['_id' => $postId]);
+    $post = $forumPostsCollection->findOne(['_id' => $postIdObj]);
     
     // If post doesn't exist in forum_posts, try the old forum collection
     if (!$post) {
         $forumCollection = $db->forum;
-        $post = $forumCollection->findOne(['_id' => $postId]);
+        $post = $forumCollection->findOne(['_id' => $postIdObj]);
         
         if (!$post) {
             echo json_encode(['success' => false, 'message' => 'Post not found']);
@@ -77,22 +87,43 @@ try {
     }
     
     // Delete the post
-    $result = $collection->deleteOne(['_id' => $postId]);
+    $result = $collection->deleteOne(['_id' => $postIdObj]);
     
     if ($result->getDeletedCount() > 0) {
-        echo json_encode([
-            'success' => true,
-            'message' => 'Post deleted successfully'
-        ]);
+        // Check if this was a form submission or API call
+        if (!empty($_POST)) {
+            // Redirect back to forum page
+            $_SESSION['success'] = 'Post deleted successfully';
+            header('Location: ../../view_posts.php');
+            exit;
+        } else {
+            // Return JSON for API calls
+            echo json_encode([
+                'success' => true,
+                'message' => 'Post deleted successfully'
+            ]);
+        }
+    } else {
+        if (!empty($_POST)) {
+            $_SESSION['error'] = 'Failed to delete post';
+            header('Location: ../../post_details.php?id=' . $postId);
+            exit;
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Failed to delete post'
+            ]);
+        }
+    }
+} catch (Exception $e) {
+    if (!empty($_POST)) {
+        $_SESSION['error'] = 'Error: ' . $e->getMessage();
+        header('Location: ../../view_posts.php');
+        exit;
     } else {
         echo json_encode([
             'success' => false,
-            'message' => 'Failed to delete post'
+            'message' => $e->getMessage()
         ]);
     }
-} catch (Exception $e) {
-    echo json_encode([
-        'success' => false,
-        'message' => $e->getMessage()
-    ]);
 } 
