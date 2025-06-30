@@ -6,16 +6,18 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login/Signup Page</title>
+    <title>Login/Signup Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="assets/styles/login.css">
     <style>
         .alert {
-            padding: 10px;
-            margin: 10px auto;
+            padding: 15px;
+            margin: 15px auto;
             width: 80%;
             border-radius: 5px;
             text-align: center;
+            font-weight: 500;
         }
         .alert-success {
             background-color: #d4edda;
@@ -29,7 +31,7 @@ session_start();
 </head>
 <body>
     <div class="main">  	
-        <input type="checkbox" id="chk">
+        <input type="checkbox" id="chk" checked>
         
         <?php
         if (isset($_SESSION['error'])) {
@@ -45,20 +47,25 @@ session_start();
         
         <div class="signup">
             <form action="src/controller/login_user.php" method="post">
-                <label for="chk">Sign Up</label>
-                <input type="text" name="username" placeholder="User name" required="">
-                <input type="email" name="email" placeholder="Email" required="">
-                <input type="password" name="password" placeholder="Password" required="">
-                <input type="text" name="role" placeholder="Your role? ex: resident / admin" required="">
-                <button>Sign Up</button>
+                <label for="chk" aria-label="Switch to signup"><i class="fas fa-user-plus"></i> Sign Up</label>
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <select name="role" required>
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="resident">Resident</option>
+                    <option value="admin">Admin</option>
+                    <option value="faculty">Faculty</option>
+                </select>
+                <button type="submit"><i class="fas fa-user-plus"></i> Create Account</button>
             </form>
         </div>
         <div class="login">
             <form action="src/controller/login_user.php" method="post">
-                <label for="chk">Login</label>
-                <input type="username" name="username" placeholder="username or id" required="">
-                <input type="password" name="Password" placeholder="password" required="">
-                <button>Login</button>
+                <label for="chk" aria-label="Switch to login"><i class="fas fa-sign-in-alt"></i> Login</label>
+                <input type="text" name="username" placeholder="Username or ID" required>
+                <input type="password" name="Password" placeholder="Password" required>
+                <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
             </form>
         </div>
     </div>
