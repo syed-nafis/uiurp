@@ -490,36 +490,47 @@ if (isset($_SESSION['user_id'])) {
         }
 
         [data-theme="light"] .neo-event-card {
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(67, 97, 238, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            position: relative;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            padding: 0;
+            height: 100%;
+            min-height: 350px; /* Add min-height to maintain consistent sizing */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+            transform-style: preserve-3d;
+            z-index: 1; /* Default z-index */
         }
 
         [data-theme="light"] .neo-event-card:hover {
-            background: rgba(255, 255, 255, 0.98);
-            border-color: rgba(247, 37, 133, 0.2);
-            box-shadow: 0 12px 48px rgba(247, 37, 133, 0.12);
+            box-shadow: 0 15px 40px rgba(247, 37, 133, 0.2);
+            border-color: rgba(247, 37, 133, 0.3);
+            transform: translateY(-10px) scale(1.02);
+            z-index: 10; /* Increase z-index on hover to prevent overlapping */
         }
 
-        [data-theme="light"] .event-date-badge {
-            background: rgba(247, 37, 133, 0.1);
-            border: 1px solid rgba(247, 37, 133, 0.2);
+        /* Modify the event-content to ensure proper spacing */
+        [data-theme="light"] .event-content {
+            padding: 1.5rem;
+            position: relative;
+            z-index: 3;
+            padding-top: 2.5rem; /* Add more padding on top for the date badge */
         }
 
-        [data-theme="light"] .neo-event-card:hover .event-date-badge {
-            background: rgba(247, 37, 133, 0.15);
-            box-shadow: 0 4px 12px rgba(247, 37, 133, 0.15);
+        /* Ensure event-description has a fixed height */
+        [data-theme="light"] .event-description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            max-height: 5.4rem; /* Approximately 3 lines of text */
+            overflow: hidden;
         }
 
-        [data-theme="light"] .event-day {
-            background: linear-gradient(135deg, var(--text-primary), var(--neo-primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        [data-theme="light"] .event-month {
-            color: var(--text-secondary);
-        }
+        /* Modify JavaScript to limit the transform effect */
 
         [data-theme="light"] .event-title {
             color: var(--text-primary);
@@ -3074,6 +3085,9 @@ if (isset($_SESSION['user_id'])) {
             position: relative;
             overflow: hidden;
             z-index: 100 !important;
+            margin-left: 4rem;
+            margin-top: 4rem;
+            transform: translateX(20px);
         }
 
         .bulletin-board-container::before {
@@ -3157,6 +3171,21 @@ if (isset($_SESSION['user_id'])) {
             min-height: 120px;
             display: flex;
             flex-direction: column;
+        }
+
+        .bulletin-item.recommended {
+            border-color: rgba(76, 201, 240, 0.4);
+            background: rgba(15, 23, 42, 0.9) !important;
+        }
+
+        .bulletin-item.recommended::after {
+            content: "★";
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            color: var(--neo-blue);
+            font-size: 0.8rem;
+            z-index: 130;
         }
 
         .bulletin-item:hover {
@@ -3622,11 +3651,20 @@ if (isset($_SESSION['user_id'])) {
                 
                 <!-- Bulletin Board -->
                 <div class="col-lg-6 position-relative d-none d-lg-block">
-                    <div class="bulletin-board-container">
+                    <div class="bulletin-board-container" style="margin-left: 2rem; margin-top: 2rem; transform: translateX(20px);">
                         <div class="bulletin-board-header">
                             <div class="board-title">
                                 <i class="bi bi-pin-angle-fill"></i>
-                                <span>Bulletin Board</span>
+                                <span>
+                                    <?php if ($isPersonalized): ?>
+                                        Bulletin Board
+                                        <span class="personalized-badge" style="color: var(--neo-blue); font-size: 0.7rem; margin-left: 0.5rem;">
+                                            <i class="bi bi-stars"></i>
+                                        </span>
+                                    <?php else: ?>
+                                        Bulletin Board
+                                    <?php endif; ?>
+                                </span>
                             </div>
                         </div>
                         
@@ -3638,8 +3676,9 @@ if (isset($_SESSION['user_id'])) {
                                 for ($i = 0; $i < $displayCount; $i++): 
                                     $item = $combinedRecommendations[$i];
                                     $contentType = $item['content_type'];
+                                    $hasRelevanceScore = isset($item['relevance_score']) && $item['relevance_score'] > 0;
                                 ?>
-                                    <div class="bulletin-item" data-item-type="<?= $contentType ?>" data-item-id="<?= $item['_id'] ?>">
+                                    <div class="bulletin-item<?= $hasRelevanceScore ? ' recommended' : '' ?>" data-item-type="<?= $contentType ?>" data-item-id="<?= $item['_id'] ?>">
                                         <?php if ($contentType === 'project'): ?>
                                         <a href="Project_details.php?id=<?= $item['_id'] ?>" class="bulletin-link">
                                             <div class="bulletin-content-badge project">Project</div>
@@ -4549,6 +4588,41 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                         <div class="card-footer">
                             <a href="Project_details.php?id=3" class="card-link">
+                                <span>View Details</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <span class="link-hover-effect"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project Item 4 - Medical -->
+                <div class="col-md-6 col-lg-4 project-item" data-category="medical" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+                    <div class="futuristic-card">
+                        <div class="card-glow"></div>
+                        <div class="card-badge medical">Medical</div>
+                        <div class="card-img-container">
+                            <img src="assets/resources/research_picture/pub_4.jpg" class="card-img-top" alt="Medical Research">
+                            <div class="card-img-overlay">
+                                <div class="view-project-wrapper">
+                                    <span class="view-project"><i class="bi bi-eye"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-tags">
+                                <span>AI Diagnostics</span>
+                                <span>Medical Imaging</span>
+                            </div>
+                            <h5 class="card-title">Deep Learning for Medical Image Segmentation</h5>
+                            <p class="card-text">Applying convolutional neural networks to segment medical images and identify critical regions like tumors in MRI scans.</p>
+                            <div class="card-meta">
+                                <span><i class="bi bi-person"></i> Dr. Amina Rahman</span>
+                                <span><i class="bi bi-calendar"></i> 2023</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="Project_details.php?id=4" class="card-link">
                                 <span>View Details</span>
                                 <i class="bi bi-arrow-right"></i>
                                 <span class="link-hover-effect"></span>
@@ -6270,16 +6344,18 @@ if (isset($_SESSION['user_id'])) {
     overflow: hidden;
     padding: 0;
     height: 100%;
+    min-height: 350px; /* Add min-height to maintain consistent sizing */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     transition: all 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-    transform: perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1);
     transform-style: preserve-3d;
+    z-index: 1; /* Default z-index */
 }
 
 .neo-event-card:hover {
     box-shadow: 0 15px 40px rgba(247, 37, 133, 0.2);
     border-color: rgba(247, 37, 133, 0.3);
     transform: translateY(-10px) scale(1.02);
+    z-index: 10; /* Increase z-index on hover to prevent overlapping */
 }
 
 .neo-event-card .card-border {
@@ -6320,10 +6396,10 @@ if (isset($_SESSION['user_id'])) {
 
 .event-date-badge {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 70px;
-    height: 70px;
+    top: 15px;
+    right: 15px;
+    width: 65px;
+    height: 65px;
     background: rgba(247, 37, 133, 0.15);
     backdrop-filter: blur(5px);
     border: 1px solid rgba(247, 37, 133, 0.3);
@@ -6332,9 +6408,10 @@ if (isset($_SESSION['user_id'])) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 3;
+    z-index: 5; /* Increased z-index to ensure it stays above content */
     overflow: hidden;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .neo-event-card:hover .event-date-badge {
@@ -6386,23 +6463,27 @@ if (isset($_SESSION['user_id'])) {
     padding: 1.5rem;
     position: relative;
     z-index: 3;
+    padding-top: 2.5rem; /* Add more padding on top for the date badge */
 }
 
 .event-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     margin-bottom: 12px;
+    padding-right: 70px; /* Add padding to prevent overlap with date badge */
 }
 
 .event-tag {
     background: rgba(76, 201, 240, 0.1);
     border: 1px solid rgba(76, 201, 240, 0.2);
     border-radius: 50px;
-    padding: 4px 12px;
+    padding: 3px 10px;
     font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.9);
     transition: all 0.3s ease;
+    white-space: nowrap; /* Prevent wrapping within tags */
+    margin-bottom: 4px; /* Add space between wrapped tags */
 }
 
 .neo-event-card:hover .event-tag {
@@ -6449,6 +6530,8 @@ if (isset($_SESSION['user_id'])) {
     color: rgba(255, 255, 255, 0.7);
     margin-bottom: 1.5rem;
     line-height: 1.5;
+    max-height: 5.4rem; /* Approximately 3 lines of text */
+    overflow: hidden;
 }
 
 .card-circuit-pattern {
@@ -6508,10 +6591,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
             
-            const deltaX = (x - centerX) / 15;
-            const deltaY = (y - centerY) / 15;
+            // Limit the rotation angles to prevent extreme 3D transforms
+            const deltaX = Math.min(Math.max((x - centerX) / 25, -5), 5);
+            const deltaY = Math.min(Math.max((y - centerY) / 25, -5), 5);
             
-            // Apply 3D rotation
+            // Apply 3D rotation with limited values to avoid overlapping
             this.style.transform = `perspective(1000px) rotateX(${-deltaY}deg) rotateY(${deltaX}deg) translateY(-5px)`;
             
             // Move glow to follow cursor
@@ -6523,8 +6607,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         card.addEventListener('mouseleave', function() {
-            // Reset transforms and effects
-            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            // Reset transforms and effects - ensure it properly resets to default state
+            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
             
             const glow = this.querySelector('.card-glow');
             if (glow) {
@@ -6533,13 +6617,437 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Add entry animation
+        // Add entry animation with a more controlled approach
         const delay = Array.from(eventCards).indexOf(card) * 100;
         card.style.animation = `card-float 0.8s ease-out ${delay}ms forwards`;
         card.style.opacity = '0';
+        
+        // Reset animation after it completes to prevent lingering effects
+        setTimeout(() => {
+            card.style.opacity = '1';
+            // Ensure position is stable after animation
+            if (!card.matches(':hover')) {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            }
+        }, delay + 1000);
     });
 });
 </script>
+
+    <!-- Native CSS Scroll Snap -->
+    <style>
+        html, body {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+        .search-section,
+        .neo-hero-section,
+        .for-you-section,
+        .featured-projects,
+        .faculty-spotlight,
+        .events-section,
+        #faq-section,
+        #footer-section {
+            scroll-snap-align: start;
+        }
+
+        /* Ensure snap always stops at each section */
+        .search-section,
+        .neo-hero-section,
+        .for-you-section,
+        .featured-projects,
+        .faculty-spotlight,
+        .events-section,
+        #faq-section,
+        #footer-section {
+            scroll-snap-stop: always;
+        }
+    </style>
+
+    <!-- Enhanced Scroll Snapping & Navigation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = Array.from(document.querySelectorAll('.search-section, .neo-hero-section, .for-you-section, .featured-projects, .faculty-spotlight, .events-section, #faq-section, #footer-section'));
+            const scrollDots = Array.from(document.querySelectorAll('.scroll-dot'));
+            
+            let isScrolling = false;
+            let currentSectionIndex = 0;
+            let scrollTimeout = null;
+            let lastScrollTime = 0;
+            let wheelAccumulator = 0;
+            let isHoveringBulletinBoard = false;
+            
+            // Debounce settings
+            const SCROLL_THRESHOLD = 50; // Minimum wheel delta to trigger scroll
+            const SCROLL_DEBOUNCE = 150; // ms to wait before allowing another scroll
+            const SCROLL_LOCK_TIME = 1000; // ms to lock scrolling during animation
+            
+            function setActiveDot(idx) {
+                scrollDots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
+                currentSectionIndex = idx;
+            }
+
+            function scrollToSection(idx) {
+                if (idx < 0 || idx >= sections.length || idx === currentSectionIndex) return;
+                
+                isScrolling = true;
+                currentSectionIndex = idx;
+                
+                // Clear any existing timeout
+                if (scrollTimeout) {
+                    clearTimeout(scrollTimeout);
+                }
+                
+                // Scroll to section
+                sections[idx].scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                setActiveDot(idx);
+                
+                // Lock scrolling for animation duration
+                scrollTimeout = setTimeout(() => {
+                    isScrolling = false;
+                    wheelAccumulator = 0; // Reset accumulator
+                }, SCROLL_LOCK_TIME);
+            }
+
+            // Improved section detection using viewport center
+            function getCurrentSectionIndex() {
+                const viewportCenter = window.innerHeight / 2;
+                let closestIndex = 0;
+                let closestDistance = Infinity;
+                
+                sections.forEach((section, index) => {
+                    const rect = section.getBoundingClientRect();
+                    const sectionCenter = rect.top + (rect.height / 2);
+                    const distance = Math.abs(sectionCenter - viewportCenter);
+                    
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        closestIndex = index;
+                    }
+                });
+                
+                return closestIndex;
+            }
+
+            // Enhanced wheel event handler with accumulation and debouncing
+            function handleWheelScroll(e) {
+                // Ignore if modifier keys are pressed
+                if (e.ctrlKey || e.altKey || e.shiftKey) return;
+                
+                // Allow normal scrolling if hovering over bulletin board
+                if (isHoveringBulletinBoard) {
+                    return; // Don't prevent default, allow normal scrolling
+                }
+                
+                // Ignore if currently scrolling
+                if (isScrolling) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                const now = Date.now();
+                
+                // Debounce rapid scroll events
+                if (now - lastScrollTime < SCROLL_DEBOUNCE) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Accumulate wheel delta for better sensitivity control
+                wheelAccumulator += e.deltaY;
+                
+                // Only trigger scroll if accumulated delta exceeds threshold
+                if (Math.abs(wheelAccumulator) < SCROLL_THRESHOLD) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Determine scroll direction
+                const direction = wheelAccumulator > 0 ? 1 : -1;
+                const targetIndex = currentSectionIndex + direction;
+                
+                // Check if target section exists
+                if (targetIndex >= 0 && targetIndex < sections.length) {
+                    e.preventDefault();
+                    lastScrollTime = now;
+                    wheelAccumulator = 0; // Reset accumulator
+                    scrollToSection(targetIndex);
+                } else {
+                    // Reset accumulator if we can't scroll further
+                    wheelAccumulator = 0;
+                }
+            }
+
+            // Dot click navigation
+            scrollDots.forEach((dot, i) => {
+                dot.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (!isScrolling) {
+                        scrollToSection(i);
+                    }
+                });
+            });
+
+            // Enhanced IntersectionObserver for better section detection
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -20% 0px', // Only trigger when section is well within viewport
+                threshold: [0, 0.25, 0.5, 0.75, 1.0]
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                if (isScrolling) return; // Don't update during programmatic scrolling
+                
+                let mostVisibleSection = null;
+                let maxVisibility = 0;
+                
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && entry.intersectionRatio > maxVisibility) {
+                        maxVisibility = entry.intersectionRatio;
+                        mostVisibleSection = entry.target;
+                    }
+                });
+                
+                if (mostVisibleSection) {
+                    const idx = sections.indexOf(mostVisibleSection);
+                    if (idx !== -1 && idx !== currentSectionIndex) {
+                        setActiveDot(idx);
+                    }
+                }
+            }, observerOptions);
+
+            // Observe all sections
+            sections.forEach((section) => observer.observe(section));
+
+            // Add wheel event listener
+            window.addEventListener('wheel', handleWheelScroll, { passive: false });
+
+            // Bulletin board hover detection to disable scroll snapping
+            const bulletinBoard = document.querySelector('.bulletin-board-container');
+            if (bulletinBoard) {
+                bulletinBoard.addEventListener('mouseenter', () => {
+                    isHoveringBulletinBoard = true;
+                    // Also disable CSS scroll snap temporarily
+                    document.documentElement.style.scrollSnapType = 'none';
+                });
+                
+                bulletinBoard.addEventListener('mouseleave', () => {
+                    isHoveringBulletinBoard = false;
+                    // Re-enable CSS scroll snap
+                    document.documentElement.style.scrollSnapType = 'y mandatory';
+                });
+            }
+            
+            // Handle keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (isScrolling) return;
+                
+                let targetIndex = -1;
+                
+                switch(e.key) {
+                    case 'ArrowDown':
+                    case 'PageDown':
+                        targetIndex = currentSectionIndex + 1;
+                        break;
+                    case 'ArrowUp':
+                    case 'PageUp':
+                        targetIndex = currentSectionIndex - 1;
+                        break;
+                    case 'Home':
+                        targetIndex = 0;
+                        break;
+                    case 'End':
+                        targetIndex = sections.length - 1;
+                        break;
+                }
+                
+                if (targetIndex >= 0 && targetIndex < sections.length && targetIndex !== currentSectionIndex) {
+                    e.preventDefault();
+                    scrollToSection(targetIndex);
+                }
+            });
+            
+            // Handle browser back/forward navigation
+            window.addEventListener('popstate', () => {
+                if (!isScrolling) {
+                    const hash = window.location.hash;
+                    if (hash) {
+                        const targetSection = document.querySelector(hash);
+                        if (targetSection) {
+                            const idx = sections.indexOf(targetSection);
+                            if (idx !== -1) {
+                                scrollToSection(idx);
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Initialize - detect current section on load
+            setTimeout(() => {
+                const initialIndex = getCurrentSectionIndex();
+                setActiveDot(initialIndex);
+            }, 100);
+            
+            // Handle window resize - recalculate current section
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    if (!isScrolling) {
+                        const newIndex = getCurrentSectionIndex();
+                        setActiveDot(newIndex);
+                    }
+                }, 250);
+            });
+        });
+    </script>
+
+    <!-- Ensure the badge is clickable -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const badgeLink = document.querySelector('.neo-badge-link');
+            if (badgeLink) {
+                badgeLink.addEventListener('click', function(e) {
+                    window.location.href = 'Faculty_Page.php';
+                });
+            }
+        });
+    </script>
+
+    <!-- Theme Initialization Script -->
+    <script>
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved theme preference or default to 'dark'
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            // Add theme transition class to body for smooth transitions
+            document.body.classList.add('theme-transition');
+            
+            // Update any text elements that need theme-specific styling
+            updateThemeSpecificElements(savedTheme);
+        });
+        
+        // Function to update theme-specific elements
+        function updateThemeSpecificElements(theme) {
+            // Update any hardcoded text colors that need to change with theme
+            const textElements = document.querySelectorAll('.text-light, .text-muted');
+            textElements.forEach(element => {
+                if (theme === 'light') {
+                    element.style.color = 'var(--text-primary)';
+                } else {
+                    element.style.color = ''; // Reset to default
+                }
+            });
+            
+            // Update search section text colors
+            const searchTitle = document.querySelector('.search-header h1');
+            const searchSubtitle = document.querySelector('.search-header p');
+            
+            if (searchTitle) {
+                searchTitle.style.color = 'var(--text-primary)';
+            }
+            if (searchSubtitle) {
+                searchSubtitle.style.color = 'var(--text-secondary)';
+            }
+            
+            // Update scroll down text
+            const scrollText = document.querySelector('.scroll-down-text');
+            const scrollArrow = document.querySelector('.scroll-down-arrow');
+            
+            if (scrollText) {
+                scrollText.style.color = 'var(--text-secondary)';
+            }
+            if (scrollArrow) {
+                scrollArrow.style.color = 'var(--text-primary)';
+            }
+        }
+        
+        // Listen for theme changes from navbar toggle
+        document.addEventListener('themeChanged', function(e) {
+            updateThemeSpecificElements(e.detail.theme);
+            updateChartColors(e.detail.theme);
+        });
+        
+        // Function to update Chart.js colors based on theme
+        function updateChartColors(theme) {
+            if (typeof Chart !== 'undefined' && window.researchChart) {
+                const isLight = theme === 'light';
+                const textColor = isLight ? '#1e293b' : '#ffffff';
+                const gridColor = isLight ? 'rgba(67, 97, 238, 0.1)' : 'rgba(255, 255, 255, 0.1)';
+                
+                // Update chart options
+                if (window.researchChart.options.scales.x) {
+                    window.researchChart.options.scales.x.ticks.color = textColor;
+                    window.researchChart.options.scales.x.grid.color = gridColor;
+                }
+                if (window.researchChart.options.scales.y) {
+                    window.researchChart.options.scales.y.ticks.color = textColor;
+                    window.researchChart.options.scales.y.grid.color = gridColor;
+                }
+                if (window.researchChart.options.plugins && window.researchChart.options.plugins.legend) {
+                    window.researchChart.options.plugins.legend.labels.color = textColor;
+                }
+                
+                // Update the chart
+                window.researchChart.update();
+            }
+            
+            // Also try to update any other charts that might exist
+            if (typeof Chart !== 'undefined') {
+                Chart.helpers.each(Chart.instances, function(instance) {
+                    const isLight = theme === 'light';
+                    const textColor = isLight ? '#1e293b' : '#ffffff';
+                    const gridColor = isLight ? 'rgba(67, 97, 238, 0.1)' : 'rgba(255, 255, 255, 0.1)';
+                    
+                    if (instance.options.scales) {
+                        Object.keys(instance.options.scales).forEach(scaleKey => {
+                            if (instance.options.scales[scaleKey].ticks) {
+                                instance.options.scales[scaleKey].ticks.color = textColor;
+                            }
+                            if (instance.options.scales[scaleKey].grid) {
+                                instance.options.scales[scaleKey].grid.color = gridColor;
+                            }
+                        });
+                    }
+                    
+                    if (instance.options.plugins && instance.options.plugins.legend) {
+                        instance.options.plugins.legend.labels.color = textColor;
+                    }
+                    
+                    instance.update();
+                });
+            }
+        }
+        
+        // Call updateChartColors when charts are loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait for charts to be initialized and then update colors
+            setTimeout(() => {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+                updateChartColors(currentTheme);
+            }, 2000);
+        });
+    </script>
+    
+    <!-- Include Global Meeting Notifications -->
+    <?php include 'src/includes/global-meeting-notifications.php'; ?>
+    
+    <!-- Preference Tracking Script -->
+    <script src="assets/js/preference_tracker.js"></script>
+    
+    <?php if (isset($_SESSION['user_id'])): ?>
+    <!-- User is logged in, enable advanced tracking -->
+    <script>
+        document.body.setAttribute('data-user-logged-in', 'true');
+    </script>
+    <?php endif; ?>
 
 <!-- Futuristic Research Guidance FAQ Section -->
 <section id="faq-section" class="faq-section section-padding">
@@ -7675,420 +8183,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-
-    <!-- Native CSS Scroll Snap -->
-    <style>
-        html, body {
-            scroll-behavior: smooth;
-            scroll-snap-type: y mandatory;
-        }
-        .search-section,
-        .neo-hero-section,
-        .for-you-section,
-        .featured-projects,
-        .faculty-spotlight,
-        .events-section,
-        #faq-section,
-        #footer-section {
-            scroll-snap-align: start;
-        }
-
-        /* Ensure snap always stops at each section */
-        .search-section,
-        .neo-hero-section,
-        .for-you-section,
-        .featured-projects,
-        .faculty-spotlight,
-        .events-section,
-        #faq-section,
-        #footer-section {
-            scroll-snap-stop: always;
-        }
-    </style>
-
-    <!-- Enhanced Scroll Snapping & Navigation Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sections = Array.from(document.querySelectorAll('.search-section, .neo-hero-section, .for-you-section, .featured-projects, .faculty-spotlight, .events-section, #faq-section, #footer-section'));
-            const scrollDots = Array.from(document.querySelectorAll('.scroll-dot'));
-            
-            let isScrolling = false;
-            let currentSectionIndex = 0;
-            let scrollTimeout = null;
-            let lastScrollTime = 0;
-            let wheelAccumulator = 0;
-            let isHoveringBulletinBoard = false;
-            
-            // Debounce settings
-            const SCROLL_THRESHOLD = 50; // Minimum wheel delta to trigger scroll
-            const SCROLL_DEBOUNCE = 150; // ms to wait before allowing another scroll
-            const SCROLL_LOCK_TIME = 1000; // ms to lock scrolling during animation
-            
-            function setActiveDot(idx) {
-                scrollDots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
-                currentSectionIndex = idx;
-            }
-
-            function scrollToSection(idx) {
-                if (idx < 0 || idx >= sections.length || idx === currentSectionIndex) return;
-                
-                isScrolling = true;
-                currentSectionIndex = idx;
-                
-                // Clear any existing timeout
-                if (scrollTimeout) {
-                    clearTimeout(scrollTimeout);
-                }
-                
-                // Scroll to section
-                sections[idx].scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-                
-                setActiveDot(idx);
-                
-                // Lock scrolling for animation duration
-                scrollTimeout = setTimeout(() => {
-                    isScrolling = false;
-                    wheelAccumulator = 0; // Reset accumulator
-                }, SCROLL_LOCK_TIME);
-            }
-
-            // Improved section detection using viewport center
-            function getCurrentSectionIndex() {
-                const viewportCenter = window.innerHeight / 2;
-                let closestIndex = 0;
-                let closestDistance = Infinity;
-                
-                sections.forEach((section, index) => {
-                    const rect = section.getBoundingClientRect();
-                    const sectionCenter = rect.top + (rect.height / 2);
-                    const distance = Math.abs(sectionCenter - viewportCenter);
-                    
-                    if (distance < closestDistance) {
-                        closestDistance = distance;
-                        closestIndex = index;
-                    }
-                });
-                
-                return closestIndex;
-            }
-
-            // Enhanced wheel event handler with accumulation and debouncing
-            function handleWheelScroll(e) {
-                // Ignore if modifier keys are pressed
-                if (e.ctrlKey || e.altKey || e.shiftKey) return;
-                
-                // Allow normal scrolling if hovering over bulletin board
-                if (isHoveringBulletinBoard) {
-                    return; // Don't prevent default, allow normal scrolling
-                }
-                
-                // Ignore if currently scrolling
-                if (isScrolling) {
-                    e.preventDefault();
-                    return;
-                }
-                
-                const now = Date.now();
-                
-                // Debounce rapid scroll events
-                if (now - lastScrollTime < SCROLL_DEBOUNCE) {
-                    e.preventDefault();
-                    return;
-                }
-                
-                // Accumulate wheel delta for better sensitivity control
-                wheelAccumulator += e.deltaY;
-                
-                // Only trigger scroll if accumulated delta exceeds threshold
-                if (Math.abs(wheelAccumulator) < SCROLL_THRESHOLD) {
-                    e.preventDefault();
-                    return;
-                }
-                
-                // Determine scroll direction
-                const direction = wheelAccumulator > 0 ? 1 : -1;
-                const targetIndex = currentSectionIndex + direction;
-                
-                // Check if target section exists
-                if (targetIndex >= 0 && targetIndex < sections.length) {
-                    e.preventDefault();
-                    lastScrollTime = now;
-                    wheelAccumulator = 0; // Reset accumulator
-                    scrollToSection(targetIndex);
-                } else {
-                    // Reset accumulator if we can't scroll further
-                    wheelAccumulator = 0;
-                }
-            }
-
-            // Dot click navigation
-            scrollDots.forEach((dot, i) => {
-                dot.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (!isScrolling) {
-                        scrollToSection(i);
-                    }
-                });
-            });
-
-            // Enhanced IntersectionObserver for better section detection
-            const observerOptions = {
-                root: null,
-                rootMargin: '-20% 0px -20% 0px', // Only trigger when section is well within viewport
-                threshold: [0, 0.25, 0.5, 0.75, 1.0]
-            };
-            
-            const observer = new IntersectionObserver((entries) => {
-                if (isScrolling) return; // Don't update during programmatic scrolling
-                
-                let mostVisibleSection = null;
-                let maxVisibility = 0;
-                
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && entry.intersectionRatio > maxVisibility) {
-                        maxVisibility = entry.intersectionRatio;
-                        mostVisibleSection = entry.target;
-                    }
-                });
-                
-                if (mostVisibleSection) {
-                    const idx = sections.indexOf(mostVisibleSection);
-                    if (idx !== -1 && idx !== currentSectionIndex) {
-                        setActiveDot(idx);
-                    }
-                }
-            }, observerOptions);
-
-            // Observe all sections
-            sections.forEach((section) => observer.observe(section));
-
-            // Add wheel event listener
-            window.addEventListener('wheel', handleWheelScroll, { passive: false });
-
-            // Bulletin board hover detection to disable scroll snapping
-            const bulletinBoard = document.querySelector('.bulletin-board-container');
-            if (bulletinBoard) {
-                bulletinBoard.addEventListener('mouseenter', () => {
-                    isHoveringBulletinBoard = true;
-                    // Also disable CSS scroll snap temporarily
-                    document.documentElement.style.scrollSnapType = 'none';
-                });
-                
-                bulletinBoard.addEventListener('mouseleave', () => {
-                    isHoveringBulletinBoard = false;
-                    // Re-enable CSS scroll snap
-                    document.documentElement.style.scrollSnapType = 'y mandatory';
-                });
-            }
-            
-            // Handle keyboard navigation
-            document.addEventListener('keydown', (e) => {
-                if (isScrolling) return;
-                
-                let targetIndex = -1;
-                
-                switch(e.key) {
-                    case 'ArrowDown':
-                    case 'PageDown':
-                        targetIndex = currentSectionIndex + 1;
-                        break;
-                    case 'ArrowUp':
-                    case 'PageUp':
-                        targetIndex = currentSectionIndex - 1;
-                        break;
-                    case 'Home':
-                        targetIndex = 0;
-                        break;
-                    case 'End':
-                        targetIndex = sections.length - 1;
-                        break;
-                }
-                
-                if (targetIndex >= 0 && targetIndex < sections.length && targetIndex !== currentSectionIndex) {
-                    e.preventDefault();
-                    scrollToSection(targetIndex);
-                }
-            });
-            
-            // Handle browser back/forward navigation
-            window.addEventListener('popstate', () => {
-                if (!isScrolling) {
-                    const hash = window.location.hash;
-                    if (hash) {
-                        const targetSection = document.querySelector(hash);
-                        if (targetSection) {
-                            const idx = sections.indexOf(targetSection);
-                            if (idx !== -1) {
-                                scrollToSection(idx);
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Initialize - detect current section on load
-            setTimeout(() => {
-                const initialIndex = getCurrentSectionIndex();
-                setActiveDot(initialIndex);
-            }, 100);
-            
-            // Handle window resize - recalculate current section
-            let resizeTimeout;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(() => {
-                    if (!isScrolling) {
-                        const newIndex = getCurrentSectionIndex();
-                        setActiveDot(newIndex);
-                    }
-                }, 250);
-            });
-        });
-    </script>
-
-    <!-- Ensure the badge is clickable -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const badgeLink = document.querySelector('.neo-badge-link');
-            if (badgeLink) {
-                badgeLink.addEventListener('click', function(e) {
-                    window.location.href = 'Faculty_Page.php';
-                });
-            }
-        });
-    </script>
-
-    <!-- Theme Initialization Script -->
-    <script>
-        // Initialize theme on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check for saved theme preference or default to 'dark'
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            
-            // Add theme transition class to body for smooth transitions
-            document.body.classList.add('theme-transition');
-            
-            // Update any text elements that need theme-specific styling
-            updateThemeSpecificElements(savedTheme);
-        });
-        
-        // Function to update theme-specific elements
-        function updateThemeSpecificElements(theme) {
-            // Update any hardcoded text colors that need to change with theme
-            const textElements = document.querySelectorAll('.text-light, .text-muted');
-            textElements.forEach(element => {
-                if (theme === 'light') {
-                    element.style.color = 'var(--text-primary)';
-                } else {
-                    element.style.color = ''; // Reset to default
-                }
-            });
-            
-            // Update search section text colors
-            const searchTitle = document.querySelector('.search-header h1');
-            const searchSubtitle = document.querySelector('.search-header p');
-            
-            if (searchTitle) {
-                searchTitle.style.color = 'var(--text-primary)';
-            }
-            if (searchSubtitle) {
-                searchSubtitle.style.color = 'var(--text-secondary)';
-            }
-            
-            // Update scroll down text
-            const scrollText = document.querySelector('.scroll-down-text');
-            const scrollArrow = document.querySelector('.scroll-down-arrow');
-            
-            if (scrollText) {
-                scrollText.style.color = 'var(--text-secondary)';
-            }
-            if (scrollArrow) {
-                scrollArrow.style.color = 'var(--text-primary)';
-            }
-        }
-        
-        // Listen for theme changes from navbar toggle
-        document.addEventListener('themeChanged', function(e) {
-            updateThemeSpecificElements(e.detail.theme);
-            updateChartColors(e.detail.theme);
-        });
-        
-        // Function to update Chart.js colors based on theme
-        function updateChartColors(theme) {
-            if (typeof Chart !== 'undefined' && window.researchChart) {
-                const isLight = theme === 'light';
-                const textColor = isLight ? '#1e293b' : '#ffffff';
-                const gridColor = isLight ? 'rgba(67, 97, 238, 0.1)' : 'rgba(255, 255, 255, 0.1)';
-                
-                // Update chart options
-                if (window.researchChart.options.scales.x) {
-                    window.researchChart.options.scales.x.ticks.color = textColor;
-                    window.researchChart.options.scales.x.grid.color = gridColor;
-                }
-                if (window.researchChart.options.scales.y) {
-                    window.researchChart.options.scales.y.ticks.color = textColor;
-                    window.researchChart.options.scales.y.grid.color = gridColor;
-                }
-                if (window.researchChart.options.plugins && window.researchChart.options.plugins.legend) {
-                    window.researchChart.options.plugins.legend.labels.color = textColor;
-                }
-                
-                // Update the chart
-                window.researchChart.update();
-            }
-            
-            // Also try to update any other charts that might exist
-            if (typeof Chart !== 'undefined') {
-                Chart.helpers.each(Chart.instances, function(instance) {
-                    const isLight = theme === 'light';
-                    const textColor = isLight ? '#1e293b' : '#ffffff';
-                    const gridColor = isLight ? 'rgba(67, 97, 238, 0.1)' : 'rgba(255, 255, 255, 0.1)';
-                    
-                    if (instance.options.scales) {
-                        Object.keys(instance.options.scales).forEach(scaleKey => {
-                            if (instance.options.scales[scaleKey].ticks) {
-                                instance.options.scales[scaleKey].ticks.color = textColor;
-                            }
-                            if (instance.options.scales[scaleKey].grid) {
-                                instance.options.scales[scaleKey].grid.color = gridColor;
-                            }
-                        });
-                    }
-                    
-                    if (instance.options.plugins && instance.options.plugins.legend) {
-                        instance.options.plugins.legend.labels.color = textColor;
-                    }
-                    
-                    instance.update();
-                });
-            }
-        }
-        
-        // Call updateChartColors when charts are loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Wait for charts to be initialized and then update colors
-            setTimeout(() => {
-                const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-                updateChartColors(currentTheme);
-            }, 2000);
-        });
-    </script>
-    
-    <!-- Include Global Meeting Notifications -->
-    <?php include 'src/includes/global-meeting-notifications.php'; ?>
-    
-    <!-- Preference Tracking Script -->
-    <script src="assets/js/preference_tracker.js"></script>
-    
-    <?php if (isset($_SESSION['user_id'])): ?>
-    <!-- User is logged in, enable advanced tracking -->
-    <script>
-        document.body.setAttribute('data-user-logged-in', 'true');
-    </script>
-    <?php endif; ?>
-</body>
-</html>

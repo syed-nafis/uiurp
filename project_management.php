@@ -265,7 +265,7 @@ session_start();
         
         .card {
             border-radius: var(--border-radius);
-            overflow: hidden;
+            overflow: visible; /* Changed from hidden to visible to allow dropdowns to show */
             background: var(--glass-bg);
             backdrop-filter: blur(12px);
             box-shadow: var(--shadow-md);
@@ -2896,6 +2896,7 @@ session_start();
         
         .supervisor-search-container {
             position: relative;
+            z-index: 10100; /* Higher z-index for supervisor */
         }
 
         .supervisor-dropdown {
@@ -2909,7 +2910,7 @@ session_start();
             border-radius: var(--border-radius) var(--border-radius) 0 0;
             max-height: 200px;
             overflow-y: auto;
-            z-index: 99999;
+            z-index: 10100; /* Higher z-index for supervisor dropdown */
             display: none;
             box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
         }
@@ -3025,6 +3026,7 @@ session_start();
         
         .student-search-container {
             position: relative;
+            z-index: 10200; /* Higher z-index to appear above supervisor dropdown */
         }
 
         .student-dropdown {
@@ -3038,7 +3040,7 @@ session_start();
             border-radius: var(--border-radius) var(--border-radius) 0 0;
             max-height: 200px;
             overflow-y: auto;
-            z-index: 99999;
+            z-index: 10000; /* Lower z-index than supervisor dropdown */
             display: none;
             box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
         }
@@ -3179,17 +3181,25 @@ session_start();
         }
 
         /* Alternative approach for broader browser support */
-        .card .supervisor-search-container,
+        .card .supervisor-search-container {
+            position: relative;
+            z-index: 10100; /* Higher z-index for supervisor */
+        }
+        
         .card .student-search-container {
             position: relative;
-            z-index: 10000;
+            z-index: 10200; /* Higher z-index to ensure student search appears above supervisor dropdown */
         }
 
         /* Force dropdowns to appear above all subsequent content */
-        .supervisor-dropdown.show,
+        .supervisor-dropdown.show {
+            position: absolute;
+            z-index: 10100 !important;
+        }
+        
         .student-dropdown.show {
             position: absolute;
-            z-index: 999999 !important;
+            z-index: 10200 !important; /* Higher z-index to appear above supervisor when both are visible */
         }
 
         /* Ensure dropdowns don't get clipped by transform contexts */
@@ -4612,28 +4622,14 @@ session_start();
             
             supervisorDropdown.classList.add('show');
             
-            // Force the dropdown to appear above the input by default
-            // Only reposition downward if there's not enough space above
-            const containerRect = document.getElementById('supervisor').getBoundingClientRect();
-            const spaceAbove = containerRect.top;
-            
-            // If there's not enough space above, position it below instead
-            if (spaceAbove < 220) { // 220px accounts for dropdown height + some padding
-                supervisorDropdown.style.bottom = 'auto';
-                supervisorDropdown.style.top = '100%';
-                supervisorDropdown.style.borderRadius = '0 0 var(--border-radius) var(--border-radius)';
-                supervisorDropdown.style.borderTop = 'none';
-                supervisorDropdown.style.borderBottom = '1px solid var(--border)';
-                supervisorDropdown.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-            } else {
-                // Reset to upward positioning (default)
-                supervisorDropdown.style.bottom = '100%';
-                supervisorDropdown.style.top = 'auto';
-                supervisorDropdown.style.borderRadius = 'var(--border-radius) var(--border-radius) 0 0';
-                supervisorDropdown.style.borderTop = '1px solid var(--border)';
-                supervisorDropdown.style.borderBottom = 'none';
-                supervisorDropdown.style.boxShadow = '0 -4px 12px rgba(0, 0, 0, 0.15)';
-            }
+            // Always position the supervisor dropdown above the input field
+            // to prevent overlapping with student search fields below
+            supervisorDropdown.style.bottom = '100%';
+            supervisorDropdown.style.top = 'auto';
+            supervisorDropdown.style.borderRadius = 'var(--border-radius) var(--border-radius) 0 0';
+            supervisorDropdown.style.borderTop = '1px solid var(--border)';
+            supervisorDropdown.style.borderBottom = 'none';
+            supervisorDropdown.style.boxShadow = '0 -4px 12px rgba(0, 0, 0, 0.15)';
         }
         
         function updateHighlight(options) {

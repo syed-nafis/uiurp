@@ -14,6 +14,9 @@ $db = $client->uiurp;
 $studentsCollection = $db->students;
 $facultiesCollection = $db->faculties;
 
+// Import MongoDB BSON classes for ObjectId
+use MongoDB\BSON\ObjectId;
+
 // Helper function to check if a user profile exists and get profile URL
 function getUserProfileInfo($userId, $userType = null) {
     global $studentsCollection, $facultiesCollection;
@@ -308,6 +311,15 @@ function createProfileLink($name, $userId, $userType = null) {
         /* Meetings Container Theme Support */
         #meetings-container {
             transition: all 0.3s ease;
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        #meetings-container::-webkit-scrollbar {
+            display: none;
         }
         
         [data-theme="light"] #meetings-container {
@@ -347,6 +359,11 @@ function createProfileLink($name, $userId, $userType = null) {
         
         [data-theme="light"] #meetings-loading .spinner-border {
             color: #1e40af;
+        }
+        
+        /* Dark mode styles for meetings container */
+        [data-theme="dark"] #meetings-container {
+            background: rgba(31, 41, 55, 0.6);
         }
         
         /* Meeting Modal Styles */
@@ -1921,6 +1938,7 @@ function createProfileLink($name, $userId, $userType = null) {
         .glow-effect {
             position: relative;
             overflow: hidden;
+            margin-top: 0;
         }
         
         .glow-effect::after {
@@ -6289,7 +6307,6 @@ function createProfileLink($name, $userId, $userType = null) {
             -webkit-backdrop-filter: blur(20px);
             padding: var(--spacing-xl);
             margin-bottom: var(--spacing-xl) !important; /* Increased from spacing-lg */
-            margin-top: var(--spacing-xl) !important; /* Added top spacing */
             border-radius: var(--border-radius-lg);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: var(--card-shadow);
@@ -6307,12 +6324,18 @@ function createProfileLink($name, $userId, $userType = null) {
         /* First section should have reduced top margin to avoid too much space from top */
         .metadata-card:first-child,
         .col-lg-4 .card.mb-4:first-child {
-            margin-top: var(--spacing-lg) !important;
+            margin-top: 0 !important;
         }
         
         /* Last section should have additional bottom spacing */
         .col-lg-4 .card.mb-4:last-child {
             margin-bottom: var(--spacing-2xl) !important;
+        }
+        
+        /* Override specifically for Project Information card */
+        .col-lg-4 .metadata-card.mb-4.mt-0 {
+            margin-top: 0 !important;
+            padding-top: var(--spacing-lg);
         }
         
         .metadata-card::before {
@@ -6446,7 +6469,7 @@ function createProfileLink($name, $userId, $userType = null) {
 
     <div class="container my-5">
         <!-- Loading spinner -->
-        <div id="loading-spinner" class="loading-spinner">
+        <div id="loading-spinner">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
@@ -6503,8 +6526,8 @@ function createProfileLink($name, $userId, $userType = null) {
                 </div>
                 
                 <!-- Right column: Metadata and sidebar info -->
-                <div class="col-lg-4">
-                    <div class="metadata-card mb-4" data-aos="fade-left" data-aos-delay="100">
+                <div class="col-lg-4" style="padding-top: 0;">
+                    <div class="metadata-card mb-4 mt-0" style="margin-top: 0 !important;" data-aos="fade-left" data-aos-delay="100">
                         <h4 class="mb-3">Project Information</h4>
                         <div id="project-info">
                             <!-- Project info will be loaded here -->
@@ -6512,7 +6535,7 @@ function createProfileLink($name, $userId, $userType = null) {
                     </div>
                     
                     <!-- Project Meetings Section -->
-                    <div class="card mb-4" data-aos="fade-left" data-aos-delay="150">
+                    <div class="card mb-4" data-aos="fade-left" data-aos-delay="150" id="project-meetings-section">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0 text-white">
                                 <i class="bi bi-calendar-event me-2"></i>Project Meetings
@@ -6521,7 +6544,7 @@ function createProfileLink($name, $userId, $userType = null) {
                                 <i class="bi bi-plus-circle"></i>
                             </button>
                         </div>
-                        <div class="card-body" id="meetings-container">
+                        <div class="card-body" id="meetings-container" style="max-height: 300px; overflow-y: auto;">
                             <div id="meetings-loading" style="display: none;">
                                 <div class="text-center py-3">
                                     <div class="spinner-border spinner-border-sm text-primary" role="status">
@@ -7121,6 +7144,12 @@ function createProfileLink($name, $userId, $userType = null) {
                         
                         editTimelineBtn.style.display = canEditTimeline ? 'inline-flex' : 'none';
                         
+                        // Control visibility of Project Meetings section based on the same edit access
+                        const projectMeetingsSection = document.getElementById('project-meetings-section');
+                        if (projectMeetingsSection) {
+                            projectMeetingsSection.style.display = canEditTimeline ? 'block' : 'none';
+                        }
+                        
                         // Show milestone status dropdowns for supervisors (with slight delay to ensure DOM is ready)
                         setTimeout(() => {
                             checkSupervisorAccess(project, loggedInUserId);
@@ -7395,6 +7424,12 @@ function createProfileLink($name, $userId, $userType = null) {
                     <div>
                         <h1 class="float-animation display-4">${project.title}</h1>
                         <div class="mb-3 d-flex align-items-center mt-3">
+                            <button id="literatureMatrixBtn" class="btn btn-outline-primary me-2" data-project-id="${project._id.$oid}">
+                                <i class="bi bi-journal-text"></i> Literature Matrix
+                            </button>
+                            <button id="paperBtn" class="btn btn-outline-success me-2" data-project-id="${project._id.$oid}">
+                                <i class="bi bi-file-earmark-text"></i> Paper
+                            </button>
                             ${editBtn}
                             ${leaveBtn}
                         </div>
@@ -7534,6 +7569,70 @@ function createProfileLink($name, $userId, $userType = null) {
             
             // Add animation for the title to make it stand out
             animateProjectTitle();
+            
+            // Add event listeners for Literature Matrix button
+            const litMatrixButton = document.getElementById('literatureMatrixBtn');
+            if (litMatrixButton) {
+                litMatrixButton.addEventListener('click', function() {
+                    const projectId = this.getAttribute('data-project-id');
+                    window.location.href = `literature_matrix.php?id=${projectId}`;
+                });
+                litMatrixButton.addEventListener('mousedown', createRipple);
+            }
+
+            // Add event listeners for Paper button
+            const paperButton = document.getElementById('paperBtn');
+            if (paperButton) {
+                paperButton.addEventListener('click', async function() {
+                    const projectId = this.getAttribute('data-project-id');
+                    try {
+                        const response = await fetch('src/model/create_etherpad.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                projectId: projectId
+                            })
+                        });
+
+                        const data = await response.json();
+                        if (data.success) {
+                            // Create modal for Etherpad
+                            const modalHtml = `
+                                <div class="modal fade" id="etherpadModal" tabindex="-1" aria-labelledby="etherpadModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-fullscreen-lg-down">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="etherpadModalLabel">Collaborative Paper Writing</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body p-0">
+                                                <iframe src="${data.embedUrl}" style="width: 100%; height: 80vh; border: none;"></iframe>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            // Add modal to body if it doesn't exist
+                            if (!document.getElementById('etherpadModal')) {
+                                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                            }
+                            
+                            // Show the modal
+                            const modal = new bootstrap.Modal(document.getElementById('etherpadModal'));
+                            modal.show();
+                        } else {
+                            throw new Error(data.message || 'Failed to create paper pad');
+                        }
+                    } catch (error) {
+                        console.error('Error opening paper pad:', error);
+                        alert('Failed to open paper pad. Please try again.');
+                    }
+                });
+                paperButton.addEventListener('mousedown', createRipple);
+            }
         }
         
         function renderProjectAbstract(project) {
@@ -9704,14 +9803,55 @@ function createProfileLink($name, $userId, $userType = null) {
     
     // Initialize meeting functionality
     function initializeMeetingFeature() {
-        // Add event listeners
-        document.getElementById('addMeetingBtn').addEventListener('click', openMeetingModal);
-        document.getElementById('saveMeetingBtn').addEventListener('click', saveMeeting);
+        console.log("Initializing meeting feature, checking access");
         
-
+        // The section visibility is already controlled by the edit access check
+        // We only need to add event listeners if the section is visible
+        const projectMeetingsSection = document.getElementById('project-meetings-section');
+        if (projectMeetingsSection && projectMeetingsSection.style.display !== 'none') {
+            // Add event listeners
+            document.getElementById('addMeetingBtn').addEventListener('click', openMeetingModal);
+            document.getElementById('saveMeetingBtn').addEventListener('click', saveMeeting);
+            
+            // Load existing meetings
+            loadProjectMeetings();
+        }
         
-        // Load existing meetings
-        loadProjectMeetings();
+        /* 
+        // The code below was causing issues - we'll implement proper access later
+        // For now always show meetings section to avoid disrupting functionality
+        
+        // Check if user has edit access to the project
+        let hasEditAccess = false;
+        
+        try {
+            console.log("Checking edit access, currentUserId:", currentUserId);
+            console.log("Project data:", project);
+            
+            // Default to showing the section - safer approach
+            hasEditAccess = true;
+            
+            // Add event listeners only if user has edit access
+            document.getElementById('addMeetingBtn').addEventListener('click', openMeetingModal);
+            document.getElementById('saveMeetingBtn').addEventListener('click', saveMeeting);
+            
+            // Load existing meetings
+            loadProjectMeetings();
+        } catch (error) {
+            console.error('Error checking edit access:', error);
+            // Show meetings section even on error for now
+            const meetingsSection = document.getElementById('project-meetings-section');
+            if (meetingsSection) {
+                meetingsSection.style.display = 'block';
+            }
+            // Add event listeners
+            document.getElementById('addMeetingBtn').addEventListener('click', openMeetingModal);
+            document.getElementById('saveMeetingBtn').addEventListener('click', saveMeeting);
+            
+            // Load existing meetings
+            loadProjectMeetings();
+        }
+        */
     }
     
     // Calendar state
@@ -10234,7 +10374,29 @@ function createProfileLink($name, $userId, $userType = null) {
         const meetingsList = document.getElementById('meetings-list');
         meetingsList.innerHTML = '';
         
-        meetings.forEach(meeting => {
+        // Sort meetings by date, newest first
+        const sortedMeetings = [...meetings].sort((a, b) => {
+            // First compare dates
+            const dateComparison = new Date(b.date) - new Date(a.date);
+            
+            // If same date, compare start times
+            if (dateComparison === 0) {
+                // Convert time strings to comparable values (assuming format like "09:00")
+                const aTime = a.startTime.split(':').map(Number);
+                const bTime = b.startTime.split(':').map(Number);
+                
+                // Compare hours first, then minutes
+                if (bTime[0] !== aTime[0]) {
+                    return bTime[0] - aTime[0];
+                } else {
+                    return bTime[1] - aTime[1];
+                }
+            }
+            
+            return dateComparison;
+        });
+        
+        sortedMeetings.forEach(meeting => {
             const meetingCard = createMeetingCard(meeting);
             meetingsList.appendChild(meetingCard);
         });

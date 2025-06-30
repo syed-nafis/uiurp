@@ -1455,9 +1455,11 @@ function isEventCreator($event) {
                                 <button type="button" class="filter-btn view-calendar-btn ripple me-2" title="View Calendar">
                                     <i class="bi bi-calendar-week"></i>
                                 </button>
+                                <?php if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'faculty'): ?>
                                 <a href="create_event.php" class="create-btn ripple" title="Create New Event">
                                     <i class="bi bi-plus-lg"></i>
                                 </a>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -1645,7 +1647,10 @@ function isEventCreator($event) {
                                             </span>
                                         <?php endif; ?>
                                         
-                                        <a href="#" class="btn-outline ripple">
+                                        <a href="#" 
+                                           class="btn-outline ripple" 
+                                           data-bs-toggle="modal" 
+                                           data-bs-target="#detailsModal<?= $event['_id_string'] ?? $event['_id'] ?>">
                                             <i class="bi bi-info-circle me-2"></i>Details
                                         </a>
                                     </div>
@@ -1706,6 +1711,160 @@ function isEventCreator($event) {
                             <i class="bi bi-trash me-2"></i>Delete Permanently
                         </button>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Details Modal -->
+    <div class="modal fade" id="detailsModal<?= $eventId ?>" tabindex="-1" aria-labelledby="detailsModalLabel<?= $eventId ?>" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background: var(--bg-secondary); border-color: var(--border-glass); border-radius: 15px;">
+                <div class="modal-header" style="border-bottom-color: var(--border-glass); background: var(--bg-primary);">
+                    <h5 class="modal-title" id="detailsModalLabel<?= $eventId ?>" style="color: var(--text-primary);">
+                        <?= htmlspecialchars($event['title']) ?>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                </div>
+                <div class="modal-body" style="color: var(--text-secondary); background: var(--bg-secondary);">
+                    <!-- Event Type and Status -->
+                    <div class="d-flex align-items-center mb-4">
+                        <span class="event-type me-2"><?= htmlspecialchars($event['eventType']) ?></span>
+                        <span class="event-status status-<?= strtolower($event['status']) ?>">
+                            <?= htmlspecialchars($event['status']) ?>
+                        </span>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <h6 class="text-primary mb-2">Description</h6>
+                        <p><?= nl2br(htmlspecialchars($event['description'])) ?></p>
+                    </div>
+
+                    <!-- Event Details -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Event Information</h6>
+                            <div class="event-details">
+                                <div class="event-detail">
+                                    <i class="bi bi-calendar-event"></i>
+                                    <span class="event-detail-text">
+                                        <?= (new DateTime($event['eventDate']))->format('F j, Y') ?>
+                                    </span>
+                                </div>
+                                <div class="event-detail">
+                                    <i class="bi bi-clock"></i>
+                                    <span class="event-detail-text">
+                                        <?= htmlspecialchars($event['startTime']) ?> - <?= htmlspecialchars($event['endTime']) ?>
+                                        <br>(<?= htmlspecialchars($event['timeZone']) ?>)
+                                    </span>
+                                </div>
+                                <div class="event-detail">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <span class="event-detail-text">
+                                        <?php if ($event['location']['type'] === 'Virtual'): ?>
+                                            Virtual Event - <?= htmlspecialchars($event['location']['virtualPlatform'] ?? 'Online Platform') ?>
+                                            <?php if (!empty($event['location']['joinLink'])): ?>
+                                                <br><a href="<?= htmlspecialchars($event['location']['joinLink']) ?>" target="_blank" class="text-primary">Join Link</a>
+                                            <?php endif; ?>
+                                        <?php elseif ($event['location']['type'] === 'Physical'): ?>
+                                            <?= htmlspecialchars($event['location']['room'] ?? 'On Campus') ?>
+                                            <?php if (!empty($event['location']['address'])): ?>
+                                                <br><?= htmlspecialchars($event['location']['address']) ?>
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            Hybrid Event
+                                            <br><?= htmlspecialchars($event['location']['room'] ?? 'Multiple Locations') ?>
+                                        <?php endif; ?>
+                                    </span>
+                                </div>
+                                <div class="event-detail">
+                                    <i class="bi bi-building"></i>
+                                    <span class="event-detail-text">
+                                        <?= htmlspecialchars($event['organizer']) ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Registration Details</h6>
+                            <?php if ($event['registration']['required']): ?>
+                                <div class="event-detail mb-2">
+                                    <i class="bi bi-calendar-check"></i>
+                                    <span class="event-detail-text">Registration Required</span>
+                                </div>
+                                <?php if (!empty($event['registration']['deadline'])): ?>
+                                    <div class="event-detail mb-2">
+                                        <i class="bi bi-calendar-x"></i>
+                                        <span class="event-detail-text">
+                                            Deadline: <?= (new DateTime($event['registration']['deadline']))->format('F j, Y') ?>
+                                        </span>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if (!empty($event['registration']['fee'])): ?>
+                                    <div class="event-detail mb-2">
+                                        <i class="bi bi-cash"></i>
+                                        <span class="event-detail-text">
+                                            Registration Fee: <?= htmlspecialchars($event['registration']['fee']) ?>
+                                        </span>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if (!empty($event['registration']['link'])): ?>
+                                    <div class="mt-3">
+                                        <a href="<?= htmlspecialchars($event['registration']['link']) ?>" 
+                                           target="_blank" 
+                                           class="btn btn-primary btn-sm">
+                                            <i class="bi bi-calendar-plus me-2"></i>Register Now
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <div class="event-detail">
+                                    <i class="bi bi-info-circle"></i>
+                                    <span class="event-detail-text">No registration required</span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- Speakers Section -->
+                    <?php if (!empty($event['speakers'])): ?>
+                        <div class="speakers-section mt-4">
+                            <h6 class="text-primary mb-3">Featured Speakers</h6>
+                            <div class="row">
+                                <?php foreach ($event['speakers'] as $speaker): ?>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="speaker-item">
+                                            <div class="speaker-name"><?= htmlspecialchars($speaker['name']) ?></div>
+                                            <div class="speaker-affiliation"><?= htmlspecialchars($speaker['affiliation']) ?></div>
+                                            <?php if (!empty($speaker['topic'])): ?>
+                                                <div class="speaker-topic"><?= htmlspecialchars($speaker['topic']) ?></div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Additional Information -->
+                    <?php if (!empty($event['additionalInfo'])): ?>
+                        <div class="mt-4">
+                            <h6 class="text-primary mb-2">Additional Information</h6>
+                            <p><?= nl2br(htmlspecialchars($event['additionalInfo'])) ?></p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <div class="modal-footer" style="border-top-color: var(--border-glass); background: var(--bg-primary);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <?php if ($event['registration']['required'] && !empty($event['registration']['link'])): ?>
+                        <a href="<?= htmlspecialchars($event['registration']['link']) ?>" 
+                           target="_blank" 
+                           class="btn btn-primary">
+                            <i class="bi bi-calendar-plus me-2"></i>Register Now
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
