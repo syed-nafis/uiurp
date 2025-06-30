@@ -491,25 +491,26 @@ if (isset($_SESSION['user_id'])) {
 
         [data-theme="light"] .neo-event-card {
             position: relative;
-            background: rgba(30, 41, 59, 0.6);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(67, 97, 238, 0.1);
             overflow: hidden;
             padding: 0;
             height: 100%;
             min-height: 350px; /* Add min-height to maintain consistent sizing */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
             transform-style: preserve-3d;
             z-index: 1; /* Default z-index */
         }
 
         [data-theme="light"] .neo-event-card:hover {
-            box-shadow: 0 15px 40px rgba(247, 37, 133, 0.2);
-            border-color: rgba(247, 37, 133, 0.3);
+            box-shadow: 0 15px 40px rgba(67, 97, 238, 0.15);
+            border-color: rgba(67, 97, 238, 0.3);
             transform: translateY(-10px) scale(1.02);
             z-index: 10; /* Increase z-index on hover to prevent overlapping */
+            background: rgba(255, 255, 255, 1);
         }
 
         /* Modify the event-content to ensure proper spacing */
