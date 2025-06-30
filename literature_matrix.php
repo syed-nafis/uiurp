@@ -61,8 +61,51 @@ $defaultTags = [
     <!-- Include custom CSS for Notion-like design -->
     <style>
         :root {
+            /* Dark Theme (Default) */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --bg-quaternary: #475569;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            
+            /* Notion-like colors for dark theme */
+            --notion-gray: #1e293b;
+            --notion-border: #334155;
+            --notion-white: #0f172a;
+            --notion-text: #f8fafc;
+            --notion-text-muted: #cbd5e1;
+            
+            /* Tag colors for dark theme */
+            --tag-blue: #1e40af;
+            --tag-green: #166534;
+            --tag-purple: #7c3aed;
+            --tag-orange: #ea580c;
+        }
+
+        /* Light Theme Variables */
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --bg-quaternary: #cbd5e1;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            
+            /* Notion-like colors for light theme */
             --notion-gray: #f7f6f3;
             --notion-border: #e3e3e1;
+            --notion-white: #ffffff;
+            --notion-text: #1e293b;
+            --notion-text-muted: #64748b;
+            
+            /* Tag colors for light theme */
             --tag-blue: #deeafd;
             --tag-green: #dbeddb;
             --tag-purple: #e9e3fd;
@@ -70,9 +113,11 @@ $defaultTags = [
         }
 
         body {
-            background-color: #ffffff;
+            background-color: var(--notion-white);
+            color: var(--notion-text);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif;
             padding-top: 60px; /* Add padding for fixed navbar */
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
@@ -90,6 +135,7 @@ $defaultTags = [
             background: var(--notion-gray);
             border-radius: 8px;
             border: 1px solid var(--notion-border);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .tag {
@@ -97,29 +143,47 @@ $defaultTags = [
             border-radius: 4px;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             user-select: none;
             position: relative;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+        }
+
+        /* Dark theme specific styles */
+        :root:not([data-theme="light"]) .tag {
+            color: var(--bg-primary);
+            background: var(--text-secondary);
         }
 
         .tag.selected {
-            background-color: var(--tag-blue) !important;
-            color: #000;
+            color: var(--bg-primary);
+            background: var(--tag-blue);
             font-weight: 500;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        /* Light theme specific styles */
+        [data-theme="light"] .tag.selected {
+            color: var(--text-primary);
+            background: var(--tag-blue);
         }
 
         .tag:hover {
-            opacity: 0.8;
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
 
         .literature-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            background: white;
+            background: var(--notion-white);
             border-radius: 8px;
             overflow: hidden;
             table-layout: fixed; /* Add fixed table layout */
+            transition: background-color 0.3s ease;
         }
 
         .literature-table thead {
@@ -133,12 +197,14 @@ $defaultTags = [
             position: sticky;
             top: 0;
             background: var(--notion-gray);
+            color: var(--notion-text);
             z-index: 2;
             padding: 12px 15px;
             border-bottom: 2px solid var(--notion-border);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
         /* Set specific widths for different columns */
@@ -149,12 +215,14 @@ $defaultTags = [
         }
 
         .literature-table td {
-            background: white;
+            background: var(--notion-white);
+            color: var(--notion-text);
             padding: 12px 15px;
             border: 1px solid var(--notion-border);
             vertical-align: top;
             word-wrap: break-word; /* Allow word wrapping */
             overflow-wrap: break-word;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
         /* Add ellipsis for long filenames */
@@ -170,8 +238,8 @@ $defaultTags = [
             overflow: visible;
             position: relative;
             z-index: 1;
-            background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: var(--notion-white);
+            box-shadow: 0 2px 8px var(--shadow-color);
         }
 
         /* Ensure other columns take up remaining space evenly */
@@ -187,20 +255,102 @@ $defaultTags = [
             background: var(--notion-gray);
             border-radius: 8px;
             border: 1px solid var(--notion-border);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
+        /* Dark theme button styling (default) */
         .btn-notion {
-            background: black;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
+            background: linear-gradient(135deg, var(--tag-blue), var(--tag-purple));
+            color: var(--text-primary);
+            border: 1px solid rgba(76, 201, 240, 0.1);
+            padding: 10px 16px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-notion:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(76, 201, 240, 0.2), rgba(114, 9, 183, 0.2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .btn-notion:hover {
-            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            border-color: rgba(76, 201, 240, 0.3);
+        }
+
+        .btn-notion:hover:before {
+            opacity: 1;
+        }
+
+        .btn-notion:active {
+            transform: translateY(0);
+        }
+
+        .btn-notion:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            background: var(--bg-quaternary);
+            border-color: transparent;
+        }
+
+        .btn-notion:disabled:before {
+            display: none;
+        }
+
+        /* Light theme button styling */
+        [data-theme="light"] .btn-notion {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px var(--shadow-color);
+        }
+
+        [data-theme="light"] .btn-notion:before {
+            background: linear-gradient(135deg, 
+                rgba(59, 130, 246, 0.1), 
+                rgba(147, 51, 234, 0.1)
+            );
+        }
+
+        [data-theme="light"] .btn-notion:hover {
+            background: var(--bg-secondary);
+            border-color: var(--tag-blue);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        [data-theme="light"] .btn-notion:disabled {
+            background: var(--bg-tertiary);
+            border-color: var(--border-color);
+            color: var(--text-muted);
+            box-shadow: none;
+        }
+
+        /* Button with icon */
+        .btn-notion i {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-notion:hover i {
+            transform: translateX(2px);
         }
 
         #fileList {
@@ -212,34 +362,53 @@ $defaultTags = [
             align-items: center;
             justify-content: space-between;
             padding: 0.5rem;
-            background: white;
+            background: var(--notion-white);
+            color: var(--notion-text);
             border-radius: 4px;
             margin-bottom: 0.5rem;
+            border: 1px solid var(--notion-border);
+            transition: all 0.3s ease;
+        }
+
+        .file-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px var(--shadow-color);
         }
 
         .alert {
             padding: 1rem;
             margin-bottom: 1rem;
             border-radius: 4px;
+            transition: all 0.3s ease;
         }
+        
         .alert-info {
             background-color: var(--tag-blue);
-            color: #004085;
+            color: var(--notion-text);
+            border: 1px solid var(--notion-border);
+        }
+
+        .alert-danger {
+            background-color: var(--tag-orange);
+            color: var(--notion-text);
+            border: 1px solid var(--notion-border);
         }
 
         .retry-button {
             background: var(--tag-blue);
+            color: var(--notion-text);
             border: none;
             padding: 4px 8px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 12px;
             margin-left: 8px;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
         }
 
         .retry-button:hover {
-            background: #c5d9fc;
+            opacity: 0.8;
+            transform: translateY(-1px);
         }
 
         .retry-button.loading {
@@ -259,16 +428,16 @@ $defaultTags = [
         }
 
         .delete-file {
-            color: #dc3545;
+            color: var(--tag-orange);
             cursor: pointer;
             padding: 4px;
             border-radius: 4px;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
         }
 
         .delete-file:hover {
-            background-color: #dc3545;
-            color: white;
+            background-color: var(--tag-orange);
+            color: var(--notion-white);
         }
 
         .tag-indicator {
@@ -283,8 +452,8 @@ $defaultTags = [
             display: inline-block;
             width: 1rem;
             height: 1rem;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-left-color: #000;
+            border: 2px solid var(--border-color);
+            border-left-color: var(--text-primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -295,8 +464,9 @@ $defaultTags = [
 
         .last-edit-info {
             font-size: 12px;
-            color: #666;
+            color: var(--notion-text-muted);
             margin-top: 4px;
+            transition: color 0.3s ease;
         }
 
         /* Add loading animation */
@@ -305,18 +475,21 @@ $defaultTags = [
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
+            background: var(--notion-white);
+            color: var(--notion-text);
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            border: 1px solid var(--notion-border);
             z-index: 1000;
             text-align: center;
+            transition: all 0.3s ease;
         }
 
         .progress-bar {
             width: 100%;
             height: 4px;
-            background: #f0f0f0;
+            background: var(--border-color);
             border-radius: 2px;
             margin-top: 10px;
         }
@@ -332,46 +505,74 @@ $defaultTags = [
         .table-responsive {
             overflow-x: auto;
             margin-top: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px var(--shadow-color);
             border-radius: 8px;
             position: relative;
+            transition: box-shadow 0.3s ease;
+        }
+
+        /* Form controls styling */
+        .form-control {
+            background-color: var(--notion-white);
+            color: var(--notion-text);
+            border: 1px solid var(--notion-border);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background-color: var(--notion-white);
+            color: var(--notion-text);
+            border-color: var(--tag-blue);
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+        }
+
+        /* Input group styling */
+        .input-group {
+            transition: all 0.3s ease;
         }
 
         /* Trendy generation overlay */
         .generation-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(30, 144, 255, 0.15); /* blue haze */
+            background: rgba(59, 130, 246, 0.15); /* blue haze */
             z-index: 2000;
             display: none;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(2px);
         }
+        
         .spinner-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: rgba(255,255,255,0.85);
+            background: var(--notion-white);
+            color: var(--notion-text);
             padding: 2rem 3rem;
             border-radius: 18px;
-            box-shadow: 0 8px 32px rgba(30,144,255,0.15);
+            box-shadow: 0 8px 32px var(--shadow-color);
+            border: 1px solid var(--notion-border);
+            transition: all 0.3s ease;
         }
+        
         .trendy-spinner {
             width: 3rem;
             height: 3rem;
-            border: 4px solid #b3d8fd;
-            border-top: 4px solid #1e90ff;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--tag-blue);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 1rem;
         }
+        
         .spinner-text {
             font-size: 1.2rem;
-            color: #1e90ff;
+            color: var(--tag-blue);
             font-weight: 500;
             letter-spacing: 0.03em;
         }
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -381,41 +582,41 @@ $defaultTags = [
             align-items: center;
             gap: 1rem;
         }
+        
         .spinner-inline {
             width: 1.5rem;
             height: 1.5rem;
-            border: 3px solid #b3d8fd;
-            border-top: 3px solid #1e90ff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        .spinner-inline-text {
-            font-size: 1.1rem;
-            color: #1e90ff;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-        }
-        .file-item.generating {
-            background: #e6f2ff !important;
-            box-shadow: 0 2px 8px rgba(30,144,255,0.06);
-        }
-        .spinner-inline {
-            width: 1.5rem;
-            height: 1.5rem;
-            border: 3px solid #b3d8fd;
-            border-top: 3px solid #1e90ff;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--tag-blue);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-right: 0.5rem;
         }
+        
         .spinner-inline-text {
             font-size: 1.1rem;
-            color: #1e90ff;
+            color: var(--tag-blue);
             font-weight: 500;
             letter-spacing: 0.02em;
         }
+        
+        .file-item.generating {
+            background: var(--tag-blue) !important;
+            color: var(--notion-text);
+            box-shadow: 0 2px 8px var(--shadow-color);
+            opacity: 0.9;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    
+    <!-- Theme initialization script - Prevent flash of unstyled content -->
+    <script>
+        (function() {
+            // Get saved theme immediately to prevent flash
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
 </head>
 <body>
     <?php include 'src/includes/navbar.php'; ?>
@@ -1009,6 +1210,13 @@ Text: ${text}`;
                 selectedTags.add(tagName);
             });
             init();
+            
+            // Listen for theme changes from navbar
+            document.addEventListener('themeChanged', function(event) {
+                // Theme change is already handled by CSS variables
+                // We can add any additional logic here if needed
+                console.log('Theme changed to:', event.detail.theme);
+            });
         };
     </script>
 </body>

@@ -1455,9 +1455,11 @@ function isEventCreator($event) {
                                 <button type="button" class="filter-btn view-calendar-btn ripple me-2" title="View Calendar">
                                     <i class="bi bi-calendar-week"></i>
                                 </button>
+                                <?php if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'faculty'): ?>
                                 <a href="create_event.php" class="create-btn ripple" title="Create New Event">
                                     <i class="bi bi-plus-lg"></i>
                                 </a>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

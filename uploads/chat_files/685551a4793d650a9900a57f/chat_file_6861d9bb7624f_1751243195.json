@@ -1,0 +1,319 @@
+[{
+  "_id": {
+    "$oid": "683c3d9cb6e015ebef6f82f4"
+  },
+  "username": "iabedeen",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685efb55060ea6c5d8a0f162"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f82f6"
+  },
+  "username": "mshibly",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685efbd7060ea6c5d8a0f163"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f82f7"
+  },
+  "username": "razim",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685eff78060ea6c5d8a0f164"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f82f8"
+  },
+  "username": "kmamun",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685effe9060ea6c5d8a0f165"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f82f9"
+  },
+  "username": "dfarid",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f0012060ea6c5d8a0f166"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f82fa"
+  },
+  "username": "ntithi",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "67e19bd7ebb89e49e04ddf26"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f82fb"
+  },
+  "username": "fhafiz",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f004f060ea6c5d8a0f167"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f82fc"
+  },
+  "username": "mbashir",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f0077060ea6c5d8a0f168"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f82fd"
+  },
+  "username": "sahmmed",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f0191060ea6c5d8a0f16a"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f82fe"
+  },
+  "username": "mhuda",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f05b0060ea6c5d8a0f16d"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f82ff"
+  },
+  "username": "nsworna",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f0611060ea6c5d8a0f16e"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f8300"
+  },
+  "username": "maislam",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f0657060ea6c5d8a0f16f"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f8301"
+  },
+  "username": "nhossain",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f067e060ea6c5d8a0f170"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f8302"
+  },
+  "username": "kjahangir",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f06c7060ea6c5d8a0f171"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f8303"
+  },
+  "username": "mislam",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f0706060ea6c5d8a0f172"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f8304"
+  },
+  "username": "mmislam",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "67e1ac09ebb89e49e04ddf37"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f8305"
+  },
+  "username": "apathan",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f0786060ea6c5d8a0f174"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f8306"
+  },
+  "username": "arodela",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f07d9060ea6c5d8a0f175"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f8307"
+  },
+  "username": "sislam",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f0801060ea6c5d8a0f176"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f8308"
+  },
+  "username": "nkabir",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685f08bf060ea6c5d8a0f177"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f8309"
+  },
+  "username": "0122410005",
+  "password": "12345",
+  "type": "student",
+  "id": {
+    "$oid": "6656d4b4f7e5b8c9a0a1b2c5"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f830a"
+  },
+  "username": "0112330022",
+  "password": "12345",
+  "type": "student",
+  "id": {
+    "$oid": "6656d4b4f7e5b8c9a0a1b2c8"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f830b"
+  },
+  "username": "0212410030",
+  "password": "12345",
+  "type": "student",
+  "id": {
+    "$oid": "6656d4b4f7e5b8c9a0a1b2c9"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f830c"
+  },
+  "username": "0312410007",
+  "password": "12345",
+  "type": "student",
+  "id": {
+    "$oid": "6656d4b4f7e5b8c9a0a1b2cb"
+  }
+},
+{
+  "_id": {
+    "$oid": "683c3d9db6e015ebef6f830d"
+  },
+  "username": "011222150",
+  "password": "12345",
+  "type": "student",
+  "id": {
+    "$oid": "6833436be5c16779b409aa42"
+  }
+},
+{
+  "_id": {
+    "$oid": "683ca39ca31eb83e71398fb0"
+  },
+  "username": "nahid",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "67e1a65bebb89e49e04ddf31"
+  }
+},
+{
+  "_id": {
+    "$oid": "684b049edbf33ef9b6553fa7"
+  },
+  "username": "sshoib",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "67e1a592ebb89e49e04ddf2f"
+  }
+},
+{
+  "_id": {
+    "$oid": "685eebb2060ea6c5d8a0f15b"
+  },
+  "username": "sherajularifin",
+  "password": "12345",
+  "type": "faculty",
+  "id": {
+    "$oid": "685eedd4060ea6c5d8a0f15f"
+  }
+},
+{
+  "_id": {
+    "$oid": "6860371a9e918ebf3527edeb"
+  },
+  "username": "011221473",
+  "password": "12345",
+  "type": "student",
+  "id": {
+    "$oid": "68602d859e918ebf3527ede3"
+  }
+}]
