@@ -13,18 +13,34 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     exit;
 }
 
-// Get JSON data
-$json = file_get_contents('php://input');
-$data = json_decode($json, true);
+// Check for both JSON and POST data
+$data = [];
+if (!empty($_POST)) {
+    // Regular form submission
+    $data = $_POST;
+} else {
+    // JSON API request
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true) ?: [];
+}
+
+// Normalize field names - allow both post_id and postId
+$postId = $data['postId'] ?? $data['post_id'] ?? null;
+
+// Get comment identifier - could be either an index or ID
+$commentId = $data['comment_id'] ?? null;
+$commentIndex = isset($data['commentIndex']) || isset($data['comment_index']) 
+    ? (int)($data['commentIndex'] ?? $data['comment_index']) 
+    : null;
 
 // Validate input
-if (!isset($data['postId']) || empty($data['postId'])) {
+if (empty($postId)) {
     echo json_encode(['success' => false, 'message' => 'Post ID is required']);
     exit;
 }
 
-if (!isset($data['commentIndex']) && $data['commentIndex'] !== 0) {
-    echo json_encode(['success' => false, 'message' => 'Comment index is required']);
+if ($commentIndex === null && empty($commentId)) {
+    echo json_encode(['success' => false, 'message' => 'Comment identifier is required']);
     exit;
 }
 
@@ -35,21 +51,21 @@ try {
     $forumPostsCollection = $db->forum_posts;
     
     // Try to convert the ID to ObjectId
-    $postId = null;
+    $postIdObj = null;
     try {
-        $postId = new ObjectId($data['postId']);
+        $postIdObj = new ObjectId($postId);
     } catch (Exception $e) {
         // If the ID is not a valid ObjectId, keep it as is (it might be a string ID)
-        $postId = $data['postId'];
+        $postIdObj = $postId;
     }
     
     // Find post
-    $post = $forumPostsCollection->findOne(['_id' => $postId]);
+    $post = $forumPostsCollection->findOne(['_id' => $postIdObj]);
     
     // If post doesn't exist in forum_posts, try the old forum collection
     if (!$post) {
         $forumCollection = $db->forum;
-        $post = $forumCollection->findOne(['_id' => $postId]);
+        $post = $forumCollection->findOne(['_id' => $postIdObj]);
         
         if (!$post) {
             echo json_encode(['success' => false, 'message' => 'Post not found']);
@@ -62,17 +78,33 @@ try {
         $collection = $forumPostsCollection;
     }
     
-    // Verify the user owns the comment or is an admin
-    $commentIndex = (int) $data['commentIndex'];
-    if (!isset($post['comments'][$commentIndex])) {
-        echo json_encode(['success' => false, 'message' => 'Comment not found']);
-        exit;
-    }
-    
     // Convert BSON array to PHP array if needed
     $comments = $post['comments'];
     if ($comments instanceof MongoDB\Model\BSONArray) {
         $comments = $comments->getArrayCopy();
+    }
+    
+    // Find the comment by ID if provided, or use index directly
+    if (!empty($commentId) && $commentIndex === null) {
+        // Find comment by ID
+        $commentIndex = -1;
+        foreach ($comments as $index => $comment) {
+            if (isset($comment['_id']) && (string)$comment['_id'] === (string)$commentId) {
+                $commentIndex = $index;
+                break;
+            }
+        }
+        
+        if ($commentIndex === -1) {
+            echo json_encode(['success' => false, 'message' => 'Comment not found']);
+            exit;
+        }
+    }
+    
+    // Verify the comment exists
+    if (!isset($comments[$commentIndex])) {
+        echo json_encode(['success' => false, 'message' => 'Comment not found']);
+        exit;
     }
     
     $comment = $comments[$commentIndex];
@@ -88,24 +120,45 @@ try {
     array_splice($comments, $commentIndex, 1);
     
     $result = $collection->updateOne(
-        ['_id' => $postId],
+        ['_id' => $postIdObj],
         ['$set' => ['comments' => $comments]]
     );
     
     if ($result->getModifiedCount() > 0) {
-        echo json_encode([
-            'success' => true,
-            'message' => 'Comment deleted successfully'
-        ]);
+        // Check if this was a form submission or API call
+        if (!empty($_POST)) {
+            // Redirect back to post details page
+            $_SESSION['success'] = 'Comment deleted successfully';
+            header('Location: ../../post_details.php?id=' . $postId);
+            exit;
+        } else {
+            // Return JSON for API calls
+            echo json_encode([
+                'success' => true,
+                'message' => 'Comment deleted successfully'
+            ]);
+        }
+    } else {
+        if (!empty($_POST)) {
+            $_SESSION['error'] = 'Failed to delete comment';
+            header('Location: ../../post_details.php?id=' . $postId);
+            exit;
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Failed to delete comment'
+            ]);
+        }
+    }
+} catch (Exception $e) {
+    if (!empty($_POST)) {
+        $_SESSION['error'] = 'Error: ' . $e->getMessage();
+        header('Location: ../../post_details.php?id=' . $postId);
+        exit;
     } else {
         echo json_encode([
             'success' => false,
-            'message' => 'Failed to delete comment'
+            'message' => $e->getMessage()
         ]);
     }
-} catch (Exception $e) {
-    echo json_encode([
-        'success' => false,
-        'message' => $e->getMessage()
-    ]);
 } 
