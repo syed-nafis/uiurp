@@ -158,20 +158,7 @@ include_once(__DIR__ . '/debug_overlay.php');
                                     </div>
                                 </div>
                                 
-                                <!-- Debug Overlay Toggle -->
-                                <div class="dropdown-theme-toggle">
-                                    <span class="theme-label"><i class="bi bi-bug-fill me-2"></i>Debug Overlay</span>
-                                    <div class="theme-toggle-container">
-                                        <button class="theme-toggle debug-toggle" id="debugOverlayToggle" aria-label="Toggle debug overlay">
-                                            <div class="toggle-track">
-                                                <div class="toggle-thumb">
-                                                    <i class="bi bi-toggle-on"></i>
-                                                    <i class="bi bi-toggle-off"></i>
-                                                </div>
-                                            </div>
-                                        </button>
-                                    </div>
-                                </div>
+                                
                                 
                                 <div class="menu-divider"></div>
                                 <a href="<?= $base_path ?>logout.php" class="menu-item logout">
