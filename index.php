@@ -4584,6 +4584,41 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                 </div>
+                
+                <!-- Project Item 4 - Medical -->
+                <div class="col-md-6 col-lg-4 project-item" data-category="medical" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+                    <div class="futuristic-card">
+                        <div class="card-glow"></div>
+                        <div class="card-badge medical">Medical</div>
+                        <div class="card-img-container">
+                            <img src="assets/resources/research_picture/pub_4.jpg" class="card-img-top" alt="Medical Research">
+                            <div class="card-img-overlay">
+                                <div class="view-project-wrapper">
+                                    <span class="view-project"><i class="bi bi-eye"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-tags">
+                                <span>AI Diagnostics</span>
+                                <span>Medical Imaging</span>
+                            </div>
+                            <h5 class="card-title">Deep Learning for Medical Image Segmentation</h5>
+                            <p class="card-text">Applying convolutional neural networks to segment medical images and identify critical regions like tumors in MRI scans.</p>
+                            <div class="card-meta">
+                                <span><i class="bi bi-person"></i> Dr. Amina Rahman</span>
+                                <span><i class="bi bi-calendar"></i> 2023</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="Project_details.php?id=4" class="card-link">
+                                <span>View Details</span>
+                                <i class="bi bi-arrow-right"></i>
+                                <span class="link-hover-effect"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <!-- More projects button -->
