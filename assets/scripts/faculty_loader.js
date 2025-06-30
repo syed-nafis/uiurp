@@ -10,6 +10,13 @@ document.addEventListener('DOMContentLoaded', function () {
     let allFaculty = [];
     let currentFilter = 'all';
     let currentSort = 'default';
+    let currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+
+    // Theme change listener
+    document.addEventListener('themeChanged', function(e) {
+        currentTheme = e.detail ? e.detail.theme : document.documentElement.getAttribute('data-theme');
+        updateDisplay(); // Re-render faculty cards with new theme
+    });
 
     function renderFaculty(facultyData) {
         facultyList.innerHTML = '';
@@ -100,8 +107,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             });
             
+            // Add hover effects that respect the theme
+            addThemeAwareHoverEffects();
+            
             console.log('Faculty Loader: Enhanced click tracking enabled for', facultyCards.length, 'faculty cards');
         }, 500);
+    }
+
+    // Add hover effects that respect the current theme
+    function addThemeAwareHoverEffects() {
+        const facultyCards = document.querySelectorAll('.neo-faculty-card');
+        facultyCards.forEach(card => {
+            // Add mouseover and mouseout effects
+            card.addEventListener('mouseover', function() {
+                const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+                if (theme === 'light') {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 8px 32px rgba(67, 97, 238, 0.12)';
+                } else {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.25)';
+                }
+            });
+            
+            card.addEventListener('mouseout', function() {
+                this.style.transform = '';
+                this.style.boxShadow = '';
+            });
+        });
     }
     
     function sortFaculty(facultyData, sortType) {
@@ -242,4 +275,13 @@ document.addEventListener('DOMContentLoaded', function () {
             updateDisplay();
         });
     }
+    
+    // Listen for theme changes from storage events (cross-tab sync)
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'theme') {
+            currentTheme = e.newValue || 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            updateDisplay();
+        }
+    });
 });

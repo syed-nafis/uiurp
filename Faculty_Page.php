@@ -50,6 +50,29 @@ session_start();
             --text-muted: rgba(255, 255, 255, 0.5);
         }
         
+        /* Light Theme Variables */
+        [data-theme="light"] {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --light-color: #ffffff;
+            --dark-color: #1e293b;
+            --success-color: #06b6d4;
+            --warning-color: #f59e0b;
+            --modern-blue: #0ea5e9;
+            --modern-purple: #8b5cf6;
+            --modern-teal: #14b8a6;
+            --modern-gray: #6b7280;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --border-glow: rgba(37, 99, 235, 0.3);
+            --surface-1: rgba(248, 250, 252, 0.9);
+            --surface-2: rgba(255, 255, 255, 0.95);
+            --text-primary: #1e293b;
+            --text-secondary: rgba(30, 41, 59, 0.7);
+            --text-muted: rgba(30, 41, 59, 0.5);
+        }
+        
         * {
             box-sizing: border-box;
         }
@@ -62,8 +85,15 @@ session_start();
             position: relative;
             min-height: 100vh;
             scroll-behavior: smooth;
+            transition: background 0.4s ease-in-out, color 0.4s ease-in-out;
         }
         
+        /* Light Theme Background */
+        [data-theme="light"] body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+        }
+        
+
         /* Enhanced Background Effects */
         .background-effects {
             position: fixed;
@@ -292,49 +322,6 @@ session_start();
                         rgba(30, 41, 59, 0.3) 100%);
             z-index: 2;
             transition: all 0.3s ease;
-        }
-        
-        /* Light theme overrides */
-        [data-theme="light"] .neo-faculty-card {
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid rgba(67, 97, 238, 0.1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        [data-theme="light"] .neo-faculty-card:hover {
-            background: rgba(255, 255, 255, 0.98);
-            border-color: rgba(67, 97, 238, 0.2);
-            box-shadow: 0 8px 32px rgba(67, 97, 238, 0.12);
-        }
-
-        [data-theme="light"] .faculty-name {
-            color: var(--text-primary);
-        }
-
-        [data-theme="light"] .faculty-position {
-            color: var(--text-secondary);
-        }
-
-        [data-theme="light"] .faculty-quote {
-            background: rgba(248, 250, 252, 0.8);
-            border-left: 3px solid rgba(67, 97, 238, 0.3);
-            color: var(--text-secondary);
-        }
-
-        [data-theme="light"] .faculty-info {
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        [data-theme="light"] .faculty-specialty-badge {
-            background: rgba(67, 97, 238, 0.1);
-            border: 1px solid rgba(67, 97, 238, 0.2);
-            color: var(--neo-primary);
-        }
-
-        [data-theme="light"] .neo-faculty-card:hover .faculty-specialty-badge {
-            background: rgba(67, 97, 238, 0.15);
-            border-color: rgba(67, 97, 238, 0.3);
-            box-shadow: 0 4px 16px rgba(67, 97, 238, 0.2);
         }
         
         /* Enhanced Hero Section with Dynamic Background */
@@ -842,6 +829,88 @@ session_start();
                 font-size: 0.8rem;
             }
         }
+
+        /* Light theme overrides */
+        [data-theme="light"] .neo-faculty-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(67, 97, 238, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .neo-faculty-card:hover {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(67, 97, 238, 0.2);
+            box-shadow: 0 8px 32px rgba(67, 97, 238, 0.12);
+        }
+
+        [data-theme="light"] .faculty-name {
+            color: var(--text-primary);
+        }
+
+        [data-theme="light"] .faculty-position {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .faculty-quote {
+            background: rgba(248, 250, 252, 0.8);
+            border-left: 3px solid rgba(67, 97, 238, 0.3);
+            color: var(--text-secondary);
+        }
+
+        [data-theme="light"] .faculty-info {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        [data-theme="light"] .faculty-specialty-badge {
+            background: rgba(67, 97, 238, 0.1);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+            color: var(--neo-primary);
+        }
+
+        [data-theme="light"] .neo-faculty-card:hover .faculty-specialty-badge {
+            background: rgba(67, 97, 238, 0.15);
+            border-color: rgba(67, 97, 238, 0.3);
+            box-shadow: 0 4px 16px rgba(67, 97, 238, 0.2);
+        }
+        
+        /* Additional theme-specific styles */
+        [data-theme="light"] .hero-section {
+            background: linear-gradient(135deg, 
+                rgba(248, 250, 252, 0.95) 0%, 
+                rgba(226, 232, 240, 0.9) 50%,
+                rgba(56, 189, 248, 0.8) 100%);
+        }
+        
+        [data-theme="light"] .overlay {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.8) 0%, 
+                rgba(240, 249, 255, 0.9) 100%);
+            border: 1px solid rgba(37, 99, 235, 0.15);
+            color: var(--text-primary);
+        }
+        
+        [data-theme="light"] .search-box-compact {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+        
+        [data-theme="light"] .search-input-compact {
+            color: var(--text-primary);
+        }
+        
+        [data-theme="light"] .search-input-compact::placeholder {
+            color: var(--text-muted);
+        }
+        
+        [data-theme="light"] .cyber-grid {
+            background-image: 
+                linear-gradient(to right, rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+        }
+        
+        [data-theme="light"] .floating-orb {
+            opacity: 0.2;
+        }
     </style>
 </head>
   <body class="faculty-page">
@@ -854,6 +923,7 @@ session_start();
           <div class="floating-orb orb-2"></div>
           <div class="floating-orb orb-3"></div>
       </div>
+      
       
       <!-- Enhanced Particles -->
       <div id="particles-js"></div>
@@ -945,6 +1015,9 @@ session_start();
           
           // Initialize ripple effects
           initializeRippleEffects();
+          
+          // Initialize floating theme toggle
+          initializeFloatingThemeToggle();
       });
 
       function initializeEnhancedParticles() {
@@ -1360,11 +1433,64 @@ session_start();
           });
       }
 
+      // Initialize floating theme toggle button
+      function initializeFloatingThemeToggle() {
+          const themeToggleBtn = document.getElementById('floatingThemeToggle');
+          
+          if (themeToggleBtn) {
+              // Set initial state
+              updateThemeToggleAppearance();
+              
+              // Add click event
+              themeToggleBtn.addEventListener('click', function() {
+                  const currentTheme = document.documentElement.getAttribute('data-theme');
+                  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                  
+                  // Save theme to localStorage
+                  localStorage.setItem('theme', newTheme);
+                  
+                  // Update document attribute
+                  document.documentElement.setAttribute('data-theme', newTheme);
+                  
+                  // Update toggle appearance
+                  updateThemeToggleAppearance();
+                  
+                  // Notify other components about theme change
+                  document.dispatchEvent(new CustomEvent('themeChanged', { 
+                      detail: { theme: newTheme } 
+                  }));
+                  
+                  // Add transition effect
+                  this.classList.add('clicked');
+                  setTimeout(() => {
+                      this.classList.remove('clicked');
+                  }, 400);
+              });
+          }
+      }
+      
+      function updateThemeToggleAppearance() {
+          const themeToggleBtn = document.getElementById('floatingThemeToggle');
+          if (!themeToggleBtn) return;
+          
+          const currentTheme = document.documentElement.getAttribute('data-theme');
+          
+          if (currentTheme === 'light') {
+              themeToggleBtn.classList.add('light-mode');
+          } else {
+              themeToggleBtn.classList.remove('light-mode');
+          }
+      }
+
       // Listen for theme changes from other pages/tabs
       window.addEventListener('storage', function(e) {
           if (e.key === 'theme') {
               const newTheme = e.newValue || 'dark';
               document.documentElement.setAttribute('data-theme', newTheme);
+              
+              // Update toggle appearance
+              updateThemeToggleAppearance();
+              
               // Reinitialize particles with new theme
               initializeEnhancedParticles();
           }
