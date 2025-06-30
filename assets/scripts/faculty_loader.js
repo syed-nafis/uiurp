@@ -3,12 +3,18 @@
 document.addEventListener('DOMContentLoaded', function () {
     const facultyList = document.getElementById('facultyList');
     const facultySearch = document.getElementById('facultySearch');
+    const toggleAlphabetical = document.getElementById('toggle-alphabetical');
+    const toggleDepartment = document.getElementById('toggle-department');
+    const toggleAllFaculty = document.getElementById('toggle-all-faculty');
+    
     let allFaculty = [];
+    let currentFilter = 'all';
+    let currentSort = 'default';
 
     function renderFaculty(facultyData) {
         facultyList.innerHTML = '';
         if (facultyData.length === 0) {
-            facultyList.innerHTML = '<p class="text-center">No faculty members found.</p>';
+            facultyList.innerHTML = '<p class="text-center text-muted">No faculty members found matching your criteria.</p>';
             return;
         }
         
@@ -29,13 +35,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 specialty = 'Research Faculty';
             }
             
+            // Get department or default
+            const department = faculty.department || 'General';
+            const position = faculty.position || 'Faculty Member';
+            
             // Prepare tracking metadata
             const trackingData = {
                 title: faculty.name,
                 specialty: specialty,
                 bio: shortBio,
+                department: department,
                 researchInterests: faculty.interested_fields_of_research || [],
-                tags: [specialty, 'Faculty'].concat(faculty.interested_fields_of_research || []).filter(Boolean)
+                tags: [specialty, 'Faculty', department].concat(faculty.interested_fields_of_research || []).filter(Boolean)
             };
             
             const facultyCard = `
@@ -44,6 +55,8 @@ document.addEventListener('DOMContentLoaded', function () {
                          data-faculty-id="${faculty._id}" 
                          data-item-type="faculty" 
                          data-item-id="${faculty._id}"
+                         data-department="${department}"
+                         data-specialty="${specialty}"
                          data-tracking-metadata='${JSON.stringify(trackingData).replace(/'/g, "&apos;").replace(/"/g, "&quot;")}'
                          style="cursor: pointer;">
                         <div class="card-border"></div>
@@ -53,13 +66,13 @@ document.addEventListener('DOMContentLoaded', function () {
                                      onload="handleImageLoad(${index})" onerror="handleImageError(${index})">
                                 <div class="img-overlay"></div>
                             </div>
-                            <div class="faculty-specialty-badge">
-                                <span>${specialty}</span>
-                            </div>
                         </div>
                         <div class="faculty-info">
                             <h4 class="faculty-name">${faculty.name}</h4>
-                            <p class="faculty-position">Faculty Member</p>
+                            <p class="faculty-position">${position}</p>
+                            <p class="faculty-department text-muted small">
+                                <i class="fas fa-building me-1"></i>${department}
+                            </p>
                             <div class="faculty-quote">
                                 <q>${shortBio}</q>
                             </div>
@@ -91,6 +104,83 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 500);
     }
     
+    function sortFaculty(facultyData, sortType) {
+        const sortedData = [...facultyData];
+        
+        switch (sortType) {
+            case 'alphabetical':
+                return sortedData.sort((a, b) => a.name.localeCompare(b.name));
+            case 'department':
+                return sortedData.sort((a, b) => {
+                    const deptA = a.department || 'General';
+                    const deptB = b.department || 'General';
+                    if (deptA === deptB) {
+                        return a.name.localeCompare(b.name);
+                    }
+                    return deptA.localeCompare(deptB);
+                });
+            default:
+                return sortedData;
+        }
+    }
+    
+    function filterFaculty(query = '') {
+        let filteredData = [...allFaculty];
+        
+        // Apply text search if query provided
+        if (query.trim()) {
+            const searchQuery = query.toLowerCase();
+            filteredData = filteredData.filter(faculty => {
+                const name = faculty.name.toLowerCase();
+                const bio = (faculty.bio || '').toLowerCase();
+                const department = (faculty.department || '').toLowerCase();
+                const position = (faculty.position || '').toLowerCase();
+                const researchFields = (faculty.interested_fields_of_research || [])
+                    .join(' ').toLowerCase();
+                
+                return name.includes(searchQuery) ||
+                       bio.includes(searchQuery) ||
+                       department.includes(searchQuery) ||
+                       position.includes(searchQuery) ||
+                       researchFields.includes(searchQuery);
+            });
+        }
+        
+        // Apply sorting
+        const sortedData = sortFaculty(filteredData, currentSort);
+        
+        return sortedData;
+    }
+    
+    function updateDisplay() {
+        const query = facultySearch ? facultySearch.value : '';
+        const filteredData = filterFaculty(query);
+        renderFaculty(filteredData);
+        
+        // Update button states
+        updateButtonStates();
+    }
+    
+    function updateButtonStates() {
+        // Remove active class from all buttons
+        [toggleAlphabetical, toggleDepartment, toggleAllFaculty].forEach(btn => {
+            if (btn) btn.classList.remove('active');
+        });
+        
+        // Add active class to current sort button
+        switch (currentSort) {
+            case 'alphabetical':
+                if (toggleAlphabetical) toggleAlphabetical.classList.add('active');
+                break;
+            case 'department':
+                if (toggleDepartment) toggleDepartment.classList.add('active');
+                break;
+            default:
+                if (toggleAllFaculty) toggleAllFaculty.classList.add('active');
+                break;
+        }
+    }
+    
     // Image loading handlers
     window.handleImageLoad = function(index) {
         const container = document.getElementById(`img-container-${index}`);
@@ -110,11 +200,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    // Load faculty data
     fetch('src/model/load_faculty.php')
         .then(response => response.json())
         .then(data => {
             allFaculty = data;
-            renderFaculty(allFaculty);
+            updateDisplay();
         })
         .catch(error => {
             if (facultyList) {
@@ -123,13 +214,32 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error loading faculty data:', error);
         });
 
+    // Event listeners
     if (facultySearch) {
         facultySearch.addEventListener('input', function () {
-            const query = this.value.toLowerCase();
-            const filteredFaculty = allFaculty.filter(faculty => {
-                return faculty.name.toLowerCase().includes(query);
-            });
-            renderFaculty(filteredFaculty);
+            updateDisplay();
+        });
+    }
+    
+    if (toggleAlphabetical) {
+        toggleAlphabetical.addEventListener('click', function() {
+            currentSort = currentSort === 'alphabetical' ? 'default' : 'alphabetical';
+            updateDisplay();
+        });
+    }
+    
+    if (toggleDepartment) {
+        toggleDepartment.addEventListener('click', function() {
+            currentSort = currentSort === 'department' ? 'default' : 'department';
+            updateDisplay();
+        });
+    }
+    
+    if (toggleAllFaculty) {
+        toggleAllFaculty.addEventListener('click', function() {
+            currentSort = 'default';
+            if (facultySearch) facultySearch.value = '';
+            updateDisplay();
         });
     }
 });
