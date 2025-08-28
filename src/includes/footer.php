@@ -60,7 +60,6 @@
                     <li><a href="#faq">FAQ</a></li>
                     <li><a href="#support">Support</a></li>
                     <li><a href="#privacy">Privacy Policy</a></li>
-                    <li><a href="src/model/debug_mongodb.php">Debug</a></li>
                 </ul>
             </div>
         </div>

@@ -10,8 +10,6 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
 // Initialize global preference tracking
 require_once __DIR__ . '/global-preference-tracker.php';
 
-// Add debug overlay after the navbar
-include_once(__DIR__ . '/debug_overlay.php');
 ?>
 
 <!-- Modern Navbar with Fluid Animations -->
