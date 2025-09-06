@@ -169,7 +169,7 @@ require_once __DIR__ . '/global-preference-tracker.php';
                     </div>
                 <?php else: ?>
                     <a href="<?= $base_path ?>login.php" class="neo-login-button">
-                        <span class="button-content">Login</span>
+                        <span class="button-content">Signup</span>
                         <span class="button-icon"><i class="bi bi-person-circle"></i></span>
                         <span class="button-glow"></span>
                     </a>

@@ -53,11 +53,11 @@ session_start();
                 <input type="password" name="password" placeholder="Password" required>
                 <select name="role" required>
                     <option value="" disabled selected>Select your role</option>
-                    <option value="resident">Resident</option>
+                    <option value="resident">Student</option>
                     <option value="admin">Admin</option>
                     <option value="faculty">Faculty</option>
                 </select>
-                <button type="submit"><i class="fas fa-user-plus"></i> Create Account</button>
+                <button type="submit"><i class="fas fa-user-plus"></i> r</button>
             </form>
         </div>
         <div class="login">
@@ -66,8 +66,16 @@ session_start();
                 <input type="text" name="username" placeholder="Username or ID" required>
                 <input type="password" name="Password" placeholder="Password" required>
                 <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button type="button" onclick="toggleToSignup()"><i class="fas fa-user-plus"></i> Don't have an account?</button>
             </form>
         </div>
     </div>
+    
+    <script>
+        function toggleToSignup() {
+            // Uncheck the checkbox to show signup form
+            document.getElementById('chk').checked = false;
+        }
+    </script>
 </body>
 </html>
