@@ -1,5 +1,26 @@
-<?php 
+<?php
+// Set secure session cookie parameters before session_start()
+$secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
+$cookieParams = session_get_cookie_params();
+session_set_cookie_params([
+    'lifetime' => $cookieParams['lifetime'],
+    'path' => $cookieParams['path'],
+    'domain' => $cookieParams['domain'],
+    'secure' => $secure,
+    'httponly' => true,
+    'samesite' => 'Strict'
+]);
 session_start();
+// Session idle timeout (20 minutes)
+$timeout = 20 * 60; // 20 minutes in seconds
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $timeout)) {
+    // Last request was more than 20 minutes ago
+    session_unset();     // Unset $_SESSION variable for the run-time
+    session_destroy();   // Destroy session data in storage
+    header('Location: login.php?timeout=1');
+    exit();
+}
+$_SESSION['LAST_ACTIVITY'] = time(); // Update last activity time
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,6 +63,9 @@ session_start();
             $_SESSION['faculty_id'] = (string) $faculty['_id'];
             echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
             unset($_SESSION['success']);
+        }
+        if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
+            echo '<div class="alert alert-warning">Your session has expired due to inactivity. Please log in again.</div>';
         }
         ?>
         
