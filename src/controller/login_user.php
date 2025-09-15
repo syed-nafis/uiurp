@@ -9,15 +9,37 @@ $loginInfoCollection = $db->login_info;
 session_start(); // Start session to track user login status
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
+    $emailOrUsername = $_POST['username'];
     $password = $_POST['Password'];
     
     
 
-    // Check if username and password match
-    $user = $loginInfoCollection->findOne(['username' => $username]);
+    // Allow login by email primarily; fallback to username for legacy accounts
+    $user = $loginInfoCollection->findOne(['email' => $emailOrUsername]);
+    if (!$user) {
+        $user = $loginInfoCollection->findOne(['username' => $emailOrUsername]);
+    }
 
-    if ($user && $password === $user['password']) {
+    // Primary: hashed password_verify. Fallback: legacy plaintext, then upgrade to hash.
+    $authenticated = false;
+    if ($user) {
+        if (is_string($user['password']) && preg_match('/^\$2y\$/', (string)$user['password'])) {
+            $authenticated = password_verify($password, $user['password']);
+        } else if (isset($user['password']) && $password === $user['password']) {
+            // Upgrade legacy plaintext to hash after successful auth
+            $authenticated = true;
+            try {
+                $loginInfoCollection->updateOne(
+                    ['_id' => $user['_id']],
+                    ['$set' => ['password' => password_hash($password, PASSWORD_BCRYPT)]]
+                );
+            } catch (Exception $e) {
+                // ignore upgrade errors
+            }
+        }
+    }
+
+    if ($authenticated) {
         $type = $user['type'];
         $id = $user['id'];
        

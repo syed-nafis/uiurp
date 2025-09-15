@@ -30,7 +30,7 @@ session_start();
     </style>
 </head>
 <body>
-    <div class="main">  	
+    <div class="main">	
         <input type="checkbox" id="chk" checked>
         
         <?php
@@ -46,20 +46,25 @@ session_start();
         ?>
         
         <div class="signup">
-            <form action="src/controller/login_user.php" method="post">
-                <label for="chk" aria-label="Switch to signup"><i class="fas fa-user-plus"></i> Sign Up</label>
-                <input type="text" name="username" placeholder="Username" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <select name="role" required>
-                    <option value="" disabled selected>Select your role</option>
-                    <option value="resident">Student</option>
-                    <option value="admin">Admin</option>
-                    <option value="faculty">Faculty</option>
-                </select>
-                <button type="submit"><i class="fas fa-user-plus"></i> r</button>
-            </form>
-        </div>
+        <form id="signupForm" action="src/controller/create_account.php" method="post">
+            <label for="chk" aria-label="Switch to signup"><i class="fas fa-user-plus"></i> Sign Up</label>
+            
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+            <div id="emailError" style="color: red; font-size: 0.9em; display: none; margin-left: 10px"></div>
+            
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <div id="passwordStrength" style="margin-top:1px; font-size:0.9em; margin-left: 35px"></div>
+            
+            <select id="role" name="role" required>
+                <option value="" disabled selected>Select your role</option>
+                <option value="student">Student</option>
+                <option value="faculty">Faculty</option>
+            </select>
+            <button type="submit"><i class="fas fa-user-plus"></i> Register</button>
+        </form>
+    </div>
+
         <div class="login">
             <form action="src/controller/login_user.php" method="post">
                 <label for="chk" aria-label="Switch to login"><i class="fas fa-sign-in-alt"></i> Login</label>
@@ -71,11 +76,157 @@ session_start();
         </div>
     </div>
     
+    <!-- OTP Modal -->
+    <div id="otpModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
+        <div style="background:#fff; padding:20px; border-radius:8px; width:320px; max-width:90%; text-align:center;">
+            <h3>Verify OTP</h3>
+            <p>Enter the 6-digit code sent to your email.</p>
+            <input id="otpInput" type="text" maxlength="6" placeholder="Enter OTP" style="width:100%; padding:10px; margin:10px 0;" />
+            <div id="otpError" style="color:#c00; min-height:20px; font-size:0.9em;"></div>
+            <button id="otpVerifyBtn" style="padding:10px 16px; margin-right:8px;">Verify</button>
+            <button id="otpCancelBtn" style="padding:10px 16px; background:#eee;">Cancel</button>
+        </div>
+    </div>
+    
     <script>
         function toggleToSignup() {
             // Uncheck the checkbox to show signup form
             document.getElementById('chk').checked = false;
         }
+        // Client-side validation for signup form
+        const form = document.getElementById('signupForm');
+        const emailInput = document.getElementById('email');
+        const roleSelect = document.getElementById('role');
+        const emailError = document.getElementById('emailError');
+
+        const passwordInput = document.getElementById('password');
+        const passwordStrength = document.getElementById('passwordStrength');
+
+        // Email validation and AJAX submit for signup
+        form.addEventListener('submit', async function(event) {
+            const role = roleSelect.value;
+            const email = emailInput.value.trim();
+
+            const studentPattern = /^[a-zA-Z0-9._%+-]+@bscse\.uiu\.ac\.bd$/;
+            const facultyPattern = /^[a-zA-Z0-9._%+-]+@cse\.uiu\.ac\.bd$/;
+
+            let errorMessage = "";
+
+            if (role === 'student' && !studentPattern.test(email)) {
+                errorMessage = "Invalid student email. It should end with @bscse.uiu.ac.bd";
+            } else if (role === 'faculty' && !facultyPattern.test(email)) {
+                errorMessage = "Invalid faculty email. It should end with @cse.uiu.ac.bd";
+            }
+
+            if (errorMessage) {
+                emailError.textContent = errorMessage;
+                emailError.style.display = "block";
+                event.preventDefault();
+                return;
+            } else {
+                emailError.style.display = "none";
+            }
+
+            // Submit via AJAX to get OTP without leaving page
+            event.preventDefault();
+            const formData = new FormData(form);
+            try {
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    body: formData
+                });
+                let data = {};
+                try { data = await res.json(); } catch (_) {}
+                // Always show modal so user sees OTP prompt; show any error inside modal
+                showOtpModal();
+                if (!res.ok || !data.success) {
+                    const msg = (data && data.message) ? data.message : 'Failed to send OTP. If you are on local, email may be disabled.';
+                    document.getElementById('otpError').textContent = msg;
+                }
+            } catch (e) {
+                showOtpModal();
+                document.getElementById('otpError').textContent = 'Network error while sending OTP. You can still try entering the code if received.';
+            }
+        });
+
+        // Password strength meter
+        passwordInput.addEventListener('input', function() {
+            const value = passwordInput.value;
+            let strength = 0;
+
+            if (value.length >= 6) strength++;
+            if (/[A-Z]/.test(value)) strength++;
+            if (/[a-z]/.test(value)) strength++;
+            if (/[0-9]/.test(value)) strength++;
+            if (/[^A-Za-z0-9]/.test(value)) strength++; // special character
+
+            let strengthText = "";
+            let color = "";
+
+            switch(strength) {
+                case 0:
+                case 1:
+                case 2:
+                    strengthText = "Weak";
+                    color = "red";
+                    break;
+                case 3:
+                case 4:
+                    strengthText = "Medium";
+                    color = "orange";
+                    break;
+                case 5:
+                    strengthText = "Strong";
+                    color = "lightgreen";
+                    break;
+            }
+
+            passwordStrength.textContent = `Password Strength: ${strengthText}`;
+            passwordStrength.style.color = color;
+        });
+
+        // OTP Modal logic
+        const otpModal = document.getElementById('otpModal');
+        const otpInput = document.getElementById('otpInput');
+        const otpError = document.getElementById('otpError');
+        const otpVerifyBtn = document.getElementById('otpVerifyBtn');
+        const otpCancelBtn = document.getElementById('otpCancelBtn');
+
+        function showOtpModal() {
+            otpInput.value = '';
+            otpError.textContent = '';
+            otpModal.style.display = 'flex';
+            otpInput.focus();
+        }
+        function hideOtpModal() { otpModal.style.display = 'none'; }
+
+        otpCancelBtn.addEventListener('click', hideOtpModal);
+        otpVerifyBtn.addEventListener('click', async function() {
+            const otp = otpInput.value.trim();
+            if (otp.length !== 6) {
+                otpError.textContent = 'Please enter the 6-digit code.';
+                return;
+            }
+            try {
+                const res = await fetch('src/controller/verify_otp.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+                    body: 'otp=' + encodeURIComponent(otp)
+                });
+                let data = {};
+                try { data = await res.json(); } catch (_) {}
+                if (res.ok && data && data.success) {
+                    hideOtpModal();
+                    alert('Account verified. Please log in.');
+                    document.getElementById('chk').checked = true; // show login
+                } else {
+                    otpError.textContent = (data && data.message) ? data.message : 'Invalid OTP.';
+                }
+            } catch (e) {
+                otpError.textContent = 'Network error.';
+            }
+        });
     </script>
 </body>
 </html>
