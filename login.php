@@ -21,6 +21,8 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 
     exit();
 }
 $_SESSION['LAST_ACTIVITY'] = time(); // Update last activity time
+// Handle redirect page
+$redirect = isset($_GET['redirect']) ? $_GET['redirect'] : 'index.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,6 +83,7 @@ $_SESSION['LAST_ACTIVITY'] = time(); // Update last activity time
                     <option value="admin">Admin</option>
                     <option value="faculty">Faculty</option>
                 </select>
+                <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirect); ?>">
                 <button type="submit"><i class="fas fa-user-plus"></i> Create Account</button>
             </form>
         </div>
@@ -89,6 +92,7 @@ $_SESSION['LAST_ACTIVITY'] = time(); // Update last activity time
                 <label for="chk" aria-label="Switch to login"><i class="fas fa-sign-in-alt"></i> Login</label>
                 <input type="text" name="username" placeholder="Username or ID" required>
                 <input type="password" name="Password" placeholder="Password" required>
+                <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirect); ?>">
                 <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
             </form>
         </div>
