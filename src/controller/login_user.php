@@ -1,6 +1,9 @@
 <?php
 require __DIR__ . '/../../vendor/autoload.php'; // Updated path to Composer's autoloader
 
+use MongoDB\BSON\UTCDateTime;
+use MongoDB\BSON\ObjectId;
+
 // Update the MongoDB connection string and database name
 $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
 $db = $client->uiurp;
@@ -12,10 +15,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['Password'];
 
-    // Check if username and password match
+    // Check if username exists
     $user = $loginInfoCollection->findOne(['username' => $username]);
 
+    $now = new UTCDateTime();
+    $nowTs = $now->toDateTime()->getTimestamp();
+    $fifteenMinutes =  60;
+
+    // Check for lockout
+    if ($user && isset($user['lockout_until']) && $user['lockout_until'] instanceof UTCDateTime) {
+        $lockoutUntilTs = $user['lockout_until']->toDateTime()->getTimestamp();
+        if ($lockoutUntilTs > $nowTs) {
+            $_SESSION['error'] = 'Your account is locked. Try again after 15 minutes.';
+            header('Location: /../../login.php');
+            exit();
+        }
+    }
+
+    // Validate password
     if ($user && $password === $user['password']) {
+        // Reset failed attempts and lockout
+        $loginInfoCollection->updateOne(
+            ['username' => $username],
+            ['$set' => [
+                'failed_attempts' => 0,
+                'last_failed_attempt' => null,
+                'lockout_until' => null
+            ]]
+        );
         $type = $user['type'];
         $id = $user['id'];
 
@@ -28,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Fetch data from the corresponding collection
         if ($type === 'faculty') {
             $facultyCollection = $db->faculties;
-            $facultyData = $facultyCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
+            $facultyData = $facultyCollection->findOne(['_id' => new ObjectId($id)]);
             if ($facultyData) {
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_type'] = 'faculty';
@@ -43,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } elseif ($type === 'student') {
             $studentCollection = $db->students;
-            $studentData = $studentCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
+            $studentData = $studentCollection->findOne(['_id' => new ObjectId($id)]);
             if ($studentData) {
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_type'] = 'student';
@@ -57,11 +84,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit();
             }
         }
+    } else if ($user) {
+        // Failed login attempt
+        $failedAttempts = isset($user['failed_attempts']) ? (int)$user['failed_attempts'] : 0;
+        $lastFailed = isset($user['last_failed_attempt']) && $user['last_failed_attempt'] instanceof UTCDateTime
+            ? $user['last_failed_attempt']->toDateTime()->getTimestamp() : 0;
+        // If last failed attempt was more than 15 minutes ago, reset counter
+        if ($nowTs - $lastFailed > $fifteenMinutes) {
+            $failedAttempts = 0;
+        }
+        $failedAttempts++;
+        $update = [
+            'failed_attempts' => $failedAttempts,
+            'last_failed_attempt' => $now
+        ];
+        if ($failedAttempts >= 5) {
+            $update['lockout_until'] = new UTCDateTime(($nowTs + $fifteenMinutes) * 1000);
+            $_SESSION['error'] = 'Your account is locked. Try again after 15 minutes.';
+        } else {
+            $_SESSION['error'] = 'Invalid username or password';
+        }
+        $loginInfoCollection->updateOne(
+            ['username' => $username],
+            ['$set' => $update]
+        );
+        header('Location: /../../login.php');
+        exit();
     }
 
-    // If login fails
+    // If login fails and user not found
     $_SESSION['error'] = 'Invalid username or password';
-    header('Location: /../../login.php'); // Redirect back to login page
+    header('Location: /../../login.php');
     exit();
 }
 ?>
