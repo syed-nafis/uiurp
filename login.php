@@ -83,7 +83,7 @@ $redirect = isset($_GET['redirect']) ? $_GET['redirect'] : 'index.php';
                     <option value="admin">Admin</option>
                     <option value="faculty">Faculty</option>
                 </select>
-                <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirect); ?>">
+                <input type="hidden" name="redirect" value="/index.php">
                 <button type="submit"><i class="fas fa-user-plus"></i> Create Account</button>
             </form>
         </div>
@@ -92,7 +92,7 @@ $redirect = isset($_GET['redirect']) ? $_GET['redirect'] : 'index.php';
                 <label for="chk" aria-label="Switch to login"><i class="fas fa-sign-in-alt"></i> Login</label>
                 <input type="text" name="username" placeholder="Username or ID" required>
                 <input type="password" name="Password" placeholder="Password" required>
-                <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirect); ?>">
+                <input type="hidden" name="redirect" value="/index.php">
                 <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
             </form>
         </div>

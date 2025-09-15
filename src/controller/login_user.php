@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         session_regenerate_id(true);
 
         // Decide where to redirect after login (default: index.php)
-        $redirect = isset($_POST['redirect']) ? $_POST['redirect'] : '../../index.php';
+        $redirect = isset($_POST['redirect']) ? $_POST['redirect'] : '/index.php';
 
         // Fetch data from the corresponding collection
         if ($type === 'faculty') {
