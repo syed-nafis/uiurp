@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Primary: hashed password_verify. Fallback: legacy plaintext, then upgrade to hash.
     $authenticated = false;
     if ($user) {
-        if (is_string($user['password']) && preg_match('/^\$2y\$/', (string)$user['password'])) {
+        if (is_string($user['password']) && preg_match('/^\$2y\$/' , (string)$user['password'])) {
             $authenticated = password_verify($password, $user['password']);
         } else if (isset($user['password']) && $password === $user['password']) {
             // Upgrade legacy plaintext to hash after successful auth

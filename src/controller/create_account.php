@@ -12,6 +12,34 @@ function post($key) {
     return isset($_POST[$key]) ? trim($_POST[$key]) : '';
 }
 
+// Helper - strong password policy validation
+function is_password_strong($password, $username, $email) {
+    // Minimum 8 chars (Unicode safe), at least 1 uppercase, 1 lowercase, 1 digit, 1 special
+    $lengthOk  = mb_strlen($password) >= 8;
+    $upperOk   = (bool)preg_match('/[A-Z]/', $password);
+    $lowerOk   = (bool)preg_match('/[a-z]/', $password);
+    $digitOk   = (bool)preg_match('/\d/', $password);
+    $specialOk = (bool)preg_match('/[^a-zA-Z\d]/', $password);
+
+    // Prevent password from containing username or email local-part
+    $passwordLower = strtolower($password);
+
+    // Handle username
+    $usernameOk = true;
+    if (!empty($username) && strlen($username) >= 3) {
+        $usernameOk = strpos($passwordLower, strtolower($username)) === false;
+    }
+
+    // Handle email local-part
+    $emailLocal = strtolower(strtok((string)$email, '@')) ?: '';
+    $emailOk = true;
+    if (!empty($emailLocal) && strlen($emailLocal) >= 3) {
+        $emailOk = strpos($passwordLower, $emailLocal) === false;
+    }
+
+    return $lengthOk && $upperOk && $lowerOk && $digitOk && $specialOk && $usernameOk && $emailOk;
+}
+
 // read real POST values from your login.php form
 $username = post('username');
 $email    = post('email');
@@ -21,6 +49,23 @@ $role     = post('role');
 // Basic server-side presence checks
 if (!$username || !$email || !$password || !$role) {
     echo "<p style='color:red;'>Missing required fields. Please go back and try again.</p>";
+    exit;
+}
+
+// Enforce strong password policy before proceeding
+if (!is_password_strong($password, $username, $email)) {
+    $message = "Password is too weak. Use 8+ chars with upper, lower, number, special, and don't include your name/email.";
+
+    // If AJAX request, return JSON
+    $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) 
+              && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
+    if ($isAjax) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => $message]);
+    } else {
+        echo "<p style='color:red;'>" . htmlspecialchars($message, ENT_QUOTES, 'UTF-8') . "</p>";
+    }
     exit;
 }
 
@@ -84,11 +129,15 @@ try {
         $collection = $db->faculties;
         $emptyDoc = [
             'name' => $username,
+            'phone' => '',
+            'job_title' => '',
             'bio' => '',
             'profile_image' => '',
             'interested_fields_of_research' => [],
             'department' => '',
-            'position' => '',
+            'projects' => [],
+            'prerequisites' => [],
+            'resources_to_learn_prerequisites' => [],
             'office_number' => '',
             'email' => $email,
             'createdAt' => time(),

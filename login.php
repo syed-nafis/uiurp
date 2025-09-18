@@ -55,7 +55,6 @@ session_start();
             
             <input type="password" id="password" name="password" placeholder="Password" required>
             <div id="passwordStrength" style="margin-top:1px; font-size:0.9em; margin-left: 35px"></div>
-            
             <select id="role" name="role" required>
                 <option value="" disabled selected>Select your role</option>
                 <option value="student">Student</option>
