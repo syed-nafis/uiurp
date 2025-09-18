@@ -42,6 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($authenticated) {
         $type = $user['type'];
         $id = $user['id'];
+        // Regenerate session ID to prevent fixation
+        session_regenerate_id(true);
        
 
         // Fetch data from the corresponding collection

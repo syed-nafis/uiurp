@@ -1,4 +1,15 @@
 <?php
+// Set secure session cookie parameters before session_start()
+$secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
+$cookieParams = session_get_cookie_params();
+session_set_cookie_params([
+    'lifetime' => $cookieParams['lifetime'],
+    'path' => $cookieParams['path'],
+    'domain' => $cookieParams['domain'],
+    'secure' => $secure,
+    'httponly' => true,
+    'samesite' => 'Strict'
+]);
 session_start();
 
 // Check if user is logged in
@@ -7,6 +18,16 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     header('Location: login.php');
     exit();
 }
+
+// Session idle timeout (30 seconds)
+$timeout = 30; // 30 seconds
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $timeout)) {
+    session_unset();
+    session_destroy();
+    header('Location: login.php?timeout=1');
+    exit();
+}
+$_SESSION['LAST_ACTIVITY'] = time();
 
 // Include MongoDB connection
 require __DIR__ . '/vendor/autoload.php';
@@ -1444,5 +1465,12 @@ if (!file_exists($profileImage)) {
       }
     });
   </script>
+
+  <!-- Show timeout message if redirected due to inactivity -->
+  <?php if (isset($_GET['timeout']) && $_GET['timeout'] == 1): ?>
+      <script>
+          alert('Your session has expired due to inactivity. Please log in again.');
+      </script>
+  <?php endif; ?>
 </body>
 </html>
