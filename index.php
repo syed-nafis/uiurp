@@ -15,9 +15,11 @@ session_start();
 // Session idle timeout (30 seconds)
 $timeout = 30; // 30 seconds
 if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $timeout)) {
+    // Save current URL before logout
+    $currentUrl = $_SERVER['REQUEST_URI'];
     session_unset();
     session_destroy();
-    header('Location: login.php?timeout=1');
+    header('Location: login.php?timeout=1&redirect=' . urlencode($currentUrl));
     exit();
 }
 $_SESSION['LAST_ACTIVITY'] = time();

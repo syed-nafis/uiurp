@@ -1,6 +1,9 @@
 <?php
 require __DIR__ . '/../../vendor/autoload.php'; // Updated path to Composer's autoloader
 
+use MongoDB\BSON\UTCDateTime;
+use MongoDB\BSON\ObjectId;
+
 // Update the MongoDB connection string and database name
 $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
 $db = $client->uiurp;
@@ -42,47 +45,76 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($authenticated) {
         $type = $user['type'];
         $id = $user['id'];
+
         // Regenerate session ID to prevent fixation
         session_regenerate_id(true);
-       
+
+        // Decide where to redirect after login (default: index.php)
+        $redirect = isset($_POST['redirect']) ? $_POST['redirect'] : '/index.php';
 
         // Fetch data from the corresponding collection
         if ($type === 'faculty') {
             $facultyCollection = $db->faculties;
-            $facultyData = $facultyCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
+            $facultyData = $facultyCollection->findOne(['_id' => new ObjectId($id)]);
             if ($facultyData) {
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_type'] = 'faculty';
-                $_SESSION['user_data'] = json_decode(json_encode($facultyData),true);
-                $_SESSION['username'] = $facultyData['name']; // Store username in session
-                $_SESSION['profile_pic'] = $facultyData['profile_image']; // Store user ID in session
-                $_SESSION['email'] = $facultyData['email']; // Store user ID in session
-                $_SESSION['user_id'] = (string)$facultyData['_id']; // Store user ID in session
-                header('Location: ../../index.php'); // Redirect to faculty dashboard
+                $_SESSION['user_data'] = json_decode(json_encode($facultyData), true);
+                $_SESSION['username'] = $facultyData['name'];
+                $_SESSION['profile_pic'] = $facultyData['profile_image'];
+                $_SESSION['email'] = $facultyData['email'];
+                $_SESSION['user_id'] = (string)$facultyData['_id'];
+
+                header("Location: " . $redirect);
                 exit();
             }
         } elseif ($type === 'student') {
-            echo "<script>console.log('" . $id . "');</script>";
             $studentCollection = $db->students;
-            $studentData = $studentCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
-            echo "<script>console.log('" . json_encode($studentData) . "');</script>"; // Log the data for debugging
+            $studentData = $studentCollection->findOne(['_id' => new ObjectId($id)]);
             if ($studentData) {
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_type'] = 'student';
                 $_SESSION['username'] = $studentData['basic_info']['name'];
-                $_SESSION['profile_pic'] = $studentData['basic_info']['profile_image_url'];// Store user ID in session
-                $_SESSION['email'] = $studentData['contact_info']['primary_email']; // Store user ID in session
-                $_SESSION['user_data'] = json_decode(json_encode($studentData),true);
-                $_SESSION['user_id'] = (string)$studentData['_id']; // Store user ID in session
-                header('Location: ../../index.php'); // Redirect to student dashboard
+                $_SESSION['profile_pic'] = $studentData['basic_info']['profile_image_url'];
+                $_SESSION['email'] = $studentData['contact_info']['primary_email'];
+                $_SESSION['user_data'] = json_decode(json_encode($studentData), true);
+                $_SESSION['user_id'] = (string)$studentData['_id'];
+
+                header("Location: " . $redirect);
                 exit();
             }
         }
+    } else if ($user) {
+        // Failed login attempt
+        $failedAttempts = isset($user['failed_attempts']) ? (int)$user['failed_attempts'] : 0;
+        $lastFailed = isset($user['last_failed_attempt']) && $user['last_failed_attempt'] instanceof UTCDateTime
+            ? $user['last_failed_attempt']->toDateTime()->getTimestamp() : 0;
+        // If last failed attempt was more than 15 minutes ago, reset counter
+        if ($nowTs - $lastFailed > $fifteenMinutes) {
+            $failedAttempts = 0;
+        }
+        $failedAttempts++;
+        $update = [
+            'failed_attempts' => $failedAttempts,
+            'last_failed_attempt' => $now
+        ];
+        if ($failedAttempts >= 5) {
+            $update['lockout_until'] = new UTCDateTime(($nowTs + $fifteenMinutes) * 1000);
+            $_SESSION['error'] = 'Your account is locked. Try again after 15 minutes.';
+        } else {
+            $_SESSION['error'] = 'Invalid username or password';
+        }
+        $loginInfoCollection->updateOne(
+            ['username' => $username],
+            ['$set' => $update]
+        );
+        header('Location: /../../login.php');
+        exit();
     }
 
-    // If login fails
+    // If login fails and user not found
     $_SESSION['error'] = 'Invalid username or password';
-    header('Location: /../../login.php'); // Redirect back to login page
+    header('Location: /../../login.php');
     exit();
 }
 ?>

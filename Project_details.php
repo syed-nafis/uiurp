@@ -1,5 +1,33 @@
 ﻿<?php
+// Set secure session cookie parameters before session_start()
+$secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
+$cookieParams = session_get_cookie_params();
+session_set_cookie_params([
+    'lifetime' => $cookieParams['lifetime'],
+    'path' => $cookieParams['path'],
+    'domain' => $cookieParams['domain'],
+    'secure' => $secure, // Only send cookie over HTTPS
+    'httponly' => true,  // Prevent JS access
+    'samesite' => 'Strict' // Prevent CSRF
+]);
 session_start();
+
+// Session idle timeout (30 seconds)
+$timeout = 30; // 30 seconds
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $timeout)) {
+    // Save current URL before logout
+    $currentUrl = $_SERVER['REQUEST_URI'];
+    session_unset();
+    session_destroy();
+    header('Location: login.php?timeout=1&redirect=' . urlencode($currentUrl));
+    exit();
+}
+$_SESSION['LAST_ACTIVITY'] = time();
+
+// Show timeout message if redirected due to inactivity
+if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
+    echo '<div class="alert alert-warning text-center" style="margin: 20px;">Your session has expired due to inactivity. Please log in again.</div>';
+}
 
 // Define a constant to indicate this is the Project_details.php file
 // This is used by included files like timeline_editor_overlay.php
