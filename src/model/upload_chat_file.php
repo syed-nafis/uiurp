@@ -1,9 +1,13 @@
 <?php
 require_once 'db_connect.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/FileUploadHandler.php';
+require_once __DIR__ . '/FileConfig.php';
 
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
+use UIURP\Model\FileUploadHandler;
+use UIURP\Model\FileConfig;
 
 // Start session to capture user data
 session_start();
@@ -110,89 +114,46 @@ try {
         }
     }
     
-    // Process uploaded file
+    // Process uploaded file using new FileUploadHandler
     $file = $_FILES['file'];
     
-    // Check for errors
-    if ($file['error'] !== UPLOAD_ERR_OK) {
-        $response['message'] = 'File upload error: ' . $file['error'];
+    // Initialize upload handler
+    $uploadHandler = new FileUploadHandler();
+    
+    // Upload directory for chat files
+    $uploadDir = FileConfig::DIR_CHAT_FILES . $projectId . '/';
+    
+    // Upload options
+    $options = [
+        'prefix' => 'chat_file',
+        'maxSize' => FileConfig::MAX_FILE_SIZE_DEFAULT
+    ];
+    
+    // Handle upload
+    $uploadResult = $uploadHandler->handleUpload($file, $uploadDir, $options);
+    
+    if (!$uploadResult['success']) {
+        $response['message'] = $uploadResult['message'];
         echo json_encode($response);
         exit;
     }
     
-    // Validate file size (max 10MB)
-    $maxFileSize = 10 * 1024 * 1024; // 10MB
-    if ($file['size'] > $maxFileSize) {
-        $response['message'] = 'File size exceeds the limit (10MB)';
-        echo json_encode($response);
-        exit;
-    }
+    // Get uploaded file data
+    $uploadedFile = $uploadResult['fileData'];
+    $fileName = $uploadedFile['name'];
+    $fileType = $uploadedFile['type'];
+    $fileSize = $uploadedFile['size'];
+    $fileExtension = $uploadedFile['extension'];
+    $relativeFilePath = ltrim($uploadedFile['path'], '/');
     
-    // Get file info
-    $fileName = $file['name'];
-    $fileType = $file['type'];
-    $fileSize = $file['size'];
-    $fileTmpPath = $file['tmp_name'];
-    
-    // Generate unique filename to prevent overwriting
-    $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-    $uniqueFileName = uniqid('chat_file_') . '_' . time() . '.' . $fileExtension;
-    
-    // Create chat_files directory if it doesn't exist
-    $uploadDir = __DIR__ . '/../../uploads/chat_files';
-    if (!file_exists($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
-    }
-    
-    // Create project-specific subfolder
-    $projectDir = $uploadDir . '/' . $projectId;
-    if (!file_exists($projectDir)) {
-        mkdir($projectDir, 0755, true);
-    }
-    
-    $uploadPath = $projectDir . '/' . $uniqueFileName;
-    $relativeFilePath = 'uploads/chat_files/' . $projectId . '/' . $uniqueFileName;
-    
-    // Move uploaded file
-    if (move_uploaded_file($fileTmpPath, $uploadPath)) {
+    // Continue with existing logic
+    {
         // Current UTC timestamp
         $currentTime = new UTCDateTime(time() * 1000);
         
-        // Determine file type category
-        $fileTypeCategory = 'other';
-        $iconClass = 'bi-file-earmark';
-        
-        // Common document types
-        $documentTypes = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv'];
-        $imageTypes = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp'];
-        
-        if (in_array(strtolower($fileExtension), $documentTypes)) {
-            $fileTypeCategory = 'document';
-            $iconClass = 'bi-file-earmark-text';
-            
-            // Specific document icons
-            if ($fileExtension == 'pdf') {
-                $iconClass = 'bi-file-earmark-pdf';
-            } elseif (in_array($fileExtension, ['doc', 'docx'])) {
-                $iconClass = 'bi-file-earmark-word';
-            } elseif (in_array($fileExtension, ['xls', 'xlsx'])) {
-                $iconClass = 'bi-file-earmark-excel';
-            } elseif (in_array($fileExtension, ['ppt', 'pptx'])) {
-                $iconClass = 'bi-file-earmark-slides';
-            }
-        } elseif (in_array(strtolower($fileExtension), $imageTypes)) {
-            $fileTypeCategory = 'image';
-            $iconClass = 'bi-image';
-        } elseif (strpos($fileType, 'video/') === 0) {
-            $fileTypeCategory = 'video';
-            $iconClass = 'bi-film';
-        } elseif (strpos($fileType, 'audio/') === 0) {
-            $fileTypeCategory = 'audio';
-            $iconClass = 'bi-file-earmark-music';
-        } elseif (in_array($fileExtension, ['zip', 'rar', '7z', 'tar', 'gz'])) {
-            $fileTypeCategory = 'archive';
-            $iconClass = 'bi-file-earmark-zip';
-        }
+        // Use file category and icon from upload handler
+        $fileTypeCategory = $uploadedFile['category'];
+        $iconClass = $uploadedFile['iconClass'];
         
         // File details
         $fileInfo = [
@@ -242,8 +203,6 @@ try {
         } else {
             $response['message'] = 'Failed to save message';
         }
-    } else {
-        $response['message'] = 'Failed to move uploaded file';
     }
     
 } catch (Exception $e) {

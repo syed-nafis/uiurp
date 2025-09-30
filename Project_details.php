@@ -1613,6 +1613,10 @@ function createProfileLink($name, $userId, $userType = null) {
                 const size = formatFileSize(file.size);
                 const date = formatDate(file.uploadedAt);
                 
+                // Build secure download URL
+                const filePath = file.path.replace(/^\//, ''); // Remove leading slash
+                const downloadUrl = '/download.php?file=' + encodeURIComponent(filePath);
+                
                 resourcesHTML += `
                     <li class="list-group-item">
                         <div class="file-info">
@@ -1621,7 +1625,7 @@ function createProfileLink($name, $userId, $userType = null) {
                             </div>
                             <small class="file-details">${size} - Uploaded on ${date}</small>
                         </div>
-                        <a href="${file.path}" class="btn btn-sm download-btn" download>
+                        <a href="${downloadUrl}" class="btn btn-sm download-btn">
                             <i class="bi bi-download"></i>
                             <span class="btn-text">Download</span>
                         </a>
@@ -2678,8 +2682,14 @@ function createProfileLink($name, $userId, $userType = null) {
                 const placeholderImage = 'assets/images/Research_Card_Placeholder.png';
                 
                 if (item.type === 'image') {
-                    // Use the actual image URL with fallback to placeholder
-                    const imageUrl = item.url || placeholderImage;
+                    // Use secure download proxy for stored images, or direct URL for external images
+                    let imageUrl = item.url || placeholderImage;
+                    
+                    // If it's a stored image (storage/ or uploads/), use download proxy with inline display
+                    if (imageUrl && (imageUrl.includes('storage/') || imageUrl.includes('uploads/'))) {
+                        const filePath = imageUrl.replace(/^\//, '');
+                        imageUrl = '/download.php?file=' + encodeURIComponent(filePath) + '&inline=1';
+                    }
                     
                     mediaHTML += `
                         <div class="col-sm-6 col-lg-4 mb-4" data-aos="zoom-in" data-aos-delay="${100 * (index + 1)}">
@@ -2699,9 +2709,16 @@ function createProfileLink($name, $userId, $userType = null) {
                         </div>
                     `;
                 } else if (item.type === 'video') {
-                    // For videos, we'll need special handling for the iframe
-                    const videoUrl = item.url || '';
+                    // For videos, handle both stored videos and external URLs (YouTube, etc.)
+                    let videoUrl = item.url || '';
                     const videoCaption = item.caption || 'Project video';
+                    
+                    // If it's a stored video (storage/ or uploads/), use download proxy with inline display
+                    if (videoUrl && (videoUrl.includes('storage/') || videoUrl.includes('uploads/')) && 
+                        !videoUrl.includes('youtube.com') && !videoUrl.includes('youtu.be')) {
+                        const filePath = videoUrl.replace(/^\//, '');
+                        videoUrl = '/download.php?file=' + encodeURIComponent(filePath) + '&inline=1';
+                    }
                     
                     mediaHTML += `
                         <div class="col-md-6 mb-4" data-aos="zoom-in" data-aos-delay="${100 * (index + 1)}">
@@ -2712,8 +2729,12 @@ function createProfileLink($name, $userId, $userType = null) {
                                 </div>
                                 <div class="ratio ratio-16x9" id="video-container-${index}">
                                     ${videoUrl ? 
-                                        `<iframe src="${videoUrl}" title="${videoCaption}" allowfullscreen
-                                            onerror="handleVideoError(this, '${placeholderImage}')"></iframe>` : 
+                                        (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be') ?
+                                            `<iframe src="${videoUrl}" title="${videoCaption}" allowfullscreen
+                                                onerror="handleVideoError(this, '${placeholderImage}')"></iframe>` :
+                                            `<video controls class="w-100 h-100" src="${videoUrl}">
+                                                Your browser does not support the video tag.
+                                            </video>`) : 
                                         `<div class="placeholder-bg" style="background-image: url('${placeholderImage}')"></div>`
                                     }
                                 </div>
@@ -2783,7 +2804,7 @@ function createProfileLink($name, $userId, $userType = null) {
         // Current image index in lightbox
         let currentImageIndex = 0;
         
-        // Updated lightbox function for placeholder handling
+        // Updated lightbox function for placeholder handling and secure download proxy
         function openLightbox(index) {
             const lightbox = document.getElementById('lightbox');
             const lightboxImage = document.getElementById('lightbox-image');
@@ -2795,8 +2816,15 @@ function createProfileLink($name, $userId, $userType = null) {
             const media = window.projectMedia[index];
             const placeholderImage = 'assets/images/Research_Card_Placeholder.png';
             
+            // Use secure download proxy for stored images
+            let imageUrl = media.url || placeholderImage;
+            if (imageUrl && (imageUrl.includes('storage/') || imageUrl.includes('uploads/'))) {
+                const filePath = imageUrl.replace(/^\//, '');
+                imageUrl = '/download.php?file=' + encodeURIComponent(filePath) + '&inline=1';
+            }
+            
             // Set image source and caption
-            lightboxImage.src = media.url || placeholderImage;
+            lightboxImage.src = imageUrl;
             lightboxCaption.textContent = media.caption || '';
             
             // Add error handling for the lightbox image
