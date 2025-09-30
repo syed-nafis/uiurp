@@ -45,6 +45,7 @@ body {
     position: relative;
     min-height: 100vh;
     scroll-behavior: smooth;
+    transition: background 0.4s ease-in-out, color 0.4s ease-in-out;
 }
 
 /* Enhanced Background Effects */

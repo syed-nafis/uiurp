@@ -22,6 +22,29 @@
             --text-muted: rgba(255, 255, 255, 0.5);
         }
         
+        /* Light Theme Variables */
+        [data-theme="light"] {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --light-color: #ffffff;
+            --dark-color: #1e293b;
+            --success-color: #06b6d4;
+            --warning-color: #f59e0b;
+            --modern-blue: #0ea5e9;
+            --modern-purple: #8b5cf6;
+            --modern-teal: #14b8a6;
+            --modern-gray: #6b7280;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --border-glow: rgba(37, 99, 235, 0.3);
+            --surface-1: rgba(248, 250, 252, 0.9);
+            --surface-2: rgba(255, 255, 255, 0.95);
+            --text-primary: #1e293b;
+            --text-secondary: rgba(30, 41, 59, 0.7);
+            --text-muted: rgba(30, 41, 59, 0.5);
+        }
+        
         * {
             box-sizing: border-box;
         }
@@ -34,6 +57,12 @@
             position: relative;
             min-height: 100vh;
             scroll-behavior: smooth;
+            transition: background 0.4s ease-in-out, color 0.4s ease-in-out;
+        }
+        
+        /* Light Theme Background */
+        [data-theme="light"] body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
         }
         
         /* Enhanced Background Effects */

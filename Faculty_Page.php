@@ -46,10 +46,17 @@ if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
     <!-- Prevent Theme Flash Script - Must run immediately -->
     <script>
     (function() {
-        // Get saved theme immediately to prevent flash
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
+        // Get saved theme immediately to prevent flash - with default for Safari/Mac
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        // Force update for Safari
+        document.documentElement.style.setProperty('color-scheme', savedTheme);
+        
+        // Webkit-specific fix for Safari on Mac
+        if (savedTheme === 'dark') {
+            document.documentElement.style.background = 'linear-gradient(135deg, #0a0d1a 0%, #1a1a2e 50%, #16213e 100%)';
+        } else {
+            document.documentElement.style.background = 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%)';
         }
     })();
     </script>

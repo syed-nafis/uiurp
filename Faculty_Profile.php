@@ -33,9 +33,6 @@ if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
 $imageFolder = "assets/resources/research_picture/";
 $images = glob($imageFolder . "*.{jpg,png,jpeg,gif}", GLOB_BRACE);
 
-// Start the session 
-session_start();
-
 // Include the MongoDB PHP library
 require 'vendor/autoload.php';
 
@@ -81,18 +78,6 @@ function convertToObjectId($id) {
         return null;
     }
 }
-
-// Set secure session cookie parameters before session_start()
-$secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
-$cookieParams = session_get_cookie_params();
-session_set_cookie_params([
-    'lifetime' => $cookieParams['lifetime'],
-    'path' => $cookieParams['path'],
-    'domain' => $cookieParams['domain'],
-    'secure' => $secure,
-    'httponly' => true,
-    'samesite' => 'Strict'
-]);
 
 // Create a MongoDB client
 $client = new MongoDB\Client("mongodb+srv://uiurp:uiurp12345@uiurp.fluqo.mongodb.net/uiurp?retryWrites=true&w=majority");
@@ -140,21 +125,6 @@ if (isset($_SESSION['user_id'], $_SESSION['user_type']) &&
 
 // Get target user ID for schedule
 $targetUserId = $faculty_id;
-
-// Session idle timeout (30 seconds)
-$timeout = 30; // 30 seconds
-if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $timeout)) {
-    session_unset();
-    session_destroy();
-    header('Location: login.php?timeout=1');
-    exit();
-}
-$_SESSION['LAST_ACTIVITY'] = time();
-
-// Show timeout message if redirected due to inactivity
-if (isset($_GET['timeout']) && $_GET['timeout'] == 1) {
-    echo '<div class="alert alert-warning text-center" style="margin: 20px;">Your session has expired due to inactivity. Please log in again.</div>';
-}
 ?>
 
 <!DOCTYPE html>
