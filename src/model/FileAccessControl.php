@@ -251,6 +251,23 @@ class FileAccessControl {
             return (string)$userIdField;
         }
         
+        // Handle BSONDocument (access like array)
+        if (is_object($userIdField) && get_class($userIdField) === 'MongoDB\Model\BSONDocument') {
+            // BSONDocument can be accessed like an array
+            if (isset($userIdField['$oid'])) {
+                return $userIdField['$oid'];
+            }
+            // Try to convert the BSONDocument to array and extract
+            $asArray = $userIdField->getArrayCopy();
+            if (isset($asArray['$oid'])) {
+                return $asArray['$oid'];
+            }
+            // If it's a simple BSONDocument wrapping an ObjectId
+            if (isset($asArray[0]) && $asArray[0] instanceof ObjectId) {
+                return (string)$asArray[0];
+            }
+        }
+        
         // Handle array with $oid
         if (is_array($userIdField) && isset($userIdField['$oid'])) {
             return $userIdField['$oid'];
@@ -261,12 +278,17 @@ class FileAccessControl {
             return $userIdField;
         }
         
-        // Try to convert to string
+        // Last resort: try to convert to string (may fail for complex objects)
         try {
-            return (string)$userIdField;
+            // For simple objects that can be cast to string
+            if (method_exists($userIdField, '__toString')) {
+                return (string)$userIdField;
+            }
         } catch (\Exception $e) {
-            return null;
+            error_log('Failed to extract user ID: ' . $e->getMessage());
         }
+        
+        return null;
     }
     
     /**

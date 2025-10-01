@@ -1387,6 +1387,7 @@
 .image-attachment {
     margin-top: 8px;
     transition: none;
+    position: relative;
 }
 
 .image-attachment img {
@@ -1395,6 +1396,38 @@
     border-radius: 8px;
     cursor: pointer;
     transition: none;
+    display: block;
+}
+
+.image-attachment-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+}
+
+.image-attachment-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.image-attachment-actions .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border: none;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(30, 64, 175, 0.2);
+}
+
+.image-attachment-actions .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(30, 64, 175, 0.3);
+    filter: brightness(1.1);
 }
 
 /* Separator for messages from different days */

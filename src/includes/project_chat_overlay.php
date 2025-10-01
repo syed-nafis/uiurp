@@ -2615,14 +2615,37 @@
         if (message.attachment) {
             const attachment = message.attachment;
             
+            // Build secure download URLs (supports both GridFS and old file system)
+            let downloadUrl, viewUrl;
+            
+            if (attachment.gridfsId) {
+                // New system: GridFS (cloud storage - works from anywhere!)
+                downloadUrl = '/download.php?gridfs_id=' + encodeURIComponent(attachment.gridfsId);
+                viewUrl = '/download.php?gridfs_id=' + encodeURIComponent(attachment.gridfsId) + '&inline=1';
+            } else if (attachment.filePath) {
+                // Old system: local file storage (backward compatibility)
+                const filePath = attachment.filePath.replace(/^\//, '');
+                downloadUrl = '/download.php?file=' + encodeURIComponent(filePath);
+                viewUrl = '/download.php?file=' + encodeURIComponent(filePath) + '&inline=1';
+            } else {
+                // Fallback
+                downloadUrl = '#';
+                viewUrl = '#';
+            }
+            
             // Image attachment shows preview
             if (attachment.fileCategory === 'image') {
                 html += `
                     <div class="image-attachment">
-                        <a href="${attachment.filePath}" target="_blank">
-                            <img src="${attachment.filePath}" alt="${attachment.fileName}" 
-                                 onerror="this.onerror=null;this.style.display='none';">
+                        <a href="${viewUrl}" target="_blank" title="Click to view full size">
+                            <img src="${viewUrl}" alt="${attachment.fileName}" 
+                                 onerror="this.onerror=null;this.style.display='none';this.parentElement.innerHTML='<div style=\'padding:20px;text-align:center;color:#888;\'><i class=\'bi bi-image\' style=\'font-size:48px;\'></i><br><small>Image not available</small></div>';">
                         </a>
+                        <div class="image-attachment-actions">
+                            <a href="${downloadUrl}" class="btn btn-sm btn-primary" download="${attachment.fileName}" title="Download ${attachment.fileName}">
+                                <i class="bi bi-download"></i> Download
+                            </a>
+                        </div>
                     </div>
                 `;
             } else {
@@ -2639,8 +2662,9 @@
                                 <span class="attachment-type">${attachment.fileExtension.toUpperCase()}</span>
                             </div>
                         </div>
-                        <a href="${attachment.filePath}" class="attachment-download" download="${attachment.fileName}">
-                            Download
+                        <a href="${downloadUrl}" class="attachment-download" download="${attachment.fileName}" title="Download ${attachment.fileName}">
+                            <i class="bi bi-download"></i>
+                            <span>Download</span>
                         </a>
                     </div>
                 `;

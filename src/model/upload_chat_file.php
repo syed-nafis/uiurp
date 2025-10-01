@@ -1,12 +1,12 @@
 <?php
 require_once 'db_connect.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/FileUploadHandler.php';
+require_once __DIR__ . '/GridFSUploadHandler.php';
 require_once __DIR__ . '/FileConfig.php';
 
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
-use UIURP\Model\FileUploadHandler;
+use UIURP\Model\GridFSUploadHandler;
 use UIURP\Model\FileConfig;
 
 // Start session to capture user data
@@ -114,23 +114,26 @@ try {
         }
     }
     
-    // Process uploaded file using new FileUploadHandler
+    // Process uploaded file using GridFS (cloud storage)
     $file = $_FILES['file'];
     
-    // Initialize upload handler
-    $uploadHandler = new FileUploadHandler();
-    
-    // Upload directory for chat files
-    $uploadDir = FileConfig::DIR_CHAT_FILES . $projectId . '/';
+    // Initialize GridFS upload handler
+    $gridfsHandler = new GridFSUploadHandler($db);
     
     // Upload options
     $options = [
-        'prefix' => 'chat_file',
         'maxSize' => FileConfig::MAX_FILE_SIZE_DEFAULT
     ];
     
-    // Handle upload
-    $uploadResult = $uploadHandler->handleUpload($file, $uploadDir, $options);
+    // Metadata for GridFS
+    $metadata = [
+        'projectId' => $projectId,
+        'uploadedBy' => $userId,
+        'uploadType' => 'chat'
+    ];
+    
+    // Upload to GridFS (MongoDB cloud storage)
+    $uploadResult = $gridfsHandler->uploadToGridFS($file, $metadata, $options);
     
     if (!$uploadResult['success']) {
         $response['message'] = $uploadResult['message'];
@@ -138,13 +141,13 @@ try {
         exit;
     }
     
-    // Get uploaded file data
+    // Get uploaded file data from GridFS
     $uploadedFile = $uploadResult['fileData'];
     $fileName = $uploadedFile['name'];
     $fileType = $uploadedFile['type'];
     $fileSize = $uploadedFile['size'];
     $fileExtension = $uploadedFile['extension'];
-    $relativeFilePath = ltrim($uploadedFile['path'], '/');
+    $gridfsId = $uploadedFile['gridfs_id']; // MongoDB file ID (accessible from anywhere!)
     
     // Continue with existing logic
     {
@@ -155,16 +158,18 @@ try {
         $fileTypeCategory = $uploadedFile['category'];
         $iconClass = $uploadedFile['iconClass'];
         
-        // File details
+        // File details (now using GridFS ID instead of file path!)
         $fileInfo = [
             'fileName' => $fileName,
             'fileSize' => $fileSize,
             'fileType' => $fileType,
             'fileExtension' => $fileExtension,
-            'filePath' => $relativeFilePath,
+            'gridfsId' => $gridfsId, // MongoDB GridFS file ID
             'fileCategory' => $fileTypeCategory,
             'iconClass' => $iconClass,
-            'uploadedAt' => $currentTime
+            'uploadedAt' => $currentTime,
+            'storage' => 'gridfs', // Flag indicating file is in cloud storage
+            'formattedSize' => FileConfig::formatFileSize($fileSize)
         ];
         
         // Default message if none provided
