@@ -10,6 +10,18 @@ $base_path = $depth > 1 ? str_repeat('../', $depth - 1) : '';
 // Initialize global preference tracking
 require_once __DIR__ . '/global-preference-tracker.php';
 
+// Include admin middleware for admin functions
+try {
+    require_once __DIR__ . '/admin_middleware.php';
+} catch (Exception $e) {
+    // If admin middleware is not available, create a simple fallback
+    if (!function_exists('isAdmin')) {
+        function isAdmin() {
+            return false;
+        }
+    }
+}
+
 ?>
 
 <!-- Modern Navbar with Fluid Animations -->
@@ -138,6 +150,18 @@ require_once __DIR__ . '/global-preference-tracker.php';
                                         <div class="menu-item-glow"></div>
                                     </a>
                                 </div>
+                                
+                                <?php if (isAdmin()): ?>
+                                <!-- Admin Section -->
+                                <div class="menu-section">
+                                    <p class="menu-section-title">Administration</p>
+                                    <a href="<?= $base_path ?>admin_dashboard.php" class="menu-item admin-menu-item">
+                                        <i class="bi bi-shield-check"></i>
+                                        <span>Admin Dashboard</span>
+                                        <div class="menu-item-glow"></div>
+                                    </a>
+                                </div>
+                                <?php endif; ?>
                                 
                                 <div class="menu-divider"></div>
                                 
@@ -1355,6 +1379,63 @@ require_once __DIR__ . '/global-preference-tracker.php';
 [data-theme="light"] .debug-toggle .toggle-thumb.active {
     transform: translateX(22px);
     background: rgba(76, 201, 240, 0.8);
+}
+
+/* Admin Menu Item Styling */
+.admin-menu-item {
+    background: linear-gradient(135deg, rgba(247, 37, 133, 0.1), rgba(114, 9, 183, 0.1));
+    border: 1px solid rgba(247, 37, 133, 0.2);
+    border-radius: 8px;
+    margin: 5px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-menu-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(247, 37, 133, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.admin-menu-item:hover::before {
+    left: 100%;
+}
+
+.admin-menu-item i {
+    color: rgba(247, 37, 133, 0.8);
+    animation: adminPulse 2s infinite;
+}
+
+@keyframes adminPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.admin-menu-item:hover {
+    background: linear-gradient(135deg, rgba(247, 37, 133, 0.2), rgba(114, 9, 183, 0.2));
+    border-color: rgba(247, 37, 133, 0.4);
+    transform: translateX(5px) scale(1.02);
+}
+
+.admin-menu-item:hover i {
+    color: rgba(247, 37, 133, 1);
+    animation: none;
+    transform: scale(1.2);
+}
+
+[data-theme="light"] .admin-menu-item {
+    background: linear-gradient(135deg, rgba(247, 37, 133, 0.05), rgba(114, 9, 183, 0.05));
+    border-color: rgba(247, 37, 133, 0.15);
+}
+
+[data-theme="light"] .admin-menu-item:hover {
+    background: linear-gradient(135deg, rgba(247, 37, 133, 0.1), rgba(114, 9, 183, 0.1));
+    border-color: rgba(247, 37, 133, 0.3);
 }
 </style>
 
