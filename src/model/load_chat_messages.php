@@ -1,6 +1,8 @@
 <?php
 require_once 'db_connect.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once 'ChatEncryption.php';
+require_once 'ProjectKeyManager.php';
 
 use MongoDB\BSON\ObjectId;
 
@@ -80,6 +82,20 @@ try {
     // Execute query
     $cursor = $collection->find($filter, $options);
     
+    // Get project encryption key if needed
+    $projectKey = null;
+    $project = $db->projectsV2->findOne(
+        ['_id' => new ObjectId($projectId)],
+        ['projection' => ['encryptionEnabled' => 1]]
+    );
+    
+    if ($project && isset($project['encryptionEnabled']) && $project['encryptionEnabled']) {
+        $keyResult = ProjectKeyManager::getProjectKey($projectId, $userId, $db);
+        if ($keyResult['success']) {
+            $projectKey = $keyResult['key'];
+        }
+    }
+    
     // Load messages
     $messages = [];
     $userProfiles = []; // Cache for user profiles to avoid redundant lookups
@@ -148,10 +164,31 @@ try {
             $senderName = $document['sender']['name'] ?? 'Unknown User';
         }
         
+        // Decrypt message if it's encrypted
+        $messageText = $document['message'];
+        $isEncrypted = false;
+        
+        if (ChatEncryption::isEncrypted($document) && $projectKey) {
+            try {
+                $encryptedData = [
+                    'message' => $document['message'],
+                    'iv' => $document['iv'] ?? '',
+                    'tag' => $document['tag'] ?? ''
+                ];
+                $messageText = ChatEncryption::decryptMessage($encryptedData, $projectKey);
+                $isEncrypted = true;
+            } catch (Exception $e) {
+                // If decryption fails, show error message
+                error_log("Message decryption failed: " . $e->getMessage());
+                $messageText = '[Encrypted message - unable to decrypt]';
+                $isEncrypted = true;
+            }
+        }
+        
         // Format message
         $message = [
             'id' => (string)$document['_id'],
-            'message' => $document['message'],
+            'message' => $messageText,
             'sender' => [
                 'id' => $senderId,
                 'name' => $senderName,
@@ -162,7 +199,8 @@ try {
             'formattedDate' => $document['timestamp']->toDateTime()->format('M d, Y'),
             'profileImage' => $profileImage,
             'isSystem' => $document['isSystemMessage'] ?? false,
-            'isCurrentUser' => ($senderId === $userId)
+            'isCurrentUser' => ($senderId === $userId),
+            'isEncrypted' => $isEncrypted
         ];
         
         // Add single attachment if it exists

@@ -1,10 +1,16 @@
 <?php
 require __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../model/db_connect.php';
+require_once __DIR__ . '/../model/GridFSUploadHandler.php';
+require_once __DIR__ . '/../model/FileConfig.php';
+require_once __DIR__ . '/../model/RateLimiter.php';
 
 // Import MongoDB classes
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\BSON\ObjectId;
+use UIURP\Model\GridFSUploadHandler;
+use UIURP\Model\FileConfig;
+use UIURP\Model\RateLimiter;
 
 // Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
@@ -62,39 +68,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'timestamp' => new UTCDateTime()
         ];
 
-        // Handle file uploads
+        // Handle file uploads using GridFS
         $attachments = [];
         if (isset($_FILES['files']) && !empty($_FILES['files']['name'][0])) {
-            $uploadDir = '../../uploads/forum_attachments/';
-            
-            // Create directory if it doesn't exist
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
-            }
+            $gridfsHandler = new GridFSUploadHandler($db);
+            $rateLimiter = new RateLimiter($db);
             
             $fileCount = count($_FILES['files']['name']);
             
             for ($i = 0; $i < $fileCount; $i++) {
-                $fileName = $_FILES['files']['name'][$i];
-                $fileTmpName = $_FILES['files']['tmp_name'][$i];
-                $fileSize = $_FILES['files']['size'][$i];
-                $fileError = $_FILES['files']['error'][$i];
-                $fileType = $_FILES['files']['type'][$i];
-                
-                // Generate unique filename
-                $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
-                $uniqueName = 'forum_' . time() . '_' . md5($fileName . microtime()) . '.' . $fileExt;
-                $uploadPath = $uploadDir . $uniqueName;
-                
-                // Move uploaded file
-                if (move_uploaded_file($fileTmpName, $uploadPath)) {
-                    $attachments[] = [
-                        'original_name' => $fileName,
-                        'stored_name' => $uniqueName,
-                        'file_type' => $fileType,
-                        'file_size' => $fileSize,
-                        'file_path' => 'uploads/forum_attachments/' . $uniqueName
+                if ($_FILES['files']['error'][$i] === 0) {
+                    $file = [
+                        'name' => $_FILES['files']['name'][$i],
+                        'type' => $_FILES['files']['type'][$i],
+                        'tmp_name' => $_FILES['files']['tmp_name'][$i],
+                        'error' => $_FILES['files']['error'][$i],
+                        'size' => $_FILES['files']['size'][$i]
                     ];
+                    
+                    // Check rate limit
+                    $rateCheck = $rateLimiter->checkUploadAllowed($userId, $file['size']);
+                    if (!$rateCheck['allowed']) {
+                        throw new Exception($rateCheck['message']);
+                    }
+                    
+                    // Upload to GridFS
+                    $metadata = [
+                        'uploadedBy' => $userId,
+                        'uploadType' => 'forum_attachment'
+                    ];
+                    
+                    $uploadResult = $gridfsHandler->uploadToGridFS($file, $metadata);
+                    
+                    if ($uploadResult['success']) {
+                        $uploadedFile = $uploadResult['fileData'];
+                        $rateLimiter->logUpload($userId, $uploadedFile['size'], $uploadedFile['name']);
+                        
+                        $attachments[] = [
+                            'original_name' => $uploadedFile['name'],
+                            'gridfsId' => $uploadedFile['gridfs_id'],
+                            'file_type' => $uploadedFile['type'],
+                            'file_size' => $uploadedFile['size'],
+                            'storage' => 'gridfs'
+                        ];
+                    }
                 }
             }
         }

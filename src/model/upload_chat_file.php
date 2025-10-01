@@ -3,11 +3,13 @@ require_once 'db_connect.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/GridFSUploadHandler.php';
 require_once __DIR__ . '/FileConfig.php';
+require_once __DIR__ . '/RateLimiter.php';
 
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 use UIURP\Model\GridFSUploadHandler;
 use UIURP\Model\FileConfig;
+use UIURP\Model\RateLimiter;
 
 // Start session to capture user data
 session_start();
@@ -117,6 +119,16 @@ try {
     // Process uploaded file using GridFS (cloud storage)
     $file = $_FILES['file'];
     
+    // Check rate limiting
+    $rateLimiter = new RateLimiter($db);
+    $rateCheck = $rateLimiter->checkUploadAllowed($userId, $file['size']);
+    
+    if (!$rateCheck['allowed']) {
+        $response['message'] = $rateCheck['message'];
+        echo json_encode($response);
+        exit;
+    }
+    
     // Initialize GridFS upload handler
     $gridfsHandler = new GridFSUploadHandler($db);
     
@@ -201,6 +213,9 @@ try {
         );
         
         if ($result->getInsertedCount()) {
+            // Log upload for rate limiting
+            $rateLimiter->logUpload($userId, $fileSize, $fileName);
+            
             $response['success'] = true;
             $response['message'] = 'File uploaded successfully';
             $response['fileInfo'] = $fileInfo;

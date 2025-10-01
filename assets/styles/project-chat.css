@@ -2178,3 +2178,258 @@ body.chat-pinned .full-width-bg {
         height: calc(100% - 46px);
     }
 }
+
+/* Encryption UI Styles */
+.encryption-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+    padding: 4px 8px;
+    background: rgba(67, 97, 238, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(67, 97, 238, 0.2);
+}
+
+.encryption-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #4361ee;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.encryption-indicator i {
+    font-size: 14px;
+}
+
+.encryption-text {
+    white-space: nowrap;
+}
+
+.encryption-settings-btn {
+    background: none;
+    border: none;
+    color: #4361ee;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.encryption-settings-btn:hover {
+    background: rgba(67, 97, 238, 0.1);
+}
+
+.encryption-settings-btn i {
+    font-size: 12px;
+}
+
+/* Encryption Settings Modal */
+#encryptionSettingsModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#encryptionSettingsModal .modal-content {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#encryptionSettingsModal .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#encryptionSettingsModal .modal-header h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+#encryptionSettingsModal .close-modal {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+#encryptionSettingsModal .close-modal:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+#encryptionSettingsModal .modal-body {
+    padding: 24px;
+}
+
+.encryption-status-info {
+    margin-bottom: 24px;
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+
+.status-item label {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.status-item span {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.encryption-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.encryption-actions .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.encryption-actions .btn-primary {
+    background: #4361ee;
+    color: white;
+}
+
+.encryption-actions .btn-primary:hover {
+    background: #3651d4;
+}
+
+.encryption-actions .btn-warning {
+    background: #f59e0b;
+    color: white;
+}
+
+.encryption-actions .btn-warning:hover {
+    background: #d97706;
+}
+
+.encryption-actions .btn-secondary {
+    background: #6b7280;
+    color: white;
+}
+
+.encryption-actions .btn-secondary:hover {
+    background: #4b5563;
+}
+
+.encryption-actions .btn-info {
+    background: #06b6d4;
+    color: white;
+}
+
+.encryption-actions .btn-info:hover {
+    background: #0891b2;
+}
+
+.encryption-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 8px;
+    color: #92400e;
+}
+
+.encryption-warning i {
+    font-size: 16px;
+    margin-top: 2px;
+}
+
+.encryption-warning p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Message encryption indicators */
+.message-content .encryption-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 8px;
+    color: #4361ee;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.message-content .encryption-indicator i {
+    font-size: 10px;
+}
+
+.message-content.decryption-error {
+    color: #ef4444;
+    font-style: italic;
+}
+
+/* Responsive encryption UI */
+@media (max-width: 768px) {
+    .encryption-status {
+        margin-left: 8px;
+        padding: 2px 6px;
+    }
+    
+    .encryption-text {
+        display: none;
+    }
+    
+    .encryption-indicator i {
+        font-size: 12px;
+    }
+    
+    #encryptionSettingsModal .modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    #encryptionSettingsModal .modal-header,
+    #encryptionSettingsModal .modal-body {
+        padding: 16px;
+    }
+}

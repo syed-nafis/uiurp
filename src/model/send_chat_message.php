@@ -1,6 +1,8 @@
 <?php
 require_once 'db_connect.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once 'ChatEncryption.php';
+require_once 'ProjectKeyManager.php';
 
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
@@ -103,6 +105,33 @@ try {
     // Current UTC timestamp
     $currentTime = new UTCDateTime();
     
+    // Check if project has encryption enabled
+    $project = $db->projectsV2->findOne(
+        ['_id' => new ObjectId($projectId)],
+        ['projection' => ['encryptionEnabled' => 1]]
+    );
+    
+    $isEncrypted = false;
+    $encryptedData = null;
+    
+    // Encrypt message if project has encryption enabled
+    if ($project && isset($project['encryptionEnabled']) && $project['encryptionEnabled']) {
+        try {
+            // Get project encryption key
+            $keyResult = ProjectKeyManager::getProjectKey($projectId, $userId, $db);
+            if ($keyResult['success']) {
+                $encryptedData = ChatEncryption::encryptMessage($messageText, $keyResult['key']);
+                $isEncrypted = true;
+            } else {
+                // If key access fails, log error but continue with unencrypted message
+                error_log("Failed to get project key for encryption: " . $keyResult['message']);
+            }
+        } catch (Exception $e) {
+            // If encryption fails, log error but continue with unencrypted message
+            error_log("Message encryption failed: " . $e->getMessage());
+        }
+    }
+    
     // Create message document
     $messageDoc = [
         'projectId' => new ObjectId($projectId),
@@ -111,10 +140,17 @@ try {
             'name' => $userName,
             'userType' => $userType
         ],
-        'message' => $messageText,
+        'message' => $isEncrypted ? $encryptedData['ciphertext'] : $messageText,
         'timestamp' => $currentTime,
-        'isSystemMessage' => false
+        'isSystemMessage' => false,
+        'encrypted' => $isEncrypted
     ];
+    
+    // Add encryption metadata if message is encrypted
+    if ($isEncrypted && $encryptedData) {
+        $messageDoc['iv'] = $encryptedData['iv'];
+        $messageDoc['tag'] = $encryptedData['tag'];
+    }
     
     // Insert message
     $result = $db->project_chat_messages->insertOne($messageDoc);

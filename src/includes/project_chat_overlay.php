@@ -2,7 +2,18 @@
 <div id="projectChatOverlay" class="project-chat-overlay">
     <!-- Chat Header with Close Button -->
     <div class="chat-header">
-        <div class="chat-title">Project Chat</div>
+        <div class="chat-title">
+            <span id="chatTitle">Project Chat</span>
+            <div class="encryption-status" id="encryptionStatus" style="display: none;">
+                <span class="encryption-indicator" id="encryptionIndicator">
+                    <i class="bi bi-shield-lock"></i>
+                    <span class="encryption-text">End-to-end encrypted</span>
+                </span>
+                <button class="encryption-settings-btn" id="encryptionSettingsBtn" title="Encryption settings">
+                    <i class="bi bi-gear"></i>
+                </button>
+            </div>
+        </div>
         <div class="chat-controls">
             <button id="pinChat" class="panel-control" title="Pin chat">
                 <i class="bi bi-pin"></i>
@@ -2677,4 +2688,229 @@
         container.appendChild(messageEl);
     }
 });
+
+// Encryption Settings Modal
+const encryptionSettingsModal = document.createElement('div');
+encryptionSettingsModal.id = 'encryptionSettingsModal';
+encryptionSettingsModal.className = 'modal';
+encryptionSettingsModal.style.display = 'none';
+encryptionSettingsModal.innerHTML = `
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Encryption Settings</h3>
+            <button class="close-modal" id="closeEncryptionModal">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="encryption-status-info">
+                <div class="status-item">
+                    <label>Encryption Status:</label>
+                    <span id="encryptionStatusText">Checking...</span>
+                </div>
+                <div class="status-item">
+                    <label>Key Generated:</label>
+                    <span id="keyGeneratedText">-</span>
+                </div>
+                <div class="status-item">
+                    <label>Last Rotation:</label>
+                    <span id="lastRotationText">-</span>
+                </div>
+            </div>
+            <div class="encryption-actions">
+                <button id="enableEncryptionBtn" class="btn btn-primary" style="display: none;">
+                    <i class="bi bi-shield-lock"></i> Enable Encryption
+                </button>
+                <button id="disableEncryptionBtn" class="btn btn-warning" style="display: none;">
+                    <i class="bi bi-shield"></i> Disable Encryption
+                </button>
+                <button id="rotateKeyBtn" class="btn btn-secondary" style="display: none;">
+                    <i class="bi bi-arrow-clockwise"></i> Rotate Key
+                </button>
+                <button id="migrateMessagesBtn" class="btn btn-info" style="display: none;">
+                    <i class="bi bi-arrow-up-circle"></i> Migrate Messages
+                </button>
+            </div>
+            <div class="encryption-warning">
+                <i class="bi bi-exclamation-triangle"></i>
+                <p>Only project creators and supervisors can manage encryption settings. Key rotation will make old messages unreadable without the previous key.</p>
+            </div>
+        </div>
+    </div>
+`;
+document.body.appendChild(encryptionSettingsModal);
+
+// Encryption functionality
+let currentProjectEncryptionStatus = null;
+
+// Check encryption status for current project
+async function checkEncryptionStatus(projectId) {
+    if (!projectId) return;
+    
+    try {
+        const response = await fetch(`src/model/manage_project_encryption.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `projectId=${projectId}&action=status`
+        });
+        
+        const data = await response.json();
+        currentProjectEncryptionStatus = data;
+        
+        // Update UI
+        updateEncryptionUI(data);
+        
+    } catch (error) {
+        console.error('Failed to check encryption status:', error);
+    }
+}
+
+// Update encryption UI elements
+function updateEncryptionUI(status) {
+    const encryptionStatus = document.getElementById('encryptionStatus');
+    const encryptionIndicator = document.getElementById('encryptionIndicator');
+    
+    if (status.success && status.encryptionEnabled) {
+        encryptionStatus.style.display = 'flex';
+        encryptionIndicator.innerHTML = '<i class="bi bi-shield-lock"></i><span class="encryption-text">End-to-end encrypted</span>';
+    } else {
+        encryptionStatus.style.display = 'none';
+    }
+}
+
+// Show encryption settings modal
+function showEncryptionSettings() {
+    if (!currentProjectId) return;
+    
+    const modal = document.getElementById('encryptionSettingsModal');
+    const statusText = document.getElementById('encryptionStatusText');
+    const keyGeneratedText = document.getElementById('keyGeneratedText');
+    const lastRotationText = document.getElementById('lastRotationText');
+    
+    // Update status info
+    if (currentProjectEncryptionStatus && currentProjectEncryptionStatus.success) {
+        statusText.textContent = currentProjectEncryptionStatus.encryptionEnabled ? 'Enabled' : 'Disabled';
+        keyGeneratedText.textContent = currentProjectEncryptionStatus.enabledAt || '-';
+        lastRotationText.textContent = currentProjectEncryptionStatus.lastKeyRotation || '-';
+        
+        // Show/hide action buttons
+        const enableBtn = document.getElementById('enableEncryptionBtn');
+        const disableBtn = document.getElementById('disableEncryptionBtn');
+        const rotateBtn = document.getElementById('rotateKeyBtn');
+        const migrateBtn = document.getElementById('migrateMessagesBtn');
+        
+        if (currentProjectEncryptionStatus.encryptionEnabled) {
+            disableBtn.style.display = 'inline-block';
+            rotateBtn.style.display = 'inline-block';
+            migrateBtn.style.display = 'inline-block';
+            enableBtn.style.display = 'none';
+        } else {
+            enableBtn.style.display = 'inline-block';
+            disableBtn.style.display = 'none';
+            rotateBtn.style.display = 'none';
+            migrateBtn.style.display = 'none';
+        }
+    } else {
+        statusText.textContent = 'Error checking status';
+    }
+    
+    modal.style.display = 'block';
+}
+
+// Hide encryption settings modal
+function hideEncryptionSettings() {
+    const modal = document.getElementById('encryptionSettingsModal');
+    modal.style.display = 'none';
+}
+
+// Handle encryption actions
+async function handleEncryptionAction(action) {
+    if (!currentProjectId) return;
+    
+    try {
+        const response = await fetch(`src/model/manage_project_encryption.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `projectId=${currentProjectId}&action=${action}`
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert(data.message);
+            // Refresh encryption status
+            await checkEncryptionStatus(currentProjectId);
+            // Refresh messages if encryption was enabled/disabled
+            if (action === 'enable' || action === 'disable') {
+                loadChatMessages(currentProjectId);
+            }
+        } else {
+            alert('Error: ' + data.message);
+        }
+        
+    } catch (error) {
+        console.error('Failed to perform encryption action:', error);
+        alert('Error performing action: ' + error.message);
+    }
+}
+
+// Event listeners for encryption
+document.addEventListener('DOMContentLoaded', function() {
+    // Encryption settings button
+    const encryptionSettingsBtn = document.getElementById('encryptionSettingsBtn');
+    if (encryptionSettingsBtn) {
+        encryptionSettingsBtn.addEventListener('click', showEncryptionSettings);
+    }
+    
+    // Close modal button
+    const closeEncryptionModal = document.getElementById('closeEncryptionModal');
+    if (closeEncryptionModal) {
+        closeEncryptionModal.addEventListener('click', hideEncryptionSettings);
+    }
+    
+    // Encryption action buttons
+    const enableEncryptionBtn = document.getElementById('enableEncryptionBtn');
+    const disableEncryptionBtn = document.getElementById('disableEncryptionBtn');
+    const rotateKeyBtn = document.getElementById('rotateKeyBtn');
+    const migrateMessagesBtn = document.getElementById('migrateMessagesBtn');
+    
+    if (enableEncryptionBtn) {
+        enableEncryptionBtn.addEventListener('click', () => handleEncryptionAction('enable'));
+    }
+    if (disableEncryptionBtn) {
+        disableEncryptionBtn.addEventListener('click', () => handleEncryptionAction('disable'));
+    }
+    if (rotateKeyBtn) {
+        rotateKeyBtn.addEventListener('click', () => handleEncryptionAction('rotate'));
+    }
+    if (migrateMessagesBtn) {
+        migrateMessagesBtn.addEventListener('click', () => handleEncryptionAction('migrate'));
+    }
+    
+    // Close modal when clicking outside
+    const modal = document.getElementById('encryptionSettingsModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                hideEncryptionSettings();
+            }
+        });
+    }
+});
+
+// Update the existing loadChatMessages function to check encryption status
+const originalLoadChatMessages = loadChatMessages;
+loadChatMessages = function(projectId, isPolling = false) {
+    // Check encryption status when loading messages
+    if (!isPolling) {
+        checkEncryptionStatus(projectId);
+    }
+    
+    // Call original function
+    return originalLoadChatMessages(projectId, isPolling);
+};
 </script> 

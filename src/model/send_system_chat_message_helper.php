@@ -1,6 +1,8 @@
 <?php
 require_once 'db_connect.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once 'ChatEncryption.php';
+require_once 'ProjectKeyManager.php';
 
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
@@ -51,6 +53,34 @@ function sendSystemChatMessage($projectId, $messageText) {
         // Current UTC timestamp
         $currentTime = new UTCDateTime();
         
+        // Check if project has encryption enabled
+        $project = $db->projectsV2->findOne(
+            ['_id' => new ObjectId($projectId)],
+            ['projection' => ['encryptionEnabled' => 1]]
+        );
+        
+        $isEncrypted = false;
+        $encryptedData = null;
+        
+        // Encrypt system message if project has encryption enabled
+        if ($project && isset($project['encryptionEnabled']) && $project['encryptionEnabled']) {
+            try {
+                // Get project encryption key (use a system user ID for key access)
+                $systemUserId = '000000000000000000000000'; // Special system user ID
+                $keyResult = ProjectKeyManager::getProjectKey($projectId, $systemUserId, $db);
+                if ($keyResult['success']) {
+                    $encryptedData = ChatEncryption::encryptMessage(trim($messageText), $keyResult['key']);
+                    $isEncrypted = true;
+                } else {
+                    // If key access fails, log error but continue with unencrypted message
+                    error_log("Failed to get project key for system message encryption: " . $keyResult['message']);
+                }
+            } catch (Exception $e) {
+                // If encryption fails, log error but continue with unencrypted message
+                error_log("System message encryption failed: " . $e->getMessage());
+            }
+        }
+        
         // Create system message document
         $messageDoc = [
             'projectId' => new ObjectId($projectId),
@@ -58,10 +88,17 @@ function sendSystemChatMessage($projectId, $messageText) {
                 'name' => 'System',
                 'userType' => 'system'
             ],
-            'message' => trim($messageText),
+            'message' => $isEncrypted ? $encryptedData['ciphertext'] : trim($messageText),
             'timestamp' => $currentTime,
-            'isSystemMessage' => true
+            'isSystemMessage' => true,
+            'encrypted' => $isEncrypted
         ];
+        
+        // Add encryption metadata if message is encrypted
+        if ($isEncrypted && $encryptedData) {
+            $messageDoc['iv'] = $encryptedData['iv'];
+            $messageDoc['tag'] = $encryptedData['tag'];
+        }
         
         // Insert message
         $result = $db->project_chat_messages->insertOne($messageDoc);

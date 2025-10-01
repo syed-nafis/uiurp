@@ -2,10 +2,19 @@
 require_once 'db_connect.php';
 require_once 'send_system_chat_message_helper.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/GridFSUploadHandler.php';
+require_once __DIR__ . '/FileConfig.php';
+require_once __DIR__ . '/RateLimiter.php';
+require_once __DIR__ . '/ProjectKeyManager.php';
+require_once __DIR__ . '/EncryptionConfig.php';
+require_once __DIR__ . '/ChatEncryption.php';
 
 // Import MongoDB BSON types
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\BSON\ObjectId;
+use UIURP\Model\GridFSUploadHandler;
+use UIURP\Model\FileConfig;
+use UIURP\Model\RateLimiter;
 
 // Start session to capture user data if available
 session_start();
@@ -232,66 +241,98 @@ if (!empty($_POST['references'])) {
     }
 }
 
-// Handle additional media uploads - format each media item as {type, url, caption}
+// Handle additional media uploads using GridFS - format each media item as {type, gridfsId, caption}
 $media = [];
 if (!empty($_FILES['mediaFiles']['name'][0])) {
-    $uploadDir = __DIR__ . '/../../storage/media/';
-    
-    // Create directory if it doesn't exist
-    if (!file_exists($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
+    $gridfsHandler = new GridFSUploadHandler($db);
+    $rateLimiter = new RateLimiter($db);
     
     $fileCount = count($_FILES['mediaFiles']['name']);
     
     for ($i = 0; $i < $fileCount; $i++) {
         if ($_FILES['mediaFiles']['error'][$i] === 0) {
-            $filename = $_FILES['mediaFiles']['name'][$i];
-            $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
-            $newFilename = 'media_' . time() . '_' . uniqid() . '.' . $fileExtension;
-            $targetFile = $uploadDir . $newFilename;
+            $file = [
+                'name' => $_FILES['mediaFiles']['name'][$i],
+                'type' => $_FILES['mediaFiles']['type'][$i],
+                'tmp_name' => $_FILES['mediaFiles']['tmp_name'][$i],
+                'error' => $_FILES['mediaFiles']['error'][$i],
+                'size' => $_FILES['mediaFiles']['size'][$i]
+            ];
             
-            if (move_uploaded_file($_FILES['mediaFiles']['tmp_name'][$i], $targetFile)) {
-                $mediaType = strpos($_FILES['mediaFiles']['type'][$i], 'image/') === 0 ? 'image' : 'video';
+            // Check rate limit
+            $rateCheck = $rateLimiter->checkUploadAllowed($_SESSION['userid'], $file['size']);
+            if (!$rateCheck['allowed']) {
+                throw new Exception($rateCheck['message']);
+            }
+            
+            // Upload to GridFS
+            $metadata = [
+                'uploadedBy' => $_SESSION['userid'],
+                'uploadType' => 'project_media'
+            ];
+            
+            $uploadResult = $gridfsHandler->uploadToGridFS($file, $metadata);
+            
+            if ($uploadResult['success']) {
+                $uploadedFile = $uploadResult['fileData'];
+                $rateLimiter->logUpload($_SESSION['userid'], $uploadedFile['size'], $uploadedFile['name']);
+                
+                $mediaType = strpos($file['type'], 'image/') === 0 ? 'image' : 'video';
                 
                 $media[] = [
                     'type' => $mediaType,
-                    'url' => '/storage/media/' . $newFilename,
-                    'caption' => $filename
+                    'gridfsId' => $uploadedFile['gridfs_id'],
+                    'caption' => $file['name'],
+                    'storage' => 'gridfs'
                 ];
             }
         }
     }
 }
 
-// Handle project files uploads - format as {name, path, type, size, uploadedAt}
+// Handle project files uploads using GridFS - format as {name, gridfsId, type, size, uploadedAt}
 $files = [];
 if (!empty($_FILES['projectFiles']['name'][0])) {
-    $uploadDir = __DIR__ . '/../../storage/files/';
-    
-    // Create directory if it doesn't exist
-    if (!file_exists($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
+    $gridfsHandler = new GridFSUploadHandler($db);
+    $rateLimiter = new RateLimiter($db);
     
     $fileCount = count($_FILES['projectFiles']['name']);
     
     for ($i = 0; $i < $fileCount; $i++) {
         if ($_FILES['projectFiles']['error'][$i] === 0) {
-            $filename = $_FILES['projectFiles']['name'][$i];
-            $fileType = $_FILES['projectFiles']['type'][$i];
-            $fileSize = $_FILES['projectFiles']['size'][$i];
-            $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
-            $newFilename = 'file_' . time() . '_' . uniqid() . '.' . $fileExtension;
-            $targetFile = $uploadDir . $newFilename;
+            $file = [
+                'name' => $_FILES['projectFiles']['name'][$i],
+                'type' => $_FILES['projectFiles']['type'][$i],
+                'tmp_name' => $_FILES['projectFiles']['tmp_name'][$i],
+                'error' => $_FILES['projectFiles']['error'][$i],
+                'size' => $_FILES['projectFiles']['size'][$i]
+            ];
             
-            if (move_uploaded_file($_FILES['projectFiles']['tmp_name'][$i], $targetFile)) {
+            // Check rate limit
+            $rateCheck = $rateLimiter->checkUploadAllowed($_SESSION['userid'], $file['size']);
+            if (!$rateCheck['allowed']) {
+                throw new Exception($rateCheck['message']);
+            }
+            
+            // Upload to GridFS
+            $metadata = [
+                'uploadedBy' => $_SESSION['userid'],
+                'uploadType' => 'project_file'
+            ];
+            
+            $uploadResult = $gridfsHandler->uploadToGridFS($file, $metadata);
+            
+            if ($uploadResult['success']) {
+                $uploadedFile = $uploadResult['fileData'];
+                $rateLimiter->logUpload($_SESSION['userid'], $uploadedFile['size'], $uploadedFile['name']);
+                
                 $files[] = [
-                    'name' => $filename,
-                    'path' => '/storage/files/' . $newFilename,
-                    'type' => $fileType,
-                    'size' => $fileSize,
-                    'uploadedAt' => new UTCDateTime()
+                    'name' => $uploadedFile['name'],
+                    'gridfsId' => $uploadedFile['gridfs_id'],
+                    'type' => $uploadedFile['type'],
+                    'size' => $uploadedFile['size'],
+                    'uploadedAt' => new UTCDateTime(),
+                    'storage' => 'gridfs'
                 ];
             }
         }
@@ -360,6 +401,32 @@ try {
     
     if ($result->getInsertedCount() === 1) {
         $projectId = (string) $result->getInsertedId();
+        
+        // Automatically enable encryption for new projects (if configured)
+        if (EncryptionConfig::isAutoEnableEnabled()) {
+            try {
+                $encryptionResult = ProjectKeyManager::initializeProjectEncryption($projectId, $db);
+                if ($encryptionResult['success']) {
+                    error_log("Encryption enabled for new project $projectId");
+                    
+                    // Auto-migrate existing messages if configured
+                    if (EncryptionConfig::isAutoMigrationEnabled()) {
+                        try {
+                            $migratedCount = ChatEncryption::migrateMessagesToEncrypted($projectId, $db);
+                            if ($migratedCount > 0) {
+                                error_log("Auto-migrated $migratedCount messages to encrypted format for project $projectId");
+                            }
+                        } catch (Exception $e) {
+                            error_log("Error auto-migrating messages for project $projectId: " . $e->getMessage());
+                        }
+                    }
+                } else {
+                    error_log("Failed to enable encryption for project $projectId: " . $encryptionResult['message']);
+                }
+            } catch (Exception $e) {
+                error_log("Error enabling encryption for project $projectId: " . $e->getMessage());
+            }
+        }
         
         // Send welcome message to the project chat
         try {

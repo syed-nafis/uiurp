@@ -559,3 +559,246 @@
 )
  -> 67e1a9f6ebb89e49e04ddf35
 [27-Jun-2025 12:04:23 Europe/Berlin] === Save Meeting Request Completed ===
+[01-Oct-2025 08:48:53 UTC] === Save Meeting Request Started ===
+[01-Oct-2025 08:48:53 UTC] Request Method: POST
+[01-Oct-2025 08:48:53 UTC] Raw Input: {"projectId":"68cba197cc8f064b09081922","title":"test meet","date":"2025-09-30","startTime":"12:00","endTime":"14:00","description":"test meet","meetingLink":"http://localhost:8000/Project_details.php?joinMeeting=rob-wdjz-hkl","type":"Project Meeting"}
+[01-Oct-2025 08:48:53 UTC] Parsed JSON data: Array
+(
+    [projectId] => 68cba197cc8f064b09081922
+    [title] => test meet
+    [date] => 2025-09-30
+    [startTime] => 12:00
+    [endTime] => 14:00
+    [description] => test meet
+    [meetingLink] => http://localhost:8000/Project_details.php?joinMeeting=rob-wdjz-hkl
+    [type] => Project Meeting
+)
+
+[01-Oct-2025 08:48:53 UTC] Current user ID: 6833436be5c16779b409aa42
+[01-Oct-2025 08:48:53 UTC] Attempting MongoDB connection...
+[01-Oct-2025 08:48:53 UTC] MongoDB connection successful
+[01-Oct-2025 08:48:54 UTC] Checking supervisor userId: MongoDB\Model\BSONDocument Object
+(
+    [storage:ArrayObject:private] => Array
+        (
+            [$oid] => 685f0801060ea6c5d8a0f176
+        )
+
+)
+ -> 685f0801060ea6c5d8a0f176
+[01-Oct-2025 08:49:00 UTC] === Save Meeting Request Started ===
+[01-Oct-2025 08:49:00 UTC] Request Method: POST
+[01-Oct-2025 08:49:00 UTC] Raw Input: {"projectId":"68cba197cc8f064b09081922","title":"test meet","date":"2025-09-30","startTime":"12:00","endTime":"14:00","description":"test meet","meetingLink":"http://localhost:8000/Project_details.php?joinMeeting=rob-wdjz-hkl","type":"Project Meeting"}
+[01-Oct-2025 08:49:00 UTC] Parsed JSON data: Array
+(
+    [projectId] => 68cba197cc8f064b09081922
+    [title] => test meet
+    [date] => 2025-09-30
+    [startTime] => 12:00
+    [endTime] => 14:00
+    [description] => test meet
+    [meetingLink] => http://localhost:8000/Project_details.php?joinMeeting=rob-wdjz-hkl
+    [type] => Project Meeting
+)
+
+[01-Oct-2025 08:49:00 UTC] Current user ID: 6833436be5c16779b409aa42
+[01-Oct-2025 08:49:00 UTC] Attempting MongoDB connection...
+[01-Oct-2025 08:49:00 UTC] MongoDB connection successful
+[01-Oct-2025 08:49:00 UTC] Checking supervisor userId: MongoDB\Model\BSONDocument Object
+(
+    [storage:ArrayObject:private] => Array
+        (
+            [$oid] => 685f0801060ea6c5d8a0f176
+        )
+
+)
+ -> 685f0801060ea6c5d8a0f176
+[01-Oct-2025 08:49:54 UTC] === Save Meeting Request Started ===
+[01-Oct-2025 08:49:54 UTC] Request Method: POST
+[01-Oct-2025 08:49:54 UTC] Raw Input: {"projectId":"68cba197cc8f064b09081922","title":"test meet","date":"2025-10-01","startTime":"12:00","endTime":"15:00","description":"test","meetingLink":"http://localhost:8000/Project_details.php?joinMeeting=qom-ecfb-xjq","type":"Project Meeting"}
+[01-Oct-2025 08:49:54 UTC] Parsed JSON data: Array
+(
+    [projectId] => 68cba197cc8f064b09081922
+    [title] => test meet
+    [date] => 2025-10-01
+    [startTime] => 12:00
+    [endTime] => 15:00
+    [description] => test
+    [meetingLink] => http://localhost:8000/Project_details.php?joinMeeting=qom-ecfb-xjq
+    [type] => Project Meeting
+)
+
+[01-Oct-2025 08:49:54 UTC] Current user ID: 6833436be5c16779b409aa42
+[01-Oct-2025 08:49:54 UTC] Attempting MongoDB connection...
+[01-Oct-2025 08:49:54 UTC] MongoDB connection successful
+[01-Oct-2025 08:49:54 UTC] Checking supervisor userId: MongoDB\Model\BSONDocument Object
+(
+    [storage:ArrayObject:private] => Array
+        (
+            [$oid] => 685f0801060ea6c5d8a0f176
+        )
+
+)
+ -> 685f0801060ea6c5d8a0f176
+[01-Oct-2025 08:50:30 UTC] === Save Meeting Request Started ===
+[01-Oct-2025 08:50:30 UTC] Request Method: POST
+[01-Oct-2025 08:50:30 UTC] Raw Input: {"projectId":"68cba197cc8f064b09081922","title":"test meet","date":"2025-10-01","startTime":"08:00","endTime":"11:00","description":"test","meetingLink":"http://localhost:8000/Project_details.php?joinMeeting=hba-aefc-ajn","type":"Project Meeting"}
+[01-Oct-2025 08:50:30 UTC] Parsed JSON data: Array
+(
+    [projectId] => 68cba197cc8f064b09081922
+    [title] => test meet
+    [date] => 2025-10-01
+    [startTime] => 08:00
+    [endTime] => 11:00
+    [description] => test
+    [meetingLink] => http://localhost:8000/Project_details.php?joinMeeting=hba-aefc-ajn
+    [type] => Project Meeting
+)
+
+[01-Oct-2025 08:50:30 UTC] Current user ID: 6833436be5c16779b409aa42
+[01-Oct-2025 08:50:30 UTC] Attempting MongoDB connection...
+[01-Oct-2025 08:50:30 UTC] MongoDB connection successful
+[01-Oct-2025 08:50:31 UTC] Checking supervisor userId: MongoDB\Model\BSONDocument Object
+(
+    [storage:ArrayObject:private] => Array
+        (
+            [$oid] => 685f0801060ea6c5d8a0f176
+        )
+
+)
+ -> 685f0801060ea6c5d8a0f176
+[01-Oct-2025 08:51:00 UTC] === Save Meeting Request Started ===
+[01-Oct-2025 08:51:00 UTC] Request Method: POST
+[01-Oct-2025 08:51:00 UTC] Raw Input: {"projectId":"68cba197cc8f064b09081922","title":"test","date":"2025-10-01","startTime":"12:00","endTime":"15:00","description":"test","meetingLink":"http://localhost:8000/Project_details.php?joinMeeting=chj-rkcd-lfx","type":"Project Meeting"}
+[01-Oct-2025 08:51:00 UTC] Parsed JSON data: Array
+(
+    [projectId] => 68cba197cc8f064b09081922
+    [title] => test
+    [date] => 2025-10-01
+    [startTime] => 12:00
+    [endTime] => 15:00
+    [description] => test
+    [meetingLink] => http://localhost:8000/Project_details.php?joinMeeting=chj-rkcd-lfx
+    [type] => Project Meeting
+)
+
+[01-Oct-2025 08:51:00 UTC] Current user ID: 6833436be5c16779b409aa42
+[01-Oct-2025 08:51:00 UTC] Attempting MongoDB connection...
+[01-Oct-2025 08:51:00 UTC] MongoDB connection successful
+[01-Oct-2025 08:51:00 UTC] Checking supervisor userId: MongoDB\Model\BSONDocument Object
+(
+    [storage:ArrayObject:private] => Array
+        (
+            [$oid] => 685f0801060ea6c5d8a0f176
+        )
+
+)
+ -> 685f0801060ea6c5d8a0f176
+[01-Oct-2025 08:51:47 UTC] === Save Meeting Request Started ===
+[01-Oct-2025 08:51:47 UTC] Request Method: POST
+[01-Oct-2025 08:51:47 UTC] Raw Input: {"projectId":"685551a4793d650a9900a57f","title":"test meet","date":"2025-09-30","startTime":"18:30","endTime":"19:30","description":"test","meetingLink":"http://localhost:8000/Project_details.php?joinMeeting=tlr-pboo-gpv","type":"Project Meeting"}
+[01-Oct-2025 08:51:47 UTC] Parsed JSON data: Array
+(
+    [projectId] => 685551a4793d650a9900a57f
+    [title] => test meet
+    [date] => 2025-09-30
+    [startTime] => 18:30
+    [endTime] => 19:30
+    [description] => test
+    [meetingLink] => http://localhost:8000/Project_details.php?joinMeeting=tlr-pboo-gpv
+    [type] => Project Meeting
+)
+
+[01-Oct-2025 08:51:47 UTC] Current user ID: 6833436be5c16779b409aa42
+[01-Oct-2025 08:51:47 UTC] Attempting MongoDB connection...
+[01-Oct-2025 08:51:47 UTC] MongoDB connection successful
+[01-Oct-2025 08:51:47 UTC] Checking supervisor userId: MongoDB\Model\BSONDocument Object
+(
+    [storage:ArrayObject:private] => Array
+        (
+            [$oid] => 685f08bf060ea6c5d8a0f177
+        )
+
+)
+ -> 685f08bf060ea6c5d8a0f177
+[01-Oct-2025 08:51:48 UTC] === Save Meeting Request Started ===
+[01-Oct-2025 08:51:48 UTC] Request Method: POST
+[01-Oct-2025 08:51:48 UTC] Raw Input: {"projectId":"685551a4793d650a9900a57f","title":"test meet","date":"2025-09-30","startTime":"18:30","endTime":"19:30","description":"test","meetingLink":"http://localhost:8000/Project_details.php?joinMeeting=tlr-pboo-gpv","type":"Project Meeting"}
+[01-Oct-2025 08:51:48 UTC] Parsed JSON data: Array
+(
+    [projectId] => 685551a4793d650a9900a57f
+    [title] => test meet
+    [date] => 2025-09-30
+    [startTime] => 18:30
+    [endTime] => 19:30
+    [description] => test
+    [meetingLink] => http://localhost:8000/Project_details.php?joinMeeting=tlr-pboo-gpv
+    [type] => Project Meeting
+)
+
+[01-Oct-2025 08:51:48 UTC] Current user ID: 6833436be5c16779b409aa42
+[01-Oct-2025 08:51:48 UTC] Attempting MongoDB connection...
+[01-Oct-2025 08:51:48 UTC] MongoDB connection successful
+[01-Oct-2025 08:51:48 UTC] Checking supervisor userId: MongoDB\Model\BSONDocument Object
+(
+    [storage:ArrayObject:private] => Array
+        (
+            [$oid] => 685f08bf060ea6c5d8a0f177
+        )
+
+)
+ -> 685f08bf060ea6c5d8a0f177
+[01-Oct-2025 08:51:59 UTC] === Save Meeting Request Started ===
+[01-Oct-2025 08:51:59 UTC] Request Method: POST
+[01-Oct-2025 08:51:59 UTC] Raw Input: {"projectId":"685551a4793d650a9900a57f","title":"test meet","date":"2025-09-30","startTime":"18:30","endTime":"19:30","description":"test","meetingLink":"http://localhost:8000/Project_details.php?joinMeeting=tlr-pboo-gpv","type":"Project Meeting"}
+[01-Oct-2025 08:51:59 UTC] Parsed JSON data: Array
+(
+    [projectId] => 685551a4793d650a9900a57f
+    [title] => test meet
+    [date] => 2025-09-30
+    [startTime] => 18:30
+    [endTime] => 19:30
+    [description] => test
+    [meetingLink] => http://localhost:8000/Project_details.php?joinMeeting=tlr-pboo-gpv
+    [type] => Project Meeting
+)
+
+[01-Oct-2025 08:51:59 UTC] Current user ID: 6833436be5c16779b409aa42
+[01-Oct-2025 08:51:59 UTC] Attempting MongoDB connection...
+[01-Oct-2025 08:51:59 UTC] MongoDB connection successful
+[01-Oct-2025 08:51:59 UTC] Checking supervisor userId: MongoDB\Model\BSONDocument Object
+(
+    [storage:ArrayObject:private] => Array
+        (
+            [$oid] => 685f08bf060ea6c5d8a0f177
+        )
+
+)
+ -> 685f08bf060ea6c5d8a0f177
+[01-Oct-2025 08:52:39 UTC] === Save Meeting Request Started ===
+[01-Oct-2025 08:52:39 UTC] Request Method: POST
+[01-Oct-2025 08:52:39 UTC] Raw Input: {"projectId":"685551a4793d650a9900a57f","title":"test meet","date":"2025-10-01","startTime":"20:00","endTime":"23:00","description":"test","meetingLink":"http://localhost:8000/Project_details.php?joinMeeting=cea-nhds-mzd","type":"Project Meeting"}
+[01-Oct-2025 08:52:39 UTC] Parsed JSON data: Array
+(
+    [projectId] => 685551a4793d650a9900a57f
+    [title] => test meet
+    [date] => 2025-10-01
+    [startTime] => 20:00
+    [endTime] => 23:00
+    [description] => test
+    [meetingLink] => http://localhost:8000/Project_details.php?joinMeeting=cea-nhds-mzd
+    [type] => Project Meeting
+)
+
+[01-Oct-2025 08:52:39 UTC] Current user ID: 6833436be5c16779b409aa42
+[01-Oct-2025 08:52:39 UTC] Attempting MongoDB connection...
+[01-Oct-2025 08:52:39 UTC] MongoDB connection successful
+[01-Oct-2025 08:52:39 UTC] Checking supervisor userId: MongoDB\Model\BSONDocument Object
+(
+    [storage:ArrayObject:private] => Array
+        (
+            [$oid] => 685f08bf060ea6c5d8a0f177
+        )
+
+)
+ -> 685f08bf060ea6c5d8a0f177

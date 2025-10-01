@@ -8,9 +8,15 @@ ini_set('max_input_time', '300');
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once 'db_connect.php';
+require_once __DIR__ . '/GridFSUploadHandler.php';
+require_once __DIR__ . '/FileConfig.php';
+require_once __DIR__ . '/RateLimiter.php';
 
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
+use UIURP\Model\GridFSUploadHandler;
+use UIURP\Model\FileConfig;
+use UIURP\Model\RateLimiter;
 
 session_start();
 
@@ -49,10 +55,24 @@ if (!isset($_POST['projectId']) || !isset($_FILES['file'])) {
 }
 
 try {
+    // Connect to database
+    $client = connectToDatabase();
+    $db = $client->uiurp;
+    
     $projectId = $_POST['projectId'];
     $userId = $_POST['userId'];
     $userName = $_POST['userName'];
     $file = $_FILES['file'];
+    
+    // Check rate limiting
+    $rateLimiter = new RateLimiter($db);
+    $rateCheck = $rateLimiter->checkUploadAllowed($userId, $file['size']);
+    
+    if (!$rateCheck['allowed']) {
+        $response['message'] = $rateCheck['message'];
+        echo json_encode($response);
+        exit;
+    }
 
     // Check for upload errors with detailed messages
     switch ($file['error']) {
@@ -93,59 +113,43 @@ try {
             exit;
     }
 
-    // Validate file size (max 25MB)
-    $maxFileSize = 25 * 1024 * 1024; // 25MB in bytes
-    if ($file['size'] > $maxFileSize) {
-        $response['message'] = 'File size exceeds the limit (25MB). Your file size: ' . round($file['size'] / (1024 * 1024), 2) . 'MB';
+    // Initialize GridFS upload handler
+    $gridfsHandler = new GridFSUploadHandler($db);
+    
+    // Upload options (literature files are PDFs only)
+    $options = [
+        'requiredType' => 'document',
+        'maxSize' => FileConfig::MAX_FILE_SIZE_DOCUMENT
+    ];
+    
+    // Metadata for GridFS
+    $metadata = [
+        'projectId' => $projectId,
+        'uploadedBy' => $userId,
+        'uploadType' => 'literature',
+        'userName' => $userName
+    ];
+    
+    // Upload to GridFS (MongoDB cloud storage)
+    $uploadResult = $gridfsHandler->uploadToGridFS($file, $metadata, $options);
+    
+    if (!$uploadResult['success']) {
+        $response['message'] = $uploadResult['message'];
         echo json_encode($response);
         exit;
     }
-
-    // Validate file type
-    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-    $mimeType = finfo_file($finfo, $file['tmp_name']);
-    finfo_close($finfo);
-
-    if ($mimeType !== 'application/pdf') {
-        $response['message'] = "Invalid file type. Expected PDF, got: $mimeType";
-        echo json_encode($response);
-        exit;
-    }
-
-    // Get file info
-    $fileName = $file['name'];
-    $fileType = $file['type'];
-    $fileSize = $file['size'];
-    $fileTmpPath = $file['tmp_name'];
-
-    // Generate unique filename
-    $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-    $uniqueFileName = uniqid('lit_') . '_' . time() . '.' . $fileExtension;
-
-    // Create upload directory if it doesn't exist
-    $uploadDir = __DIR__ . '/../../storage/files/literature review/' . $projectId;
-    if (!file_exists($uploadDir)) {
-        if (!mkdir($uploadDir, 0755, true)) {
-            throw new Exception('Failed to create upload directory');
-        }
-    }
-
-    if (!is_writable($uploadDir)) {
-        throw new Exception('Upload directory is not writable');
-    }
-
-    $uploadPath = $uploadDir . '/' . $uniqueFileName;
-    $relativeFilePath = 'storage/files/literature review/' . $projectId . '/' . $uniqueFileName;
-
-    // Move uploaded file
-    if (move_uploaded_file($fileTmpPath, $uploadPath)) {
-        $response['success'] = true;
-        $response['message'] = 'File uploaded successfully';
-        $response['filePath'] = $relativeFilePath;
-    } else {
-        $error = error_get_last();
-        throw new Exception('Failed to move uploaded file: ' . ($error ? $error['message'] : 'Unknown error'));
-    }
+    
+    // Get uploaded file data from GridFS
+    $uploadedFile = $uploadResult['fileData'];
+    
+    // Log upload for rate limiting
+    $rateLimiter->logUpload($userId, $uploadedFile['size'], $uploadedFile['name']);
+    
+    $response['success'] = true;
+    $response['message'] = 'File uploaded successfully to cloud storage';
+    $response['gridfsId'] = $uploadedFile['gridfs_id'];
+    $response['fileName'] = $uploadedFile['name'];
+    $response['fileSize'] = $uploadedFile['size'];
 
 } catch (Exception $e) {
     $response['message'] = 'Error: ' . $e->getMessage();

@@ -20,6 +20,14 @@ class FileConfig {
     const MAX_FILE_SIZE_VIDEO = 104857600;   // 100MB
     const MAX_FILE_SIZE_ARCHIVE = 52428800;  // 50MB
     
+    // Blacklisted file extensions (executable files - NEVER allow)
+    private static $blacklistedExtensions = [
+        'exe', 'bat', 'cmd', 'com', 'pif', 'scr', 'vbs', 'js',
+        'jar', 'class', 'sh', 'bash', 'app', 'dmg', 'deb', 'rpm',
+        'msi', 'dll', 'so', 'dylib', 'sys', 'drv', 'cpl',
+        'ps1', 'psm1', 'ws', 'wsf', 'hta', 'gadget'
+    ];
+    
     // Upload directories (relative to project root)
     const DIR_PROJECT_FILES = 'storage/files/';
     const DIR_MEDIA = 'storage/media/';
@@ -135,10 +143,30 @@ class FileConfig {
         $fileName = $file['name'];
         $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
         
+        // SECURITY: Check blacklisted extensions (executable files)
+        if (in_array($fileExtension, self::$blacklistedExtensions)) {
+            $response['message'] = "Executable files are not allowed for security reasons. Extension: $fileExtension";
+            error_log("Blocked executable file upload attempt: $fileName");
+            return $response;
+        }
+        
         // Detect MIME type using finfo
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_file($finfo, $file['tmp_name']);
         finfo_close($finfo);
+        
+        // SECURITY: Additional MIME type checks for executables
+        $dangerousMimeTypes = [
+            'application/x-msdownload', 'application/x-msdos-program',
+            'application/x-executable', 'application/x-sharedlib',
+            'application/x-java-archive', 'application/java-archive'
+        ];
+        
+        if (in_array($mimeType, $dangerousMimeTypes)) {
+            $response['message'] = "Executable files are not allowed for security reasons. Type: $mimeType";
+            error_log("Blocked executable file upload attempt by MIME: $fileName ($mimeType)");
+            return $response;
+        }
         
         // Find file category
         $fileCategory = self::detectFileCategory($fileExtension, $mimeType);
@@ -146,6 +174,11 @@ class FileConfig {
         if (!$fileCategory) {
             $response['message'] = "File type not allowed. Extension: $fileExtension, MIME: $mimeType";
             return $response;
+        }
+        
+        // SECURITY: Sanitize SVG files (remove JavaScript)
+        if ($fileExtension === 'svg') {
+            self::sanitizeSVG($file['tmp_name']);
         }
         
         // Check if specific type is required
@@ -290,5 +323,55 @@ class FileConfig {
         }
         
         return true;
+    }
+    
+    /**
+     * Sanitize SVG files to remove JavaScript and event handlers
+     * SECURITY: Prevents XSS attacks via SVG files
+     */
+    private static function sanitizeSVG($filePath) {
+        try {
+            $content = file_get_contents($filePath);
+            
+            if ($content === false) {
+                return; // Can't read file, skip sanitization
+            }
+            
+            // Remove script tags
+            $content = preg_replace('/<script\b[^>]*>.*?<\/script>/is', '', $content);
+            
+            // Remove event handlers (onclick, onload, etc.)
+            $content = preg_replace('/\son\w+\s*=\s*["\'][^"\']*["\']/i', '', $content);
+            
+            // Remove javascript: protocol
+            $content = preg_replace('/javascript:/i', '', $content);
+            
+            // Remove data: URIs that might contain scripts
+            $content = preg_replace('/data:text\/html[^"\'>\s]*/i', '', $content);
+            
+            // Write sanitized content back
+            file_put_contents($filePath, $content);
+            
+            error_log("SVG file sanitized successfully: $filePath");
+        } catch (\Exception $e) {
+            error_log("Failed to sanitize SVG: " . $e->getMessage());
+            // Don't fail the upload, just log the error
+        }
+    }
+    
+    /**
+     * Get user-friendly file size and type disclaimer text
+     */
+    public static function getUploadDisclaimer($uploadType = 'default') {
+        $disclaimers = [
+            'document' => "Allowed: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, CSV (Max 25MB)",
+            'image' => "Allowed: JPG, PNG, GIF, SVG, WEBP, BMP (Max 5MB)",
+            'video' => "Allowed: MP4, AVI, MOV, WMV, WEBM, MKV (Max 100MB)",
+            'archive' => "Allowed: ZIP, RAR, 7Z, TAR, GZ (Max 50MB)",
+            'default' => "Allowed: Documents, Images, Videos, Audio, Archives (Max 10MB)",
+            'all' => "Allowed file types: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, CSV, JPG, PNG, GIF, SVG, WEBP, MP4, AVI, MOV, MP3, WAV, ZIP, RAR, 7Z. Max sizes: Documents 25MB, Images 5MB, Videos 100MB, Archives 50MB. Executable files (.exe, .bat, .sh, etc.) are blocked for security."
+        ];
+        
+        return $disclaimers[$uploadType] ?? $disclaimers['default'];
     }
 }

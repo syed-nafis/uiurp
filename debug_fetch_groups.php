@@ -1,65 +1,50 @@
 <?php
-require_once 'db_connect.php';
-require_once __DIR__ . '/../../vendor/autoload.php';
-require_once 'ChatEncryption.php';
-require_once 'ProjectKeyManager.php';
+/**
+ * Debug fetch_chat_groups.php
+ */
+
+// Start session
+session_start();
+
+// Set up session data to simulate logged in user
+$_SESSION['user_id'] = '6833436be5c16779b409aa42';
+$_SESSION['user_data'] = [
+    '_id' => ['$oid' => '6833436be5c16779b409aa42'],
+    'name' => 'Samin yeaser khan'
+];
+
+require_once 'src/model/db_connect.php';
+require_once 'src/model/ChatEncryption.php';
+require_once 'src/model/ProjectKeyManager.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use MongoDB\BSON\ObjectId;
 
-// Start session to capture user data
-session_start();
+echo "🔍 Debug fetch_chat_groups.php\n";
+echo "==============================\n\n";
 
-// Initialize response array
-$response = [
-    'success' => false,
-    'chatGroups' => [],
-    'message' => '',
-];
-
-// Check if user is logged in
-if (!isset($_SESSION['user_id']) && !isset($_SESSION['user_data'])) {
-    $response['message'] = 'User not logged in';
-    echo json_encode($response);
-    exit;
-}
-
-// Set user ID
-$userId = null;
-if (isset($_SESSION['user_id'])) {
-    // Convert MongoDB ObjectId to string if needed
-    if (is_object($_SESSION['user_id']) && get_class($_SESSION['user_id']) === 'MongoDB\BSON\ObjectId') {
-        $userId = (string)$_SESSION['user_id'];
-    } else {
-        $userId = $_SESSION['user_id'];
-    }
-} elseif (isset($_SESSION['user_data']) && isset($_SESSION['user_data']['_id']) && isset($_SESSION['user_data']['_id']['$oid'])) {
-    $userId = $_SESSION['user_data']['_id']['$oid'];
-} elseif (isset($_SESSION['user_data']) && isset($_SESSION['user_data']['_id'])) {
-    $userId = (string)$_SESSION['user_data']['_id'];
-}
+$userId = '6833436be5c16779b409aa42';
 
 try {
-    // Connect to MongoDB
     $client = connectToDatabase();
     $db = $client->uiurp;
-    $collection = $db->projectsV2;
     
-    // Define query to find all projects where user is involved
+    // Get all projects where user is involved
     $filter = [
         '$or' => [
-            ['createdBy' => $userId],  // Direct creator ID field
-            ['createdBy.$oid' => $userId],  // MongoDB ObjectId format
-            ['members' => ['$elemMatch' => ['userId' => $userId]]],  // String format
-            ['members' => ['$elemMatch' => ['userId.$oid' => $userId]]],  // MongoDB ObjectId format
-            ['members.userId' => $userId],  // Direct string match in members array
-            ['members.userId.$oid' => $userId],  // Direct ObjectId match in members array
-            ['supervisor.userId.$oid' => $userId],  // MongoDB ObjectId format
-            ['supervisor.userId' => $userId]  // String format
+            ['createdBy' => $userId],
+            ['createdBy.$oid' => $userId],
+            ['members' => ['$elemMatch' => ['userId' => $userId]]],
+            ['members' => ['$elemMatch' => ['userId.$oid' => $userId]]],
+            ['members.userId' => $userId],
+            ['members.userId.$oid' => $userId],
+            ['supervisor.userId.$oid' => $userId],
+            ['supervisor.userId' => $userId]
         ]
     ];
     
     $options = [
-        'sort' => ['updatedAt' => -1], // Sort by most recently updated
+        'sort' => ['updatedAt' => -1],
         'projection' => [
             '_id' => 1,
             'title' => 1,
@@ -69,13 +54,15 @@ try {
         ]
     ];
     
-    $cursor = $collection->find($filter, $options);
+    $cursor = $db->projectsV2->find($filter, $options);
     $chatGroups = [];
     
     // Get chat messages collection for fetching latest messages
     $messagesCollection = $db->project_chat_messages;
     
     foreach ($cursor as $project) {
+        echo "📝 Processing project: " . $project['title'] . "\n";
+        
         // Get the latest message for this project
         $latestMessage = $messagesCollection->findOne(
             ['projectId' => $project['_id']],
@@ -99,13 +86,17 @@ try {
         $lastTime = '';
         
         if ($latestMessage) {
+            echo "   Raw message: " . $latestMessage['message'] . "\n";
+            echo "   Is encrypted: " . (ChatEncryption::isEncrypted($latestMessage) ? 'YES' : 'NO') . "\n";
             
             // Decrypt message if it's encrypted
             $messageText = $latestMessage['message'];
-            if (ChatEncryption::isEncrypted($latestMessage)) {
+            if (ChatEncryption::isEncrypted($latestMessage) && !$latestMessage['isSystemMessage']) {
+                echo "   Attempting decryption...\n";
                 try {
                     // Get project encryption key
                     $keyResult = ProjectKeyManager::getProjectKey((string)$project['_id'], $userId, $db);
+                    echo "   Key result success: " . ($keyResult['success'] ? 'YES' : 'NO') . "\n";
                     if ($keyResult['success']) {
                         $encryptedData = [
                             'message' => $latestMessage['message'],
@@ -113,60 +104,57 @@ try {
                             'tag' => $latestMessage['tag'] ?? ''
                         ];
                         $messageText = ChatEncryption::decryptMessage($encryptedData, $keyResult['key']);
+                        echo "   ✅ Decrypted: " . $messageText . "\n";
                     } else {
+                        echo "   ❌ Key retrieval failed: " . $keyResult['message'] . "\n";
                         $messageText = '[Encrypted message]';
                     }
                 } catch (Exception $e) {
+                    echo "   ❌ Decryption error: " . $e->getMessage() . "\n";
                     $messageText = '[Encrypted message]';
                 }
+            } else {
+                echo "   ℹ️  Not encrypted or system message\n";
             }
             
             // Format the last message
             if (isset($latestMessage['isSystemMessage']) && $latestMessage['isSystemMessage']) {
-                // For system messages, just show the message without sender name
                 $lastMessage = $messageText;
                 $lastSender = 'System';
             } elseif (isset($latestMessage['attachment'])) {
-                // For file attachments, show a nice preview
                 $fileName = $latestMessage['attachment']['fileName'] ?? 'file';
                 $senderName = $latestMessage['sender']['name'] ?? 'Someone';
                 $lastMessage = "$senderName shared: $fileName";
                 $lastSender = $senderName;
             } else {
-                // Regular message
                 $lastMessage = $messageText;
                 $lastSender = $latestMessage['sender']['name'] ?? 'Someone';
             }
             
+            echo "   Final message: " . $lastMessage . "\n";
+            echo "   Sender: " . $lastSender . "\n";
             
             // Truncate message if too long
             if (strlen($lastMessage) > 50) {
                 $lastMessage = substr($lastMessage, 0, 47) . '...';
+                echo "   Truncated to: " . $lastMessage . "\n";
             }
             
             // Format timestamp
-            if (isset($latestMessage['timestamp'])) {
-                $timestamp = $latestMessage['timestamp'];
-                if (is_object($timestamp) && method_exists($timestamp, 'toDateTime')) {
-                    $dateTime = $timestamp->toDateTime();
-                    $now = new DateTime();
-                    $diff = $now->diff($dateTime);
-                    
-                    if ($diff->days == 0) {
-                        // Today - show time
-                        $lastTime = $dateTime->format('H:i');
-                    } elseif ($diff->days == 1) {
-                        // Yesterday
-                        $lastTime = 'Yesterday';
-                    } elseif ($diff->days < 7) {
-                        // This week - show day name
-                        $lastTime = $dateTime->format('D');
-                    } else {
-                        // Older - show date
-                        $lastTime = $dateTime->format('M j');
-                    }
-                }
+            $timestamp = $latestMessage['timestamp']->toDateTime();
+            $lastTime = $timestamp->format('H:i');
+            
+            // If message is from today, show time, otherwise show date
+            $today = new DateTime();
+            if ($timestamp->format('Y-m-d') === $today->format('Y-m-d')) {
+                $lastTime = $timestamp->format('H:i');
+            } else {
+                $lastTime = $timestamp->format('M d');
             }
+            
+            echo "   Time: " . $lastTime . "\n\n";
+        } else {
+            echo "   No messages\n\n";
         }
         
         // Create a chat group object for each project
@@ -177,20 +165,23 @@ try {
             'lastSender' => $lastSender,
             'lastTime' => $lastTime,
             'imageUrl' => isset($project['coverImage']) && isset($project['coverImage']['url']) ? 
-                $project['coverImage']['url'] : null,
+                $project['coverImage']['url'] : null
         ];
         
         $chatGroups[] = $group;
     }
     
-    $response['success'] = true;
-    $response['chatGroups'] = $chatGroups;
-    echo json_encode($response);
+    echo "📊 Final Results:\n";
+    echo "================\n";
+    foreach ($chatGroups as $i => $group) {
+        echo "Group " . ($i + 1) . ": " . $group['name'] . "\n";
+        echo "  Last message: " . $group['lastMessage'] . "\n";
+        echo "  Sender: " . $group['lastSender'] . "\n";
+        echo "  Time: " . $group['lastTime'] . "\n\n";
+    }
     
 } catch (Exception $e) {
-    $errorMsg = "Error fetching chat groups: " . $e->getMessage();
-    
-    $response['message'] = $errorMsg;
-    echo json_encode($response);
+    echo "❌ Error: " . $e->getMessage() . "\n";
+    exit(1);
 }
-?> 
+?>
